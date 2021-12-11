@@ -37,6 +37,8 @@ jobs:
           cd blog
           hugo --minify
           ls
+          mv ./public ../
+          cd ../
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
