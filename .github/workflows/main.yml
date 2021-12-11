@@ -10,22 +10,21 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
-      - name: Check out isshe/blog
-        uses: actions/checkout@master
-        with:
-          repository: isshe/blog
-
-      - name: ls, pwd
-        run: |
-          ls
-          pwd
-
-
-      - name: Check out actions
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Check out isshe/blog
+        uses: actions/checkout@v2
+        with:
+          repository: isshe/blog
+          path: blog
+
+      - name: ls pwd
+        run: |
+          ls
+          pwd
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
