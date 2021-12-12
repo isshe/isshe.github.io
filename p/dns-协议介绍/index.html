@@ -1,0 +1,416 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="[TOC]
+DNS DNS - 域名系统（Domain Name System）。
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
+ 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ dig +trace www.isshe.xyz 进行查看
+  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m."><title>DNS 协议介绍</title>
+<link rel=canonical href=https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="DNS 协议介绍">
+<meta property="og:description" content="[TOC]
+DNS DNS - 域名系统（Domain Name System）。
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
+ 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ dig +trace www.isshe.xyz 进行查看
+  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m.">
+<meta property="og:url" content="https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dns"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T15:29:37+00:00"><meta property="article:modified_time" content="2021-12-12T15:29:37+00:00">
+<meta name=twitter:title content="DNS 协议介绍">
+<meta name=twitter:description content="[TOC]
+DNS DNS - 域名系统（Domain Name System）。
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
+ 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ dig +trace www.isshe.xyz 进行查看
+  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m.">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class=main-article>
+<header class=article-header>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/dns/ style=background-color:#576aed;color:#fff>
+DNS
+</a>
+<a href=/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ style=background-color:#b989fc;color:#fff>
+计算机网络
+</a>
+<a href=/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/ style=background-color:#4766f6;color:#fff>
+网络协议
+</a>
+<a href=/categories/protocol/ style=background-color:#7d4f3a;color:#fff>
+Protocol
+</a>
+<a href=/categories/computer-network/ style=background-color:#a29de8;color:#fff>
+Computer Network
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>DNS 协议介绍</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 12, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 3 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<p>[TOC]</p>
+<h2 id=dns>DNS</h2>
+<p>DNS - 域名系统（Domain Name System）。</p>
+<ul>
+<li>是一个将<code>域名</code>和<code>IP地址</code>进行映射的<code>分布式数据库</code>。</li>
+<li>DNS是应用层协议，使用TCP和UDP的53端口。</li>
+<li>每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。</li>
+</ul>
+<h1 id=作用>作用</h1>
+<ul>
+<li>将对人友好的域名转换为对计算机友好的IP地址。</li>
+</ul>
+<h1 id=原理过程>原理/过程</h1>
+<p>域名层级</p>
+<pre tabindex=0><code>主机名.次级域名.顶级域名.根域名
+host.sld.tld.root
+www.isshe.xyz.root
+abc.isshe.xyz.root
+</code></pre><p>分级查询：从根域名开始，依次查询每一级域名的NS记录。</p>
+<ul>
+<li>从<code>根域名服务器</code>查询<code>顶级域名服务器</code>的NS记录和A记录；
+<ul>
+<li><code>根域名服务器</code>是总所周知的，不用查。</li>
+</ul>
+</li>
+<li>从<code>顶级域名服务器</code>查询<code>次级域名服务器</code>的NS记录和A记录；</li>
+<li>从<code>次级域名服务器</code>查询<code>主机名</code>的A记录；</li>
+</ul>
+<p>分级查询示例：<code>www.isshe.xyz</code></p>
+<blockquote>
+<p>dig +trace <a class=link href=http://www.isshe.xyz target=_blank rel=noopener>www.isshe.xyz</a> 进行查看</p>
+</blockquote>
+<ul>
+<li>列出根域名服务器：</li>
+</ul>
+<pre tabindex=0><code>.                       227343  IN      NS      e.root-servers.net.
+.                       227343  IN      NS      k.root-servers.net.
+.                       227343  IN      NS      i.root-servers.net.
+.                       227343  IN      NS      d.root-servers.net.
+.                       227343  IN      NS      j.root-servers.net.
+.                       227343  IN      NS      m.root-servers.net.
+.                       227343  IN      NS      b.root-servers.net.
+.                       227343  IN      NS      c.root-servers.net.
+.                       227343  IN      NS      h.root-servers.net.
+.                       227343  IN      NS      f.root-servers.net.
+.                       227343  IN      NS      l.root-servers.net.
+.                       227343  IN      NS      a.root-servers.net.
+.                       227343  IN      NS      g.root-servers.net.
+</code></pre><ul>
+<li>查询<code>xyz.</code>的结果：</li>
+</ul>
+<pre tabindex=0><code>xyz.                    172800  IN      NS      x.nic.xyz.
+xyz.                    172800  IN      NS      y.nic.xyz.
+xyz.                    172800  IN      NS      z.nic.xyz.
+xyz.                    172800  IN      NS      generationxyz.nic.xyz.
+...
+;; Received 669 bytes from 192.58.128.30#53(j.root-servers.net) in 651 ms
+</code></pre><ul>
+<li>查询<code>isshe.xyz.</code>的结果：</li>
+</ul>
+<pre tabindex=0><code>isshe.xyz.              3600    IN      NS      f1g1ns1.dnspod.net.
+isshe.xyz.              3600    IN      NS      f1g1ns2.dnspod.net.
+...
+;; Received 581 bytes from 194.169.218.42#53(x.nic.xyz) in 245 ms
+</code></pre><ul>
+<li>查询<code>www.isshe.xyz.</code>的结果：</li>
+</ul>
+<pre tabindex=0><code>www.isshe.xyz.          600     IN      CNAME   isshe.coding.me.
+isshe.xyz.              86400   IN      NS      f1g1ns1.dnspod.net.
+isshe.xyz.              86400   IN      NS      f1g1ns2.dnspod.net.
+;; Received 135 bytes from 14.215.155.156#53(f1g1ns1.dnspod.net) in 10 ms
+</code></pre><h1 id=协议格式>协议格式</h1>
+<pre tabindex=0><code>0                   16                  32 0                   16                 32
++-------------------+-------------------+  +---------------------------------------+
+| Transaction ID    | Flags             |  / Name                                  /
++-------------------+-------------------+  /                                       /
+| Questions         | Answer RRs        |  +-------------------+-------------------+
++-------------------+-------------------+  | Type              | Class             |
+| Authority RRs     | Additional RRs    |  +-------------------+-------------------+
++-------------------+-------------------+ /
+/ Question                              /
++---------------------------------------+
+/ Answers                               /
++---------------------------------------+
+/ Authoritaty                           /
++---------------------------------------+
+/ Additional                            /
++---------------------------------------+
+</code></pre><h2 id=transaction-id>Transaction ID</h2>
+<ul>
+<li>会话ID，DNS报文的ID标识。</li>
+<li>请求和应答报文的这个字段相同。</li>
+</ul>
+<h2 id=flags>Flags</h2>
+<ul>
+<li>标志：</li>
+</ul>
+<pre tabindex=0><code>+----+--------+----+----+----+----+--------+-------+
+| QR | opcode | AA | TC | RD | RA | (zero) | rcode |
++----+--------+----+----+----+----+--------+-------+
+  1      4      1    1    1    1      3        4
+</code></pre><ul>
+<li>QR: 查询/响应标记，0查询，1响应。</li>
+<li>opcode：0标准查询，1反向查询，2服务器状态请求。</li>
+<li>AA：授权回答。</li>
+<li>TC：可截断的。</li>
+<li>RD：期望递归。</li>
+<li>RA：可用递归。</li>
+<li>rcode：表示返回码。0没有差错，2服务器错误，3名字差错</li>
+</ul>
+<h2 id=question>Question</h2>
+<pre tabindex=0><code>0                   16                 32
++---------------------------------------+
+/ Name                                  /
+/                                       /
++-------------------+-------------------+
+| Type              | Class             |
++-------------------+-------------------+
+</code></pre><ul>
+<li>Name：查询的域名名称。按Lable划分(isshe.xyz，为2个lable)，以<code>'\0'</code>结尾；可能为奇数个字节。</li>
+<li>Type：查询类型。A：主机。</li>
+<li>Class：查询的协议类。IN：internet。</li>
+</ul>
+<h2 id=answerauthorityadditional>Answer/Authority/Additional</h2>
+<pre tabindex=0><code>0                   16                 32
++---------------------------------------+
+/ Name                                  /
+/                                       /
++-------------------+-------------------+
+| Type              | Class             |
++-------------------+-------------------+
+| TTL                                   |
++---------------------------------------+
+| RdLength          | Rdata             /
++-------------------+                   /
+|                                       /
++---------------------------------------+
+</code></pre><ul>
+<li>Name: 域名。</li>
+<li>Type：类型。</li>
+<li>Class：Rdata的类。</li>
+<li>TTL：资源记录的生存时间。0表示只能被传输，不能被缓存。（无符号整型）</li>
+<li>RdLenght：Rdata的长度。</li>
+<li>Rdata：资源数据，表示记录。格式和Type、Class有关。如Type=A、Class=IN，Rdata就是一个IP地址。</li>
+</ul>
+<h2 id=rrs>RRs</h2>
+<p>Questions：指明Question的数量。
+Answer RRs：指明Answer的数量。
+Authority RRs：指明Antuority的数量。
+Additional RRs：指明Additional的数量。</p>
+<h1 id=记录类型>记录类型</h1>
+<blockquote>
+<p>详见<a class=link href=https://zh.wikipedia.org/wiki/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B%E5%88%97%E8%A1%A8 target=_blank rel=noopener>DNS记录类型列表</a></p>
+</blockquote>
+<p>常见记录类型：</p>
+<ul>
+<li>A：主机记录（Address）。</li>
+<li>NS：域名服务器记录（Name Server）。
+<ul>
+<li>返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为IP地址。</li>
+</ul>
+</li>
+<li>CNAME：规范名称记录，当前查询域名是另一个域名的跳转。（即别名记录，指向某个A记录）</li>
+<li>AAAA：IPv6主机记录。</li>
+<li>SRV：服务位置记录。</li>
+<li>MX: 邮件记录(Mail eXchange)，返回接收电子邮件的服务器地址。</li>
+<li>PTR：逆向查询记录（Pointer Record），从IP查域名。</li>
+</ul>
+<h1 id=报文示例>报文示例</h1>
+<h2 id=报文示例-查询>报文示例-查询</h2>
+<pre tabindex=0><code>               +---------------------------------------------------+
+    Header     | OPCODE=SQUERY                                     |
+               +---------------------------------------------------+
+    Question   | QNAME=SRI-NIC.ARPA., QCLASS=IN, QTYPE=A           |
+               +---------------------------------------------------+
+    Answer     | &lt;empty&gt;                                           |
+               +---------------------------------------------------+
+    Authority  | &lt;empty&gt;                                           |
+               +---------------------------------------------------+
+    Additional | &lt;empty&gt;                                           |
+               +---------------------------------------------------+
+</code></pre><h2 id=报文示例-响应>报文示例-响应</h2>
+<pre tabindex=0><code>               +---------------------------------------------------+
+    Header     | OPCODE=SQUERY, RESPONSE, AA                       |
+               +---------------------------------------------------+
+    Question   | QNAME=SRI-NIC.ARPA., QCLASS=IN, QTYPE=A           |
+               +---------------------------------------------------+
+    Answer     | SRI-NIC.ARPA. 86400 IN A 26.0.0.73                |
+               |               86400 IN A 10.0.0.51                |
+               +---------------------------------------------------+
+    Authority  | &lt;empty&gt;                                           |
+               +---------------------------------------------------+
+    Additional | &lt;empty&gt;                                           |
+               +---------------------------------------------------+
+</code></pre><h1 id=疑问>疑问</h1>
+<h1 id=相关>相关</h1>
+<ul>
+<li>dig 命令：可用于DNS相关操作。</li>
+<li>host 命令：dig的简化版本。</li>
+<li>whois 命令: 查看域名注册情况。</li>
+<li>nslookup 命令: 可互动式查询域名记录。</li>
+<li><a class=link href=https://www.ruanyifeng.com/blog/2016/06/dns.html target=_blank rel=noopener>DNS 原理入门-阮一峰</a></li>
+<li><a class=link href=https://en.wikipedia.org/wiki/Domain_Name_System#DNS_message_format target=_blank rel=noopener>wiki</a></li>
+<li><a class=link href=https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8 target=_blank rel=noopener>wiki中文</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/dns/>dns</a>
+<a href=/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/>计算机网络</a>
+<a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>
+<a href=/tags/protocol/>protocol</a>
+<a href=/tags/computer-network/>computer network</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article>
+<a href=/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>
+<div class=article-details>
+<h2 class=article-title>ARP 协议介绍</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post DHCP 协议介绍" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>DHCP 协议介绍</h2>
+</div>
+</a>
+</article>
+<article>
+<a href=/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>
+<div class=article-details>
+<h2 class=article-title>ICMP 协议介绍</h2>
+</div>
+</a>
+</article>
+<article>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#dns>DNS</a></li>
+</ol>
+<ol>
+<li><a href=#transaction-id>Transaction ID</a></li>
+<li><a href=#flags>Flags</a></li>
+<li><a href=#question>Question</a></li>
+<li><a href=#answerauthorityadditional>Answer/Authority/Additional</a></li>
+<li><a href=#rrs>RRs</a></li>
+</ol>
+<ol>
+<li><a href=#报文示例-查询>报文示例-查询</a></li>
+<li><a href=#报文示例-响应>报文示例-响应</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

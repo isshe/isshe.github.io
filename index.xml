@@ -1,1 +1,945 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 11 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 12 Dec 2021 15:29:37 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>ARP 协议介绍</title><link>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 15:29:37 +0000</pubDate><guid>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
+&lt;h2 id="arp协议">ARP协议&lt;/h2>
+&lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
+&lt;h1 id="工作过程">工作过程&lt;/h1>
+&lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
+&lt;ul>
+&lt;li>第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。&lt;/li>
+&lt;li>第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。
+&lt;ul>
+&lt;li>收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。&lt;/li>
+&lt;li>第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。&lt;/li>
+&lt;li>第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。&lt;/li>
+&lt;/ul>
+&lt;h1 id="问题">问题&lt;/h1>
+&lt;h2 id="什么是arp欺骗">什么是ARP欺骗？&lt;/h2>
+&lt;ul>
+&lt;li>地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到&lt;code>应答报文&lt;/code>的主机，不会校验报文的真实性，就会加到ARP缓存中。&lt;/li>
+&lt;li>由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。&lt;/li>
+&lt;/ul></description></item><item><title>DHCP 协议介绍</title><link>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 15:29:37 +0000</pubDate><guid>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" alt="Featured image of post DHCP 协议介绍" />&lt;hr>
+&lt;p>title: 【网络协议】DHCP-动态主机配置协议
+date: 2018-08-18 14:30:31
+tags:&lt;/p>
+&lt;ul>
+&lt;li>计算机网络&lt;/li>
+&lt;li>DHCP
+categories: 网络协议
+toc: false
+mathjax: false
+description:
+top: false&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;p>[TOC]&lt;/p>
+&lt;h2 id="dhcp">DHCP&lt;/h2>
+&lt;p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
+DHCP是一个应用层协议。基于&lt;code>UDP&lt;/code>。&lt;/p>
+&lt;h1 id="作用">作用&lt;/h1>
+&lt;ul>
+&lt;li>用于&lt;code>内网或网络服务供应商&lt;/code>自动分配IP给用户。&lt;/li>
+&lt;li>作为&lt;code>内部管理员&lt;/code>对所有计算机进行&lt;code>中央管理&lt;/code>的手段。&lt;/li>
+&lt;/ul>
+&lt;h1 id="历史">历史&lt;/h1>
+&lt;ul>
+&lt;li>DHCP在1993年10月成为标准协议，它的前身是&lt;code>BOOTP&lt;/code>协议。&lt;/li>
+&lt;li>BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。&lt;/li>
+&lt;/ul>
+&lt;h1 id="数据包类型">数据包类型&lt;/h1>
+&lt;ul>
+&lt;li>DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。&lt;/li>
+&lt;li>DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。&lt;/li>
+&lt;li>DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。&lt;/li>
+&lt;li>DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。&lt;/li>
+&lt;li>DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。&lt;/li>
+&lt;li>DHCP NAK：服务器回复客户，客户要求的网址不能被分配。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理流程">原理/流程&lt;/h1>
+&lt;ul>
+&lt;li>客户主机发送DHCP服务器发现(DISCOVER)&lt;strong>广播包&lt;/strong>。&lt;/li>
+&lt;li>服务器收到DISCOVER包后，回复&lt;code>OFFER&lt;/code>&lt;strong>单播或广播包&lt;/strong>。【疑问？】&lt;/li>
+&lt;li>客户主机收到OFFER包后，发送&lt;code>REQUEST&lt;/code>&lt;strong>广播包&lt;/strong>。&lt;/li>
+&lt;li>服务器回复&lt;code>ACK&lt;/code>&lt;strong>单播或广播包&lt;/strong>。包含分配的IP及网关IP(next server IP)、租约等。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 76;
+flex-basis: 184px"
+>
+&lt;a href="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" data-size="440x572">
+&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png"
+width="440"
+height="572"
+srcset="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="典型DHCP会话的模式">
+&lt;/a>
+&lt;figcaption>典型DHCP会话的模式&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h1 id="协议结构">协议结构&lt;/h1>
+&lt;pre tabindex="0">&lt;code> +-------+--------+--------+--------+
+|8 bits | 8 bits | 8 bits | 8 bits |
++-------+--------+--------+--------+
+| Op | Htype | Hlen | Hops |
++-------+--------+--------+--------+
+| Xid |
++----------------------------------+
+| Secs | Flags |
++----------------+-----------------+
+| Ciaddr |
++----------------------------------+
+| Yiaddr |
++----------------------------------+
+| Siaddr |
++----------------------------------+
+| Giaddr |
++----------------------------------+
+| Chaddr (16 bytes) |
++----------------------------------+
+| Sname (64 bytes) |
++----------------------------------+
+| File (128 bytes) |
++----------------------------------+
+| Option (variable) |
++----------------------------------+
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>Op: 信息类型。如：客户端请求为1，服务器回复为2。&lt;/li>
+&lt;li>Htype：硬件类型。如：Ethernet(0x01)&lt;/li>
+&lt;li>Hlen: 硬件地址长度。如：6。（MAC地址）&lt;/li>
+&lt;li>Hops: 跳数。&lt;/li>
+&lt;li>Xid：传输ID。&lt;/li>
+&lt;li>Secs: 过去的时间。【疑问】&lt;/li>
+&lt;li>Flags：标记。&lt;/li>
+&lt;li>Ciaddr：客户端IP地址。（这里应该是续约的时候用的）&lt;/li>
+&lt;li>Siaddr：下一个服务器IP地址。&lt;/li>
+&lt;li>Yiaddr：你的IP。（分配给客户机的IP）&lt;/li>
+&lt;li>Giaddr：中继代理IP。【？？？】&lt;/li>
+&lt;li>Chaddr：客户机硬件地址。（Ethernet中就是Mac地址）&lt;/li>
+&lt;li>Sname：服务器主机名称。&lt;/li>
+&lt;li>File：文件名。&lt;/li>
+&lt;li>Options：选项。详见&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
+>rfc2132&lt;/a>
+&lt;ul>
+&lt;li>1：子网掩码；&lt;/li>
+&lt;li>3：路由(网关)；&lt;/li>
+&lt;li>12：主机名&lt;/li>
+&lt;li>50：请求的IP地址&lt;/li>
+&lt;li>51：租约时间&lt;/li>
+&lt;li>53：DHCP消息类型。即上面的几种类型。&lt;/li>
+&lt;li>54：服务器标识。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;h2 id="dhcp服务器是否可以把一台主机拉黑">DHCP服务器是否可以把一台主机拉黑？&lt;/h2>
+&lt;ul>
+&lt;li>这个应该由DHCP软件提供。&lt;/li>
+&lt;/ul>
+&lt;h2 id="服务器回复为什么是单播或广播包">服务器回复为什么是&lt;code>单播或广播包&lt;/code>？&lt;/h2>
+&lt;ul>
+&lt;li>Flags中设置&lt;code>BROADCAST = 0&lt;/code>时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。&lt;/li>
+&lt;/ul>
+&lt;h2 id="secs字段是哪一个时间段">Secs字段是哪一个时间段？&lt;/h2>
+&lt;ul>
+&lt;li>从获取到IP地址或者续约过程开始到现在所消耗的时间。&lt;/li>
+&lt;/ul>
+&lt;h2 id="giaddr字段作用是什么">Giaddr字段作用是什么？&lt;/h2>
+&lt;ul>
+&lt;li>giaddr: 中继代理地址。&lt;/li>
+&lt;li>中继代理相关详见：&lt;a class="link" href="http://blog.sina.com.cn/s/blog_712ff0c9010109df.html" target="_blank" rel="noopener"
+>博客&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="相关">相关&lt;/h1>
+&lt;ul>
+&lt;li>DHCP: RFC 2131&lt;/li>
+&lt;li>DHCP6: RFC 3315&lt;/li>
+&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_blank" rel="noopener"
+>DHCP wiki&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/%e5%8a%a8%e6%80%81%e4%b8%bb%e6%9c%ba%e8%ae%be%e7%bd%ae%e5%8d%8f%e8%ae%ae" target="_blank" rel="noopener"
+>DHCP wiki中文&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
+>rfc2132&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>DNS 协议介绍</title><link>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 15:29:37 +0000</pubDate><guid>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
+&lt;h2 id="dns">DNS&lt;/h2>
+&lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
+&lt;ul>
+&lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
+&lt;li>DNS是应用层协议，使用TCP和UDP的53端口。&lt;/li>
+&lt;li>每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。&lt;/li>
+&lt;/ul>
+&lt;h1 id="作用">作用&lt;/h1>
+&lt;ul>
+&lt;li>将对人友好的域名转换为对计算机友好的IP地址。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理过程">原理/过程&lt;/h1>
+&lt;p>域名层级&lt;/p>
+&lt;pre tabindex="0">&lt;code>主机名.次级域名.顶级域名.根域名
+host.sld.tld.root
+www.isshe.xyz.root
+abc.isshe.xyz.root
+&lt;/code>&lt;/pre>&lt;p>分级查询：从根域名开始，依次查询每一级域名的NS记录。&lt;/p>
+&lt;ul>
+&lt;li>从&lt;code>根域名服务器&lt;/code>查询&lt;code>顶级域名服务器&lt;/code>的NS记录和A记录；
+&lt;ul>
+&lt;li>&lt;code>根域名服务器&lt;/code>是总所周知的，不用查。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>从&lt;code>顶级域名服务器&lt;/code>查询&lt;code>次级域名服务器&lt;/code>的NS记录和A记录；&lt;/li>
+&lt;li>从&lt;code>次级域名服务器&lt;/code>查询&lt;code>主机名&lt;/code>的A记录；&lt;/li>
+&lt;/ul>
+&lt;p>分级查询示例：&lt;code>www.isshe.xyz&lt;/code>&lt;/p>
+&lt;blockquote>
+&lt;p>dig +trace &lt;a class="link" href="http://www.isshe.xyz" target="_blank" rel="noopener"
+>www.isshe.xyz&lt;/a> 进行查看&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>列出根域名服务器：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>. 227343 IN NS e.root-servers.net.
+. 227343 IN NS k.root-servers.net.
+. 227343 IN NS i.root-servers.net.
+. 227343 IN NS d.root-servers.net.
+. 227343 IN NS j.root-servers.net.
+. 227343 IN NS m.root-servers.net.
+. 227343 IN NS b.root-servers.net.
+. 227343 IN NS c.root-servers.net.
+. 227343 IN NS h.root-servers.net.
+. 227343 IN NS f.root-servers.net.
+. 227343 IN NS l.root-servers.net.
+. 227343 IN NS a.root-servers.net.
+. 227343 IN NS g.root-servers.net.
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>查询&lt;code>xyz.&lt;/code>的结果：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>xyz. 172800 IN NS x.nic.xyz.
+xyz. 172800 IN NS y.nic.xyz.
+xyz. 172800 IN NS z.nic.xyz.
+xyz. 172800 IN NS generationxyz.nic.xyz.
+...
+;; Received 669 bytes from 192.58.128.30#53(j.root-servers.net) in 651 ms
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>查询&lt;code>isshe.xyz.&lt;/code>的结果：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>isshe.xyz. 3600 IN NS f1g1ns1.dnspod.net.
+isshe.xyz. 3600 IN NS f1g1ns2.dnspod.net.
+...
+;; Received 581 bytes from 194.169.218.42#53(x.nic.xyz) in 245 ms
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>查询&lt;code>www.isshe.xyz.&lt;/code>的结果：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>www.isshe.xyz. 600 IN CNAME isshe.coding.me.
+isshe.xyz. 86400 IN NS f1g1ns1.dnspod.net.
+isshe.xyz. 86400 IN NS f1g1ns2.dnspod.net.
+;; Received 135 bytes from 14.215.155.156#53(f1g1ns1.dnspod.net) in 10 ms
+&lt;/code>&lt;/pre>&lt;h1 id="协议格式">协议格式&lt;/h1>
+&lt;pre tabindex="0">&lt;code>0 16 32 0 16 32
++-------------------+-------------------+ +---------------------------------------+
+| Transaction ID | Flags | / Name /
++-------------------+-------------------+ / /
+| Questions | Answer RRs | +-------------------+-------------------+
++-------------------+-------------------+ | Type | Class |
+| Authority RRs | Additional RRs | +-------------------+-------------------+
++-------------------+-------------------+ /
+/ Question /
++---------------------------------------+
+/ Answers /
++---------------------------------------+
+/ Authoritaty /
++---------------------------------------+
+/ Additional /
++---------------------------------------+
+&lt;/code>&lt;/pre>&lt;h2 id="transaction-id">Transaction ID&lt;/h2>
+&lt;ul>
+&lt;li>会话ID，DNS报文的ID标识。&lt;/li>
+&lt;li>请求和应答报文的这个字段相同。&lt;/li>
+&lt;/ul>
+&lt;h2 id="flags">Flags&lt;/h2>
+&lt;ul>
+&lt;li>标志：&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>+----+--------+----+----+----+----+--------+-------+
+| QR | opcode | AA | TC | RD | RA | (zero) | rcode |
++----+--------+----+----+----+----+--------+-------+
+1 4 1 1 1 1 3 4
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>QR: 查询/响应标记，0查询，1响应。&lt;/li>
+&lt;li>opcode：0标准查询，1反向查询，2服务器状态请求。&lt;/li>
+&lt;li>AA：授权回答。&lt;/li>
+&lt;li>TC：可截断的。&lt;/li>
+&lt;li>RD：期望递归。&lt;/li>
+&lt;li>RA：可用递归。&lt;/li>
+&lt;li>rcode：表示返回码。0没有差错，2服务器错误，3名字差错&lt;/li>
+&lt;/ul>
+&lt;h2 id="question">Question&lt;/h2>
+&lt;pre tabindex="0">&lt;code>0 16 32
++---------------------------------------+
+/ Name /
+/ /
++-------------------+-------------------+
+| Type | Class |
++-------------------+-------------------+
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>Name：查询的域名名称。按Lable划分(isshe.xyz，为2个lable)，以&lt;code>'\0'&lt;/code>结尾；可能为奇数个字节。&lt;/li>
+&lt;li>Type：查询类型。A：主机。&lt;/li>
+&lt;li>Class：查询的协议类。IN：internet。&lt;/li>
+&lt;/ul>
+&lt;h2 id="answerauthorityadditional">Answer/Authority/Additional&lt;/h2>
+&lt;pre tabindex="0">&lt;code>0 16 32
++---------------------------------------+
+/ Name /
+/ /
++-------------------+-------------------+
+| Type | Class |
++-------------------+-------------------+
+| TTL |
++---------------------------------------+
+| RdLength | Rdata /
++-------------------+ /
+| /
++---------------------------------------+
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>Name: 域名。&lt;/li>
+&lt;li>Type：类型。&lt;/li>
+&lt;li>Class：Rdata的类。&lt;/li>
+&lt;li>TTL：资源记录的生存时间。0表示只能被传输，不能被缓存。（无符号整型）&lt;/li>
+&lt;li>RdLenght：Rdata的长度。&lt;/li>
+&lt;li>Rdata：资源数据，表示记录。格式和Type、Class有关。如Type=A、Class=IN，Rdata就是一个IP地址。&lt;/li>
+&lt;/ul>
+&lt;h2 id="rrs">RRs&lt;/h2>
+&lt;p>Questions：指明Question的数量。
+Answer RRs：指明Answer的数量。
+Authority RRs：指明Antuority的数量。
+Additional RRs：指明Additional的数量。&lt;/p>
+&lt;h1 id="记录类型">记录类型&lt;/h1>
+&lt;blockquote>
+&lt;p>详见&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B%E5%88%97%E8%A1%A8" target="_blank" rel="noopener"
+>DNS记录类型列表&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>常见记录类型：&lt;/p>
+&lt;ul>
+&lt;li>A：主机记录（Address）。&lt;/li>
+&lt;li>NS：域名服务器记录（Name Server）。
+&lt;ul>
+&lt;li>返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为IP地址。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>CNAME：规范名称记录，当前查询域名是另一个域名的跳转。（即别名记录，指向某个A记录）&lt;/li>
+&lt;li>AAAA：IPv6主机记录。&lt;/li>
+&lt;li>SRV：服务位置记录。&lt;/li>
+&lt;li>MX: 邮件记录(Mail eXchange)，返回接收电子邮件的服务器地址。&lt;/li>
+&lt;li>PTR：逆向查询记录（Pointer Record），从IP查域名。&lt;/li>
+&lt;/ul>
+&lt;h1 id="报文示例">报文示例&lt;/h1>
+&lt;h2 id="报文示例-查询">报文示例-查询&lt;/h2>
+&lt;pre tabindex="0">&lt;code> +---------------------------------------------------+
+Header | OPCODE=SQUERY |
++---------------------------------------------------+
+Question | QNAME=SRI-NIC.ARPA., QCLASS=IN, QTYPE=A |
++---------------------------------------------------+
+Answer | &amp;lt;empty&amp;gt; |
++---------------------------------------------------+
+Authority | &amp;lt;empty&amp;gt; |
++---------------------------------------------------+
+Additional | &amp;lt;empty&amp;gt; |
++---------------------------------------------------+
+&lt;/code>&lt;/pre>&lt;h2 id="报文示例-响应">报文示例-响应&lt;/h2>
+&lt;pre tabindex="0">&lt;code> +---------------------------------------------------+
+Header | OPCODE=SQUERY, RESPONSE, AA |
++---------------------------------------------------+
+Question | QNAME=SRI-NIC.ARPA., QCLASS=IN, QTYPE=A |
++---------------------------------------------------+
+Answer | SRI-NIC.ARPA. 86400 IN A 26.0.0.73 |
+| 86400 IN A 10.0.0.51 |
++---------------------------------------------------+
+Authority | &amp;lt;empty&amp;gt; |
++---------------------------------------------------+
+Additional | &amp;lt;empty&amp;gt; |
++---------------------------------------------------+
+&lt;/code>&lt;/pre>&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;h1 id="相关">相关&lt;/h1>
+&lt;ul>
+&lt;li>dig 命令：可用于DNS相关操作。&lt;/li>
+&lt;li>host 命令：dig的简化版本。&lt;/li>
+&lt;li>whois 命令: 查看域名注册情况。&lt;/li>
+&lt;li>nslookup 命令: 可互动式查询域名记录。&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener"
+>DNS 原理入门-阮一峰&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Domain_Name_System#DNS_message_format" target="_blank" rel="noopener"
+>wiki&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
+>wiki中文&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>ICMP 协议介绍</title><link>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 15:29:37 +0000</pubDate><guid>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
+&lt;h2 id="icmp">ICMP&lt;/h2>
+&lt;ul>
+&lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
+&lt;li>ICMP是互联网协议族的核心协议之一。&lt;/li>
+&lt;li>IMCP用于发送控制消息，提供可能发生在通信环境中的各种问题反馈。&lt;/li>
+&lt;li>ICMP消息都是直接封装在一个IP数据包中的，因此，和UDP一样，ICMP是不可靠的。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理及技术细节">原理及技术细节&lt;/h1>
+&lt;ul>
+&lt;li>每个路由器在转发数据报的时候都会把IP包头中的TTL值减1。&lt;/li>
+&lt;/ul>
+&lt;h1 id="报文结构">报文结构&lt;/h1>
+&lt;p>ICMP报头从IP报头的第160位(20字节)开始：（有可选部分另算）&lt;/p>
+&lt;pre tabindex="0">&lt;code> 8bit 8bit 8bit 8bit
++------+------+------+------+
+| Type | Code | Checksum |
++------+------+------+------+
+| ID | Sequence |
++------+------+------+------+
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>Type: ICMP报文类型。&lt;/li>
+&lt;li>Code：进一步划分ICMP的类型；该字段用来查找产生错误的原因。
+&lt;ul>
+&lt;li>例如，ICMP的目标不可达类型可以把这个位设为1至15等来表示不同的意思。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Checksum：校验和。&lt;/li>
+&lt;li>ID：ID/标识，在Echo Reply类型的消息中需要返回这个字段。&lt;/li>
+&lt;li>Sequence：序号，在Echo Reply类型的消息中需要返回这个字段。&lt;/li>
+&lt;/ul>
+&lt;h1 id="报文类型">报文类型&lt;/h1>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Type&lt;/th>
+&lt;th>Code&lt;/th>
+&lt;th>Status&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;th>查询&lt;/th>
+&lt;th>差错&lt;/th>
+&lt;th>备注&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>0：Echo响应&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Echo响应&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>ping中使用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>未分配&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>未分配&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>3：目的不可达&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>目标网络不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>目标主机不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>目标协议不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>目标端口不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>4&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>要求分段并(但)设置DF标记&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>5&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>源路由失败&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>6&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>未知的目标网络&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>7&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>未知的目标主机&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>8&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>源主机隔离（作废不用）&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>9&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>禁止访问的网络&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>10&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>禁止访问的主机&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>11&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>对特定的TOS 网络不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>12&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>对特定的TOS 主机不可达&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>13&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>由于过滤 网络流量被禁止&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>14&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>主机越权&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>15&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>优先权终止生效&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>4：源端关闭&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>弃用&lt;/td>
+&lt;td>源端关闭（拥塞控制）&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>5：重定向&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>重定向网络&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>重定向主机&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>基于TOS的网络重定向&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>3&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>基于TOS的主机重定向&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>6&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>弃用&lt;/td>
+&lt;td>备用主机地址&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>7&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>未分配&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>8&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Echo请求&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>9&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>路由通告&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>路由器的发现/选择/请求&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11：超时&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>TTL超时&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>分片重组超时&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>12：参数问题-IP头部错误&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>IP报文首部参数错误&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>丢失必要选项&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>2&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>不支持的长度&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>13&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>时间戳请求&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>14&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>时间戳应答&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>15&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>信息请求&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>16&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>信息应答&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>17&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>地址掩码请求&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>18&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>地址掩码应答&lt;/td>
+&lt;td>✓&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>19&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;td>因安全原因保留&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>20~29&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;td>保留用于稳健性实验&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>30~39&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>弃用&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>40&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;a class="link" href="https://zh.wikipedia.org/w/index.php?title=Photuris_%28protocol%29&amp;amp;action=edit&amp;amp;redlink=1" target="_blank" rel="noopener"
+>Photuris&lt;/a>, Security failures&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>？？？&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>41&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>用于实验性移动协议，如Seamoby[RFC4065]&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>42~255&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>保留&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>235&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>实验性&lt;/td>
+&lt;td>RFC3692&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>254&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>实验性&lt;/td>
+&lt;td>RFC3692&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h1 id="部分报文结构示例">部分报文结构示例&lt;/h1>
+&lt;h2 id="3目标不可达">3：目标不可达&lt;/h2>
+&lt;p>目的地不可达由主机或其入站网关生成，以通知客户端由于某种原因目的地不可达。&lt;/p>
+&lt;pre tabindex="0">&lt;code>0 8 16 24 32
++---------+----------+----------+----------+
+| Type=3 | Code=... | Checksum |
++---------+----------+----------+----------+
+| 未使用 | 下一跳MTU |
++------------------------------------------+
+| IP报头和原始数据报数据的前8个字节 |
++------------------------------------------+
+&lt;/code>&lt;/pre>&lt;h2 id="11-超时">11: 超时&lt;/h2>
+&lt;p>超时由网关生成，以便通知&lt;code>源&lt;/code>，数据报在TTL=0时被丢弃了。&lt;/p>
+&lt;pre tabindex="0">&lt;code>0 8 16 32
++---------+----------+----------+
+| Type=11 | Code=0/1 | Checksum |
++---------+----------+----------+
+| 未使用 |
++-------------------------------+
+| IP报头和原始数据报数据的前8个字节 |
++-------------------------------+
+&lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
+&lt;ul>
+&lt;li>RFC 792&lt;/li>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 15:29:37 +0000</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
+&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
+在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
+&lt;h1 id="作用">作用&lt;/h1>
+&lt;ul>
+&lt;li>VLAN可以为网络提供以下作用：
+&lt;ul>
+&lt;li>广播控制&lt;/li>
+&lt;li>带宽利用&lt;/li>
+&lt;li>降低延迟&lt;/li>
+&lt;li>安全性（非设计作用，本身功能所附加出的）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>采用虚拟局域网技术实现交换机以太网的广播隔离。&lt;/li>
+&lt;li>一个VLAN相当于OSI模型第2层的广播域，它能将广播控制在一个VLAN内部。&lt;/li>
+&lt;li>不同VLAN之间或VLAN与LAN/WAN的数据通信必须通过第3层（网络层）完成。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理划分方式">原理（划分方式）&lt;/h1>
+&lt;h2 id="物理层physical-layer">物理层(physical layer)&lt;/h2>
+&lt;ul>
+&lt;li>以&lt;code>交换机端口&lt;/code>作为划分VLAN的基础。&lt;/li>
+&lt;li>适合规模不大的组织。&lt;/li>
+&lt;/ul>
+&lt;h2 id="数据链路层data-link-layer">数据链路层(data link layer)&lt;/h2>
+&lt;ul>
+&lt;li>以每台主机的&lt;code>MAC地址&lt;/code>作为划分VLAN的基础。&lt;/li>
+&lt;li>实现方法：
+&lt;ul>
+&lt;li>创建一个MAC与VLAN映射的数据库。&lt;/li>
+&lt;li>当网络设备连接到端口后，&lt;code>交换机&lt;/code>向&lt;code>VMPS(VLAN管理策略服务器)&lt;/code>请求这个数据库。&lt;/li>
+&lt;li>找到相应的映射，完成VLAN的分配。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>优点：
+&lt;ul>
+&lt;li>计算机物理位置的不同，也不影响VLAN的运作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>缺点：
+&lt;ul>
+&lt;li>人为建立MAC与VLAN的映射关系；因此导致管理复杂度增加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="网络层">网络层&lt;/h2>
+&lt;ul>
+&lt;li>以&lt;code>IP地址&lt;/code>作为划分VLAN的基础；以子网视为VLAN设置的依据。【？？？】&lt;/li>
+&lt;li>优点：
+&lt;ul>
+&lt;li>网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置VLANs架构的复杂度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>缺点：
+&lt;ul>
+&lt;li>交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>
