@@ -1,7 +1,6 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="[TOC]
-DNS DNS - 域名系统（Domain Name System）。
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="DNS DNS - 域名系统（Domain Name System）。
  是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
 主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
  从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
@@ -9,8 +8,7 @@ DNS DNS - 域名系统（Domain Name System）。
   列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m."><title>DNS 协议介绍</title>
 <link rel=canonical href=https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="DNS 协议介绍">
-<meta property="og:description" content="[TOC]
-DNS DNS - 域名系统（Domain Name System）。
+<meta property="og:description" content="DNS DNS - 域名系统（Domain Name System）。
  是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
 主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
  从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
@@ -18,10 +16,9 @@ DNS DNS - 域名系统（Domain Name System）。
   列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m.">
 <meta property="og:url" content="https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dns"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T15:29:37+00:00"><meta property="article:modified_time" content="2021-12-12T15:29:37+00:00">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dns"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T15:36:10+00:00"><meta property="article:modified_time" content="2021-12-12T15:36:10+00:00">
 <meta name=twitter:title content="DNS 协议介绍">
-<meta name=twitter:description content="[TOC]
-DNS DNS - 域名系统（Domain Name System）。
+<meta name=twitter:description content="DNS DNS - 域名系统（Domain Name System）。
  是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
 主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
  从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
@@ -74,7 +71,6 @@ Computer Network
 </div>
 </header>
 <section class=article-content>
-<p>[TOC]</p>
 <h2 id=dns>DNS</h2>
 <p>DNS - 域名系统（Domain Name System）。</p>
 <ul>
