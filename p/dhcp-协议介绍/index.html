@@ -10,7 +10,7 @@
 协议结构  +-------+--------+--------+--------+ |8 bits | 8 bits | 8 bits | 8 bits | +-------+--------+--------+--------+ | Op | Htype | Hlen | Hops | +-------+--------+--------+--------+ | Xid | +----------------------------------+ | Secs | Flags | +----------------+-----------------+ | Ciaddr | +----------------------------------+ | Yiaddr | +----------------------------------+ | Siaddr | +----------------------------------+ | Giaddr | +----------------------------------+ | Chaddr (16 bytes) | +----------------------------------+ | Sname (64 bytes) | +----------------------------------+ | File (128 bytes) | +----------------------------------+ | Option (variable) | +----------------------------------+  Op: 信息类型。如：客户端请求为1，服务器回复为2。 Htype：硬件类型。如：Ethernet(0x01) Hlen: 硬件地址长度。如：6。（MAC地址） Hops: 跳数。 Xid：传输ID。 Secs: 过去的时间。【疑问】 Flags：标记。 Ciaddr：客户端IP地址。（这里应该是续约的时候用的） Siaddr：下一个服务器IP地址。 Yiaddr：你的IP。（分配给客户机的IP） Giaddr：中继代理IP。【？？？】 Chaddr：客户机硬件地址。（Ethernet中就是Mac地址） Sname：服务器主机名称。 File：文件名。 Options：选项。详见rfc2132  1：子网掩码； 3：路由(网关)； 12：主机名 50：请求的IP地址 51：租约时间 53：DHCP消息类型。即上面的几种类型。 54：服务器标识。    疑问 DHCP服务器是否可以把一台主机拉黑？  这个应该由DHCP软件提供。  服务器回复为什么是单播或广播包？  Flags中设置BROADCAST = 0时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。  Secs字段是哪一个时间段？  从获取到IP地址或者续约过程开始到现在所消耗的时间。  Giaddr字段作用是什么？  giaddr: 中继代理地址。 中继代理相关详见：博客  相关  DHCP: RFC 2131 DHCP6: RFC 3315 DHCP wiki DHCP wiki中文 rfc2132  ">
 <meta property="og:url" content="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dhcp"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T15:57:08+00:00"><meta property="article:modified_time" content="2021-12-12T15:57:08+00:00"><meta property="og:image" content="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dhcp"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T16:13:02+00:00"><meta property="article:modified_time" content="2021-12-12T16:13:02+00:00"><meta property="og:image" content="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png">
 <meta name=twitter:title content="DHCP 协议介绍">
 <meta name=twitter:description content="DHCP DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。 DHCP是一个应用层协议。基于UDP。
 作用  用于内网或网络服务供应商自动分配IP给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP在1993年10月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。 DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。 DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。 DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送DHCP服务器发现(DISCOVER)广播包。 服务器收到DISCOVER包后，回复OFFER单播或广播包。【疑问？】 客户主机收到OFFER包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的IP及网关IP(next server IP)、租约等。   典型DHCP会话的模式 
@@ -36,19 +36,19 @@ extended">
 </div>
 <div class=article-details>
 <header class=article-category>
-<a href=/categories/dhcp/ style=background-color:#2c712a;color:#fff>
+<a href=/categories/dhcp/ style=background-color:#980198;color:#fff>
 DHCP
 </a>
-<a href=/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ style=background-color:#b989fc;color:#fff>
+<a href=/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ style=background-color:#3b53f8;color:#fff>
 计算机网络
 </a>
-<a href=/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/ style=background-color:#0f51e6;color:#fff>
+<a href=/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/ style=background-color:#e71c6d;color:#fff>
 网络协议
 </a>
-<a href=/categories/protocol/ style=background-color:#7d4f3a;color:#fff>
+<a href=/categories/protocol/ style=background-color:#f56224;color:#fff>
 Protocol
 </a>
-<a href=/categories/computer-network/ style=background-color:#1c0886;color:#fff>
+<a href=/categories/computer-network/ style=background-color:#64e971;color:#fff>
 Computer Network
 </a>
 </header>
