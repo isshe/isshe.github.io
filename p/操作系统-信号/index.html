@@ -114,14 +114,14 @@ extended">
 </ul>
 </li>
 <li>
-<p>详见<a class=link href=./Examples/ex_SIGCHLD.c>ex_SIGCHLD.c</a></p>
+<p>详见<a class=link href=Examples/ex_SIGCHLD.c>ex_SIGCHLD.c</a></p>
 </li>
 <li>
 <p><strong>教训：不可以用信号来对其他进程中发生的时间计数</strong></p>
 </li>
 </ul>
 <h2 id=3-显式地阻塞和取消阻塞信号>3. 显式地阻塞和取消阻塞信号</h2>
-<p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见<a class=link href=./Examples/3_ex_procmask_bug.c>ex3</a>和<a class=link href=./Examples/4_ex_procmask_fix_bug.c>ex4</a>）</p>
+<p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见<a class=link href=./Examples/3_ex_procmask_bug.c>ex3</a>和<a class=link href=Examples/4_ex_procmask_fix_bug.c>ex4</a>）</p>
 <ul>
 <li>相关函数</li>
 </ul>
@@ -142,15 +142,15 @@ extended">
 <ul>
 <li>进程组。详见<a class=link href=../../1.%e8%bf%9b%e7%a8%8b>1.进程</a></li>
 <li>Linux信号
-<figure>
-<a href=/Linux_signal.png>
-<img src=/Linux_signal.png loading=lazy alt=Linux信号>
+<figure class=gallery-image style=flex-grow:101;flex-basis:243px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png data-size=646x638>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png width=646 height=638 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_1024x0_resize_box_3.png 1024w" loading=lazy alt=Linux信号>
 </a>
 <figcaption>Linux信号</figcaption>
 </figure></li>
-<li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见<a class=link href=./Examples/ex_SIGCHLD.c>ex_SIGCHILD.c</a>】</li>
+<li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见<a class=link href=Examples/ex_SIGCHLD.c>ex_SIGCHILD.c</a>】</li>
 <li>可移植的signal函数。【详见<a class=link href=../../A.lib/isshe_signal.h>isshe_signal.h</a>和<a class=link href=../../A.lib/isshe_signal.c>isshe_signal.c</a>】</li>
-<li>非本地跳转：可和信号一起实现程序重启功能。【详见<a class=link href=./Examples/5_ex_restart.c>ex_restart</a>，macOS上行为和书本有所不同】
+<li>非本地跳转：可和信号一起实现程序重启功能。【详见<a class=link href=Examples/5_ex_restart.c>ex_restart</a>，macOS上行为和书本有所不同】
 <ul>
 <li>相关函数</li>
 </ul>

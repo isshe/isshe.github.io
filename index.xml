@@ -77,7 +77,7 @@
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.png" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
 &lt;p>gdb - GNU调试器。&lt;/p>
 &lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
 GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
@@ -227,7 +227,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
 >https://man.linuxde.net/gdb&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.png" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
 &lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
@@ -288,7 +288,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -457,7 +457,7 @@ ip neigh del 192.168.2.149 dev ens33&lt;/p>
 &lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
 >https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
 &lt;li>linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
 &lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
 &lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
 &lt;ul>
@@ -586,7 +586,7 @@ modprobe &lt;span class="o">[&lt;/span>--dump-modversions&lt;span class="o">]&lt
 &lt;li>lsmod&lt;/li>
 &lt;li>modinfo&lt;/li>
 &lt;/ul>
-&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
+&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
 &lt;p>显示当前的连接情况。（UDP、TCP、UNIX、ICMP等）
 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。&lt;/p>
 &lt;h1 id="1-介绍">1. 介绍&lt;/h1>
@@ -644,7 +644,7 @@ netstat -ie
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示listening监听状态的连接">显示LISTENING(监听)状态的连接&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -l
 &lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="3-疑问">3. 疑问&lt;/h1>
-&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
+&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.png" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
 &lt;h1 id="隧道">隧道&lt;/h1>
 &lt;p>场景：家里内网机器 A 想要访问公司的内网机器 B。
 条件：需要一个公网机器 C （假设IP是 1.1.1.1）。&lt;/p>
@@ -1355,14 +1355,14 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>详见&lt;a class="link" href="./Examples/ex_SIGCHLD.c" >ex_SIGCHLD.c&lt;/a>&lt;/p>
+&lt;p>详见&lt;a class="link" href="Examples/ex_SIGCHLD.c" >ex_SIGCHLD.c&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>&lt;strong>教训：不可以用信号来对其他进程中发生的时间计数&lt;/strong>&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="3-显式地阻塞和取消阻塞信号">3. 显式地阻塞和取消阻塞信号&lt;/h2>
-&lt;p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见&lt;a class="link" href="./Examples/3_ex_procmask_bug.c" >ex3&lt;/a>和&lt;a class="link" href="./Examples/4_ex_procmask_fix_bug.c" >ex4&lt;/a>）&lt;/p>
+&lt;p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见&lt;a class="link" href="./Examples/3_ex_procmask_bug.c" >ex3&lt;/a>和&lt;a class="link" href="Examples/4_ex_procmask_fix_bug.c" >ex4&lt;/a>）&lt;/p>
 &lt;ul>
 &lt;li>相关函数&lt;/li>
 &lt;/ul>
@@ -1384,17 +1384,24 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;li>进程组。详见&lt;a class="link" href="../../1.%e8%bf%9b%e7%a8%8b" >1.进程&lt;/a>&lt;/li>
 &lt;li>Linux信号
 &lt;figure
+class="gallery-image"
+style="
+flex-grow: 101;
+flex-basis: 243px"
 >
-&lt;a href="https://isshe.site/Linux_signal.png" >
-&lt;img src="https://isshe.site/Linux_signal.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png" data-size="646x638">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png"
+width="646"
+height="638"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="Linux信号">
 &lt;/a>
 &lt;figcaption>Linux信号&lt;/figcaption>
 &lt;/figure>&lt;/li>
-&lt;li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见&lt;a class="link" href="./Examples/ex_SIGCHLD.c" >ex_SIGCHILD.c&lt;/a>】&lt;/li>
+&lt;li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见&lt;a class="link" href="Examples/ex_SIGCHLD.c" >ex_SIGCHILD.c&lt;/a>】&lt;/li>
 &lt;li>可移植的signal函数。【详见&lt;a class="link" href="../../A.lib/isshe_signal.h" >isshe_signal.h&lt;/a>和&lt;a class="link" href="../../A.lib/isshe_signal.c" >isshe_signal.c&lt;/a>】&lt;/li>
-&lt;li>非本地跳转：可和信号一起实现程序重启功能。【详见&lt;a class="link" href="./Examples/5_ex_restart.c" >ex_restart&lt;/a>，macOS上行为和书本有所不同】
+&lt;li>非本地跳转：可和信号一起实现程序重启功能。【详见&lt;a class="link" href="Examples/5_ex_restart.c" >ex_restart&lt;/a>，macOS上行为和书本有所不同】
 &lt;ul>
 &lt;li>相关函数&lt;/li>
 &lt;/ul>
@@ -1448,9 +1455,16 @@ alt="Linux信号">
 &lt;h2 id="1进程地址空间">1.进程地址空间&lt;/h2>
 &lt;h3 id="11-典型进程地址空间1">1.1 典型进程地址空间1&lt;/h3>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 119;
+flex-basis: 287px"
 >
-&lt;a href="https://isshe.site/process_address_map.png" >
-&lt;img src="https://isshe.site/process_address_map.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.png" data-size="553x461">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.png"
+width="553"
+height="461"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map_hu575c6395d5e84185e674e7125c58f205_133704_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map_hu575c6395d5e84185e674e7125c58f205_133704_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="典型进程地址空间1">
 &lt;/a>
@@ -1467,9 +1481,16 @@ alt="典型进程地址空间1">
 &lt;/ul>
 &lt;h3 id="12-典型进程地址空间2">1.2 典型进程地址空间2&lt;/h3>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 89;
+flex-basis: 214px"
 >
-&lt;a href="https://isshe.site/process_address_map2.png" >
-&lt;img src="https://isshe.site/process_address_map2.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map2.png" data-size="313x351">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map2.png"
+width="313"
+height="351"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map2_hubf952d7d7b4c15b4a5fb33d32dcdde07_39075_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map2_hubf952d7d7b4c15b4a5fb33d32dcdde07_39075_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="典型进程地址空间2">
 &lt;/a>
@@ -1479,9 +1500,16 @@ alt="典型进程地址空间2">
 &lt;h3 id="21-状态转换图">2.1 状态转换图&lt;/h3>
 &lt;ul>
 &lt;li>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 186;
+flex-basis: 448px"
 >
-&lt;a href="https://isshe.site/process_status_change.png" >
-&lt;img src="https://isshe.site/process_status_change.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_status_change.png" data-size="491x263">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_status_change.png"
+width="491"
+height="263"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_status_change_hubac1e619861cdad4c7c1db0c8f359365_25814_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_status_change_hubac1e619861cdad4c7c1db0c8f359365_25814_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="状态转换图">
 &lt;/a>
@@ -1587,7 +1615,7 @@ alt="状态转换图">
 &lt;/ul>
 &lt;h3 id="42-示例">4.2 示例&lt;/h3>
 &lt;ul>
-&lt;li>见&lt;a class="link" href="./Examples/1_daemonize.c" >守护进程示例&lt;/a>&lt;/li>
+&lt;li>见&lt;a class="link" href="Examples/1_daemonize.c" >守护进程示例&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h3 id="43-守护进程的惯例">4.3 守护进程的惯例&lt;/h3>
 &lt;ul>
@@ -1715,9 +1743,16 @@ int setpgid(pid_t pid, pid_t pgid);
 &lt;/ul>
 &lt;h3 id="a3-c程序的启动和终止">A.3 C程序的启动和终止&lt;/h3>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 138;
+flex-basis: 331px"
 >
-&lt;a href="https://isshe.site/c_program_start_end.png" >
-&lt;img src="https://isshe.site/c_program_start_end.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/c_program_start_end.png" data-size="653x473">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/c_program_start_end.png"
+width="653"
+height="473"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/c_program_start_end_hu1c3c21029dbcbc09f3d43e0d44972160_99269_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/c_program_start_end_hu1c3c21029dbcbc09f3d43e0d44972160_99269_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="C程序的启动和终止">
 &lt;/a>
@@ -1732,9 +1767,16 @@ alt="C程序的启动和终止">
 &lt;/ul>
 &lt;h3 id="a5-7个exec的关系">A.5 7个exec的关系&lt;/h3>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 216;
+flex-basis: 520px"
 >
-&lt;a href="https://isshe.site/7_exec_relationship.png" >
-&lt;img src="https://isshe.site/7_exec_relationship.png"
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/7_exec_relationship.png" data-size="577x266">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/7_exec_relationship.png"
+width="577"
+height="266"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/7_exec_relationship_hu4ed92d3a8b8c87444b47f80c914bafe3_46772_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/7_exec_relationship_hu4ed92d3a8b8c87444b47f80c914bafe3_46772_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="7个exec的关系">
 &lt;/a>
@@ -1966,7 +2008,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpeg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
