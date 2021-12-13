@@ -1837,134 +1837,6 @@ alt="7个exec的关系">
 &lt;ul>
 &lt;li>地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到&lt;code>应答报文&lt;/code>的主机，不会校验报文的真实性，就会加到ARP缓存中。&lt;/li>
 &lt;li>由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DHCP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</link><pubDate>Mon, 13 Dec 2021 16:07:25 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" alt="Featured image of post 网络协议 —— DHCP" />&lt;h2 id="dhcp">DHCP&lt;/h2>
-&lt;p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
-DHCP是一个应用层协议。基于&lt;code>UDP&lt;/code>。&lt;/p>
-&lt;h1 id="作用">作用&lt;/h1>
-&lt;ul>
-&lt;li>用于&lt;code>内网或网络服务供应商&lt;/code>自动分配IP给用户。&lt;/li>
-&lt;li>作为&lt;code>内部管理员&lt;/code>对所有计算机进行&lt;code>中央管理&lt;/code>的手段。&lt;/li>
-&lt;/ul>
-&lt;h1 id="历史">历史&lt;/h1>
-&lt;ul>
-&lt;li>DHCP在1993年10月成为标准协议，它的前身是&lt;code>BOOTP&lt;/code>协议。&lt;/li>
-&lt;li>BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。&lt;/li>
-&lt;/ul>
-&lt;h1 id="数据包类型">数据包类型&lt;/h1>
-&lt;ul>
-&lt;li>DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。&lt;/li>
-&lt;li>DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。&lt;/li>
-&lt;li>DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。&lt;/li>
-&lt;li>DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。&lt;/li>
-&lt;li>DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。&lt;/li>
-&lt;li>DHCP NAK：服务器回复客户，客户要求的网址不能被分配。&lt;/li>
-&lt;/ul>
-&lt;h1 id="原理流程">原理/流程&lt;/h1>
-&lt;ul>
-&lt;li>客户主机发送DHCP服务器发现(DISCOVER)&lt;strong>广播包&lt;/strong>。&lt;/li>
-&lt;li>服务器收到DISCOVER包后，回复&lt;code>OFFER&lt;/code>&lt;strong>单播或广播包&lt;/strong>。【疑问？】&lt;/li>
-&lt;li>客户主机收到OFFER包后，发送&lt;code>REQUEST&lt;/code>&lt;strong>广播包&lt;/strong>。&lt;/li>
-&lt;li>服务器回复&lt;code>ACK&lt;/code>&lt;strong>单播或广播包&lt;/strong>。包含分配的IP及网关IP(next server IP)、租约等。&lt;/li>
-&lt;/ul>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 76;
-flex-basis: 184px"
->
-&lt;a href="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" data-size="440x572">
-&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png"
-width="440"
-height="572"
-srcset="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="典型DHCP会话的模式">
-&lt;/a>
-&lt;figcaption>典型DHCP会话的模式&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h1 id="协议结构">协议结构&lt;/h1>
-&lt;pre tabindex="0">&lt;code> +-------+--------+--------+--------+
-|8 bits | 8 bits | 8 bits | 8 bits |
-+-------+--------+--------+--------+
-| Op | Htype | Hlen | Hops |
-+-------+--------+--------+--------+
-| Xid |
-+----------------------------------+
-| Secs | Flags |
-+----------------+-----------------+
-| Ciaddr |
-+----------------------------------+
-| Yiaddr |
-+----------------------------------+
-| Siaddr |
-+----------------------------------+
-| Giaddr |
-+----------------------------------+
-| Chaddr (16 bytes) |
-+----------------------------------+
-| Sname (64 bytes) |
-+----------------------------------+
-| File (128 bytes) |
-+----------------------------------+
-| Option (variable) |
-+----------------------------------+
-&lt;/code>&lt;/pre>&lt;ul>
-&lt;li>Op: 信息类型。如：客户端请求为1，服务器回复为2。&lt;/li>
-&lt;li>Htype：硬件类型。如：Ethernet(0x01)&lt;/li>
-&lt;li>Hlen: 硬件地址长度。如：6。（MAC地址）&lt;/li>
-&lt;li>Hops: 跳数。&lt;/li>
-&lt;li>Xid：传输ID。&lt;/li>
-&lt;li>Secs: 过去的时间。【疑问】&lt;/li>
-&lt;li>Flags：标记。&lt;/li>
-&lt;li>Ciaddr：客户端IP地址。（这里应该是续约的时候用的）&lt;/li>
-&lt;li>Siaddr：下一个服务器IP地址。&lt;/li>
-&lt;li>Yiaddr：你的IP。（分配给客户机的IP）&lt;/li>
-&lt;li>Giaddr：中继代理IP。【？？？】&lt;/li>
-&lt;li>Chaddr：客户机硬件地址。（Ethernet中就是Mac地址）&lt;/li>
-&lt;li>Sname：服务器主机名称。&lt;/li>
-&lt;li>File：文件名。&lt;/li>
-&lt;li>Options：选项。详见&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
->rfc2132&lt;/a>
-&lt;ul>
-&lt;li>1：子网掩码；&lt;/li>
-&lt;li>3：路由(网关)；&lt;/li>
-&lt;li>12：主机名&lt;/li>
-&lt;li>50：请求的IP地址&lt;/li>
-&lt;li>51：租约时间&lt;/li>
-&lt;li>53：DHCP消息类型。即上面的几种类型。&lt;/li>
-&lt;li>54：服务器标识。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h1 id="疑问">疑问&lt;/h1>
-&lt;h2 id="dhcp服务器是否可以把一台主机拉黑">DHCP服务器是否可以把一台主机拉黑？&lt;/h2>
-&lt;ul>
-&lt;li>这个应该由DHCP软件提供。&lt;/li>
-&lt;/ul>
-&lt;h2 id="服务器回复为什么是单播或广播包">服务器回复为什么是&lt;code>单播或广播包&lt;/code>？&lt;/h2>
-&lt;ul>
-&lt;li>Flags中设置&lt;code>BROADCAST = 0&lt;/code>时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。&lt;/li>
-&lt;/ul>
-&lt;h2 id="secs字段是哪一个时间段">Secs字段是哪一个时间段？&lt;/h2>
-&lt;ul>
-&lt;li>从获取到IP地址或者续约过程开始到现在所消耗的时间。&lt;/li>
-&lt;/ul>
-&lt;h2 id="giaddr字段作用是什么">Giaddr字段作用是什么？&lt;/h2>
-&lt;ul>
-&lt;li>giaddr: 中继代理地址。&lt;/li>
-&lt;li>中继代理相关详见：&lt;a class="link" href="http://blog.sina.com.cn/s/blog_712ff0c9010109df.html" target="_blank" rel="noopener"
->博客&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;h1 id="相关">相关&lt;/h1>
-&lt;ul>
-&lt;li>DHCP: RFC 2131&lt;/li>
-&lt;li>DHCP6: RFC 3315&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_blank" rel="noopener"
->DHCP wiki&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/%e5%8a%a8%e6%80%81%e4%b8%bb%e6%9c%ba%e8%ae%be%e7%bd%ae%e5%8d%8f%e8%ae%ae" target="_blank" rel="noopener"
->DHCP wiki中文&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
->rfc2132&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Mon, 13 Dec 2021 16:07:25 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
@@ -2685,4 +2557,132 @@ Additional | &amp;lt;empty&amp;gt; |
 &lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
 &lt;ul>
 &lt;li>RFC 792&lt;/li>
+&lt;/ul></description></item><item><title>网络协议 —— DHCP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</link><pubDate>Sun, 12 Dec 2021 00:00:00 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" alt="Featured image of post 网络协议 —— DHCP" />&lt;h2 id="dhcp">DHCP&lt;/h2>
+&lt;p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
+DHCP是一个应用层协议。基于&lt;code>UDP&lt;/code>。&lt;/p>
+&lt;h1 id="作用">作用&lt;/h1>
+&lt;ul>
+&lt;li>用于&lt;code>内网或网络服务供应商&lt;/code>自动分配IP给用户。&lt;/li>
+&lt;li>作为&lt;code>内部管理员&lt;/code>对所有计算机进行&lt;code>中央管理&lt;/code>的手段。&lt;/li>
+&lt;/ul>
+&lt;h1 id="历史">历史&lt;/h1>
+&lt;ul>
+&lt;li>DHCP在1993年10月成为标准协议，它的前身是&lt;code>BOOTP&lt;/code>协议。&lt;/li>
+&lt;li>BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。&lt;/li>
+&lt;/ul>
+&lt;h1 id="数据包类型">数据包类型&lt;/h1>
+&lt;ul>
+&lt;li>DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。&lt;/li>
+&lt;li>DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。&lt;/li>
+&lt;li>DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。&lt;/li>
+&lt;li>DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。&lt;/li>
+&lt;li>DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。&lt;/li>
+&lt;li>DHCP NAK：服务器回复客户，客户要求的网址不能被分配。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理流程">原理/流程&lt;/h1>
+&lt;ul>
+&lt;li>客户主机发送DHCP服务器发现(DISCOVER)&lt;strong>广播包&lt;/strong>。&lt;/li>
+&lt;li>服务器收到DISCOVER包后，回复&lt;code>OFFER&lt;/code>&lt;strong>单播或广播包&lt;/strong>。【疑问？】&lt;/li>
+&lt;li>客户主机收到OFFER包后，发送&lt;code>REQUEST&lt;/code>&lt;strong>广播包&lt;/strong>。&lt;/li>
+&lt;li>服务器回复&lt;code>ACK&lt;/code>&lt;strong>单播或广播包&lt;/strong>。包含分配的IP及网关IP(next server IP)、租约等。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 76;
+flex-basis: 184px"
+>
+&lt;a href="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" data-size="440x572">
+&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png"
+width="440"
+height="572"
+srcset="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="典型DHCP会话的模式">
+&lt;/a>
+&lt;figcaption>典型DHCP会话的模式&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h1 id="协议结构">协议结构&lt;/h1>
+&lt;pre tabindex="0">&lt;code> +-------+--------+--------+--------+
+|8 bits | 8 bits | 8 bits | 8 bits |
++-------+--------+--------+--------+
+| Op | Htype | Hlen | Hops |
++-------+--------+--------+--------+
+| Xid |
++----------------------------------+
+| Secs | Flags |
++----------------+-----------------+
+| Ciaddr |
++----------------------------------+
+| Yiaddr |
++----------------------------------+
+| Siaddr |
++----------------------------------+
+| Giaddr |
++----------------------------------+
+| Chaddr (16 bytes) |
++----------------------------------+
+| Sname (64 bytes) |
++----------------------------------+
+| File (128 bytes) |
++----------------------------------+
+| Option (variable) |
++----------------------------------+
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>Op: 信息类型。如：客户端请求为1，服务器回复为2。&lt;/li>
+&lt;li>Htype：硬件类型。如：Ethernet(0x01)&lt;/li>
+&lt;li>Hlen: 硬件地址长度。如：6。（MAC地址）&lt;/li>
+&lt;li>Hops: 跳数。&lt;/li>
+&lt;li>Xid：传输ID。&lt;/li>
+&lt;li>Secs: 过去的时间。【疑问】&lt;/li>
+&lt;li>Flags：标记。&lt;/li>
+&lt;li>Ciaddr：客户端IP地址。（这里应该是续约的时候用的）&lt;/li>
+&lt;li>Siaddr：下一个服务器IP地址。&lt;/li>
+&lt;li>Yiaddr：你的IP。（分配给客户机的IP）&lt;/li>
+&lt;li>Giaddr：中继代理IP。【？？？】&lt;/li>
+&lt;li>Chaddr：客户机硬件地址。（Ethernet中就是Mac地址）&lt;/li>
+&lt;li>Sname：服务器主机名称。&lt;/li>
+&lt;li>File：文件名。&lt;/li>
+&lt;li>Options：选项。详见&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
+>rfc2132&lt;/a>
+&lt;ul>
+&lt;li>1：子网掩码；&lt;/li>
+&lt;li>3：路由(网关)；&lt;/li>
+&lt;li>12：主机名&lt;/li>
+&lt;li>50：请求的IP地址&lt;/li>
+&lt;li>51：租约时间&lt;/li>
+&lt;li>53：DHCP消息类型。即上面的几种类型。&lt;/li>
+&lt;li>54：服务器标识。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;h2 id="dhcp服务器是否可以把一台主机拉黑">DHCP服务器是否可以把一台主机拉黑？&lt;/h2>
+&lt;ul>
+&lt;li>这个应该由DHCP软件提供。&lt;/li>
+&lt;/ul>
+&lt;h2 id="服务器回复为什么是单播或广播包">服务器回复为什么是&lt;code>单播或广播包&lt;/code>？&lt;/h2>
+&lt;ul>
+&lt;li>Flags中设置&lt;code>BROADCAST = 0&lt;/code>时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。&lt;/li>
+&lt;/ul>
+&lt;h2 id="secs字段是哪一个时间段">Secs字段是哪一个时间段？&lt;/h2>
+&lt;ul>
+&lt;li>从获取到IP地址或者续约过程开始到现在所消耗的时间。&lt;/li>
+&lt;/ul>
+&lt;h2 id="giaddr字段作用是什么">Giaddr字段作用是什么？&lt;/h2>
+&lt;ul>
+&lt;li>giaddr: 中继代理地址。&lt;/li>
+&lt;li>中继代理相关详见：&lt;a class="link" href="http://blog.sina.com.cn/s/blog_712ff0c9010109df.html" target="_blank" rel="noopener"
+>博客&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="相关">相关&lt;/h1>
+&lt;ul>
+&lt;li>DHCP: RFC 2131&lt;/li>
+&lt;li>DHCP6: RFC 3315&lt;/li>
+&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol" target="_blank" rel="noopener"
+>DHCP wiki&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/%e5%8a%a8%e6%80%81%e4%b8%bb%e6%9c%ba%e8%ae%be%e7%bd%ae%e5%8d%8f%e8%ae%ae" target="_blank" rel="noopener"
+>DHCP wiki中文&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
+>rfc2132&lt;/a>&lt;/li>
 &lt;/ul></description></item></channel></rss>
