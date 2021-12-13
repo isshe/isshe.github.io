@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 12 Dec 2021 16:17:15 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>ARP 协议介绍</title><link>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 16:17:15 +0000</pubDate><guid>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="arp协议">ARP协议&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 04:33:35 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>ARP 协议介绍</title><link>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="arp协议">ARP协议&lt;/h2>
 &lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
 &lt;h1 id="工作过程">工作过程&lt;/h1>
 &lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
@@ -18,7 +18,7 @@
 &lt;ul>
 &lt;li>地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到&lt;code>应答报文&lt;/code>的主机，不会校验报文的真实性，就会加到ARP缓存中。&lt;/li>
 &lt;li>由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。&lt;/li>
-&lt;/ul></description></item><item><title>DHCP 协议介绍</title><link>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 16:17:15 +0000</pubDate><guid>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" alt="Featured image of post DHCP 协议介绍" />&lt;h2 id="dhcp">DHCP&lt;/h2>
+&lt;/ul></description></item><item><title>DHCP 协议介绍</title><link>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" alt="Featured image of post DHCP 协议介绍" />&lt;h2 id="dhcp">DHCP&lt;/h2>
 &lt;p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
 DHCP是一个应用层协议。基于&lt;code>UDP&lt;/code>。&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -146,7 +146,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>DNS 协议介绍</title><link>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 16:17:15 +0000</pubDate><guid>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>DNS 协议介绍</title><link>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
@@ -354,7 +354,7 @@ Additional | &amp;lt;empty&amp;gt; |
 >wiki&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
 >wiki中文&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>ICMP 协议介绍</title><link>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 16:17:15 +0000</pubDate><guid>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
+&lt;/ul></description></item><item><title>ICMP 协议介绍</title><link>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
 &lt;h2 id="icmp">ICMP&lt;/h2>
 &lt;ul>
 &lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
@@ -867,7 +867,7 @@ Additional | &amp;lt;empty&amp;gt; |
 &lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
 &lt;ul>
 &lt;li>RFC 792&lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 16:17:15 +0000</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
