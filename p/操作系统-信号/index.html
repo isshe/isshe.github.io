@@ -1,0 +1,282 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
+ 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
+  教训：不可以用信号来对其他进程中发生的时间计数
+  3."><title>操作系统 —— 信号</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 信号">
+<meta property="og:description" content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
+ 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
+  教训：不可以用信号来对其他进程中发生的时间计数
+  3.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="signal"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="os"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png">
+<meta name=twitter:title content="操作系统 —— 信号">
+<meta name=twitter:description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
+ 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
+  教训：不可以用信号来对其他进程中发生的时间计数
+  3."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_1600x0_resize_box_3.png 1600w" width=800 height=790 loading=lazy alt="Featured image of post 操作系统 —— 信号">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>操作系统 —— 信号</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=信号>信号</h1>
+<ul>
+<li>一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。</li>
+<li>每种信号类型都对应于某种系统事件。</li>
+<li>信号的默认行为：</li>
+</ul>
+<h2 id=1信号发送和信号接收>1.信号发送和信号接收</h2>
+<ul>
+<li><code>待处理信号</code>：一个发出而没有被接收的信号。</li>
+<li>内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。</li>
+<li>当目的进程被内核<code>强迫</code>以某种方式对信号的发送做出反应时，目的进程就接收了信号。</li>
+<li>Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于<code>进程组(process group)</code>的。</li>
+<li>相关函数:</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/types.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;unistd.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// 发送sig指定信号到pid进程
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>kill</span><span class=p>(</span><span class=n>pid_t</span> <span class=n>pid</span><span class=p>,</span> <span class=kt>int</span> <span class=n>sig</span><span class=p>);</span>
+
+<span class=c1>// 向自己发送SIGALRM信号
+</span><span class=c1></span><span class=kt>unsigned</span> <span class=kt>int</span> <span class=nf>alarm</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>secs</span><span class=p>);</span>
+
+<span class=k>typedef</span> <span class=nf>void</span> <span class=p>(</span><span class=o>*</span><span class=n>sighandler_t</span><span class=p>)(</span><span class=kt>int</span><span class=p>);</span>
+<span class=n>sighandler_t</span> <span class=nf>signal</span><span class=p>(</span><span class=kt>int</span> <span class=n>signum</span><span class=p>,</span> <span class=n>sighandler_t</span> <span class=n>handler</span><span class=p>);</span>
+</code></pre></div><h2 id=2信号处理问题>2.信号处理问题</h2>
+<ul>
+<li>
+<p>待处理信号被阻塞。</p>
+<ul>
+<li>例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1]</li>
+<li>（第2个信号不是SIGINT信号，那是否也还是阻塞？）</li>
+</ul>
+</li>
+<li>
+<p>待处理信号不会排队等待。</p>
+<ul>
+<li>任意类型至多只有一个待处理信号。[疑问][2]</li>
+<li>（不同类型的信号就可以有多个吗？）</li>
+</ul>
+</li>
+<li>
+<p>系统调用可以被中断。</p>
+<ul>
+<li>如read、wait、accept这样的<code>慢速系统调用</code>被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为<code>EINTR</code>。</li>
+</ul>
+</li>
+<li>
+<p>详见<a class=link href=./Examples/ex_SIGCHLD.c>ex_SIGCHLD.c</a></p>
+</li>
+<li>
+<p><strong>教训：不可以用信号来对其他进程中发生的时间计数</strong></p>
+</li>
+</ul>
+<h2 id=3-显式地阻塞和取消阻塞信号>3. 显式地阻塞和取消阻塞信号</h2>
+<p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见<a class=link href=./Examples/3_ex_procmask_bug.c>ex3</a>和<a class=link href=./Examples/4_ex_procmask_fix_bug.c>ex4</a>）</p>
+<ul>
+<li>相关函数</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=c1>// 设置阻塞、不阻塞、添加到阻塞
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigprocmask</span><span class=p>(</span><span class=kt>int</span> <span class=n>how</span><span class=p>,</span> <span class=k>const</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>set</span><span class=p>,</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>oset</span><span class=p>);</span>
+<span class=c1>// 添加signo到set中
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigaddset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
+<span class=c1>// 吧signo从set中删除
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigdelset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
+<span class=c1>// 初始化set为空集
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigemptyset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>);</span>
+<span class=c1>// 将每个(所有？)信号添加到set中
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigfillset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>);</span>
+<span class=c1>// 判断signo是否是set的成员，是返回1，否则0
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigismember</span><span class=p>(</span><span class=k>const</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
+</code></pre></div><h2 id=a拓展>A.拓展</h2>
+<ul>
+<li>进程组。详见<a class=link href=../../1.%e8%bf%9b%e7%a8%8b>1.进程</a></li>
+<li>Linux信号
+<figure>
+<a href=/Linux_signal.png>
+<img src=/Linux_signal.png loading=lazy alt=Linux信号>
+</a>
+<figcaption>Linux信号</figcaption>
+</figure></li>
+<li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见<a class=link href=./Examples/ex_SIGCHLD.c>ex_SIGCHILD.c</a>】</li>
+<li>可移植的signal函数。【详见<a class=link href=../../A.lib/isshe_signal.h>isshe_signal.h</a>和<a class=link href=../../A.lib/isshe_signal.c>isshe_signal.c</a>】</li>
+<li>非本地跳转：可和信号一起实现程序重启功能。【详见<a class=link href=./Examples/5_ex_restart.c>ex_restart</a>，macOS上行为和书本有所不同】
+<ul>
+<li>相关函数</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;setjmp.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=kt>int</span> <span class=nf>setjmp</span><span class=p>(</span><span class=n>jmp_buf</span> <span class=n>env</span><span class=p>);</span>
+<span class=kt>void</span> <span class=nf>logjmp</span><span class=p>(</span><span class=n>jmp_buf</span> <span class=n>env</span><span class=p>,</span> <span class=kt>int</span> <span class=n>retval</span><span class=p>);</span>
+<span class=c1>// 下面两个可以和信号一起用
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>sigsetjmp</span><span class=p>(</span><span class=n>sigjmp_buf</span> <span class=n>env</span><span class=p>,</span> <span class=kt>int</span> <span class=n>savesige</span><span class=p>);</span>
+<span class=kt>void</span> <span class=nf>siglongjmp</span><span class=p>(</span><span class=n>sigjmp_buf</span> <span class=n>env</span><span class=p>,</span> <span class=kt>int</span> <span class=n>retval</span><span class=p>);</span>
+</code></pre></div></li>
+</ul>
+<h2 id=b疑问>B.疑问</h2>
+<ul>
+<li><code>2.信号处理问题</code>中：
+[1]第2个信号不是SIGINT信号，那是否也还是阻塞？
+[2]不同类型的信号就可以有多个吗？</li>
+</ul>
+<h2 id=c参考>C.参考</h2>
+<ul>
+<li>《深入理解计算机系统》</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/signal/>signal</a>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/os/>os</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.4bf2335a98bd1515921cbc5a0c5a1d8b_hu575c6395d5e84185e674e7125c58f205_133704_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程" data-hash="md5-S/IzWpi9FRWSHLxaDFodiw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1信号发送和信号接收>1.信号发送和信号接收</a></li>
+<li><a href=#2信号处理问题>2.信号处理问题</a></li>
+<li><a href=#3-显式地阻塞和取消阻塞信号>3. 显式地阻塞和取消阻塞信号</a></li>
+<li><a href=#a拓展>A.拓展</a></li>
+<li><a href=#b疑问>B.疑问</a></li>
+<li><a href=#c参考>C.参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

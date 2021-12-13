@@ -1,0 +1,398 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="gdb gdb - GNU调试器。
+调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。 GDB可以做4种主要的事情来帮助你捕捉bug：
+ 启动你的程序，指定任何可能影响程序行为的内容。 使程序在指定条件下停止。 检查你程序停止时，正在发生的事情。 更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。  你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。 使用gdb命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令help来查看帮助（不用退出gdb）。 你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：
+ gdb program
+ 您还可以从可执行程序和指定的core文件开始：
+ gdb program core
+ 如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：
+ gdb program 1234 gdb -p 1234
+ 将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。 以下是一些常用的GDB命令:
+break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger"><title>Linux 命令 —— gdb</title>
+<link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— gdb">
+<meta property="og:description" content="gdb gdb - GNU调试器。
+调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。 GDB可以做4种主要的事情来帮助你捕捉bug：
+ 启动你的程序，指定任何可能影响程序行为的内容。 使程序在指定条件下停止。 检查你程序停止时，正在发生的事情。 更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。  你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。 使用gdb命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令help来查看帮助（不用退出gdb）。 你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：
+ gdb program
+ 您还可以从可执行程序和指定的core文件开始：
+ gdb program core
+ 如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：
+ gdb program 1234 gdb -p 1234
+ 将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。 以下是一些常用的GDB命令:
+break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger">
+<meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="gdb"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg">
+<meta name=twitter:title content="Linux 命令 —— gdb">
+<meta name=twitter:description content="gdb gdb - GNU调试器。
+调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。 GDB可以做4种主要的事情来帮助你捕捉bug：
+ 启动你的程序，指定任何可能影响程序行为的内容。 使程序在指定条件下停止。 检查你程序停止时，正在发生的事情。 更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。  你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。 使用gdb命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令help来查看帮助（不用退出gdb）。 你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：
+ gdb program
+ 您还可以从可执行程序和指定的core文件开始：
+ gdb program core
+ 如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：
+ gdb program 1234 gdb -p 1234
+ 将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。 以下是一些常用的GDB命令:
+break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu6485f23e60e2e8e9568294bae27898e8_22406_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu6485f23e60e2e8e9568294bae27898e8_22406_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu6485f23e60e2e8e9568294bae27898e8_22406_1600x0_resize_q75_box.jpg 1600w" width=800 height=903 loading=lazy alt="Featured image of post Linux 命令 —— gdb">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/linux-%E5%91%BD%E4%BB%A4/ style=background-color:#71d399;color:#fff>
+Linux 命令
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>Linux 命令 —— gdb</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=gdb>gdb</h2>
+<p>gdb - GNU调试器。</p>
+<p>调试器(如GDB)的目的是允许你查看其他程序在执行时的"内部"的内容，或者程序奔溃的时候正在做什么。
+GDB可以做4种主要的事情来帮助你捕捉bug：</p>
+<ul>
+<li>启动你的程序，指定任何可能影响程序行为的内容。</li>
+<li>使程序在指定条件下停止。</li>
+<li>检查你程序停止时，正在发生的事情。</li>
+<li>更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。</li>
+</ul>
+<p>你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。
+使用<code>gdb</code>命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令"exit"告诉它退出。你可以用GDB命令<code>help</code>来查看帮助（不用退出gdb）。
+你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：</p>
+<blockquote>
+<p>gdb program</p>
+</blockquote>
+<p>您还可以从可执行程序和指定的core文件开始：</p>
+<blockquote>
+<p>gdb program core</p>
+</blockquote>
+<p>如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：</p>
+<blockquote>
+<p>gdb program 1234
+gdb -p 1234</p>
+</blockquote>
+<p>将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。
+以下是一些常用的GDB命令:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=nb>break</span> <span class=o>[</span>file:<span class=o>]</span><span class=k>function</span>
+    在函数<span class=o>(</span>文件<span class=o>)</span>中设置断点。
+    缩写：b。
+    用法：
+        b &lt;行号&gt;，如：b <span class=m>8</span>
+        b &lt;函数名称&gt;，如：b main
+        b *&lt;函数名称&gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”）
+        b *&lt;代码地址&gt;，如：b *0x804835c。
+d <span class=o>[</span>breakpoint number<span class=o>]</span>
+    删除断点
+
+run <span class=o>[</span>arglist<span class=o>]</span>
+    开始你的程序（arglist是参数列表）
+    缩写：r
+
+bt
+    回溯<span class=o>(</span>backtrace<span class=o>)</span>：显示程序堆栈。
+
+print expr
+    显示表达式expr的值。
+    缩写：p
+
+c
+    继续运行你的程序（在停止后，例如断电）。continue的缩写。
+
+next
+    继续下一行<span class=o>(</span>在停止后<span class=o>)</span>；不进入函数的单步调试。
+    缩写：n
+
+edit <span class=o>[</span>file:<span class=o>]</span><span class=k>function</span>
+    查看程序当前停止的行。
+
+list <span class=o>[</span>file:<span class=o>]</span><span class=k>function</span>
+    在当前停止的位置附近键入程序的文本。
+
+step
+    继续下一行<span class=o>(</span>在停止后<span class=o>)</span>；进入函数的单步调试。
+    缩写：s
+
+i
+    显示各类信息。如：i r，显示寄存器的信息
+
+<span class=nb>help</span> <span class=o>[</span>name<span class=o>]</span>
+    显示GDB命令name的信息，或有关使用GDB的一般信息。
+
+quit
+    退出GDB。
+    缩写：q
+</code></pre></div><p>有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger</p>
+<h1 id=用法>用法</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gdb <span class=o>[</span>-help<span class=o>]</span> <span class=o>[</span>-nh<span class=o>]</span> <span class=o>[</span>-nx<span class=o>]</span> <span class=o>[</span>-q<span class=o>]</span> <span class=o>[</span>-batch<span class=o>]</span> <span class=o>[</span>-cd<span class=o>=</span>dir<span class=o>]</span> <span class=o>[</span>-f<span class=o>]</span> <span class=o>[</span>-b bps<span class=o>]</span>
+   <span class=o>[</span>-tty<span class=o>=</span>dev<span class=o>]</span> <span class=o>[</span>-s symfile<span class=o>]</span> <span class=o>[</span>-e prog<span class=o>]</span> <span class=o>[</span>-se prog<span class=o>]</span> <span class=o>[</span>-c core<span class=o>]</span> <span class=o>[</span>-p procID<span class=o>]</span>
+   <span class=o>[</span>-x cmds<span class=o>]</span> <span class=o>[</span>-d dir<span class=o>]</span> <span class=o>[</span>prog<span class=p>|</span>prog procID<span class=p>|</span>prog core<span class=o>]</span>
+</code></pre></div><h1 id=选项>选项</h1>
+<p>选项之外的任何参数都需要指定可执行文件和核心文件（或进程ID）。
+所有选项和命令行参数都按顺序处理。使用' -x &lsquo;选项时，顺序会有所不同。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>-help
+-h  列出所有选项，并提供简要说明。
+
+-symbols<span class=o>=</span>file
+-s file
+    从file文件中读取符号表（symbol table）。
+
+-write
+    允许写入可执行文件和core文件。
+
+-exec<span class=o>=</span>file
+-e file
+    使用file文件作为可执行文件在适当时执行，并与核心转储一起检查纯数据。
+
+-se<span class=o>=</span>file
+    从file文件中读取符号表并将file用作可执行文件。
+
+-core<span class=o>=</span>file
+-c file
+   指定core文件。
+
+-command<span class=o>=</span>file
+-x file
+    执行file文件中的GDB命令。（自动化？）
+
+-ex <span class=nb>command</span>
+    执行给定的GDB命令。
+
+-directory<span class=o>=</span>directory
+-d directory
+    将目录添加到路径<span class=o>(</span>path<span class=o>)</span>以搜索源文件。
+
+-nh 不要执行~/.gdbinit中的命令。
+-nx
+-n  不要执行任何<span class=s1>&#39;.gdbinit&#39;</span>初始化文件中的命令。
+
+-quiet
+-q  <span class=s2>&#34;Quiet&#34;</span>. 不要打印介绍性和版权信息。这些消息也在批处理模式下被抑制。
+
+-batch
+    以批处理模式运行。
+    在执行完用-x选项指定的所有命令文件<span class=o>(</span>如果不禁止，则为.gdbinit<span class=o>)</span>后，以0退出。
+    如果在运行命令文件中的GDB命令时发生错误，则以非0退出。
+    批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序<span class=p>;</span> 
+    为了使这个更有用，消息程序正常退出。【？？？】
+
+-cd<span class=o>=</span>directory
+    使用directory作用GDB的工作目录（而不是用当前目录）
+
+-fullname
+-f   Emacs在将GDB作为子进程运行时设置此选项。
+    它告诉GDB每次显示堆栈帧时都以标准的，可识别的方式输出完整的文件名和行号（包括每次程序停止时）。
+    这种可识别的格式看起来像两个<span class=s1>&#39;\032&#39;</span>字符，后跟文件名，行号和以冒号分隔的字符位置，以及换行符。
+    Emacs-to-GDB接口程序使用两个<span class=s1>&#39;\032&#39;</span>字符作为信号来显示帧的源代码。
+
+-b bps
+    设置GDB用于远程调试的任何串行接口的线性速度（波特率或每秒位数）。
+
+-tty<span class=o>=</span>device
+    使用device运行程序的标准输入和输出。
+</code></pre></div><h1 id=示例>示例</h1>
+<h2 id=编译并跟踪>编译并跟踪</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc test.c -o <span class=nb>test</span> -g
+gdb <span class=nb>test</span>
+    &lt;gdb命令&gt; 
+    &lt;b main&gt;: 断点
+    &lt;b 10&gt;: 第10行设置断点
+    &lt;d 10&gt;: 删除第10行的断点
+    &lt;info b&gt;: 查看断点信息
+    &lt;c&gt;: 继续
+    &lt;n&gt;: 下一行
+    &lt;s&gt;: 下一行，进入函数。
+    &lt;r&gt;: 执行
+    &lt;c&gt;: 继续执行
+    &lt;i r&gt;: 显示寄存器的信息
+    &lt;bt&gt;: 显示堆栈
+    &lt;list 10&gt;: 从第10行开始显示代码
+</code></pre></div><h1 id=疑问>疑问</h1>
+<h1 id=拓展>拓展</h1>
+<ul>
+<li>shell命令：info gdb</li>
+<li><a class=link href=https://sourceware.org/gdb/current/onlinedocs/gdb/ target=_blank rel=noopener>gdb在线文档</a>
+<ul>
+<li><a class=link href=http://mermaja.act.uji.es/docencia/is37/data/gdb.pdf target=_blank rel=noopener>A Guide to the GNU Source-Level Debugger</a></li>
+</ul>
+</li>
+</ul>
+<h1 id=参考>参考</h1>
+<ul>
+<li><a class=link href=https://man.linuxde.net/gdb target=_blank rel=noopener>https://man.linuxde.net/gdb</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/gdb/>gdb</a>
+<a href=/tags/linux-%E5%91%BD%E4%BB%A4/>linux 命令</a>
+<a href=/tags/command/>command</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.c0127903dac4110e1d5103ae27c763b4_hu6c226959cebd96f85422def462695424_85269_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-wBJ5A9rEEQ4dUQOuJ8djtA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ssh</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#gdb>gdb</a></li>
+</ol>
+<ol>
+<li><a href=#编译并跟踪>编译并跟踪</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

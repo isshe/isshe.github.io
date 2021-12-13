@@ -1,0 +1,314 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="DHCP DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。 DHCP是一个应用层协议。基于UDP。
+作用  用于内网或网络服务供应商自动分配IP给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP在1993年10月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。 DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。 DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。 DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送DHCP服务器发现(DISCOVER)广播包。 服务器收到DISCOVER包后，回复OFFER单播或广播包。【疑问？】 客户主机收到OFFER包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的IP及网关IP(next server IP)、租约等。   典型DHCP会话的模式 
+协议结构  +-------+--------+--------+--------+ |8 bits | 8 bits | 8 bits | 8 bits | +-------+--------+--------+--------+ | Op | Htype | Hlen | Hops | +-------+--------+--------+--------+ | Xid | +----------------------------------+ | Secs | Flags | +----------------+-----------------+ | Ciaddr | +----------------------------------+ | Yiaddr | +----------------------------------+ | Siaddr | +----------------------------------+ | Giaddr | +----------------------------------+ | Chaddr (16 bytes) | +----------------------------------+ | Sname (64 bytes) | +----------------------------------+ | File (128 bytes) | +----------------------------------+ | Option (variable) | +----------------------------------+  Op: 信息类型。如：客户端请求为1，服务器回复为2。 Htype：硬件类型。如：Ethernet(0x01) Hlen: 硬件地址长度。如：6。（MAC地址） Hops: 跳数。 Xid：传输ID。 Secs: 过去的时间。【疑问】 Flags：标记。 Ciaddr：客户端IP地址。（这里应该是续约的时候用的） Siaddr：下一个服务器IP地址。 Yiaddr：你的IP。（分配给客户机的IP） Giaddr：中继代理IP。【？？？】 Chaddr：客户机硬件地址。（Ethernet中就是Mac地址） Sname：服务器主机名称。 File：文件名。 Options：选项。详见rfc2132  1：子网掩码； 3：路由(网关)； 12：主机名 50：请求的IP地址 51：租约时间 53：DHCP消息类型。即上面的几种类型。 54：服务器标识。    疑问 DHCP服务器是否可以把一台主机拉黑？  这个应该由DHCP软件提供。  服务器回复为什么是单播或广播包？  Flags中设置BROADCAST = 0时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。  Secs字段是哪一个时间段？  从获取到IP地址或者续约过程开始到现在所消耗的时间。  Giaddr字段作用是什么？  giaddr: 中继代理地址。 中继代理相关详见：博客  相关  DHCP: RFC 2131 DHCP6: RFC 3315 DHCP wiki DHCP wiki中文 rfc2132  "><title>网络协议 —— DHCP</title>
+<link rel=canonical href=https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="网络协议 —— DHCP">
+<meta property="og:description" content="DHCP DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。 DHCP是一个应用层协议。基于UDP。
+作用  用于内网或网络服务供应商自动分配IP给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP在1993年10月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。 DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。 DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。 DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送DHCP服务器发现(DISCOVER)广播包。 服务器收到DISCOVER包后，回复OFFER单播或广播包。【疑问？】 客户主机收到OFFER包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的IP及网关IP(next server IP)、租约等。   典型DHCP会话的模式 
+协议结构  +-------+--------+--------+--------+ |8 bits | 8 bits | 8 bits | 8 bits | +-------+--------+--------+--------+ | Op | Htype | Hlen | Hops | +-------+--------+--------+--------+ | Xid | +----------------------------------+ | Secs | Flags | +----------------+-----------------+ | Ciaddr | +----------------------------------+ | Yiaddr | +----------------------------------+ | Siaddr | +----------------------------------+ | Giaddr | +----------------------------------+ | Chaddr (16 bytes) | +----------------------------------+ | Sname (64 bytes) | +----------------------------------+ | File (128 bytes) | +----------------------------------+ | Option (variable) | +----------------------------------+  Op: 信息类型。如：客户端请求为1，服务器回复为2。 Htype：硬件类型。如：Ethernet(0x01) Hlen: 硬件地址长度。如：6。（MAC地址） Hops: 跳数。 Xid：传输ID。 Secs: 过去的时间。【疑问】 Flags：标记。 Ciaddr：客户端IP地址。（这里应该是续约的时候用的） Siaddr：下一个服务器IP地址。 Yiaddr：你的IP。（分配给客户机的IP） Giaddr：中继代理IP。【？？？】 Chaddr：客户机硬件地址。（Ethernet中就是Mac地址） Sname：服务器主机名称。 File：文件名。 Options：选项。详见rfc2132  1：子网掩码； 3：路由(网关)； 12：主机名 50：请求的IP地址 51：租约时间 53：DHCP消息类型。即上面的几种类型。 54：服务器标识。    疑问 DHCP服务器是否可以把一台主机拉黑？  这个应该由DHCP软件提供。  服务器回复为什么是单播或广播包？  Flags中设置BROADCAST = 0时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。  Secs字段是哪一个时间段？  从获取到IP地址或者续约过程开始到现在所消耗的时间。  Giaddr字段作用是什么？  giaddr: 中继代理地址。 中继代理相关详见：博客  相关  DHCP: RFC 2131 DHCP6: RFC 3315 DHCP wiki DHCP wiki中文 rfc2132  ">
+<meta property="og:url" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="dhcp"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png">
+<meta name=twitter:title content="网络协议 —— DHCP">
+<meta name=twitter:description content="DHCP DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。 DHCP是一个应用层协议。基于UDP。
+作用  用于内网或网络服务供应商自动分配IP给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP在1993年10月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。 DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。 DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。 DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送DHCP服务器发现(DISCOVER)广播包。 服务器收到DISCOVER包后，回复OFFER单播或广播包。【疑问？】 客户主机收到OFFER包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的IP及网关IP(next server IP)、租约等。   典型DHCP会话的模式 
+协议结构  +-------+--------+--------+--------+ |8 bits | 8 bits | 8 bits | 8 bits | +-------+--------+--------+--------+ | Op | Htype | Hlen | Hops | +-------+--------+--------+--------+ | Xid | +----------------------------------+ | Secs | Flags | +----------------+-----------------+ | Ciaddr | +----------------------------------+ | Yiaddr | +----------------------------------+ | Siaddr | +----------------------------------+ | Giaddr | +----------------------------------+ | Chaddr (16 bytes) | +----------------------------------+ | Sname (64 bytes) | +----------------------------------+ | File (128 bytes) | +----------------------------------+ | Option (variable) | +----------------------------------+  Op: 信息类型。如：客户端请求为1，服务器回复为2。 Htype：硬件类型。如：Ethernet(0x01) Hlen: 硬件地址长度。如：6。（MAC地址） Hops: 跳数。 Xid：传输ID。 Secs: 过去的时间。【疑问】 Flags：标记。 Ciaddr：客户端IP地址。（这里应该是续约的时候用的） Siaddr：下一个服务器IP地址。 Yiaddr：你的IP。（分配给客户机的IP） Giaddr：中继代理IP。【？？？】 Chaddr：客户机硬件地址。（Ethernet中就是Mac地址） Sname：服务器主机名称。 File：文件名。 Options：选项。详见rfc2132  1：子网掩码； 3：路由(网关)； 12：主机名 50：请求的IP地址 51：租约时间 53：DHCP消息类型。即上面的几种类型。 54：服务器标识。    疑问 DHCP服务器是否可以把一台主机拉黑？  这个应该由DHCP软件提供。  服务器回复为什么是单播或广播包？  Flags中设置BROADCAST = 0时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。  Secs字段是哪一个时间段？  从获取到IP地址或者续约过程开始到现在所消耗的时间。  Giaddr字段作用是什么？  giaddr: 中继代理地址。 中继代理相关详见：博客  相关  DHCP: RFC 2131 DHCP6: RFC 3315 DHCP wiki DHCP wiki中文 rfc2132  "><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_800x0_resize_box_3.png srcset="/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_800x0_resize_box_3.png 800w, /p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1600x0_resize_box_3.png 1600w" width=800 height=1040 loading=lazy alt="Featured image of post 网络协议 —— DHCP">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/ style=background-color:#51b4d9;color:#fff>
+网络协议
+</a>
+<a href=/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ style=background-color:#d191e1;color:#fff>
+计算机网络
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>网络协议 —— DHCP</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=dhcp>DHCP</h2>
+<p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
+DHCP是一个应用层协议。基于<code>UDP</code>。</p>
+<h1 id=作用>作用</h1>
+<ul>
+<li>用于<code>内网或网络服务供应商</code>自动分配IP给用户。</li>
+<li>作为<code>内部管理员</code>对所有计算机进行<code>中央管理</code>的手段。</li>
+</ul>
+<h1 id=历史>历史</h1>
+<ul>
+<li>DHCP在1993年10月成为标准协议，它的前身是<code>BOOTP</code>协议。</li>
+<li>BOOTP：BOOTP是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。</li>
+</ul>
+<h1 id=数据包类型>数据包类型</h1>
+<ul>
+<li>DHCP发现（DISCOVER）：client在物理子网上发送广播来寻找可用的服务器。</li>
+<li>DHCP提供（OFFER）：当DHCP服务器收到一个来自客户的IP租约请求时，它会提供一个IP租约。</li>
+<li>DHCP请求（REQUEST）：当客户PC收到一个IP租约提供时，它必须告诉所有其他的DHCP服务器它已经接受了一个租约提供。</li>
+<li>DHCP确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。</li>
+<li>DHCP释放(RELEASE)：客户端向DHCP服务器发送一个请求以释放DHCP资源，并注销其IP地址。</li>
+<li>DHCP NAK：服务器回复客户，客户要求的网址不能被分配。</li>
+</ul>
+<h1 id=原理流程>原理/流程</h1>
+<ul>
+<li>客户主机发送DHCP服务器发现(DISCOVER)<strong>广播包</strong>。</li>
+<li>服务器收到DISCOVER包后，回复<code>OFFER</code><strong>单播或广播包</strong>。【疑问？】</li>
+<li>客户主机收到OFFER包后，发送<code>REQUEST</code><strong>广播包</strong>。</li>
+<li>服务器回复<code>ACK</code><strong>单播或广播包</strong>。包含分配的IP及网关IP(next server IP)、租约等。</li>
+</ul>
+<p><figure class=gallery-image style=flex-grow:76;flex-basis:184px>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png data-size=440x572>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png width=440 height=572 srcset="/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, /p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w" loading=lazy alt=典型DHCP会话的模式>
+</a>
+<figcaption>典型DHCP会话的模式</figcaption>
+</figure></p>
+<h1 id=协议结构>协议结构</h1>
+<pre tabindex=0><code>        +-------+--------+--------+--------+
+        |8 bits | 8 bits | 8 bits | 8 bits |
+        +-------+--------+--------+--------+
+        | Op    | Htype  | Hlen   | Hops   |
+        +-------+--------+--------+--------+
+        | Xid                              |
+        +----------------------------------+
+        | Secs           | Flags           |
+        +----------------+-----------------+
+        | Ciaddr                           |
+        +----------------------------------+
+        | Yiaddr                           |
+        +----------------------------------+
+        | Siaddr                           |
+        +----------------------------------+
+        | Giaddr                           |
+        +----------------------------------+
+        | Chaddr (16 bytes)                |
+        +----------------------------------+
+        | Sname (64 bytes)                 |
+        +----------------------------------+
+        | File (128 bytes)                 |
+        +----------------------------------+
+        | Option (variable)                |
+        +----------------------------------+
+</code></pre><ul>
+<li>Op: 信息类型。如：客户端请求为1，服务器回复为2。</li>
+<li>Htype：硬件类型。如：Ethernet(0x01)</li>
+<li>Hlen: 硬件地址长度。如：6。（MAC地址）</li>
+<li>Hops: 跳数。</li>
+<li>Xid：传输ID。</li>
+<li>Secs: 过去的时间。【疑问】</li>
+<li>Flags：标记。</li>
+<li>Ciaddr：客户端IP地址。（这里应该是续约的时候用的）</li>
+<li>Siaddr：下一个服务器IP地址。</li>
+<li>Yiaddr：你的IP。（分配给客户机的IP）</li>
+<li>Giaddr：中继代理IP。【？？？】</li>
+<li>Chaddr：客户机硬件地址。（Ethernet中就是Mac地址）</li>
+<li>Sname：服务器主机名称。</li>
+<li>File：文件名。</li>
+<li>Options：选项。详见<a class=link href=https://tools.ietf.org/html/rfc2132 target=_blank rel=noopener>rfc2132</a>
+<ul>
+<li>1：子网掩码；</li>
+<li>3：路由(网关)；</li>
+<li>12：主机名</li>
+<li>50：请求的IP地址</li>
+<li>51：租约时间</li>
+<li>53：DHCP消息类型。即上面的几种类型。</li>
+<li>54：服务器标识。</li>
+</ul>
+</li>
+</ul>
+<h1 id=疑问>疑问</h1>
+<h2 id=dhcp服务器是否可以把一台主机拉黑>DHCP服务器是否可以把一台主机拉黑？</h2>
+<ul>
+<li>这个应该由DHCP软件提供。</li>
+</ul>
+<h2 id=服务器回复为什么是单播或广播包>服务器回复为什么是<code>单播或广播包</code>？</h2>
+<ul>
+<li>Flags中设置<code>BROADCAST = 0</code>时，则是单播；否则是广播。这是为了健壮性，同时兼容单播和多播。</li>
+</ul>
+<h2 id=secs字段是哪一个时间段>Secs字段是哪一个时间段？</h2>
+<ul>
+<li>从获取到IP地址或者续约过程开始到现在所消耗的时间。</li>
+</ul>
+<h2 id=giaddr字段作用是什么>Giaddr字段作用是什么？</h2>
+<ul>
+<li>giaddr: 中继代理地址。</li>
+<li>中继代理相关详见：<a class=link href=http://blog.sina.com.cn/s/blog_712ff0c9010109df.html target=_blank rel=noopener>博客</a></li>
+</ul>
+<h1 id=相关>相关</h1>
+<ul>
+<li>DHCP: RFC 2131</li>
+<li>DHCP6: RFC 3315</li>
+<li><a class=link href=https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol target=_blank rel=noopener>DHCP wiki</a></li>
+<li><a class=link href=https://zh.wikipedia.org/wiki/%e5%8a%a8%e6%80%81%e4%b8%bb%e6%9c%ba%e8%ae%be%e7%bd%ae%e5%8d%8f%e8%ae%ae target=_blank rel=noopener>DHCP wiki中文</a></li>
+<li><a class=link href=https://tools.ietf.org/html/rfc2132 target=_blank rel=noopener>rfc2132</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/dhcp/>dhcp</a>
+<a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>
+<a href=/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/>计算机网络</a>
+<a href=/tags/protocol/>protocol</a>
+<a href=/tags/computer-network/>computer network</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.92e807e090a193d2f9e547aa439368c2_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-kugH4JChk9L55UeqQ5Nowg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.2fa2be21eaace4e918c97d2ad77ec60c_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-L6K+Ieqs5OkYyX0q137GDA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— ARP</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.b841352646c368e3d11bbf4727910450_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_250x150_fill_q75_box_smart1.jpeg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-uEE1JkbDaOPRG79HJ5EEUA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— DNS</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.27d391a14e68b5eb559333f92e869f66_hu145d34d1ec22bcb129ce02135b210b81_32414_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-J9ORoU5otetVkzP5LoafZg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— ICMP</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#dhcp>DHCP</a></li>
+</ol>
+<ol>
+<li><a href=#dhcp服务器是否可以把一台主机拉黑>DHCP服务器是否可以把一台主机拉黑？</a></li>
+<li><a href=#服务器回复为什么是单播或广播包>服务器回复为什么是<code>单播或广播包</code>？</a></li>
+<li><a href=#secs字段是哪一个时间段>Secs字段是哪一个时间段？</a></li>
+<li><a href=#giaddr字段作用是什么>Giaddr字段作用是什么？</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

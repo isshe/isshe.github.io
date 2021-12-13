@@ -1,0 +1,392 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="vmstat 报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。
+用法 vmstat [options] [delay [count]] vmstat [-f] [-s] [-m] vmstat [-S unit] vmstat [-d] vmstat [-p disk partition] vmstat [-V] 选项 delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。 count 更新次数。如果未指定计数且指定了延迟(delay)，则count默认为无穷大。 -a, --active 显示活动和非活动内存（2.5.41及之后的版本） -f, --forks 显示自引导以来的fork数。 这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。 每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。 -m, --slabs 显示slabinfo。【相关字段含义见下面部分】 -n, --one-header 标题仅显示一次而不是定期显示。 -s, --stats 显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。 -d, --disk 报告磁盘信息（2.5.70及之后版本） -D, --disk-sum 报告一些有关磁盘活动的摘要统计信息。 -p, --partition device 分区的详细统计信息。 (2.5.70及之后版本). -S, --unit character 更换输出的单位：1000(k)，1024(K)，1000000(m)，1048576(M) 字节。 注意，这不会改变交换(si/so)或块(bi/bo)字段。 -t, --timestamp 为每一行附加时间戳。 -w, --wide 宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。 输出宽度会超过每行80个字符。 -V, --version 显示版本信息并退出。 -h, --help 显示帮助信息并退出。 字段描述 VM 模式字段描述  进程  r: 可运行进程的数量 (正在运行+就绪状态)。 b: 处于不可中断睡眠的进程数量。   内存  swpd: 使用的虚拟内存量。 free: 空闲内存量。(idle) buff: 用作缓冲区(buffer)的内存量。 cache: 用作缓存(cache)的内存量。 inact: 非活动内存量。（-a选项） active: 活动内存量。（-a选项）   交换内存  si: 从磁盘交换的内存量（/s）。 so: 交换到磁盘的内存量（/s）。   IO  bi: 从块设备接收的块数（blocks/s）。 bo: 发送到块设备的块数（blocks/ s）。   系统  in: 每秒的中断数，包括时钟。 cs: 每秒上下文切换次数。   CPU  这些是总CPU时间的占比。 us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间) sy: 运行内核代码所花费的时间。 (系统时间) id: 空闲时间。在2."><title>Linux 命令 —— vmstat</title>
+<link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— vmstat">
+<meta property="og:description" content="vmstat 报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。
+用法 vmstat [options] [delay [count]] vmstat [-f] [-s] [-m] vmstat [-S unit] vmstat [-d] vmstat [-p disk partition] vmstat [-V] 选项 delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。 count 更新次数。如果未指定计数且指定了延迟(delay)，则count默认为无穷大。 -a, --active 显示活动和非活动内存（2.5.41及之后的版本） -f, --forks 显示自引导以来的fork数。 这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。 每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。 -m, --slabs 显示slabinfo。【相关字段含义见下面部分】 -n, --one-header 标题仅显示一次而不是定期显示。 -s, --stats 显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。 -d, --disk 报告磁盘信息（2.5.70及之后版本） -D, --disk-sum 报告一些有关磁盘活动的摘要统计信息。 -p, --partition device 分区的详细统计信息。 (2.5.70及之后版本). -S, --unit character 更换输出的单位：1000(k)，1024(K)，1000000(m)，1048576(M) 字节。 注意，这不会改变交换(si/so)或块(bi/bo)字段。 -t, --timestamp 为每一行附加时间戳。 -w, --wide 宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。 输出宽度会超过每行80个字符。 -V, --version 显示版本信息并退出。 -h, --help 显示帮助信息并退出。 字段描述 VM 模式字段描述  进程  r: 可运行进程的数量 (正在运行+就绪状态)。 b: 处于不可中断睡眠的进程数量。   内存  swpd: 使用的虚拟内存量。 free: 空闲内存量。(idle) buff: 用作缓冲区(buffer)的内存量。 cache: 用作缓存(cache)的内存量。 inact: 非活动内存量。（-a选项） active: 活动内存量。（-a选项）   交换内存  si: 从磁盘交换的内存量（/s）。 so: 交换到磁盘的内存量（/s）。   IO  bi: 从块设备接收的块数（blocks/s）。 bo: 发送到块设备的块数（blocks/ s）。   系统  in: 每秒的中断数，包括时钟。 cs: 每秒上下文切换次数。   CPU  这些是总CPU时间的占比。 us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间) sy: 运行内核代码所花费的时间。 (系统时间) id: 空闲时间。在2.">
+<meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="vmstat"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg">
+<meta name=twitter:title content="Linux 命令 —— vmstat">
+<meta name=twitter:description content="vmstat 报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。
+用法 vmstat [options] [delay [count]] vmstat [-f] [-s] [-m] vmstat [-S unit] vmstat [-d] vmstat [-p disk partition] vmstat [-V] 选项 delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。 count 更新次数。如果未指定计数且指定了延迟(delay)，则count默认为无穷大。 -a, --active 显示活动和非活动内存（2.5.41及之后的版本） -f, --forks 显示自引导以来的fork数。 这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。 每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。 -m, --slabs 显示slabinfo。【相关字段含义见下面部分】 -n, --one-header 标题仅显示一次而不是定期显示。 -s, --stats 显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。 -d, --disk 报告磁盘信息（2.5.70及之后版本） -D, --disk-sum 报告一些有关磁盘活动的摘要统计信息。 -p, --partition device 分区的详细统计信息。 (2.5.70及之后版本). -S, --unit character 更换输出的单位：1000(k)，1024(K)，1000000(m)，1048576(M) 字节。 注意，这不会改变交换(si/so)或块(bi/bo)字段。 -t, --timestamp 为每一行附加时间戳。 -w, --wide 宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。 输出宽度会超过每行80个字符。 -V, --version 显示版本信息并退出。 -h, --help 显示帮助信息并退出。 字段描述 VM 模式字段描述  进程  r: 可运行进程的数量 (正在运行+就绪状态)。 b: 处于不可中断睡眠的进程数量。   内存  swpd: 使用的虚拟内存量。 free: 空闲内存量。(idle) buff: 用作缓冲区(buffer)的内存量。 cache: 用作缓存(cache)的内存量。 inact: 非活动内存量。（-a选项） active: 活动内存量。（-a选项）   交换内存  si: 从磁盘交换的内存量（/s）。 so: 交换到磁盘的内存量（/s）。   IO  bi: 从块设备接收的块数（blocks/s）。 bo: 发送到块设备的块数（blocks/ s）。   系统  in: 每秒的中断数，包括时钟。 cs: 每秒上下文切换次数。   CPU  这些是总CPU时间的占比。 us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间) sy: 运行内核代码所花费的时间。 (系统时间) id: 空闲时间。在2."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 命令 —— vmstat">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/linux-%E5%91%BD%E4%BB%A4/ style=background-color:#71d399;color:#fff>
+Linux 命令
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>Linux 命令 —— vmstat</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=vmstat>vmstat</h2>
+<p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。</p>
+<h1 id=用法>用法</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>vmstat <span class=o>[</span>options<span class=o>]</span> <span class=o>[</span>delay <span class=o>[</span>count<span class=o>]]</span>
+
+vmstat <span class=o>[</span>-f<span class=o>]</span> <span class=o>[</span>-s<span class=o>]</span> <span class=o>[</span>-m<span class=o>]</span>
+vmstat <span class=o>[</span>-S unit<span class=o>]</span>
+vmstat <span class=o>[</span>-d<span class=o>]</span>
+vmstat <span class=o>[</span>-p disk partition<span class=o>]</span>
+vmstat <span class=o>[</span>-V<span class=o>]</span>
+</code></pre></div><h1 id=选项>选项</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>delay  更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。
+
+count  更新次数。如果未指定计数且指定了延迟<span class=o>(</span>delay<span class=o>)</span>，则count默认为无穷大。
+
+-a, --active
+      显示活动和非活动内存（2.5.41及之后的版本）
+
+-f, --forks
+      显示自引导以来的fork数。
+      这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。
+      每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。
+
+-m, --slabs
+      显示slabinfo。【相关字段含义见下面部分】
+
+-n, --one-header
+      标题仅显示一次而不是定期显示。
+
+-s, --stats
+      显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。
+
+-d, --disk
+      报告磁盘信息（2.5.70及之后版本）
+
+-D, --disk-sum
+      报告一些有关磁盘活动的摘要统计信息。
+
+-p, --partition device
+      分区的详细统计信息。 <span class=o>(</span>2.5.70及之后版本<span class=o>)</span>.
+
+-S, --unit character
+      更换输出的单位：1000<span class=o>(</span>k<span class=o>)</span>，1024<span class=o>(</span>K<span class=o>)</span>，1000000<span class=o>(</span>m<span class=o>)</span>，1048576<span class=o>(</span>M<span class=o>)</span> 字节。
+      注意，这不会改变交换<span class=o>(</span>si/so<span class=o>)</span>或块<span class=o>(</span>bi/bo<span class=o>)</span>字段。
+
+-t, --timestamp
+      为每一行附加时间戳。
+
+-w, --wide
+      宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。
+      输出宽度会超过每行80个字符。
+
+-V, --version
+      显示版本信息并退出。
+
+-h, --help
+      显示帮助信息并退出。
+
+</code></pre></div><h1 id=字段描述>字段描述</h1>
+<h2 id=vm-模式字段描述>VM 模式字段描述</h2>
+<ul>
+<li>进程
+<ul>
+<li>r: 可运行进程的数量 (正在运行+就绪状态)。</li>
+<li>b: 处于不可中断睡眠的进程数量。</li>
+</ul>
+</li>
+<li>内存
+<ul>
+<li>swpd: 使用的虚拟内存量。</li>
+<li>free: 空闲内存量。(idle)</li>
+<li>buff: 用作缓冲区(buffer)的内存量。</li>
+<li>cache: 用作缓存(cache)的内存量。</li>
+<li>inact: 非活动内存量。（-a选项）</li>
+<li>active: 活动内存量。（-a选项）</li>
+</ul>
+</li>
+<li>交换内存
+<ul>
+<li>si: 从磁盘交换的内存量（/s）。</li>
+<li>so: 交换到磁盘的内存量（/s）。</li>
+</ul>
+</li>
+<li>IO
+<ul>
+<li>bi: 从块设备接收的块数（blocks/s）。</li>
+<li>bo: 发送到块设备的块数（blocks/ s）。</li>
+</ul>
+</li>
+<li>系统
+<ul>
+<li>in: 每秒的中断数，包括时钟。</li>
+<li>cs: 每秒上下文切换次数。</li>
+</ul>
+</li>
+<li>CPU
+<ul>
+<li>这些是总CPU时间的占比。</li>
+<li>us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间)</li>
+<li>sy: 运行内核代码所花费的时间。 (系统时间)</li>
+<li>id: 空闲时间。在2.5.41版本之前，这包括IO等待时间。</li>
+<li>wa: 等待IO的时间。在2.5.41版本之前，包含在空闲状态。</li>
+<li>st: 从虚拟机中窃取的时间。在Linux 2.6.11之前，未知。【？？？】</li>
+</ul>
+</li>
+</ul>
+<h2 id=disk-模式字段描述>DISK 模式字段描述</h2>
+<ul>
+<li>读(reads)
+<ul>
+<li>total: 完全成功的读总数（次数还是字节？应该是次数，因为换单位(K或M)，数值也不改变）。</li>
+<li>merged: 分组(groups)读取(导致一个I/O)。</li>
+<li>sectors: 成功读取的扇区数。</li>
+<li>ms: 花在读上的<code>毫秒</code>数。</li>
+</ul>
+</li>
+<li>写(writes)
+<ul>
+<li>total: 完全成功的写总数。</li>
+<li>merged: 分组写 (导致一个I/O)。</li>
+<li>sectors: 成功写的扇区数。</li>
+<li>ms: 花在写上的<code>毫秒</code>数。</li>
+</ul>
+</li>
+<li>IO(input/output)
+<ul>
+<li>cur: 正在处理的IO。</li>
+<li>s: 花在I/O上的<code>秒</code>数。</li>
+</ul>
+</li>
+</ul>
+<h2 id=disk-partition-模式字段描述>DISK PARTITION 模式字段描述</h2>
+<ul>
+<li>reads: 发送到此分区上的读的总数。</li>
+<li>read sectors: 分区上读的扇区总数。</li>
+<li>writes: 发送到此分区上的写的总数。</li>
+<li>requested writes: 此分区发出的写请求总数。</li>
+</ul>
+<h2 id=slab-模式字段描述>SLAB 模式字段描述</h2>
+<ul>
+<li>cache: 缓存名称。</li>
+<li>num: 当前活动对象数量。</li>
+<li>total: 有效/可用对象总数。</li>
+<li>size: 每个对象的大小。</li>
+<li>pages: 具有至少一个活动对象的页面数。</li>
+</ul>
+<h1 id=示例>示例</h1>
+<h2 id=显示内存cpu中断fork等总览信息>显示内存、CPU、中断、fork等总览信息</h2>
+<blockquote>
+<p>vmstat -s</p>
+</blockquote>
+<h2 id=保持更新固定次数>保持更新固定次数</h2>
+<blockquote>
+<p>vmstat -a 2 // 每2s更新一次，一直更新
+vmstat -a 1 100 // 每1s更新一次，更新100次</p>
+</blockquote>
+<h2 id=显示启动以来的fork数量>显示启动以来的fork数量</h2>
+<blockquote>
+<p>vmstat -f</p>
+</blockquote>
+<h2 id=显示某个分区统计信息>显示某个分区统计信息</h2>
+<blockquote>
+<p>vmstat -p sda1</p>
+</blockquote>
+<h2 id=更换输出单位>更换输出单位</h2>
+<blockquote>
+<p>vmstat -s -S M</p>
+</blockquote>
+<h2 id=显示slab内存对象信息>显示slab内存对象信息</h2>
+<blockquote>
+<p>vmstat -m</p>
+</blockquote>
+<h1 id=疑问>疑问</h1>
+<ul>
+<li>st: 从虚拟机中窃取的时间？</li>
+<li>磁盘分区的相关字段不理解？</li>
+</ul>
+<h1 id=参考>参考</h1>
+<ul>
+<li>Linux man page</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/vmstat/>vmstat</a>
+<a href=/tags/linux-%E5%91%BD%E4%BB%A4/>linux 命令</a>
+<a href=/tags/command/>command</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#vmstat>vmstat</a></li>
+</ol>
+<ol>
+<li><a href=#vm-模式字段描述>VM 模式字段描述</a></li>
+<li><a href=#disk-模式字段描述>DISK 模式字段描述</a></li>
+<li><a href=#disk-partition-模式字段描述>DISK PARTITION 模式字段描述</a></li>
+<li><a href=#slab-模式字段描述>SLAB 模式字段描述</a></li>
+</ol>
+<ol>
+<li><a href=#显示内存cpu中断fork等总览信息>显示内存、CPU、中断、fork等总览信息</a></li>
+<li><a href=#保持更新固定次数>保持更新固定次数</a></li>
+<li><a href=#显示启动以来的fork数量>显示启动以来的fork数量</a></li>
+<li><a href=#显示某个分区统计信息>显示某个分区统计信息</a></li>
+<li><a href=#更换输出单位>更换输出单位</a></li>
+<li><a href=#显示slab内存对象信息>显示slab内存对象信息</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

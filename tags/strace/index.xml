@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>strace on 树深时间录</title><link>https://isshe.site/tags/strace/</link><description>Recent content in strace on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 06:52:14 +0000</lastBuildDate><atom:link href="https://isshe.site/tags/strace/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>strace strace - 跟踪系统调用和信号。
+在最简单的情况下，strace运行指定的命令直到它退出。 它拦截并记录由进程调用的系统调用和进程接收的信号。 每个系统调用的名称，其参数和返回值都打印在标准错误或使用-o选项指定的文件上。 strace是一种有用的诊断，指导和调试工具。 跟踪中的每一行都包含系统调用名称，后跟括号中的参数及其返回值。如：
+open(&amp;#34;/dev/null&amp;#34;, O_RDONLY) = 3 系统调用错误，如：(返回 -1，并打印出错原因)
+open(&amp;#34;/foo/bar&amp;#34;, O_RDONLY) = -1 ENOENT (No such file or directory) 信号，如：
+sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ killed by SIGINT +++ 正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。 当调用返回时，它将被标记为已恢复：
+[pid 28772] select(4, [3], NULL, NULL, NULL &amp;lt;unfinished ...&amp;gt; [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0 [pid 28772] &amp;lt;... select resumed&amp;gt; ) = 1 (in [3]) 系统调用被中断后重启，如：
+read(0, 0x7ffff72cf5cf, 1) = ?</description></item></channel></rss>

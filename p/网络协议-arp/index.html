@@ -1,0 +1,218 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="ARP协议 ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。
+工作过程 当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：
+ 第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。 第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。  收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。   第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。 第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。 第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。  问题 什么是ARP欺骗？  地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到应答报文的主机，不会校验报文的真实性，就会加到ARP缓存中。 由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。  "><title>网络协议 —— ARP</title>
+<link rel=canonical href=https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="网络协议 —— ARP">
+<meta property="og:description" content="ARP协议 ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。
+工作过程 当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：
+ 第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。 第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。  收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。   第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。 第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。 第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。  问题 什么是ARP欺骗？  地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到应答报文的主机，不会校验报文的真实性，就会加到ARP缓存中。 由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。  ">
+<meta property="og:url" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="arp"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png">
+<meta name=twitter:title content="网络协议 —— ARP">
+<meta name=twitter:description content="ARP协议 ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。
+工作过程 当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：
+ 第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。 第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。  收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。   第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。 第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。 第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。  问题 什么是ARP欺骗？  地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到应答报文的主机，不会校验报文的真实性，就会加到ARP缓存中。 由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。  "><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_800x0_resize_box_3.png srcset="/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_800x0_resize_box_3.png 800w, /p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_1600x0_resize_box_3.png 1600w" width=800 height=606 loading=lazy alt="Featured image of post 网络协议 —— ARP">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/ style=background-color:#51b4d9;color:#fff>
+网络协议
+</a>
+<a href=/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ style=background-color:#d191e1;color:#fff>
+计算机网络
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>网络协议 —— ARP</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=arp协议>ARP协议</h2>
+<p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。</p>
+<h1 id=工作过程>工作过程</h1>
+<p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：</p>
+<ul>
+<li>第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。</li>
+<li>第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。
+<ul>
+<li>收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。</li>
+</ul>
+</li>
+<li>第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。</li>
+<li>第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。</li>
+<li>第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。</li>
+</ul>
+<h1 id=问题>问题</h1>
+<h2 id=什么是arp欺骗>什么是ARP欺骗？</h2>
+<ul>
+<li>地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到<code>应答报文</code>的主机，不会校验报文的真实性，就会加到ARP缓存中。</li>
+<li>由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/arp/>arp</a>
+<a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>
+<a href=/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/>计算机网络</a>
+<a href=/tags/protocol/>protocol</a>
+<a href=/tags/computer-network/>computer network</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.92e807e090a193d2f9e547aa439368c2_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-kugH4JChk9L55UeqQ5Nowg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DHCP" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— DHCP</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.b841352646c368e3d11bbf4727910450_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_250x150_fill_q75_box_smart1.jpeg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-uEE1JkbDaOPRG79HJ5EEUA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— DNS</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.27d391a14e68b5eb559333f92e869f66_hu145d34d1ec22bcb129ce02135b210b81_32414_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-J9ORoU5otetVkzP5LoafZg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— ICMP</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#arp协议>ARP协议</a></li>
+</ol>
+<ol>
+<li><a href=#什么是arp欺骗>什么是ARP欺骗？</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="strace strace - 跟踪系统调用和信号。
+在最简单的情况下，strace运行指定的命令直到它退出。 它拦截并记录由进程调用的系统调用和进程接收的信号。 每个系统调用的名称，其参数和返回值都打印在标准错误或使用-o选项指定的文件上。 strace是一种有用的诊断，指导和调试工具。 跟踪中的每一行都包含系统调用名称，后跟括号中的参数及其返回值。如：
+open(&amp;#34;/dev/null&amp;#34;, O_RDONLY) = 3 系统调用错误，如：(返回 -1，并打印出错原因)
+open(&amp;#34;/foo/bar&amp;#34;, O_RDONLY) = -1 ENOENT (No such file or directory) 信号，如：
+sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ killed by SIGINT +++ 正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。 当调用返回时，它将被标记为已恢复：
+[pid 28772] select(4, [3], NULL, NULL, NULL &amp;lt;unfinished ...&amp;gt; [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0 [pid 28772] &amp;lt;... select resumed&amp;gt; ) = 1 (in [3]) 系统调用被中断后重启，如：
+read(0, 0x7ffff72cf5cf, 1) = ?"><title>Linux 命令 —— strace</title>
+<link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— strace">
+<meta property="og:description" content="strace strace - 跟踪系统调用和信号。
+在最简单的情况下，strace运行指定的命令直到它退出。 它拦截并记录由进程调用的系统调用和进程接收的信号。 每个系统调用的名称，其参数和返回值都打印在标准错误或使用-o选项指定的文件上。 strace是一种有用的诊断，指导和调试工具。 跟踪中的每一行都包含系统调用名称，后跟括号中的参数及其返回值。如：
+open(&amp;#34;/dev/null&amp;#34;, O_RDONLY) = 3 系统调用错误，如：(返回 -1，并打印出错原因)
+open(&amp;#34;/foo/bar&amp;#34;, O_RDONLY) = -1 ENOENT (No such file or directory) 信号，如：
+sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ killed by SIGINT +++ 正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。 当调用返回时，它将被标记为已恢复：
+[pid 28772] select(4, [3], NULL, NULL, NULL &amp;lt;unfinished ...&amp;gt; [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0 [pid 28772] &amp;lt;... select resumed&amp;gt; ) = 1 (in [3]) 系统调用被中断后重启，如：
+read(0, 0x7ffff72cf5cf, 1) = ?">
+<meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="strace"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg">
+<meta name=twitter:title content="Linux 命令 —— strace">
+<meta name=twitter:description content="strace strace - 跟踪系统调用和信号。
+在最简单的情况下，strace运行指定的命令直到它退出。 它拦截并记录由进程调用的系统调用和进程接收的信号。 每个系统调用的名称，其参数和返回值都打印在标准错误或使用-o选项指定的文件上。 strace是一种有用的诊断，指导和调试工具。 跟踪中的每一行都包含系统调用名称，后跟括号中的参数及其返回值。如：
+open(&amp;#34;/dev/null&amp;#34;, O_RDONLY) = 3 系统调用错误，如：(返回 -1，并打印出错原因)
+open(&amp;#34;/foo/bar&amp;#34;, O_RDONLY) = -1 ENOENT (No such file or directory) 信号，如：
+sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ killed by SIGINT +++ 正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。 当调用返回时，它将被标记为已恢复：
+[pid 28772] select(4, [3], NULL, NULL, NULL &amp;lt;unfinished ...&amp;gt; [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0 [pid 28772] &amp;lt;... select resumed&amp;gt; ) = 1 (in [3]) 系统调用被中断后重启，如：
+read(0, 0x7ffff72cf5cf, 1) = ?"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post Linux 命令 —— strace">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/linux-%E5%91%BD%E4%BB%A4/ style=background-color:#71d399;color:#fff>
+Linux 命令
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>Linux 命令 —— strace</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=strace>strace</h1>
+<p>strace - 跟踪系统调用和信号。</p>
+<p>在最简单的情况下，strace运行指定的命令直到它退出。
+它拦截并记录由进程调用的系统调用和进程接收的信号。
+每个系统调用的名称，其参数和返回值都打印在<code>标准错误</code>或使用<code>-o选项指定的文件</code>上。
+strace是一种有用的诊断，指导和调试工具。
+跟踪中的每一行都包含系统调用<code>名称</code>，后跟括号中的<code>参数</code>及其<code>返回值</code>。如：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>open</span><span class=p>(</span><span class=s>&#34;/dev/null&#34;</span><span class=p>,</span> <span class=n>O_RDONLY</span><span class=p>)</span> <span class=o>=</span> <span class=mi>3</span>
+</code></pre></div><p>系统调用错误，如：(返回 -1，并打印出错原因)</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>open</span><span class=p>(</span><span class=s>&#34;/foo/bar&#34;</span><span class=p>,</span> <span class=n>O_RDONLY</span><span class=p>)</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span> <span class=n>ENOENT</span> <span class=p>(</span><span class=n>No</span> <span class=n>such</span> <span class=n>file</span> <span class=n>or</span> <span class=n>directory</span><span class=p>)</span>
+</code></pre></div><p>信号，如：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>sigsuspend</span><span class=p>([]</span> <span class=o>&lt;</span><span class=n>unfinished</span> <span class=p>...</span><span class=o>&gt;</span>
+<span class=o>---</span> <span class=n>SIGINT</span> <span class=p>(</span><span class=n>Interrupt</span><span class=p>)</span> <span class=o>---</span>
+<span class=o>+++</span> <span class=n>killed</span> <span class=n>by</span> <span class=n>SIGINT</span> <span class=o>+++</span>
+</code></pre></div><p>正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。
+当调用返回时，它将被标记为已恢复：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=p>[</span><span class=n>pid</span> <span class=mi>28772</span><span class=p>]</span> <span class=n>select</span><span class=p>(</span><span class=mi>4</span><span class=p>,</span> <span class=p>[</span><span class=mi>3</span><span class=p>],</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=nb>NULL</span> <span class=o>&lt;</span><span class=n>unfinished</span> <span class=p>...</span><span class=o>&gt;</span>
+<span class=p>[</span><span class=n>pid</span> <span class=mi>28779</span><span class=p>]</span> <span class=n>clock_gettime</span><span class=p>(</span><span class=n>CLOCK_REALTIME</span><span class=p>,</span> <span class=p>{</span><span class=mi>1130322148</span><span class=p>,</span> <span class=mi>939977000</span><span class=p>})</span> <span class=o>=</span> <span class=mi>0</span>
+<span class=p>[</span><span class=n>pid</span> <span class=mi>28772</span><span class=p>]</span> <span class=o>&lt;</span><span class=p>...</span> <span class=n>select</span> <span class=n>resumed</span><span class=o>&gt;</span> <span class=p>)</span>      <span class=o>=</span> <span class=mi>1</span> <span class=p>(</span><span class=n>in</span> <span class=p>[</span><span class=mi>3</span><span class=p>])</span>
+</code></pre></div><p>系统调用被中断后重启，如：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>read</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mh>0x7ffff72cf5cf</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>              <span class=o>=</span> <span class=o>?</span> <span class=n>ERESTARTSYS</span> <span class=p>(</span><span class=n>To</span> <span class=n>be</span> <span class=n>restarted</span><span class=p>)</span>
+<span class=o>---</span> <span class=n>SIGALRM</span> <span class=p>(</span><span class=n>Alarm</span> <span class=n>clock</span><span class=p>)</span> <span class=err>@</span> <span class=mi>0</span> <span class=p>(</span><span class=mi>0</span><span class=p>)</span> <span class=o>---</span>
+<span class=n>rt_sigreturn</span><span class=p>(</span><span class=mh>0xe</span><span class=p>)</span>                       <span class=o>=</span> <span class=mi>0</span>
+<span class=n>read</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=s>&#34;&#34;</span><span class=p>...,</span> <span class=mi>1</span><span class=p>)</span>                       <span class=o>=</span> <span class=mi>0</span>
+</code></pre></div><p>解引用结构指针，并根据需要显示成员。 在所有情况下，参数都以尽可能类似C的方式格式化。 例如“ls -l /dev/null”：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>lstat</span><span class=p>(</span><span class=s>&#34;/dev/null&#34;</span><span class=p>,</span> <span class=p>{</span><span class=n>st_mode</span><span class=o>=</span><span class=n>S_IFCHR</span><span class=o>|</span><span class=mo>0666</span><span class=p>,</span> <span class=n>st_rdev</span><span class=o>=</span><span class=n>makedev</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>),</span> <span class=p>...})</span> <span class=o>=</span> <span class=mi>0</span>
+</code></pre></div><p>解引用字符指针：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>read</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=s>&#34;root::0:0:System Administrator:/&#34;</span><span class=p>...,</span> <span class=mi>1024</span><span class=p>)</span> <span class=o>=</span> <span class=mi>422</span>
+</code></pre></div><h2 id=用法>用法</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>strace  <span class=o>[</span>-CdffhiqrtttTvVxxy<span class=o>]</span>  <span class=o>[</span>-In<span class=o>]</span>  <span class=o>[</span>-bexecve<span class=o>]</span>  <span class=o>[</span>-eexpr<span class=o>]</span>...   <span class=o>[</span>-acolumn<span class=o>]</span> <span class=o>[</span>-ofile<span class=o>]</span> <span class=o>[</span>-sstrsize<span class=o>]</span> <span class=o>[</span>-Ppath<span class=o>]</span>... -ppid... / <span class=o>[</span>-D<span class=o>]</span>
+<span class=o>[</span>-Evar<span class=o>[=</span>val<span class=o>]]</span>... <span class=o>[</span>-uusername<span class=o>]</span> <span class=nb>command</span> <span class=o>[</span>args<span class=o>]</span>
+
+strace -c<span class=o>[</span>df<span class=o>]</span> <span class=o>[</span>-In<span class=o>]</span> <span class=o>[</span>-bexecve<span class=o>]</span> <span class=o>[</span>-eexpr<span class=o>]</span>...  <span class=o>[</span>-Ooverhead<span class=o>]</span> <span class=o>[</span>-Ssortby<span class=o>]</span> -ppid... / <span class=o>[</span>-D<span class=o>]</span> <span class=o>[</span>-Evar<span class=o>[=</span>val<span class=o>]]</span>... <span class=o>[</span>-uusername<span class=o>]</span>  <span class=nb>command</span>
+<span class=o>[</span>args<span class=o>]</span>
+
+</code></pre></div><h2 id=选项>选项</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>-c          统计系统调用的次数、出错次数。在Linux上，这会尝试显示系统时间（在内核中运行的CPU时间），与墙上时间无关。
+            如果 -c 和 -f 或 -F 一起使用，仅保留所有跟踪进程的聚合总计。
+
+-C          与-c类似，但在进程运行时也会打印常规输出。
+
+-D          将跟踪器进程作为分离的孙子<span class=o>(</span>detached grandchild<span class=o>)</span>进程运行，而不是作为tracee的父进程。 
+            这通过将tracee保持为调用进程的直接子进程来减少strace的可见效果
+
+-d          在标准错误上输出strace的debug信息。
+
+-f          跟踪由fork/vfork/clone调用所产生的子进程。
+            注意，如果是多线程，则<span class=s2>&#34;-p PID -f&#34;</span>将附加到PID进程的所有线程，而不仅是附加到带有 <span class=s2>&#34;thread_id = PID&#34;</span> 的线程。
+
+
+-ff         如果<span class=s2>&#34;-o filename&#34;</span>选项生效，则每个进程的跟踪信息都将写入filename.pid中，其中pid是每个进程的进程ID。 
+            这与-c不兼容，因为不保留每进程计数。
+
+-F          此选项现已过时，它具有与-f相同的功能。
+
+-h          打印帮助。
+
+-i          在系统调用时打印指令指针。
+
+-q          不显示有关附加/分离<span class=o>(</span>attaching/detaching<span class=o>)</span>的消息。
+            当输出重定向到文件并且命令是直接运行的<span class=o>(</span>而不是附加<span class=o>(</span>attaching<span class=o>))</span>的，会自动发生这种情况。
+
+-qq         不显示有关进程退出状态的消息。
+
+-r          在进入每个系统调用时打印相对时间戳。 这记录了连续系统调用开始之间的时间差。
+
+-t          在每一行跟踪信息前面添加时间（一天中的时间），最小单位是秒。
+
+-tt         在每一行跟踪信息前面添加时间（一天中的时间），最小单位是毫秒。
+
+-ttt        打印的时间将包括微秒，并且前导部分将被打印为自纪元以来的秒数。
+
+-T          显示系统调用花费的时间。 这记录了每个系统调用的开始和结束之间的时间差。
+
+-v          打印environment、stat、termios等调用的未缩写版本。 这些结构在调用中非常常见，因此默认行为显示结构成员的合理子集。 使用此选项可获得所有细节。
+
+-V          打印strace的版本.
+
+-x          以十六进制字符串格式打印所有非ASCII字符串。
+
+-xx         以十六进制字符串格式打印所有字符串。
+
+-y          打印与文件描述符参数关联的路径。
+
+-a column   对齐特定列中的返回值（默认列40）。
+
+-b syscall  如果到达指定的系统调用，则从跟踪的进程中分离。 目前，仅支持execve系统调用。
+            这个选项很有用，如果你想要跟踪多线程的进程<span class=o>(</span>需要-f<span class=o>)</span>，但不想跟踪其（可能非常复杂的）孩子。
+
+-e expr     用于修改要跟踪的事件或如何跟踪它们的一个限定表达式。 表达式的格式是：
+                     <span class=o>[</span><span class=nv>qualifier</span><span class=o>=][</span>!<span class=o>]</span>value1<span class=o>[</span>,value2<span class=o>]</span>...
+              
+            qualifier是trace，abbrev，verbose，raw，signal，read，write之一，value是依赖于限定符的符号或数字。 
+            默认限定符是trace。使用感叹号会取消该组值。 例如，<span class=s2>&#34;-e open&#34;</span>表示字面意思<span class=s2>&#34;-e trace=open&#34;</span>，这意味着仅跟踪“open”的系统调用。 
+            相比之下，“-e <span class=nv>trace</span><span class=o>=</span>open”表示跟踪除open之外的每个系统调用。 
+            此外，特殊值all和none都有明显的含义。
+
+            请注意，即使在引用的参数中，某些shell也会使用感叹号进行历史记录扩展。 
+            注意，有些shell使用<span class=s2>&#34;!&#34;</span>来执行历史记录里的命令，如果是这样，您必须使用反斜杠转义感叹号。
+
+-e <span class=nv>trace</span><span class=o>=</span><span class=nb>set</span>
+            只跟踪指定的系统调用.例如:-e <span class=nv>trace</span><span class=o>=</span>open,close,rean,write表示只跟踪这四个系统调用.默认为set<span class=o>=</span>all。
+
+-e <span class=nv>trace</span><span class=o>=</span>file
+            只跟踪有关文件操作的系统调用。（跟踪所有以一个文件名作为参数的系统调用）
+            你可以看做是：-e <span class=nv>trace</span><span class=o>=</span>open,stat,chmod,unlink,...
+            这对于查看进程引用的文件很有用。
+            此外，使用缩写将确保您不会意外忘记在列表中包含类似lstat的调用。 
+
+-e <span class=nv>trace</span><span class=o>=</span>process
+            只跟踪有关进程控制的系统调用。 这对于查看进程的fork，wait和exec步骤非常有用。
+
+-e <span class=nv>trace</span><span class=o>=</span>network
+            跟踪所有与网络相关的系统调用.
+
+-e <span class=nv>trace</span><span class=o>=</span>signal
+            跟踪所有与信号相关的系统调用.
+
+-e <span class=nv>trace</span><span class=o>=</span>ipc
+            跟踪所有与IPC相关的系统调用.
+
+-e <span class=nv>trace</span><span class=o>=</span>desc
+            跟踪所有与文件描述符相关的系统调用.
+
+-e <span class=nv>trace</span><span class=o>=</span>memory
+            跟踪与内存映射相关的所有系统调用.
+
+-e <span class=nv>abbrev</span><span class=o>=</span><span class=nb>set</span>
+            设定strace输出的系统调用的结果集。<span class=s2>&#34;-v&#34;</span>选项等于“abbrev<span class=o>=</span>none”，默认为“abbrev<span class=o>=</span>all”.
+
+-e <span class=nv>verbose</span><span class=o>=</span><span class=nb>set</span>
+            对指定系统调用集的结构进行解引用。 默认值为 <span class=s2>&#34;verbose=all&#34;</span>。
+
+-e <span class=nv>raw</span><span class=o>=</span><span class=nb>set</span>
+            将指定的系统调用的参数以十六进制显示。（为指定的系统调用集打印原始的，未解码的参数。）
+            如果您不信任解码或者您需要知道参数的实际数值，这将非常有用。
+
+-e <span class=nv>signal</span><span class=o>=</span><span class=nb>set</span>
+            指定跟踪的系统信号.默认为all.如<span class=s2>&#34;signal=!SIGIO&#34;</span><span class=o>(</span><span class=nv>或者signal</span><span class=o>=</span>!io<span class=o>)</span>,表示不跟踪SIGIO信号.
+
+-e <span class=nv>read</span><span class=o>=</span><span class=nb>set</span> 以完整的16进制或ASCII形式，输出所有从指定文件描述符集中读取的数据。例如: <span class=s2>&#34;-e read=3,5&#34;</span>，读文件描述符3和5上的所有输入活动。
+            请注意请注意，这与read<span class=o>(</span>2<span class=o>)</span>系统调用的正常跟踪无关，该调用由选项<span class=s2>&#34;-e trace=read&#34;</span>控制。
+
+-e <span class=nv>write</span><span class=o>=</span><span class=nb>set</span>
+            以完整的16进制或ASCII形式，输出所有写到指定文件描述符集的数据。
+
+-I interruptible
+            当strace可以被信号中断（例如按^C）
+            1：没有信号被阻挡<span class=p>;</span> 
+            2：解码系统调用时阻塞致命信号（默认）<span class=p>;</span> 
+            3：致命信号总是被阻止（默认为<span class=s1>&#39;-o FILE PROG&#39;</span>）<span class=p>;</span>
+            4：致命信号和SIGTSTP（^Z）始终被阻止（有助于使strace -o FILE PROG不在^Z上停止）。
+-o filename
+            把跟踪信息输出到filename指定的文件而不是输出到stderr。
+            如果指定<span class=s2>&#34;-ff&#34;</span>则会使用filename.pid。
+            如果参数以<span class=s2>&#34;|&#34;</span>或<span class=s2>&#34;!&#34;</span>开始，则参数的其余部分会被视作一个命令，并且所有输出都会通过管道给它<span class=o>(</span>此命令<span class=o>)</span>。【？？？】
+            这样可以方便地将调试输出传递给程序，而不会影响已执行程序的重定向。【？？？】
+            <span class=o>[</span>If the argument begins with <span class=sb>`</span><span class=p>|</span><span class=s1>&#39; or with `!&#39;</span> <span class=k>then</span> the rest of the argument is treated as a <span class=nb>command</span> and all output is piped to it.  
+            This is convenient <span class=k>for</span> piping the debugging output to a program without affecting the redirections of executed programs.<span class=o>]</span>
+
+-O overhead
+            将跟踪系统调用的overhead（开销）设置为overhead微秒。
+            这对于覆盖默认启发式方法非常有用，可以猜测在使用-c选项进行计时系统调用时仅花费多少时间。
+            可以通过在没有跟踪的情况下对给定程序运行进行计时（使用time<span class=o>(</span>1<span class=o>)</span>）并将累积的系统调用时间与使用-c产生的总数进行比较来测量启发式的准确性。
+
+-p pid
+            使用进程ID pid附加到进程并开始跟踪。
+            可以通过键盘中断信号（CTRL-C）随时终止跟踪。 
+            strace会通过将自己从跟踪过程中分离出来而让它（它们）继续运行。
+            多个-p选项可用于附加到许多进程。 支持-p<span class=s2>&#34;`pidof PROG`&#34;</span>语法。
+
+-P path     仅跟踪系统调用访问的路径。 多个-P选项可用于指定多个路径。
+
+-s strsize  指定要打印的最大字符串大小（默认值为32）。 请注意，文件名不被视为字符串，并且始终完整打印。
+
+-S sortby   按指定条件对-c选项打印的直方图的输出进行排序。 
+            合法值是时间<span class=o>(</span><span class=nb>time</span><span class=o>)</span>，系统调用<span class=o>(</span>call<span class=o>)</span>，名称<span class=o>(</span>name<span class=o>)</span>，默认为时间。<span class=o>(</span>根据什么来排序的意思<span class=o>)</span>
+
+-u username 使用用户名所在的<span class=s2>&#34;用户ID&#34;</span>，“组ID“和”补充组“来运行命令。
+            此选项仅在以root身份运行，并且能够正确执行setuid（和/或）setgid二进制文件时有用。 
+            除非使用此选项，否则setuid和setgid程序在没有有效权限的情况下执行。
+
+-E <span class=nv>var</span><span class=o>=</span>val  <span class=nv>在其环境变量列表中运行带有var</span><span class=o>=</span>val的命令。
+
+-E var      在将var传递给命令前，从继承的环境变量列表中将var删除。
+</code></pre></div><h2 id=示例>示例</h2>
+<h3 id=显示每个系统调用的相对时间>显示每个系统调用的相对时间</h3>
+<blockquote>
+<p>strace -r ls
+ls表示ls命令</p>
+</blockquote>
+<h3 id=显示系统调用时间一天当中的时间纪元时间>显示系统调用时间（一天当中的时间/纪元时间）</h3>
+<blockquote>
+<p>strace -t ls
+strace -tt ls
+strace -ttt ls</p>
+</blockquote>
+<h3 id=打印与文件描述符相关联的路径>打印与文件描述符相关联的路径</h3>
+<blockquote>
+<p>strace -y ls</p>
+</blockquote>
+<h3 id=跟踪指定进程>跟踪指定进程</h3>
+<blockquote>
+<p>strace -p 123</p>
+</blockquote>
+<h3 id=把输出存在文件中>把输出存在文件中</h3>
+<blockquote>
+<p>strace -o ls.log ls</p>
+</blockquote>
+<h2 id=相关>相关</h2>
+<ul>
+<li>ltrace(1)</li>
+<li>time(1)</li>
+<li>ptrace(2)</li>
+<li>proc(5)</li>
+</ul>
+<h2 id=参考>参考</h2>
+<ul>
+<li><a class=link href=https://man.linuxde.net/strace target=_blank rel=noopener>https://man.linuxde.net/strace</a></li>
+<li>Linux man page</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/strace/>strace</a>
+<a href=/tags/linux-%E5%91%BD%E4%BB%A4/>linux 命令</a>
+<a href=/tags/command/>command</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#用法>用法</a></li>
+<li><a href=#选项>选项</a></li>
+<li><a href=#示例>示例</a>
+<ol>
+<li><a href=#显示每个系统调用的相对时间>显示每个系统调用的相对时间</a></li>
+<li><a href=#显示系统调用时间一天当中的时间纪元时间>显示系统调用时间（一天当中的时间/纪元时间）</a></li>
+<li><a href=#打印与文件描述符相关联的路径>打印与文件描述符相关联的路径</a></li>
+<li><a href=#跟踪指定进程>跟踪指定进程</a></li>
+<li><a href=#把输出存在文件中>把输出存在文件中</a></li>
+</ol>
+</li>
+<li><a href=#相关>相关</a></li>
+<li><a href=#参考>参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

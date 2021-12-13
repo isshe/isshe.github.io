@@ -1,0 +1,405 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="ip 显示/操纵路由、设备、策略路由、隧道。
+概要 ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename OBJECT := { link | address | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm | netns | l2tp | tcp_metrics } OPTIONS := { -V[ersion] | -h[uman-readable] | -s[tatistics] | -r[esolve] | -f[amily] { inet | inet6 | ipx | dnet | link } | -o[neline] | -n[etns] name | -a[ll] | -c[olor] } OBJECT:"><title>Linux 命令 —— ip</title>
+<link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— ip">
+<meta property="og:description" content="ip 显示/操纵路由、设备、策略路由、隧道。
+概要 ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename OBJECT := { link | address | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm | netns | l2tp | tcp_metrics } OPTIONS := { -V[ersion] | -h[uman-readable] | -s[tatistics] | -r[esolve] | -f[amily] { inet | inet6 | ipx | dnet | link } | -o[neline] | -n[etns] name | -a[ll] | -c[olor] } OBJECT:">
+<meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="ip"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png">
+<meta name=twitter:title content="Linux 命令 —— ip">
+<meta name=twitter:description content="ip 显示/操纵路由、设备、策略路由、隧道。
+概要 ip [ OPTIONS ] OBJECT { COMMAND | help } ip [ -force ] -batch filename OBJECT := { link | address | addrlabel | route | rule | neigh | ntable | tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm | netns | l2tp | tcp_metrics } OPTIONS := { -V[ersion] | -h[uman-readable] | -s[tatistics] | -r[esolve] | -f[amily] { inet | inet6 | ipx | dnet | link } | -o[neline] | -n[etns] name | -a[ll] | -c[olor] } OBJECT:"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png srcset="/p/linux-%E5%91%BD%E4%BB%A4-ip/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png 800w, /p/linux-%E5%91%BD%E4%BB%A4-ip/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_1600x0_resize_box_3.png 1600w" width=800 height=669 loading=lazy alt="Featured image of post Linux 命令 —— ip">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/linux-%E5%91%BD%E4%BB%A4/ style=background-color:#71d399;color:#fff>
+Linux 命令
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>Linux 命令 —— ip</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 3 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=ip>ip</h2>
+<p>显示/操纵路由、设备、策略路由、隧道。</p>
+<h2 id=概要>概要</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>ip <span class=o>[</span> OPTIONS <span class=o>]</span> OBJECT <span class=o>{</span> COMMAND <span class=p>|</span> <span class=nb>help</span> <span class=o>}</span>
+
+ip <span class=o>[</span> -force <span class=o>]</span> -batch filename
+
+OBJECT :<span class=o>=</span> <span class=o>{</span> link <span class=p>|</span> address <span class=p>|</span> addrlabel <span class=p>|</span> route <span class=p>|</span> rule <span class=p>|</span> neigh <span class=p>|</span> ntable <span class=p>|</span> tunnel <span class=p>|</span> tuntap <span class=p>|</span> maddress <span class=p>|</span> mroute <span class=p>|</span> mrule <span class=p>|</span> monitor <span class=p>|</span> xfrm <span class=p>|</span> netns <span class=p>|</span> l2tp <span class=p>|</span> tcp_metrics <span class=o>}</span>
+
+OPTIONS :<span class=o>=</span> <span class=o>{</span> -V<span class=o>[</span>ersion<span class=o>]</span> <span class=p>|</span> -h<span class=o>[</span>uman-readable<span class=o>]</span> <span class=p>|</span> -s<span class=o>[</span>tatistics<span class=o>]</span> <span class=p>|</span> -r<span class=o>[</span>esolve<span class=o>]</span> <span class=p>|</span> -f<span class=o>[</span>amily<span class=o>]</span> <span class=o>{</span> inet <span class=p>|</span> inet6 <span class=p>|</span> ipx <span class=p>|</span> dnet <span class=p>|</span> link <span class=o>}</span> <span class=p>|</span> -o<span class=o>[</span>neline<span class=o>]</span> <span class=p>|</span> -n<span class=o>[</span>etns<span class=o>]</span> name <span class=p>|</span> -a<span class=o>[</span>ll<span class=o>]</span> <span class=p>|</span> -c<span class=o>[</span>olor<span class=o>]</span> <span class=o>}</span>
+</code></pre></div><p>OBJECT:</p>
+<ul>
+<li>address - 一个设备的IPv4/IPv6地址。（缩写：a 或 addr）</li>
+<li>addrlabel - 协议地址选择的标签配置。 （缩写：addrl）</li>
+<li>l2tp - IP隧道以太网(L2TPv3).</li>
+<li>link - 网络设备。如eth0。 （ 缩写：l）</li>
+<li>maddress - 多播地址。 （缩写：m 或 maddr）</li>
+<li>monitor - 监测netlink消息</li>
+<li>mroute - 组播路由缓存条目。 （缩写：mr）</li>
+<li>mrule - 组播路由策略数据库中的规则。</li>
+<li>neighbour - 管理 ARP 或 NDISC 缓存条目。（缩写：n or neigh）</li>
+<li>netns - 管理网络命名空间。</li>
+<li>ntable - 管理邻居缓存的操作。</li>
+<li>route - 路由表中的路由规则。 （缩写：r）</li>
+<li>rule - 路由策略数据库中的规则。 （缩写：ru</li>
+<li>tcp_metrics/tcpmetrics - 管理 TCP Metrics。</li>
+<li>tunnel - IP隧道。 （缩写：t）</li>
+<li>tuntap - 管理 TUN/TAP 设备。</li>
+<li>xfrm - 管理 IPSec 策略。 （缩写：x）</li>
+</ul>
+<h1 id=选项>选项</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>-V, -Version
+    打印ip实用工具/iproute2的版本。
+
+-h, -human, -human-readable
+    输出具有人类可读值的后跟后缀的统计信息。
+
+-b, -batch &lt;FILENAME&gt;
+    从提供的文件或标准输入中读取命令并调用它们。首次失败将导致ip终止。
+
+-force 
+    不在批处理模式出错时终止ip。如果在执行命令期间出现任何错误，则应用程序返回代码将不为零。
+
+-s, -stats, -statistics
+    输出更多信息。如果选项出现两次或更多次，则信息量会增加。通常，信息是统计信息或某些时间值。
+
+-d, -details
+    输出更多细节信息。
+
+-l, -loops &lt;COUNT&gt;
+    指定<span class=s1>&#39;ip address flush&#39;</span>逻辑在放弃之前将尝试的最大循环次数。默认值为10。零<span class=o>(</span>0<span class=o>)</span>表示一直循环到删除所有地址。
+
+-f, -family &lt;FAMILY&gt;
+    指定要使用的协议族。
+    协议族标识符可以是inet，inet6，bridge，ipx，dnet，mpls或link之一。
+    如果此选项不存在，则从其他参数中猜出协议族。
+    如果命令行的其余部分没有提供足够的信息来猜测，则ip会使用一个默认值，通常是inet或any。 
+    link是一个特殊的系列标识符，表示不涉及任何网络协议。
+
+-4     -family inet 的简写.
+-6     -family inet6 的简写.
+-B     -family bridge 的简写.
+-D     -family decnet 的简写.
+-I     -family ipx 的简写.
+-M     -family mpls 的简写.
+-0     -family link 的简写.
+
+-o, -oneline
+    将每条记录输出到单一的行，用<span class=s1>&#39;\&#39;</span>字符替换换行符。
+    当您想要使用wc或grep输出计数记录时，这很方便。
+
+-r, -resolve
+    使用系统的名称解析程序来打印DNS名称而不是主机地址。
+
+-n, -netns &lt;NETNS&gt;
+    将ip切换到指定的网络命名空间NETNS。 实际上它只是简化执行：
+        ip netns <span class=nb>exec</span> NETNS ip <span class=o>[</span> OPTIONS <span class=o>]</span> OBJECT <span class=o>{</span> COMMAND <span class=p>|</span> <span class=nb>help</span> <span class=o>}</span>
+    到
+        ip -n<span class=o>[</span>etns<span class=o>]</span> NETNS <span class=o>[</span> OPTIONS <span class=o>]</span> OBJECT <span class=o>{</span> COMMAND <span class=p>|</span> <span class=nb>help</span> <span class=o>}</span>
+
+-a, -all
+    对所有对象执行指定的命令，它取决于命令是否支持此选项。
+
+-c, -color
+    使用颜色输出。
+
+-t, -timestamp
+    使用monitor选项时显示当前时间。
+</code></pre></div><h1 id=示例>示例</h1>
+<h2 id=查看详细的接口信息>查看详细的接口信息</h2>
+<blockquote>
+<p>ip -c -d -s -s link show
+ip -c -d -s -s link show ens33</p>
+</blockquote>
+<h2 id=查看接口地址>查看接口地址</h2>
+<blockquote>
+<p>ip addr shwo ens33
+ip -4 addr show ens33
+ip -6 addr show ens33</p>
+</blockquote>
+<h2 id=为接口添加地址>为接口添加地址</h2>
+<blockquote>
+<p>ip addr add &lt;IP 地址/前缀长度> [broadcast &lt;广播地址>] dev &lt;接口名>
+ip addr add 192.168.2.102/24 dev ens33
+IPv6地址加<code>-6</code>即可。</p>
+</blockquote>
+<h2 id=删除接口地址>删除接口地址</h2>
+<blockquote>
+<p>sudo ip addr del 192.168.2.102/24 dev ens33</p>
+</blockquote>
+<h2 id=启用接口>启用接口</h2>
+<blockquote>
+<p>ip link set ens33 up</p>
+</blockquote>
+<h2 id=禁用接口>禁用接口</h2>
+<blockquote>
+<p>ip link set ens33 down</p>
+</blockquote>
+<h2 id=设置接口mac地址>设置接口MAC地址</h2>
+<p>设置前需要先禁用接口</p>
+<blockquote>
+<p>ip link set ens33 address 00:0c:29:a5:ce:35</p>
+</blockquote>
+<h2 id=设置接口mtu>设置接口MTU</h2>
+<blockquote>
+<p>ip link set ens33 mtu 1500</p>
+</blockquote>
+<h2 id=添加8021q-vlan接口>添加802.1Q VLAN接口</h2>
+<blockquote>
+<p>ip link add link &lt;接口名> name &lt;子接口名> type vlan id
+sudo ip link add link ens33 name ens33.1 type vlan id 10</p>
+</blockquote>
+<h2 id=删除一个接口>删除一个接口</h2>
+<blockquote>
+<p>sudo ip link del ens33.1</p>
+</blockquote>
+<h2 id=查看路由表>查看路由表</h2>
+<blockquote>
+<p>sudo ip route show</p>
+</blockquote>
+<h2 id=查看指定目标地址用的那条路由规则>查看指定目标地址用的那条路由规则</h2>
+<blockquote>
+<p>ip route get 192.168.2.103</p>
+</blockquote>
+<h2 id=添加默认路由>添加默认路由</h2>
+<blockquote>
+<p>ip route add default via &lt;默认网关> [dev &lt;出接口>]</p>
+</blockquote>
+<h2 id=添加路由表项>添加路由表项</h2>
+<blockquote>
+<p>ip route add &lt;目标 IP 地址/前缀长度> via &lt;下一跳> [dev &lt;出接口>]
+sudo ip route add 192.168.2.0/24 via 192.168.2.1 dev ens33</p>
+</blockquote>
+<h2 id=删除路由表项>删除路由表项</h2>
+<blockquote>
+<p>sudo ip route del 192.168.3.0/24 dev ens33</p>
+</blockquote>
+<h2 id=查看arp表>查看ARP表</h2>
+<blockquote>
+<p>ip neigh show dev ens33</p>
+</blockquote>
+<h2 id=添加永久arp条目>添加永久ARP条目</h2>
+<blockquote>
+<p>ip neigh add &lt;IP 地址> lladdr &lt;以冒号分割的 MAC 地址> dev &lt;接口名> nud permanent
+ip neigh add 192.168.2.149 lladdr e0:d5:5e:a1:d0:d1 dev ens33 nud permanent</p>
+</blockquote>
+<h2 id=把动态arp条目转换为永久arp条目>把动态ARP条目转换为永久ARP条目</h2>
+<blockquote>
+<p>ip neigh change &lt;IP 地址> dev &lt;接口名> nud permanent</p>
+</blockquote>
+<h2 id=删除arp条目>删除ARP条目</h2>
+<blockquote>
+<p>ip neigh del &lt;IP 地址> dev &lt;接口名>
+ip neigh del 192.168.2.149 dev ens33</p>
+</blockquote>
+<h2 id=清空arp表不影响永久条目>清空ARP表（不影响永久条目）</h2>
+<blockquote>
+<p>ip neigh flush all</p>
+</blockquote>
+<h1 id=参考>参考</h1>
+<ul>
+<li><a class=link href=https://zhuanlan.zhihu.com/p/28155886 target=_blank rel=noopener>https://zhuanlan.zhihu.com/p/28155886</a></li>
+<li><a class=link href=https://ss64.com/bash/ip.html target=_blank rel=noopener>https://ss64.com/bash/ip.html</a></li>
+<li>linux man page</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/ip/>ip</a>
+<a href=/tags/linux-%E5%91%BD%E4%BB%A4/>linux 命令</a>
+<a href=/tags/command/>command</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.c0127903dac4110e1d5103ae27c763b4_hu6c226959cebd96f85422def462695424_85269_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-wBJ5A9rEEQ4dUQOuJ8djtA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ssh</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#ip>ip</a></li>
+<li><a href=#概要>概要</a></li>
+</ol>
+<ol>
+<li><a href=#查看详细的接口信息>查看详细的接口信息</a></li>
+<li><a href=#查看接口地址>查看接口地址</a></li>
+<li><a href=#为接口添加地址>为接口添加地址</a></li>
+<li><a href=#删除接口地址>删除接口地址</a></li>
+<li><a href=#启用接口>启用接口</a></li>
+<li><a href=#禁用接口>禁用接口</a></li>
+<li><a href=#设置接口mac地址>设置接口MAC地址</a></li>
+<li><a href=#设置接口mtu>设置接口MTU</a></li>
+<li><a href=#添加8021q-vlan接口>添加802.1Q VLAN接口</a></li>
+<li><a href=#删除一个接口>删除一个接口</a></li>
+<li><a href=#查看路由表>查看路由表</a></li>
+<li><a href=#查看指定目标地址用的那条路由规则>查看指定目标地址用的那条路由规则</a></li>
+<li><a href=#添加默认路由>添加默认路由</a></li>
+<li><a href=#添加路由表项>添加路由表项</a></li>
+<li><a href=#删除路由表项>删除路由表项</a></li>
+<li><a href=#查看arp表>查看ARP表</a></li>
+<li><a href=#添加永久arp条目>添加永久ARP条目</a></li>
+<li><a href=#把动态arp条目转换为永久arp条目>把动态ARP条目转换为永久ARP条目</a></li>
+<li><a href=#删除arp条目>删除ARP条目</a></li>
+<li><a href=#清空arp表不影响永久条目>清空ARP表（不影响永久条目）</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="tcpdump tcpdump - dump traffic on a network（转储网络上的流量）。
+用法 tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ] [ -c count ] [ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ] [ --number ] [ -Q in|out|inout ] [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,."><title>Linux 命令 —— tcpdump</title>
+<link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— tcpdump">
+<meta property="og:description" content="tcpdump tcpdump - dump traffic on a network（转储网络上的流量）。
+用法 tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ] [ -c count ] [ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ] [ --number ] [ -Q in|out|inout ] [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,.">
+<meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="tcpdump"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpeg">
+<meta name=twitter:title content="Linux 命令 —— tcpdump">
+<meta name=twitter:description content="tcpdump tcpdump - dump traffic on a network（转储网络上的流量）。
+用法 tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ] [ -c count ] [ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ] [ --number ] [ -Q in|out|inout ] [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpeg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_800x0_resize_q75_box.jpeg srcset="/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_800x0_resize_q75_box.jpeg 800w, /p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_1600x0_resize_q75_box.jpeg 1600w" width=800 height=800 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/linux-%E5%91%BD%E4%BB%A4/ style=background-color:#71d399;color:#fff>
+Linux 命令
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>Linux 命令 —— tcpdump</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 4 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=tcpdump>tcpdump</h2>
+<p>tcpdump - dump traffic on a network（转储网络上的流量）。</p>
+<h1 id=用法>用法</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>tcpdump <span class=o>[</span> -AbdDefhHIJKlLnNOpqStuUvxX# <span class=o>]</span> <span class=o>[</span> -B buffer_size <span class=o>]</span>
+       <span class=o>[</span> -c count <span class=o>]</span>
+       <span class=o>[</span> -C file_size <span class=o>]</span> <span class=o>[</span> -G rotate_seconds <span class=o>]</span> <span class=o>[</span> -F file <span class=o>]</span>
+       <span class=o>[</span> -i interface <span class=o>]</span> <span class=o>[</span> -j tstamp_type <span class=o>]</span> <span class=o>[</span> -m module <span class=o>]</span> <span class=o>[</span> -M secret <span class=o>]</span>
+       <span class=o>[</span> --number <span class=o>]</span> <span class=o>[</span> -Q in<span class=p>|</span>out<span class=p>|</span>inout <span class=o>]</span>
+       <span class=o>[</span> -r file <span class=o>]</span> <span class=o>[</span> -V file <span class=o>]</span> <span class=o>[</span> -s snaplen <span class=o>]</span> <span class=o>[</span> -T <span class=nb>type</span> <span class=o>]</span> <span class=o>[</span> -w file <span class=o>]</span>
+       <span class=o>[</span> -W filecount <span class=o>]</span>
+       <span class=o>[</span> -E spi@ipaddr algo:secret,...  <span class=o>]</span>
+       <span class=o>[</span> -y datalinktype <span class=o>]</span> <span class=o>[</span> -z postrotate-command <span class=o>]</span> <span class=o>[</span> -Z user <span class=o>]</span>
+       <span class=o>[</span> --time-stamp-precision<span class=o>=</span>tstamp_precision <span class=o>]</span>
+       <span class=o>[</span> --immediate-mode <span class=o>]</span> <span class=o>[</span> --version <span class=o>]</span>
+       <span class=o>[</span> expression <span class=o>]</span>
+</code></pre></div><h1 id=选项>选项</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>       -A     以ASCII格式打印每个数据包（减去其链接级别标题）。方便捕获网页。
+
+       -b     以ASDOT表示法而不是ASPLAIN表示法打印BGP数据包中的AS编号。
+
+       -B buffer_size
+       --buffer-size<span class=o>=</span>buffer_size
+              将操作系统捕获缓冲区大小设置为buffer_size。
+
+       -c count
+              收到count个包后退出。
+
+       -C file_size
+              在将原始数据包写入保存文件之前，检查该文件当前是否大于file_size，如果是，关闭当前保存文件并打开一个新文件。
+              第一个文件之后的文件将使用 -w 标志指定名称 ，后面带一个数字，从1开始向上。
+              file_size的单位是数百万字节（1,000,000字节，而不是1,048,576字节）。
+
+       -d     将编译后的数据包匹配代码以人类可读的形式转储到标准输出并停止。
+
+       -dd    将数据包匹配代码转储为 C 程序片段。
+
+       -ddd   将数据包匹配代码转储为十进制数字（以计数开头）。
+
+       -D
+       --list-interfaces
+              打印系统上可用的网络接口列表以及 tcpdump 可以捕获数据包的列表。
+              对于每个网络接口，打印数字和接口名称，可能后跟接口的文本描述。
+              可以将接口名称或编号提供给 -i 标志以指定要捕获的接口。
+              这对于没有列出命令的系统很有用。
+              如果tcpdump是用缺少pcap_findalldevs<span class=o>()</span>的libpcap建立的，则不支持此选项<span class=o>(</span>-D<span class=o>)</span>。
+
+       -e     在每个转储行上打印链接级标题。例如，这可以用于打印诸如以太网和IEEE 802.11之类的协议的MAC层地址。
+
+       -E     使用 spi@ipaddr algo:secret来解密发送到addr并包含安全参数索引值 spi的 IPsec ESP数据包。
+              可以用逗号或换行符分隔重复该组合。
+              请注意，此时支持为IPv4 ESP数据包设置机密。
+              算法可以是 des-cbc， 3des-cbc， blowfish-cbc， rc3-cbc， cast128-cbc或 none。默认为des-cbc。
+              只有在启用加密编译tcpdump的情况下才能解密数据包。
+              secret是ESP密钥的ASCII文本。如果前面带有0x，则将读取十六进制值。
+              此选项在RFC2406提出，不是在RFC1827。
+              该选项仅用于调试目的，不鼓励使用此选项和真正的“secret”密钥。通过在命令行上显示IPsec密钥，您可以通过ps和其他场合将其显示给其他人。
+              除了上面的语法之外，语法文件名可以用来让tcpdump读取提供的文件。
+              文件在收到第一个ESP数据包后打开，所以tcpdump应该具备所有可能需要的特殊权限。
+
+       -f     以数字方式而不是符号方式打印“外来<span class=o>(</span>foreign<span class=o>)</span>”IPv4地址。
+              “外部”IPv4地址的测试是使用正在进行捕获的接口的IPv4地址和网络掩码完成的。
+
+       -F file
+              使用file作为过滤器表达式的输入。命令行上给出的附加表达式将被忽略。
+
+       -G rotate_seconds
+              如果指定，每rotate_second秒回转<span class=o>(</span>rotate<span class=o>)</span>-w指定的文件。【回转？？？】
+              保存文件将具有-w指定的名称，该名称 应包含strftime定义的时间格式。
+              如果未指定时间格式，则每个新文件都将覆盖前一个。
+              每当生成的文件名不唯一时，tcpdump将覆盖预先存在的数据<span class=p>;</span> 因此，不建议提供比捕获周期更粗糙的时间规范。
+              如果与 -C 选项一起使用，文件名将采用<span class=s2>&#34;file&lt;count&gt;&#34;</span>的形式。
+
+       -h
+       --help 打印tcpdump和libpcap版本字符串，打印用法消息，然后退出。
+       --version
+              打印tcpdump和libpcap版本字符串并退出。
+
+       -H     尝试检测802.11s草图网格标头。
+
+       -i interface
+       --interface<span class=o>=</span>interface
+              指定监听的接口。
+              如果未指定，tcpdump将在系统接口列表中搜索编号最小的已配置接口（不包括环回），这可能会变成例如“eth0”。
+              在具有2.2或更高版本内核的Linux系统上， 可以使用“any” 的 接口参数来捕获来自所有接口的数据包。
+              请注意，“any”设备上的捕获将不会以混杂模式完成。
+              如果 支持-D标志，则如果系统上没有任何接口将该数字作为名称，则该标志打印的接口号可用作 接口参数。
+
+       -I
+       --monitor-mode
+              将接口置于“监控模式<span class=o>(</span>monitor mode<span class=o>)</span>”<span class=p>;</span> 这仅在IEEE 802.11 Wi-Fi接口上受支持，并且仅在某些操作系统上受支持。
+              请注意，在监视器模式下，适配器可能与与其关联的网络取消关联，因此您将无法使用具有该适配器的任何无线网络。
+              如果您在监视器模式下捕获并且未使用其他适配器连接到另一个网络，则可能会无法访问网络服务器上的文件或解析主机名或网络地址。
+              该标志将影响-L 标志的输出 。
+              如果未指定-I，则仅显示未处于监控模式时可用的链路层类型<span class=p>;</span> 如果指定-I，则仅显示处于监视模式时可用的链接层类型。
+
+       --immediate-mode
+              在“立即模式<span class=o>(</span>immediate mode<span class=o>)</span>”下进行数据包捕获。
+              在此模式下，数据包一到达就会传送到tcpdump，而不是为了提高效率而进行缓冲。
+              这是打印数据包时的默认设置。
+
+       -j tstamp_type
+       --time-stamp-type<span class=o>=</span>tstamp_type
+              将捕获的时间戳类型设置为tstamp_type。
+              pcap-tstamp中给出时间戳类型的名称<span class=p>;</span> 并非所有列出的类型都必须对任何给定的接口有效。
+
+       -J
+       --list-time-stamp-types
+              列出接口支持的时间戳类型并退出。如果无法为接口设置时间戳类型，则不会列出时间戳类型。
+
+       --time-stamp-precision<span class=o>=</span>tstamp_precision
+              捕获时，将捕获的时间戳精度设置为 tstamp_precision。
+              请注意，高精度时间戳（纳秒）的可用性及其实际精度取决于平台和硬件。
+              还要注意，当以纳秒级精度将捕获写入保存文件时，时间戳以纳秒分辨率写入，并且文件使用不同的幻数编写，以指示时间戳以秒和纳秒为单位<span class=p>;</span>
+              并非所有读取pcap文件的程序都能读取这些捕获。
+              读取保存文件时，将时间戳转换为timestamp_precision指定的精度，并以该分辨率显示它们。
+              如果指定的精度小于文件中时间戳的精度，则转换将失去精度。
+              为支持的值timestamp_precision是微为微秒分辨率和纳米为十亿分之一秒分辨率。
+              默认值为微秒分辨率。
+
+       -K
+       --dont-verify-checksums
+              不尝试验证IP，TCP或UDP校验和。
+              这对于在硬件中执行部分或全部校验和计算的接口非常有用<span class=p>;</span> 
+              否则，所有传出的TCP校验和都将被标记为错误。
+
+       -l     使stdout行缓冲。 如果您想在捕获数据时查看数据，则非常有用。
+              例如：tcpdump -l <span class=p>|</span> tee dat
+              或：  tcpdump -l &gt; dat <span class=p>&amp;</span> tail -f dat
+
+              请注意，在Windows上，“行缓冲”意味着“无缓冲”，因此如果指定了-l，WinDump将单独写入每个字符。
+              -U 在其行为上类似于 -l，但它会导致输出为“数据包缓冲” 因此输出在每个数据包的末尾而不是在每行的末尾写入stdout<span class=p>;</span> 
+              这是在所有平台上缓冲的，包括Windows。
+       -L
+       --list-data-link-types
+              在指定模式下列出接口的已知数据链接类型，然后退出。
+              已知数据链接类型列表可能取决于指定的模式<span class=p>;</span>
+              例如，在某些平台上，Wi-Fi接口可能在不处于监控模式时支持一组数据链路类型和处于监控模式时的另一组数据链路类型。
+
+       -m module
+              从文件模块加载SMI MIB模块定义。可以多次使用此选项将多个MIB模块加载到tcpdump中。
+
+       -M secret
+              使用secret作为共享密钥，使用TCP-MD5选项（RFC 2385）验证TCP段中的摘要（如果存在）。
+
+       -n     不要将地址（即主机地址，端口号等）转换为名称。
+
+       -N     不要打印主机名的域名限定。例如，如果你指定这个标记，那么tcpdump将打印<span class=s2>&#34;nic&#34;</span>而不是<span class=s2>&#34;nic.ddn.mil&#34;</span>。
+
+       -#
+       --number
+              在行的开头打印一个可选的包号。
+
+       -O
+       --no-optimize
+              不要运行数据包匹配代码优化器。仅当您怀疑优化器中存在错误时，此选项才有用。
+
+       -p
+       --no-promiscuous-mode
+              不要将接口置于混杂模式。
+              请注意，由于某些其他原因，接口可能处于混杂模式<span class=p>;</span> 
+              因此，<span class=s2>&#34;-p&#34;</span>不能用作<span class=s2>&#34;ether host {local-hw-addr}&#34;</span>或<span class=s2>&#34;ether broadcast&#34;</span>的缩写。
+
+       -Q direction
+       --direction<span class=o>=</span>direction
+              选择发送/接收方向上的哪些数据包应该被捕获。可能的值是“in”，“out”和“inout”。并非适用于所有平台。
+
+       -q     快速（安静？）输出。打印较少的协议信息，因此输出线更短。
+
+       -r file
+              从文件读取数据包（使用 -w 选项或其他编写pcap或pcapng文件的工具创建 ）。如果文件是<span class=s2>&#34;-&#34;</span>，则使用标准输入。
+
+       -S
+       --absolute-tcp-sequence-numbers
+              打印绝对而非相对的TCP序列号<span class=o>(</span>sequence numbers<span class=o>)</span>。默认是相对。
+
+       -s snaplen
+       --snapshot-length<span class=o>=</span>snaplen
+              Snarf snaplen来自每个数据包的数据字节而不是默认值262144字节。
+              由于快照有限而被截断的数据包在输出中用<span class=s2>&#34;[|proto]&#34;</span>，其中proto 是发生截断的协议级别的名称。
+              请注意，拍摄较大的快照会增加处理数据包所需的时间，并有效地减少数据包缓冲量。这可能会导致数据包丢失。
+              另请注意，拍摄较小的快照会丢弃传输层上方协议的数据，这会丢失可能很重要的信息。
+              例如，NFS和AFS请求和回复非常大，如果选择了太短的快照长度，则很多细节将不可用。
+              如果您需要将快照大小减小到默认值以下，则应将snaplen限制为捕获您感兴趣的协议信息的最小数量。
+              将snaplen设置 为0会将其设置为默认值262144，以便向后兼容最近的旧版本tcpdump的版本 。
+
+       -T <span class=nb>type</span>
+              强制将<span class=s2>&#34;expression&#34;</span>选择的数据包解释为指定的类型。
+              目前已知的类型是 aodv（Ad-hoc按需距离矢量协议），carp（通用地址冗余协议），
+              cnfp（Cisco NetFlow协议）， lmp（链路管理协议）， pgm（实用通用多播），
+              pgm_zmtp1（ZMTP/1.0内部PGM/EPGM），resp（REdis序列化协议）， radius（RADIUS），
+              rpc（远程过程调用）， rtp（实时应用程序协议）， rtcp（实时应用程序控制协议），
+              snmp（简单网络管理协议）， tftp（普通文件传输协议）， 增值税（视觉音频工具），
+              wb（分布式白板）， zmtp1（ZeroMQ消息传输协议1.0）和 vxlan（虚拟可扩展局域网）。
+              请注意，上面的pgm类型仅影响UDP解释，无论如何，本机PGM始终被识别为IP协议113。
+              UDP封装的PGM通常称为<span class=s2>&#34;EPGM&#34;</span>或<span class=s2>&#34;PGM/UDP&#34;</span>。
+              请注意，上面的pgm_zmtp1类型会同时影响本机PGM和UDP的解释。
+              在本机PGM解码期间，ODATA/RDATA分组的应用数据将被解码为具有ZMTP/1.0帧的ZeroMQ数据报。
+              在UDP解码期间，除了任何UDP分组之外，任何UDP分组都将被视为封装的PGM分组。
+
+       -t     不在每个转储行上打印时间戳。
+
+       -tt    打印时间戳，自1970年1月1日00:00:00，UTC以及自该时间以来的每秒分数，在每个转储行上。
+
+       -ttt   在每个转储行上的当前行和上一行之间 打印增量（微秒或纳秒分辨率，具体取决于--time-stamp-precision选项）。
+              默认值为微秒分辨率。
+
+       -tttt  在每个转储行上打印一个时间戳，以小时，分钟，秒和从午夜开始的一小时一秒为止。
+
+       -ttttt 在每个转储行上的当前行和第一行之间打印增量（微秒或纳秒分辨率，具体取决于 --time-stamp-precision选项）。默认值为微秒分辨率。
+       
+       -u     打印未解码的NFS句柄。
+
+       -U
+       --packet-buffered
+              如果未指定 -w 选项，或者如果指定了 -w 选项但是也指定了 --print 标志，则使打印的数据包输出<span class=s2>&#34;packet-buffered&#34;</span>；
+              即，当打印每个数据包的内容的描述时，它将被写入标准输出，而不是，在不写入终端时，仅在输出缓冲器填满时写入。
+              <span class=o>(</span> i.e.,  as  the description of the contents of each packet is printed, it
+               will be written to the standard output, rather than, when not writing to a  terminal,
+               being written only when the output buffer fills.<span class=o>)</span>
+              如果指定了 -w 选项，则保存的原始数据包输出<span class=s2>&#34;packet-buffered&#34;</span><span class=p>;</span> 
+              即，在保存每个数据包时，它将被写入输出文件，而不是仅在输出缓冲区填满时才写入。
+              
+              该 -U 如果标志将不被支持, 如果旧版本tcpdump内置的libpcap缺少pcap_dump_flush（3PCAP） 函数。
+
+       -v     解析和打印时，产生（略多）详细输出。 
+              例如，打印IP包中的生存时间，标识，总长度和选项。
+              还可以启用其他数据包完整性检查，例如验证IP和ICMP标头校验和。
+              使用-w 选项写入文件时 ，每秒报告一次捕获的数据包数。
+
+       -vv    更详细的输出。例如，从NFS回复数据包打印其他字段，并完全解码SMB数据包。
+
+       -vvv   更详细的输出。例如，telnet SB ... SE选项全部打印。与 -X 的Telnet选项被印刷在十六进制为好。
+
+       -V file
+              从文件中读取文件名列表。如果文件是<span class=s2>&#34;-&#34;</span>，则使用标准输入。
+
+       -w file
+              将原始数据包写入文件而不是解析并打印出来。
+              稍后可以使用-r选项打印它们。如果文件是“ - ”，则使用标准输出。
+              如果写入文件或管道，则此输出将被缓冲，因此从文件或管道读取的程序在收到后可能无法在任意时间内看到数据包。
+              使用 -U 标志可以在收到数据包后立即写入数据包。
+              MIME类型application/vnd.tcpdump.pcap已在IANA注册pcap文件。
+              文件扩展名.pcap是最常用的。
+              但是，许多操作系统和应用程序将使用扩展（如果存在）并建议添加一个（例如.pcap）
+              读取捕获文件时Tcpdump本身不检查扩展名，并且在写入时不添加扩展名（它在文件头中使用幻数）。
+              有关文件格式的说明，请参阅 pcap-savefile。
+
+       -W     与 -C 选项一起使用时 ，这将限制创建的文件数量达到指定的数量，并从头开始覆盖文件，从而创建一个“旋转”缓冲区。
+              此外，它会将具有足够前导0的文件命名为支持最大文件数，从而允许它们正确排序。
+              与 -G 选项一起使用时 ，这将限制创建的旋转转储文件的数量，在达到限制时退出状态0。
+              如果两者配合使用 -C 和 -G， 该 -W 选项将目前被忽略，并且只会影响的文件名。
+
+       -x     解析和打印时，除了打印每个数据包的标头外，还要以十六进制格式打印每个数据包的数据（减去其链接级别标题）。
+              将打印整个数据包或snaplen字节中较小的一个 。
+              请注意，这是整个链路层数据包，因此对于填充（例如以太网）的链路层，当较高层数据包短于所需填充时，也将打印填充字节。
+
+       -xx    解析和打印时，除了打印每个数据包的标头外，还要打印每个数据包的数据， 包括其链接级别标题，以十六进制表示。
+
+
+       -X     解析和打印时，除了打印每个数据包的标题外，还要以十六进制和ASCII格式打印每个数据包的数据（减去其链接级别标题）。
+              这对于分析新协议非常方便。
+
+       -XX    解析和打印时，除了打印每个数据包的标头外，还要以 十六进制和ASCII格式打印每个数据包的数据， 包括其链接级别标题。
+
+       -y datalinktype
+       --linktype<span class=o>=</span>datalinktype
+              设置要在将数据包捕获到datalinktype时使用的数据链接类型。
+
+       -z postrotate-command
+              与-C 或 -G 选项一起使用时 ，这将使 tcpdump 运行<span class=s2>&#34;postrotate-command file&#34;</span>，
+              其中 file 是每次轮换后关闭的savefile（保存文件，-w创建）。
+              例如，指定 -z gzip 或 -z bzip2 将使用gzip或bzip2压缩每个savefile。
+              请注意，tcpdump将使用最低优先级并行执行命令，以便不会干扰捕获过程。
+              如果您想使用一个本身带有标志或不同参数的命令，您总是可以编写一个shell脚本，
+              它将保存文件名作为唯一参数，制作标志和参数排列并执行您想要的命令。
+
+       -Z user
+       --relinquish-privileges<span class=o>=</span>user
+              如果 tcpdump 以root运行，打开所述捕获装置或输入savefiles之后，
+              但在打开任何savefiles输出之前，将用户ID改为user和组ID改为user的主组。
+              默认情况下，在编译时也可以启用此行为。
+
+        expression
+              选择要转储的数据包。如果没有给出表达式<span class=o>(</span>expression<span class=o>)</span>，则网络上的所有数据包都将被转储。
+              否则，只会转储表达式为<span class=s2>&#34;true&#34;</span>的数据包。
+              有关表达式语法，请参阅 pcap-filter。
+              该表达式<span class=o>(</span>expression<span class=o>)</span>参数可被传递给和tcpdump作为单一壳牌参数，或作为多个shell参数，取其更方便。
+              通常，如果表达式包含Shell元字符，例如用于转义协议名称的反斜杠，则更容易将其作为单个引用参数传递，
+              而不是转义Shell元字符。在解析之前，多个参数与空格连接在一起。
+</code></pre></div><h1 id=示例>示例</h1>
+<h2 id=指定接口主机写到文件>指定接口+主机，写到文件</h2>
+<blockquote>
+<p>tcpdump -i br-lan1 -w x_xxxx.cap -v host xx.xx.xx.xx</p>
+</blockquote>
+<h2 id=指定端口范围>指定端口范围</h2>
+<blockquote>
+<p>tcpdump -i ens33 udp portrange 67-68 -v</p>
+</blockquote>
+<h2 id=捕获和指定主机相关的数据包>捕获和指定主机相关的数据包</h2>
+<blockquote>
+<p>tcpdump host sundown</p>
+</blockquote>
+<h2 id=打印指定主机间的流量>打印指定主机间的流量</h2>
+<blockquote>
+<p>tcpdump host helios and ( hot or ace )</p>
+</blockquote>
+<ul>
+<li>helios 和 hot 、 helios 和 ace之间的流量。</li>
+</ul>
+<h2 id=打印所有本地主机和berkeley主机间的流量>打印所有本地主机和Berkeley主机间的流量</h2>
+<blockquote>
+<p>tcpdump net ucb-ether</p>
+</blockquote>
+<h2 id=通过互联网网关snup打印所有ftp流量请注意引用该表达式是为了防止shell错误地解释括号>通过互联网网关snup打印所有ftp流量(请注意，引用该表达式是为了防止shell（错误地）解释括号）</h2>
+<blockquote>
+<p>tcpdump &lsquo;gateway snup and (port ftp or ftp-data)&rsquo;</p>
+</blockquote>
+<h2 id=要打印既不是来自本地主机也不是发往本地主机的流量如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量(如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</h2>
+<blockquote>
+<p>tcpdump ip and not net localnet</p>
+</blockquote>
+<h2 id=打印涉及非本地主机的每个tcp对话的开始和结束数据包syn和fin数据包>打印涉及非本地主机的每个TCP对话的<code>开始</code>和<code>结束</code>数据包（SYN和FIN数据包）</h2>
+<blockquote>
+<p>tcpdump &lsquo;tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet&rsquo;</p>
+</blockquote>
+<h2 id=打印与端口80之间的所有ipv4-http数据包>打印与端口80之间的所有IPv4 HTTP数据包</h2>
+<blockquote>
+<p>仅打印包含数据的数据包，而不打印例如SYN和FIN数据包以及仅ACK数据包
+tcpdump &lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)&#171;2)) - ((tcp[12]&0xf0)&#187;2)) != 0)&rsquo;</p>
+</blockquote>
+<h2 id=打印通过网关snup发送的长度超过576字节的ip数据包>打印通过网关snup发送的长度超过576字节的IP数据包</h2>
+<blockquote>
+<p>tcpdump &lsquo;gateway snup and ip[2:2] > 576&rsquo;</p>
+</blockquote>
+<h2 id=打印未通过以太网广播或多播发送的ip广播或多播数据包>打印未通过以太网广播或多播发送的IP广播或多播数据包</h2>
+<blockquote>
+<p>tcpdump &lsquo;ether[0] & 1 = 0 and ip[16] >= 224&rsquo;</p>
+</blockquote>
+<h2 id=打印所有不是回应请求回复的icmp数据包即不ping数据包>打印所有不是回应请求/回复的ICMP数据包（即不ping数据包）</h2>
+<blockquote>
+<p>tcpdump &lsquo;icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply&rsquo;</p>
+</blockquote>
+<h1 id=参考>参考</h1>
+<blockquote>
+<p><a class=link href=https://www.tcpdump.org/manpages/tcpdump.1.html target=_blank rel=noopener>https://www.tcpdump.org/manpages/tcpdump.1.html</a>
+linux man page</p>
+</blockquote>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/tcpdump/>tcpdump</a>
+<a href=/tags/linux-%E5%91%BD%E4%BB%A4/>linux 命令</a>
+<a href=/tags/command/>command</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#tcpdump>tcpdump</a></li>
+</ol>
+<ol>
+<li><a href=#指定接口主机写到文件>指定接口+主机，写到文件</a></li>
+<li><a href=#指定端口范围>指定端口范围</a></li>
+<li><a href=#捕获和指定主机相关的数据包>捕获和指定主机相关的数据包</a></li>
+<li><a href=#打印指定主机间的流量>打印指定主机间的流量</a></li>
+<li><a href=#打印所有本地主机和berkeley主机间的流量>打印所有本地主机和Berkeley主机间的流量</a></li>
+<li><a href=#通过互联网网关snup打印所有ftp流量请注意引用该表达式是为了防止shell错误地解释括号>通过互联网网关snup打印所有ftp流量(请注意，引用该表达式是为了防止shell（错误地）解释括号）</a></li>
+<li><a href=#要打印既不是来自本地主机也不是发往本地主机的流量如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量(如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</a></li>
+<li><a href=#打印涉及非本地主机的每个tcp对话的开始和结束数据包syn和fin数据包>打印涉及非本地主机的每个TCP对话的<code>开始</code>和<code>结束</code>数据包（SYN和FIN数据包）</a></li>
+<li><a href=#打印与端口80之间的所有ipv4-http数据包>打印与端口80之间的所有IPv4 HTTP数据包</a></li>
+<li><a href=#打印通过网关snup发送的长度超过576字节的ip数据包>打印通过网关snup发送的长度超过576字节的IP数据包</a></li>
+<li><a href=#打印未通过以太网广播或多播发送的ip广播或多播数据包>打印未通过以太网广播或多播发送的IP广播或多播数据包</a></li>
+<li><a href=#打印所有不是回应请求回复的icmp数据包即不ping数据包>打印所有不是回应请求/回复的ICMP数据包（即不ping数据包）</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

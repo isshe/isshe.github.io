@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>gdb on 树深时间录</title><link>https://isshe.site/tags/gdb/</link><description>Recent content in gdb on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 06:52:14 +0000</lastBuildDate><atom:link href="https://isshe.site/tags/gdb/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>gdb gdb - GNU调试器。
+调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。 GDB可以做4种主要的事情来帮助你捕捉bug：
+启动你的程序，指定任何可能影响程序行为的内容。 使程序在指定条件下停止。 检查你程序停止时，正在发生的事情。 更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。 你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。 使用gdb命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令help来查看帮助（不用退出gdb）。 你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：
+gdb program
+您还可以从可执行程序和指定的core文件开始：
+gdb program core
+如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：
+gdb program 1234 gdb -p 1234
+将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。 以下是一些常用的GDB命令:
+break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger</description></item></channel></rss>

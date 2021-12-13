@@ -1,4 +1,1812 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 04:33:35 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>ARP 协议介绍</title><link>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/arp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="arp协议">ARP协议&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 06:52:14 +0000</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
+&lt;h2 id="1-硬件中断注册">1. 硬件中断注册&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;linux/interrupt.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">static&lt;/span> &lt;span class="kr">inline&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">__must_check&lt;/span>
+&lt;span class="n">request_irq&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">irq&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">irq_handler_t&lt;/span> &lt;span class="n">handler&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：申请一个中断线。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>irq: 中断线号&lt;/li>
+&lt;li>handler: 中断处理函数&lt;/li>
+&lt;li>flags:&lt;/li>
+&lt;li>name:&lt;/li>
+&lt;li>dev:&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-硬件中断释放">2. 硬件中断释放&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;linux/interrupt.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nf">free_irq&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">irq&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">dev_id&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：释放一个中断线。如果没有其他设备注册该IRQ线，就关闭该IRQ。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>irq: 中断线号。&lt;/li>
+&lt;li>dev_id: 设备标识。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-中断类型">3. 中断类型&lt;/h2>
+&lt;p>网络设备常见的中断事件类型：&lt;/p>
+&lt;ul>
+&lt;li>接收一帧：最常见、标准的情况。&lt;/li>
+&lt;li>传输失败；&lt;/li>
+&lt;li>DMA传输已成功完成；
+&lt;ul>
+&lt;li>drivers/net/3c59x.c有相关范例。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>设备有足够内存处理新传输；&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-中断共享">4. 中断共享&lt;/h2>
+&lt;p>IRQ线是有限的资源；允许系统能容纳设备数目的简单方式就是：允许多台设备共享一个IRQ线。
+一组设备共享一条IRQ线时，所有这些设备的设备驱动程序都必须有能力处理共享的IRQ。换言之，设备注册IRQ时，需要说明其是否支持中断共享。&lt;/p>
+&lt;h2 id="5-irq处理函数映射中断向量表">5. IRQ处理函数映射（中断向量表）&lt;/h2>
+&lt;p>相关结构：详见&amp;lt;include/linux/interrupt.h&amp;gt;&lt;/p>
+&lt;ul>
+&lt;li>struct irq_desc&lt;/li>
+&lt;li>struct irqaction&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">irq_desc&lt;/span> &lt;span class="o">----&amp;gt;+---------+&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">+---------+&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">action&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">--------------------&amp;gt;&lt;/span> &lt;span class="o">+---------------+&lt;/span>
+&lt;span class="o">+---------+&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">next&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">+---------------+&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">+---------+&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
+&lt;span class="n">NR_IRQS&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">action&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">--------------------&amp;gt;&lt;/span> &lt;span class="o">+---------------+&lt;/span> &lt;span class="o">------&amp;gt;&lt;/span> &lt;span class="o">+---------------+&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">+---------+&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">next&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">next&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="n">SA_SHIRQ&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">+---------------+&lt;/span> &lt;span class="o">+---------------+&lt;/span>
+&lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
+&lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;p>gdb - GNU调试器。&lt;/p>
+&lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
+GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
+&lt;ul>
+&lt;li>启动你的程序，指定任何可能影响程序行为的内容。&lt;/li>
+&lt;li>使程序在指定条件下停止。&lt;/li>
+&lt;li>检查你程序停止时，正在发生的事情。&lt;/li>
+&lt;li>更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。&lt;/li>
+&lt;/ul>
+&lt;p>你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。
+使用&lt;code>gdb&lt;/code>命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令&lt;code>help&lt;/code>来查看帮助（不用退出gdb）。
+你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program&lt;/p>
+&lt;/blockquote>
+&lt;p>您还可以从可执行程序和指定的core文件开始：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program core&lt;/p>
+&lt;/blockquote>
+&lt;p>如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program 1234
+gdb -p 1234&lt;/p>
+&lt;/blockquote>
+&lt;p>将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。
+以下是一些常用的GDB命令:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nb">break&lt;/span> &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+在函数&lt;span class="o">(&lt;/span>文件&lt;span class="o">)&lt;/span>中设置断点。
+缩写：b。
+用法：
+b &amp;lt;行号&amp;gt;，如：b &lt;span class="m">8&lt;/span>
+b &amp;lt;函数名称&amp;gt;，如：b main
+b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”）
+b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。
+d &lt;span class="o">[&lt;/span>breakpoint number&lt;span class="o">]&lt;/span>
+删除断点
+run &lt;span class="o">[&lt;/span>arglist&lt;span class="o">]&lt;/span>
+开始你的程序（arglist是参数列表）
+缩写：r
+bt
+回溯&lt;span class="o">(&lt;/span>backtrace&lt;span class="o">)&lt;/span>：显示程序堆栈。
+print expr
+显示表达式expr的值。
+缩写：p
+c
+继续运行你的程序（在停止后，例如断电）。continue的缩写。
+next
+继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；不进入函数的单步调试。
+缩写：n
+edit &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+查看程序当前停止的行。
+list &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+在当前停止的位置附近键入程序的文本。
+step
+继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；进入函数的单步调试。
+缩写：s
+i
+显示各类信息。如：i r，显示寄存器的信息
+&lt;span class="nb">help&lt;/span> &lt;span class="o">[&lt;/span>name&lt;span class="o">]&lt;/span>
+显示GDB命令name的信息，或有关使用GDB的一般信息。
+quit
+退出GDB。
+缩写：q
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger&lt;/p>
+&lt;h1 id="用法">用法&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gdb &lt;span class="o">[&lt;/span>-help&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nh&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nx&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-q&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-batch&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-cd&lt;span class="o">=&lt;/span>dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-f&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-b bps&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-tty&lt;span class="o">=&lt;/span>dev&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-s symfile&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-e prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-se prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-c core&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-p procID&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-x cmds&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-d dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>prog&lt;span class="p">|&lt;/span>prog procID&lt;span class="p">|&lt;/span>prog core&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
+&lt;p>选项之外的任何参数都需要指定可执行文件和核心文件（或进程ID）。
+所有选项和命令行参数都按顺序处理。使用' -x &amp;lsquo;选项时，顺序会有所不同。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-help
+-h 列出所有选项，并提供简要说明。
+-symbols&lt;span class="o">=&lt;/span>file
+-s file
+从file文件中读取符号表（symbol table）。
+-write
+允许写入可执行文件和core文件。
+-exec&lt;span class="o">=&lt;/span>file
+-e file
+使用file文件作为可执行文件在适当时执行，并与核心转储一起检查纯数据。
+-se&lt;span class="o">=&lt;/span>file
+从file文件中读取符号表并将file用作可执行文件。
+-core&lt;span class="o">=&lt;/span>file
+-c file
+指定core文件。
+-command&lt;span class="o">=&lt;/span>file
+-x file
+执行file文件中的GDB命令。（自动化？）
+-ex &lt;span class="nb">command&lt;/span>
+执行给定的GDB命令。
+-directory&lt;span class="o">=&lt;/span>directory
+-d directory
+将目录添加到路径&lt;span class="o">(&lt;/span>path&lt;span class="o">)&lt;/span>以搜索源文件。
+-nh 不要执行~/.gdbinit中的命令。
+-nx
+-n 不要执行任何&lt;span class="s1">&amp;#39;.gdbinit&amp;#39;&lt;/span>初始化文件中的命令。
+-quiet
+-q &lt;span class="s2">&amp;#34;Quiet&amp;#34;&lt;/span>. 不要打印介绍性和版权信息。这些消息也在批处理模式下被抑制。
+-batch
+以批处理模式运行。
+在执行完用-x选项指定的所有命令文件&lt;span class="o">(&lt;/span>如果不禁止，则为.gdbinit&lt;span class="o">)&lt;/span>后，以0退出。
+如果在运行命令文件中的GDB命令时发生错误，则以非0退出。
+批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序&lt;span class="p">;&lt;/span>
+为了使这个更有用，消息程序正常退出。【？？？】
+-cd&lt;span class="o">=&lt;/span>directory
+使用directory作用GDB的工作目录（而不是用当前目录）
+-fullname
+-f Emacs在将GDB作为子进程运行时设置此选项。
+它告诉GDB每次显示堆栈帧时都以标准的，可识别的方式输出完整的文件名和行号（包括每次程序停止时）。
+这种可识别的格式看起来像两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符，后跟文件名，行号和以冒号分隔的字符位置，以及换行符。
+Emacs-to-GDB接口程序使用两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符作为信号来显示帧的源代码。
+-b bps
+设置GDB用于远程调试的任何串行接口的线性速度（波特率或每秒位数）。
+-tty&lt;span class="o">=&lt;/span>device
+使用device运行程序的标准输入和输出。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="编译并跟踪">编译并跟踪&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gcc test.c -o &lt;span class="nb">test&lt;/span> -g
+gdb &lt;span class="nb">test&lt;/span>
+&amp;lt;gdb命令&amp;gt;
+&amp;lt;b main&amp;gt;: 断点
+&amp;lt;b 10&amp;gt;: 第10行设置断点
+&amp;lt;d 10&amp;gt;: 删除第10行的断点
+&amp;lt;info b&amp;gt;: 查看断点信息
+&amp;lt;c&amp;gt;: 继续
+&amp;lt;n&amp;gt;: 下一行
+&amp;lt;s&amp;gt;: 下一行，进入函数。
+&amp;lt;r&amp;gt;: 执行
+&amp;lt;c&amp;gt;: 继续执行
+&amp;lt;i r&amp;gt;: 显示寄存器的信息
+&amp;lt;bt&amp;gt;: 显示堆栈
+&amp;lt;list 10&amp;gt;: 从第10行开始显示代码
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;h1 id="拓展">拓展&lt;/h1>
+&lt;ul>
+&lt;li>shell命令：info gdb&lt;/li>
+&lt;li>&lt;a class="link" href="https://sourceware.org/gdb/current/onlinedocs/gdb/" target="_blank" rel="noopener"
+>gdb在线文档&lt;/a>
+&lt;ul>
+&lt;li>&lt;a class="link" href="http://mermaja.act.uji.es/docencia/is37/data/gdb.pdf" target="_blank" rel="noopener"
+>A Guide to the GNU Source-Level Debugger&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
+>https://man.linuxde.net/gdb&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;h1 id="submodule">submodule&lt;/h1>
+&lt;h2 id="添加submodule">添加submodule：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
+&amp;gt; git submodule add https://github.com/isshe/gitsubproject
+&lt;/code>&lt;/pre>&lt;h2 id="查看subproject的commit">查看subproject的commit：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git diff --cached &amp;lt;subproject dir&amp;gt;
+&amp;gt; git diff --cached gitsubproject/
+&lt;/code>&lt;/pre>&lt;h2 id="查看subproject的gitmodules">查看subproject的.gitmodules：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git diff --cached --submodule
+&lt;/code>&lt;/pre>&lt;h2 id="自动clone每个submodule">自动clone每个submodule：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git clone --recursive &amp;lt;your repository url&amp;gt;
+&amp;gt; git clone --recursive https://github.com/isshe/gitproject
+&lt;/code>&lt;/pre>&lt;h2 id="拉取子模块">拉取子模块：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git submodule init
+git submodule update
+&amp;gt; 更常用的是：递归更新
+git submodule update --init --recursive
+&lt;/code>&lt;/pre>&lt;p>子模块的后续更新：&lt;/p>
+&lt;pre tabindex="0">&lt;code>git submodule update --remote
+&lt;/code>&lt;/pre>&lt;h2 id="调整submodule的commit">调整submodule的commit：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git pull origin xxx
+&lt;/code>&lt;/pre>&lt;h2 id="切submodule的分支">切submodule的分支：&lt;/h2>
+&lt;pre tabindex="0">&lt;code>git config -f .gitmodules submodule.&amp;lt;submodule dir&amp;gt;.branch &amp;lt;submodule target branch name&amp;gt;
+&amp;gt; git config -f .gitmodules submodule.DbConnector.branch stable
+&lt;/code>&lt;/pre>&lt;p>更新到相应的分支：&lt;/p>
+&lt;pre tabindex="0">&lt;code>git checkout -b &amp;lt;branch name&amp;gt; --track origin/&amp;lt;branch name&amp;gt;
+&amp;gt; git checkout -b chudai --track origin/chudai
+&lt;/code>&lt;/pre>&lt;h2 id="删除一个submodule">删除一个submodule：&lt;/h2>
+&lt;ul>
+&lt;li>Delete the relevant section from the &lt;code>.gitmodules&lt;/code> file.&lt;/li>
+&lt;li>Stage the &lt;code>.gitmodules&lt;/code> changes &lt;code>git add .gitmodules&lt;/code>&lt;/li>
+&lt;li>Delete the relevant section from &lt;code>.git/config&lt;/code>.&lt;/li>
+&lt;li>Run &lt;code>git rm --cached path_to_submodule&lt;/code> (no trailing slash).&lt;/li>
+&lt;li>Run &lt;code>rm -rf .git/modules/path_to_submodule&lt;/code>&lt;/li>
+&lt;li>Commit &lt;code>git commit -m &amp;quot;Removed submodule &amp;lt;name&amp;gt;&amp;quot;&lt;/code>&lt;/li>
+&lt;li>Delete the now untracked submodule files&lt;code>rm -rf path_to_submodule&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h1 id="使用示例">使用示例&lt;/h1>
+&lt;h2 id="显示某次提交修改的文件">显示某次提交修改的文件&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">git show --name-only HEAD
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="git-merge-squash">git merge squash&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">git checkout &amp;lt;your-dev-branch&amp;gt;
+&lt;span class="c1"># -i 后跟 commit id，要合并的提交的前一个，如果你要合并两次提交，那个出来的编辑器里应该有两条记录&lt;/span>
+git rebase -i HEAD~2
+&lt;span class="c1"># 编辑框出来后，可以把后面的提交的 pick 改为 squash&lt;/span>
+git pull --rebase origin master
+git push -f origin &amp;lt;your-dev-branch&amp;gt; &lt;span class="c1">#&lt;/span>
+git checkout master
+git pull origin master
+git merge &amp;lt;your-dev-branch&amp;gt;
+git push origin master
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="git-tag">git tag&lt;/h1>
+&lt;ul>
+&lt;li>打 tag&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>git tag -a {tag name} {commit id}
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>推送 tag 到远端&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>git push origin {tag name}
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
+&lt;h2 id="概要">概要&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
+ip &lt;span class="o">[&lt;/span> -force &lt;span class="o">]&lt;/span> -batch filename
+OBJECT :&lt;span class="o">=&lt;/span> &lt;span class="o">{&lt;/span> link &lt;span class="p">|&lt;/span> address &lt;span class="p">|&lt;/span> addrlabel &lt;span class="p">|&lt;/span> route &lt;span class="p">|&lt;/span> rule &lt;span class="p">|&lt;/span> neigh &lt;span class="p">|&lt;/span> ntable &lt;span class="p">|&lt;/span> tunnel &lt;span class="p">|&lt;/span> tuntap &lt;span class="p">|&lt;/span> maddress &lt;span class="p">|&lt;/span> mroute &lt;span class="p">|&lt;/span> mrule &lt;span class="p">|&lt;/span> monitor &lt;span class="p">|&lt;/span> xfrm &lt;span class="p">|&lt;/span> netns &lt;span class="p">|&lt;/span> l2tp &lt;span class="p">|&lt;/span> tcp_metrics &lt;span class="o">}&lt;/span>
+OPTIONS :&lt;span class="o">=&lt;/span> &lt;span class="o">{&lt;/span> -V&lt;span class="o">[&lt;/span>ersion&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -h&lt;span class="o">[&lt;/span>uman-readable&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -s&lt;span class="o">[&lt;/span>tatistics&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -r&lt;span class="o">[&lt;/span>esolve&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -f&lt;span class="o">[&lt;/span>amily&lt;span class="o">]&lt;/span> &lt;span class="o">{&lt;/span> inet &lt;span class="p">|&lt;/span> inet6 &lt;span class="p">|&lt;/span> ipx &lt;span class="p">|&lt;/span> dnet &lt;span class="p">|&lt;/span> link &lt;span class="o">}&lt;/span> &lt;span class="p">|&lt;/span> -o&lt;span class="o">[&lt;/span>neline&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -n&lt;span class="o">[&lt;/span>etns&lt;span class="o">]&lt;/span> name &lt;span class="p">|&lt;/span> -a&lt;span class="o">[&lt;/span>ll&lt;span class="o">]&lt;/span> &lt;span class="p">|&lt;/span> -c&lt;span class="o">[&lt;/span>olor&lt;span class="o">]&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>OBJECT:&lt;/p>
+&lt;ul>
+&lt;li>address - 一个设备的IPv4/IPv6地址。（缩写：a 或 addr）&lt;/li>
+&lt;li>addrlabel - 协议地址选择的标签配置。 （缩写：addrl）&lt;/li>
+&lt;li>l2tp - IP隧道以太网(L2TPv3).&lt;/li>
+&lt;li>link - 网络设备。如eth0。 （ 缩写：l）&lt;/li>
+&lt;li>maddress - 多播地址。 （缩写：m 或 maddr）&lt;/li>
+&lt;li>monitor - 监测netlink消息&lt;/li>
+&lt;li>mroute - 组播路由缓存条目。 （缩写：mr）&lt;/li>
+&lt;li>mrule - 组播路由策略数据库中的规则。&lt;/li>
+&lt;li>neighbour - 管理 ARP 或 NDISC 缓存条目。（缩写：n or neigh）&lt;/li>
+&lt;li>netns - 管理网络命名空间。&lt;/li>
+&lt;li>ntable - 管理邻居缓存的操作。&lt;/li>
+&lt;li>route - 路由表中的路由规则。 （缩写：r）&lt;/li>
+&lt;li>rule - 路由策略数据库中的规则。 （缩写：ru&lt;/li>
+&lt;li>tcp_metrics/tcpmetrics - 管理 TCP Metrics。&lt;/li>
+&lt;li>tunnel - IP隧道。 （缩写：t）&lt;/li>
+&lt;li>tuntap - 管理 TUN/TAP 设备。&lt;/li>
+&lt;li>xfrm - 管理 IPSec 策略。 （缩写：x）&lt;/li>
+&lt;/ul>
+&lt;h1 id="选项">选项&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-V, -Version
+打印ip实用工具/iproute2的版本。
+-h, -human, -human-readable
+输出具有人类可读值的后跟后缀的统计信息。
+-b, -batch &amp;lt;FILENAME&amp;gt;
+从提供的文件或标准输入中读取命令并调用它们。首次失败将导致ip终止。
+-force
+不在批处理模式出错时终止ip。如果在执行命令期间出现任何错误，则应用程序返回代码将不为零。
+-s, -stats, -statistics
+输出更多信息。如果选项出现两次或更多次，则信息量会增加。通常，信息是统计信息或某些时间值。
+-d, -details
+输出更多细节信息。
+-l, -loops &amp;lt;COUNT&amp;gt;
+指定&lt;span class="s1">&amp;#39;ip address flush&amp;#39;&lt;/span>逻辑在放弃之前将尝试的最大循环次数。默认值为10。零&lt;span class="o">(&lt;/span>0&lt;span class="o">)&lt;/span>表示一直循环到删除所有地址。
+-f, -family &amp;lt;FAMILY&amp;gt;
+指定要使用的协议族。
+协议族标识符可以是inet，inet6，bridge，ipx，dnet，mpls或link之一。
+如果此选项不存在，则从其他参数中猜出协议族。
+如果命令行的其余部分没有提供足够的信息来猜测，则ip会使用一个默认值，通常是inet或any。
+link是一个特殊的系列标识符，表示不涉及任何网络协议。
+-4 -family inet 的简写.
+-6 -family inet6 的简写.
+-B -family bridge 的简写.
+-D -family decnet 的简写.
+-I -family ipx 的简写.
+-M -family mpls 的简写.
+-0 -family link 的简写.
+-o, -oneline
+将每条记录输出到单一的行，用&lt;span class="s1">&amp;#39;\&amp;#39;&lt;/span>字符替换换行符。
+当您想要使用wc或grep输出计数记录时，这很方便。
+-r, -resolve
+使用系统的名称解析程序来打印DNS名称而不是主机地址。
+-n, -netns &amp;lt;NETNS&amp;gt;
+将ip切换到指定的网络命名空间NETNS。 实际上它只是简化执行：
+ip netns &lt;span class="nb">exec&lt;/span> NETNS ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
+到
+ip -n&lt;span class="o">[&lt;/span>etns&lt;span class="o">]&lt;/span> NETNS &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
+-a, -all
+对所有对象执行指定的命令，它取决于命令是否支持此选项。
+-c, -color
+使用颜色输出。
+-t, -timestamp
+使用monitor选项时显示当前时间。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="查看详细的接口信息">查看详细的接口信息&lt;/h2>
+&lt;blockquote>
+&lt;p>ip -c -d -s -s link show
+ip -c -d -s -s link show ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="查看接口地址">查看接口地址&lt;/h2>
+&lt;blockquote>
+&lt;p>ip addr shwo ens33
+ip -4 addr show ens33
+ip -6 addr show ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="为接口添加地址">为接口添加地址&lt;/h2>
+&lt;blockquote>
+&lt;p>ip addr add &amp;lt;IP 地址/前缀长度&amp;gt; [broadcast &amp;lt;广播地址&amp;gt;] dev &amp;lt;接口名&amp;gt;
+ip addr add 192.168.2.102/24 dev ens33
+IPv6地址加&lt;code>-6&lt;/code>即可。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="删除接口地址">删除接口地址&lt;/h2>
+&lt;blockquote>
+&lt;p>sudo ip addr del 192.168.2.102/24 dev ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="启用接口">启用接口&lt;/h2>
+&lt;blockquote>
+&lt;p>ip link set ens33 up&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="禁用接口">禁用接口&lt;/h2>
+&lt;blockquote>
+&lt;p>ip link set ens33 down&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="设置接口mac地址">设置接口MAC地址&lt;/h2>
+&lt;p>设置前需要先禁用接口&lt;/p>
+&lt;blockquote>
+&lt;p>ip link set ens33 address 00:0c:29:a5:ce:35&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="设置接口mtu">设置接口MTU&lt;/h2>
+&lt;blockquote>
+&lt;p>ip link set ens33 mtu 1500&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="添加8021q-vlan接口">添加802.1Q VLAN接口&lt;/h2>
+&lt;blockquote>
+&lt;p>ip link add link &amp;lt;接口名&amp;gt; name &amp;lt;子接口名&amp;gt; type vlan id &lt;!-- raw HTML omitted -->
+sudo ip link add link ens33 name ens33.1 type vlan id 10&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="删除一个接口">删除一个接口&lt;/h2>
+&lt;blockquote>
+&lt;p>sudo ip link del ens33.1&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="查看路由表">查看路由表&lt;/h2>
+&lt;blockquote>
+&lt;p>sudo ip route show&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="查看指定目标地址用的那条路由规则">查看指定目标地址用的那条路由规则&lt;/h2>
+&lt;blockquote>
+&lt;p>ip route get 192.168.2.103&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="添加默认路由">添加默认路由&lt;/h2>
+&lt;blockquote>
+&lt;p>ip route add default via &amp;lt;默认网关&amp;gt; [dev &amp;lt;出接口&amp;gt;]&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="添加路由表项">添加路由表项&lt;/h2>
+&lt;blockquote>
+&lt;p>ip route add &amp;lt;目标 IP 地址/前缀长度&amp;gt; via &amp;lt;下一跳&amp;gt; [dev &amp;lt;出接口&amp;gt;]
+sudo ip route add 192.168.2.0/24 via 192.168.2.1 dev ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="删除路由表项">删除路由表项&lt;/h2>
+&lt;blockquote>
+&lt;p>sudo ip route del 192.168.3.0/24 dev ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="查看arp表">查看ARP表&lt;/h2>
+&lt;blockquote>
+&lt;p>ip neigh show dev ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="添加永久arp条目">添加永久ARP条目&lt;/h2>
+&lt;blockquote>
+&lt;p>ip neigh add &amp;lt;IP 地址&amp;gt; lladdr &amp;lt;以冒号分割的 MAC 地址&amp;gt; dev &amp;lt;接口名&amp;gt; nud permanent
+ip neigh add 192.168.2.149 lladdr e0:d5:5e:a1:d0:d1 dev ens33 nud permanent&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="把动态arp条目转换为永久arp条目">把动态ARP条目转换为永久ARP条目&lt;/h2>
+&lt;blockquote>
+&lt;p>ip neigh change &amp;lt;IP 地址&amp;gt; dev &amp;lt;接口名&amp;gt; nud permanent&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="删除arp条目">删除ARP条目&lt;/h2>
+&lt;blockquote>
+&lt;p>ip neigh del &amp;lt;IP 地址&amp;gt; dev &amp;lt;接口名&amp;gt;
+ip neigh del 192.168.2.149 dev ens33&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="清空arp表不影响永久条目">清空ARP表（不影响永久条目）&lt;/h2>
+&lt;blockquote>
+&lt;p>ip neigh flush all&lt;/p>
+&lt;/blockquote>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://zhuanlan.zhihu.com/p/28155886" target="_blank" rel="noopener"
+>https://zhuanlan.zhihu.com/p/28155886&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
+>https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
+&lt;li>linux man page&lt;/li>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
+&lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
+&lt;ul>
+&lt;li>注意，模块名称中&lt;code>-&lt;/code>和&lt;code>_&lt;/code>没有区别（自动执行下划线转换）。&lt;/li>
+&lt;li>modprobe在模块目录&lt;code>/lib/modules/'uname -r'&lt;/code>(符号冲突了，用&lt;code>'&lt;/code>代替)中查找所有模块和其他文件。
+&lt;ul>
+&lt;li>除了&lt;code>/etc/modprobe.d&lt;/code>目录是的可选配置文件。详见&lt;code>modprobe.d&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>modprobe还将以&lt;code>&amp;lt;module&amp;gt;.&amp;lt;option&amp;gt;&lt;/code>的形式使用内核命令行上指定的模块选项。
+&lt;ul>
+&lt;li>&lt;code>modprobe.blacklist=&amp;lt;module&amp;gt;&lt;/code>的形式使用黑名单。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果在modulename之后给出了任何参数，它们将被传递给内核。
+&lt;ul>
+&lt;li>除了配置文件中列出的选项。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="用法">用法&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">modprobe &lt;span class="o">[&lt;/span>-v&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-V&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-C config-file&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-n&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-i&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-q&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-b&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>modulename&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>module parameters...&lt;span class="o">]&lt;/span>
+modprobe &lt;span class="o">[&lt;/span>-r&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-v&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-n&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-i&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>modulename...&lt;span class="o">]&lt;/span>
+modprobe &lt;span class="o">[&lt;/span>-c&lt;span class="o">]&lt;/span>
+modprobe &lt;span class="o">[&lt;/span>--dump-modversions&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>filename&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-a, --all
+加载命令行中指定的所有模块。
+-b, --use-blacklist
+此选项使modprobe将配置文件（如果有）中的黑名单命令也应用于模块名称。 它通常由udev&lt;span class="o">(&lt;/span>7&lt;span class="o">)&lt;/span>使用。
+-C, --config
+此选项会覆盖缺省配置目录（/etc/modprobe.d）
+此选项通过安装或删除命令传递给 MODPROBE_OPTIONS环境变量中 的其他modprobe命令。
+-c, --showconfig
+输出config目录中的有效配置并退出。
+--dump-modversions
+打印出模块所需的模块版本信息列表。 分发版通常使用此选项，以便使用模块版本控制deps&lt;span class="o">(&lt;/span>依赖？&lt;span class="o">)&lt;/span>打包Linux内核模块。
+-d, --dirname
+模块的根目录，默认是&lt;span class="sb">`&lt;/span>/&lt;span class="sb">`&lt;/span>。
+--first-time
+通常，如果告知插入已存在的模块或删除不存在的模块，modprobe将成功（并且不执行任何操作）。
+这是简单脚本的理想选择&lt;span class="p">;&lt;/span> 然而，更复杂的脚本通常想知道modprobe是否真的做了一些事情：
+这个选项使modprobe失败，因为它实际上没有做任何事情。
+--force-vermagic
+每个模块都包含一个包含重要信息的小字符串，例如内核和编译器版本。
+如果模块无法加载并且内核抱怨&lt;span class="sb">`&lt;/span>version magic&lt;span class="sb">`&lt;/span>不匹配，则可以使用此选项将其删除&lt;span class="o">(&lt;/span>抱怨&lt;span class="o">)&lt;/span>。
+当然，这个检查是为了保护你的，所以这个使用选项是危险的，除非你知道你在做什么。
+这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。
+--force-modversion
+当使用CONFIG_MODVERSIONS集编译模块时，会创建模块使用（或由模块提供）的每个接口的版本的详细说明。
+如果模块无法加载并且内核抱怨模块不同意某个接口的版本，则可以使用“--force-modversion”来完全删除版本信息。
+当然，这项检查是为了保护您的，所以使用此选项是危险的，除非您知道自己在做什么。
+这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。
+-f, --force
+尝试从模块中删除任何可能阻止加载的版本信息：这与使用--force-vermagic和--force-modversion相同。
+当然，这些检查是为了您的保护，所以使用此选项是危险的，除非您知道自己在做什么。
+这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。
+-i, --ignore-install, --ignore-remove
+此选项使modprobe忽略命令行中，指定的模块的配置文件（如果有）中的安装和删除命令（任何相关模块仍然受配置文件中为它们设置的命令的限制）。
+当使用此选项时，无论是否仅使用--ignore-install或--ignore-remove中的一个或其他（而不是两个）更具体地进行请求，将忽略安装和删除命令。
+详见modprobe.d&lt;span class="o">(&lt;/span>5&lt;span class="o">)&lt;/span>。
+-n, --dry-run, --show
+除了实际插入或删除模块（或运行安装或删除命令）之外，此选项可以执行所有操作。
+与-v结合使用，可用于调试问题。 由于历史原因，--dry-run和--show实际上意味着相同的事情并且可以互换。
+-q, --quiet
+使用此标志，如果您尝试删除或插入无法找到的模块（并且不是别名或安装/删除命令），modprobe将不会打印错误消息。
+但是，它仍将以非零退出状态返回。
+内核使用它来机会性地探测可能存在的正在使用request_module的模块。
+-R, --resolve-alias
+打印与别名匹配的所有模块名称。这对于调试模块别名问题很有用。
+-r, --remove
+这个选项使modprobe删除而不是插入一个模块。
+如果它依赖的模块也没有使用，modprobe讲尝试移除它们。
+不像插入可以在命令行上指定多个模块。（意思是-r指定移除一个？）
+（在删除模块时指定模块参数没有意义）
+通常没有理由删除模块，但有些错误的&lt;span class="o">(&lt;/span>buggy&lt;span class="o">)&lt;/span>模块需要它。 您的发行版内核可能尚未构建为支持删除模块。
+-S, --set-version
+设置内核版本，而不是使用uname&lt;span class="o">(&lt;/span>2&lt;span class="o">)&lt;/span>来决定内核版本（它决定了在哪里找到模块）。
+--show-depends
+显示模块的依赖，包括模块它自己。
+列出模块（或别名）的依赖关系，包括模块本身。
+这会生成一组&lt;span class="o">(&lt;/span>可能为空&lt;span class="o">)&lt;/span>模块文件名，每行一个，每个以“insmod”开头，通常由发行版使用，以确定生成initrd/initramfs映像时要包含哪些模块。
+应用的安装命令以“install”为前缀。
+它不运行任何安装命令。
+请注意，modinfo&lt;span class="o">(&lt;/span>8&lt;span class="o">)&lt;/span> 可用于从模块本身提取模块的依赖关系，但不知道别名或安装命令。
+-s, --syslog
+此选项会导致错误消息通过syslog机制（如级别为LOG_NOTICE的LOG_DAEMON）而不是标准错误。
+当stderr不可用时，也会自动启用此功能。
+此选项通过安装或删除命令传递给MODPROBE_OPTIONS环境变量中的其他modprobe命令。
+-V, --version
+显示此程序的版本并退出。
+-v, --verbose
+打印程序正在做什么的信息。
+通常modprobe只打印出错的信息。
+此选项通过安装或删除命令传递给MODPROBE_OPTIONS环境变量中的其他modprobe命令。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="加载模块">加载模块&lt;/h2>
+&lt;blockquote>
+&lt;p>modprobe vfat&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="卸载模块">卸载模块&lt;/h2>
+&lt;blockquote>
+&lt;p>modprobe -r vfat&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="查看模块的配置文件">查看模块的配置文件&lt;/h2>
+&lt;blockquote>
+&lt;p>modprobe -r&lt;/p>
+&lt;/blockquote>
+&lt;p>输出类似：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">alias&lt;/span> &lt;span class="n">ip6t_conntrack&lt;/span> &lt;span class="n">xt_conntrack&lt;/span>
+&lt;span class="n">alias&lt;/span> &lt;span class="n">ip_conntrack&lt;/span> &lt;span class="n">nf_conntrack_ipv4&lt;/span>
+&lt;span class="n">alias&lt;/span> &lt;span class="nl">symbol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">__nf_conntrack_confirm&lt;/span> &lt;span class="n">nf_conntrack&lt;/span>
+&lt;span class="n">alias&lt;/span> &lt;span class="nl">symbol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">ct_sip_parse_request&lt;/span> &lt;span class="n">nf_conntrack_sip&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>symbol：应该是说这个是&lt;code>nf_conntrack&lt;/code>中的符号（也就是函数）。【？？？】&lt;/li>
+&lt;/ul>
+&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;ul>
+&lt;li>modprobe -r输出的含义？&lt;/li>
+&lt;/ul>
+&lt;h1 id="相关">相关&lt;/h1>
+&lt;ul>
+&lt;li>modprobe.d&lt;/li>
+&lt;li>insmod&lt;/li>
+&lt;li>rmmod&lt;/li>
+&lt;li>lsmod&lt;/li>
+&lt;li>modinfo&lt;/li>
+&lt;/ul>
+&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
+&lt;p>显示当前的连接情况。（UDP、TCP、UNIX、ICMP等）
+显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。&lt;/p>
+&lt;h1 id="1-介绍">1. 介绍&lt;/h1>
+&lt;h2 id="11-用法">1.1 用法&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat &lt;span class="o">[&lt;/span>-vWeenNcCF&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>&amp;lt;Af&amp;gt;&lt;span class="o">]&lt;/span> -r
+netstat &lt;span class="o">{&lt;/span>-V&lt;span class="p">|&lt;/span>--version&lt;span class="p">|&lt;/span>-h&lt;span class="p">|&lt;/span>--help&lt;span class="o">}&lt;/span>
+netstat &lt;span class="o">[&lt;/span>-vWnNcaeol&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>&amp;lt;Socket&amp;gt; ...&lt;span class="o">]&lt;/span>
+netstat &lt;span class="o">{&lt;/span> &lt;span class="o">[&lt;/span>-vWeenNac&lt;span class="o">]&lt;/span> -i &lt;span class="p">|&lt;/span> &lt;span class="o">[&lt;/span>-cWnNe&lt;span class="o">]&lt;/span> -M &lt;span class="p">|&lt;/span> -s &lt;span class="o">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="12-选项">1.2 选项&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">-r, --route 显示路由表
+-i, --interfaces 显示接口列表
+-g, --groups 显示多播组成员
+-s, --statistics 显示网络统计信息
+-M, --masquerade display masqueraded connections【？？？】
+-v, --verbose 详细
+-W, --wide 不要截断IP地址
+-n, --numeric 不要解析IP成域名（直接使用IP，不经过域名服务器）
+--numeric-hosts 不要解析主机名
+--numeric-ports 不要解析端口名
+--numeric-users 不要解析用户名
+-N, --symbolic 解析硬件名 【？？？】
+-e, --extend 显示更多信息
+-p, --programs 显示进程ID和进程名
+-c, --continuous 持续列出网络状态
+-l, --listening 显示LISTENING状态的连接
+-a, --all, --listening 显示所有连接&lt;span class="o">(&lt;/span>默认: 显示CONNECTED的连接&lt;span class="o">)&lt;/span>
+-o, --timers 显示计时器 【netstat -to】
+-F, --fib 显示转发信息库（Forwarding Information Base），默认显示
+-C, --cache 显示路由缓存&lt;span class="o">(&lt;/span>routing cache&lt;span class="o">)&lt;/span>而不是FIB
+-t, --tcp 显示TCP信息
+-u, --udp 显示UDP信息
+-w, --raw 实现raw信息
+-x, --unix 显示unix信息
+--ax25 显示AMPR AX.25信息
+--ipx 显示Novell IPX信息
+--ddp 显示Appletalk DDP信息
+&amp;lt;Socket&amp;gt;&lt;span class="o">={&lt;/span>-t&lt;span class="p">|&lt;/span>--tcp&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>-u&lt;span class="p">|&lt;/span>--udp&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>-w&lt;span class="p">|&lt;/span>--raw&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>-x&lt;span class="p">|&lt;/span>--unix&lt;span class="o">}&lt;/span> --ax25 --ipx --netrom
+&amp;lt;AF&amp;gt;&lt;span class="o">=&lt;/span>Use &lt;span class="s1">&amp;#39;-6|-4&amp;#39;&lt;/span> or &lt;span class="s1">&amp;#39;-A &amp;lt;af&amp;gt;&amp;#39;&lt;/span> or &lt;span class="s1">&amp;#39;--&amp;lt;af&amp;gt;&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span> default: inet
+可能的地址系列列表（支持路由）:
+inet &lt;span class="o">(&lt;/span>DARPA Internet&lt;span class="o">)&lt;/span> inet6 &lt;span class="o">(&lt;/span>IPv6&lt;span class="o">)&lt;/span> ax25 &lt;span class="o">(&lt;/span>AMPR AX.25&lt;span class="o">)&lt;/span>
+netrom &lt;span class="o">(&lt;/span>AMPR NET/ROM&lt;span class="o">)&lt;/span> ipx &lt;span class="o">(&lt;/span>Novell IPX&lt;span class="o">)&lt;/span> ddp &lt;span class="o">(&lt;/span>Appletalk DDP&lt;span class="o">)&lt;/span>
+x25 &lt;span class="o">(&lt;/span>CCITT X.25&lt;span class="o">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="2-示例">2. 示例&lt;/h1>
+&lt;h2 id="查看端口是否被占用">查看端口是否被占用&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -tuanp &lt;span class="p">|&lt;/span> grep &lt;span class="m">53&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="获取进程id进程名">获取进程ID/进程名&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -ap
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示网络统计数据">显示网络统计数据&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示路由表">显示路由表&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -r
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示网络接口">显示网络接口&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -i
+netstat -ie
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示listening监听状态的连接">显示LISTENING(监听)状态的连接&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -l
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="3-疑问">3. 疑问&lt;/h1>
+&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
+&lt;h1 id="隧道">隧道&lt;/h1>
+&lt;p>场景：家里内网机器 A 想要访问公司的内网机器 B。
+条件：需要一个公网机器 C （假设IP是 1.1.1.1）。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>打开公网机器的转发&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 B 上执行:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ssh -p &lt;span class="m">22&lt;/span> -NR 0.0.0.0:10443:0.0.0.0:443 root@1.1.1.1
+&lt;span class="c1"># 前面部分 0.0.0.0:10443：C 的信息&lt;/span>
+&lt;span class="c1"># 后面部分 0.0.0.0:443：B 的信息&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>在 A 上执行:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ssh -p &lt;span class="m">22&lt;/span> -NL 0.0.0.0:10443:0.0.0.0:10443 root@1.1.1.1
+&lt;span class="c1"># 前面部分 0.0.0.0:10443：A 的信息&lt;/span>
+&lt;span class="c1"># 后面部分 0.0.0.0:10443：C 的信息&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
+&lt;p>此时，在 A 上通过 localhost:10443 即可访问 B 的 443。&lt;/p>
+&lt;h2 id="端口映射">端口映射&lt;/h2>
+&lt;p>此方法相比上面的更为简化，直接把内网端口映射到外网设备上，直接访问外网设备映射的端口即可。&lt;/p>
+&lt;ul>
+&lt;li>修改公网设备的 ssh 配置&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">sudo vi /etc/ssh/sshd_config
+&lt;span class="c1"># 设置&lt;/span>
+GatewayPorts yes
+&lt;span class="c1"># 重启 ssh 服务&lt;/span>
+sudo systemctl restart sshd
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>进行端口映射&lt;/li>
+&lt;/ul>
+&lt;p>在内网机器上：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ssh -p &lt;span class="m">22&lt;/span> -NR 0.0.0.0:10443:0.0.0.0:443 root@1.1.1.1
+&lt;span class="c1"># 前面部分 0.0.0.0:10443：公网机器信息&lt;/span>
+&lt;span class="c1"># 后面部分 0.0.0.0:443：内网机器信息&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
+&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
+&lt;p>strace - 跟踪系统调用和信号。&lt;/p>
+&lt;p>在最简单的情况下，strace运行指定的命令直到它退出。
+它拦截并记录由进程调用的系统调用和进程接收的信号。
+每个系统调用的名称，其参数和返回值都打印在&lt;code>标准错误&lt;/code>或使用&lt;code>-o选项指定的文件&lt;/code>上。
+strace是一种有用的诊断，指导和调试工具。
+跟踪中的每一行都包含系统调用&lt;code>名称&lt;/code>，后跟括号中的&lt;code>参数&lt;/code>及其&lt;code>返回值&lt;/code>。如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/dev/null&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">O_RDONLY&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">3&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>系统调用错误，如：(返回 -1，并打印出错原因)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/foo/bar&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">O_RDONLY&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span> &lt;span class="n">ENOENT&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">No&lt;/span> &lt;span class="n">such&lt;/span> &lt;span class="n">file&lt;/span> &lt;span class="n">or&lt;/span> &lt;span class="n">directory&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>信号，如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">sigsuspend&lt;/span>&lt;span class="p">([]&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">unfinished&lt;/span> &lt;span class="p">...&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="o">---&lt;/span> &lt;span class="n">SIGINT&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Interrupt&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">---&lt;/span>
+&lt;span class="o">+++&lt;/span> &lt;span class="n">killed&lt;/span> &lt;span class="n">by&lt;/span> &lt;span class="n">SIGINT&lt;/span> &lt;span class="o">+++&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。
+当调用返回时，它将被标记为已恢复：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="p">[&lt;/span>&lt;span class="n">pid&lt;/span> &lt;span class="mi">28772&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="n">select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">NULL&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">unfinished&lt;/span> &lt;span class="p">...&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="p">[&lt;/span>&lt;span class="n">pid&lt;/span> &lt;span class="mi">28779&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="n">clock_gettime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CLOCK_REALTIME&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="mi">1130322148&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">939977000&lt;/span>&lt;span class="p">})&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="p">[&lt;/span>&lt;span class="n">pid&lt;/span> &lt;span class="mi">28772&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="p">...&lt;/span> &lt;span class="n">select&lt;/span> &lt;span class="n">resumed&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">in&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>系统调用被中断后重启，如：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">read&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mh">0x7ffff72cf5cf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="n">ERESTARTSYS&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">To&lt;/span> &lt;span class="n">be&lt;/span> &lt;span class="n">restarted&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">---&lt;/span> &lt;span class="n">SIGALRM&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Alarm&lt;/span> &lt;span class="n">clock&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="err">@&lt;/span> &lt;span class="mi">0&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">---&lt;/span>
+&lt;span class="n">rt_sigreturn&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mh">0xe&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="n">read&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">...,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>解引用结构指针，并根据需要显示成员。 在所有情况下，参数都以尽可能类似C的方式格式化。 例如“ls -l /dev/null”：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">lstat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;/dev/null&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="n">st_mode&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">S_IFCHR&lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="mo">0666&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">st_rdev&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">makedev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="p">...})&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>解引用字符指针：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">read&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;root::0:0:System Administrator:/&amp;#34;&lt;/span>&lt;span class="p">...,&lt;/span> &lt;span class="mi">1024&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">422&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="用法">用法&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">strace &lt;span class="o">[&lt;/span>-CdffhiqrtttTvVxxy&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-In&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-bexecve&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-eexpr&lt;span class="o">]&lt;/span>... &lt;span class="o">[&lt;/span>-acolumn&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-ofile&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-sstrsize&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-Ppath&lt;span class="o">]&lt;/span>... -ppid... / &lt;span class="o">[&lt;/span>-D&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-Evar&lt;span class="o">[=&lt;/span>val&lt;span class="o">]]&lt;/span>... &lt;span class="o">[&lt;/span>-uusername&lt;span class="o">]&lt;/span> &lt;span class="nb">command&lt;/span> &lt;span class="o">[&lt;/span>args&lt;span class="o">]&lt;/span>
+strace -c&lt;span class="o">[&lt;/span>df&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-In&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-bexecve&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-eexpr&lt;span class="o">]&lt;/span>... &lt;span class="o">[&lt;/span>-Ooverhead&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-Ssortby&lt;span class="o">]&lt;/span> -ppid... / &lt;span class="o">[&lt;/span>-D&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-Evar&lt;span class="o">[=&lt;/span>val&lt;span class="o">]]&lt;/span>... &lt;span class="o">[&lt;/span>-uusername&lt;span class="o">]&lt;/span> &lt;span class="nb">command&lt;/span>
+&lt;span class="o">[&lt;/span>args&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="选项">选项&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-c 统计系统调用的次数、出错次数。在Linux上，这会尝试显示系统时间（在内核中运行的CPU时间），与墙上时间无关。
+如果 -c 和 -f 或 -F 一起使用，仅保留所有跟踪进程的聚合总计。
+-C 与-c类似，但在进程运行时也会打印常规输出。
+-D 将跟踪器进程作为分离的孙子&lt;span class="o">(&lt;/span>detached grandchild&lt;span class="o">)&lt;/span>进程运行，而不是作为tracee的父进程。
+这通过将tracee保持为调用进程的直接子进程来减少strace的可见效果
+-d 在标准错误上输出strace的debug信息。
+-f 跟踪由fork/vfork/clone调用所产生的子进程。
+注意，如果是多线程，则&lt;span class="s2">&amp;#34;-p PID -f&amp;#34;&lt;/span>将附加到PID进程的所有线程，而不仅是附加到带有 &lt;span class="s2">&amp;#34;thread_id = PID&amp;#34;&lt;/span> 的线程。
+-ff 如果&lt;span class="s2">&amp;#34;-o filename&amp;#34;&lt;/span>选项生效，则每个进程的跟踪信息都将写入filename.pid中，其中pid是每个进程的进程ID。
+这与-c不兼容，因为不保留每进程计数。
+-F 此选项现已过时，它具有与-f相同的功能。
+-h 打印帮助。
+-i 在系统调用时打印指令指针。
+-q 不显示有关附加/分离&lt;span class="o">(&lt;/span>attaching/detaching&lt;span class="o">)&lt;/span>的消息。
+当输出重定向到文件并且命令是直接运行的&lt;span class="o">(&lt;/span>而不是附加&lt;span class="o">(&lt;/span>attaching&lt;span class="o">))&lt;/span>的，会自动发生这种情况。
+-qq 不显示有关进程退出状态的消息。
+-r 在进入每个系统调用时打印相对时间戳。 这记录了连续系统调用开始之间的时间差。
+-t 在每一行跟踪信息前面添加时间（一天中的时间），最小单位是秒。
+-tt 在每一行跟踪信息前面添加时间（一天中的时间），最小单位是毫秒。
+-ttt 打印的时间将包括微秒，并且前导部分将被打印为自纪元以来的秒数。
+-T 显示系统调用花费的时间。 这记录了每个系统调用的开始和结束之间的时间差。
+-v 打印environment、stat、termios等调用的未缩写版本。 这些结构在调用中非常常见，因此默认行为显示结构成员的合理子集。 使用此选项可获得所有细节。
+-V 打印strace的版本.
+-x 以十六进制字符串格式打印所有非ASCII字符串。
+-xx 以十六进制字符串格式打印所有字符串。
+-y 打印与文件描述符参数关联的路径。
+-a column 对齐特定列中的返回值（默认列40）。
+-b syscall 如果到达指定的系统调用，则从跟踪的进程中分离。 目前，仅支持execve系统调用。
+这个选项很有用，如果你想要跟踪多线程的进程&lt;span class="o">(&lt;/span>需要-f&lt;span class="o">)&lt;/span>，但不想跟踪其（可能非常复杂的）孩子。
+-e expr 用于修改要跟踪的事件或如何跟踪它们的一个限定表达式。 表达式的格式是：
+&lt;span class="o">[&lt;/span>&lt;span class="nv">qualifier&lt;/span>&lt;span class="o">=][&lt;/span>!&lt;span class="o">]&lt;/span>value1&lt;span class="o">[&lt;/span>,value2&lt;span class="o">]&lt;/span>...
+ 
+qualifier是trace，abbrev，verbose，raw，signal，read，write之一，value是依赖于限定符的符号或数字。
+默认限定符是trace。使用感叹号会取消该组值。 例如，&lt;span class="s2">&amp;#34;-e open&amp;#34;&lt;/span>表示字面意思&lt;span class="s2">&amp;#34;-e trace=open&amp;#34;&lt;/span>，这意味着仅跟踪“open”的系统调用。
+相比之下，“-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>open”表示跟踪除open之外的每个系统调用。
+此外，特殊值all和none都有明显的含义。
+请注意，即使在引用的参数中，某些shell也会使用感叹号进行历史记录扩展。
+注意，有些shell使用&lt;span class="s2">&amp;#34;!&amp;#34;&lt;/span>来执行历史记录里的命令，如果是这样，您必须使用反斜杠转义感叹号。
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+只跟踪指定的系统调用.例如:-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>open,close,rean,write表示只跟踪这四个系统调用.默认为set&lt;span class="o">=&lt;/span>all。
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>file
+只跟踪有关文件操作的系统调用。（跟踪所有以一个文件名作为参数的系统调用）
+你可以看做是：-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>open,stat,chmod,unlink,...
+这对于查看进程引用的文件很有用。
+此外，使用缩写将确保您不会意外忘记在列表中包含类似lstat的调用。
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>process
+只跟踪有关进程控制的系统调用。 这对于查看进程的fork，wait和exec步骤非常有用。
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>network
+跟踪所有与网络相关的系统调用.
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>signal
+跟踪所有与信号相关的系统调用.
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>ipc
+跟踪所有与IPC相关的系统调用.
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>desc
+跟踪所有与文件描述符相关的系统调用.
+-e &lt;span class="nv">trace&lt;/span>&lt;span class="o">=&lt;/span>memory
+跟踪与内存映射相关的所有系统调用.
+-e &lt;span class="nv">abbrev&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+设定strace输出的系统调用的结果集。&lt;span class="s2">&amp;#34;-v&amp;#34;&lt;/span>选项等于“abbrev&lt;span class="o">=&lt;/span>none”，默认为“abbrev&lt;span class="o">=&lt;/span>all”.
+-e &lt;span class="nv">verbose&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+对指定系统调用集的结构进行解引用。 默认值为 &lt;span class="s2">&amp;#34;verbose=all&amp;#34;&lt;/span>。
+-e &lt;span class="nv">raw&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+将指定的系统调用的参数以十六进制显示。（为指定的系统调用集打印原始的，未解码的参数。）
+如果您不信任解码或者您需要知道参数的实际数值，这将非常有用。
+-e &lt;span class="nv">signal&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+指定跟踪的系统信号.默认为all.如&lt;span class="s2">&amp;#34;signal=!SIGIO&amp;#34;&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="nv">或者signal&lt;/span>&lt;span class="o">=&lt;/span>!io&lt;span class="o">)&lt;/span>,表示不跟踪SIGIO信号.
+-e &lt;span class="nv">read&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span> 以完整的16进制或ASCII形式，输出所有从指定文件描述符集中读取的数据。例如: &lt;span class="s2">&amp;#34;-e read=3,5&amp;#34;&lt;/span>，读文件描述符3和5上的所有输入活动。
+请注意请注意，这与read&lt;span class="o">(&lt;/span>2&lt;span class="o">)&lt;/span>系统调用的正常跟踪无关，该调用由选项&lt;span class="s2">&amp;#34;-e trace=read&amp;#34;&lt;/span>控制。
+-e &lt;span class="nv">write&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">set&lt;/span>
+以完整的16进制或ASCII形式，输出所有写到指定文件描述符集的数据。
+-I interruptible
+当strace可以被信号中断（例如按^C）
+1：没有信号被阻挡&lt;span class="p">;&lt;/span>
+2：解码系统调用时阻塞致命信号（默认）&lt;span class="p">;&lt;/span>
+3：致命信号总是被阻止（默认为&lt;span class="s1">&amp;#39;-o FILE PROG&amp;#39;&lt;/span>）&lt;span class="p">;&lt;/span>
+4：致命信号和SIGTSTP（^Z）始终被阻止（有助于使strace -o FILE PROG不在^Z上停止）。
+-o filename
+把跟踪信息输出到filename指定的文件而不是输出到stderr。
+如果指定&lt;span class="s2">&amp;#34;-ff&amp;#34;&lt;/span>则会使用filename.pid。
+如果参数以&lt;span class="s2">&amp;#34;|&amp;#34;&lt;/span>或&lt;span class="s2">&amp;#34;!&amp;#34;&lt;/span>开始，则参数的其余部分会被视作一个命令，并且所有输出都会通过管道给它&lt;span class="o">(&lt;/span>此命令&lt;span class="o">)&lt;/span>。【？？？】
+这样可以方便地将调试输出传递给程序，而不会影响已执行程序的重定向。【？？？】
+&lt;span class="o">[&lt;/span>If the argument begins with &lt;span class="sb">`&lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="s1">&amp;#39; or with `!&amp;#39;&lt;/span> &lt;span class="k">then&lt;/span> the rest of the argument is treated as a &lt;span class="nb">command&lt;/span> and all output is piped to it.
+This is convenient &lt;span class="k">for&lt;/span> piping the debugging output to a program without affecting the redirections of executed programs.&lt;span class="o">]&lt;/span>
+-O overhead
+将跟踪系统调用的overhead（开销）设置为overhead微秒。
+这对于覆盖默认启发式方法非常有用，可以猜测在使用-c选项进行计时系统调用时仅花费多少时间。
+可以通过在没有跟踪的情况下对给定程序运行进行计时（使用time&lt;span class="o">(&lt;/span>1&lt;span class="o">)&lt;/span>）并将累积的系统调用时间与使用-c产生的总数进行比较来测量启发式的准确性。
+-p pid
+使用进程ID pid附加到进程并开始跟踪。
+可以通过键盘中断信号（CTRL-C）随时终止跟踪。
+strace会通过将自己从跟踪过程中分离出来而让它（它们）继续运行。
+多个-p选项可用于附加到许多进程。 支持-p&lt;span class="s2">&amp;#34;`pidof PROG`&amp;#34;&lt;/span>语法。
+-P path 仅跟踪系统调用访问的路径。 多个-P选项可用于指定多个路径。
+-s strsize 指定要打印的最大字符串大小（默认值为32）。 请注意，文件名不被视为字符串，并且始终完整打印。
+-S sortby 按指定条件对-c选项打印的直方图的输出进行排序。
+合法值是时间&lt;span class="o">(&lt;/span>&lt;span class="nb">time&lt;/span>&lt;span class="o">)&lt;/span>，系统调用&lt;span class="o">(&lt;/span>call&lt;span class="o">)&lt;/span>，名称&lt;span class="o">(&lt;/span>name&lt;span class="o">)&lt;/span>，默认为时间。&lt;span class="o">(&lt;/span>根据什么来排序的意思&lt;span class="o">)&lt;/span>
+-u username 使用用户名所在的&lt;span class="s2">&amp;#34;用户ID&amp;#34;&lt;/span>，“组ID“和”补充组“来运行命令。
+此选项仅在以root身份运行，并且能够正确执行setuid（和/或）setgid二进制文件时有用。
+除非使用此选项，否则setuid和setgid程序在没有有效权限的情况下执行。
+-E &lt;span class="nv">var&lt;/span>&lt;span class="o">=&lt;/span>val &lt;span class="nv">在其环境变量列表中运行带有var&lt;/span>&lt;span class="o">=&lt;/span>val的命令。
+-E var 在将var传递给命令前，从继承的环境变量列表中将var删除。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="示例">示例&lt;/h2>
+&lt;h3 id="显示每个系统调用的相对时间">显示每个系统调用的相对时间&lt;/h3>
+&lt;blockquote>
+&lt;p>strace -r ls
+ls表示ls命令&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="显示系统调用时间一天当中的时间纪元时间">显示系统调用时间（一天当中的时间/纪元时间）&lt;/h3>
+&lt;blockquote>
+&lt;p>strace -t ls
+strace -tt ls
+strace -ttt ls&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="打印与文件描述符相关联的路径">打印与文件描述符相关联的路径&lt;/h3>
+&lt;blockquote>
+&lt;p>strace -y ls&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="跟踪指定进程">跟踪指定进程&lt;/h3>
+&lt;blockquote>
+&lt;p>strace -p 123&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="把输出存在文件中">把输出存在文件中&lt;/h3>
+&lt;blockquote>
+&lt;p>strace -o ls.log ls&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="相关">相关&lt;/h2>
+&lt;ul>
+&lt;li>ltrace(1)&lt;/li>
+&lt;li>time(1)&lt;/li>
+&lt;li>ptrace(2)&lt;/li>
+&lt;li>proc(5)&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://man.linuxde.net/strace" target="_blank" rel="noopener"
+>https://man.linuxde.net/strace&lt;/a>&lt;/li>
+&lt;li>Linux man page&lt;/li>
+&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpeg" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
+&lt;p>tcpdump - dump traffic on a network（转储网络上的流量）。&lt;/p>
+&lt;h1 id="用法">用法&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">tcpdump &lt;span class="o">[&lt;/span> -AbdDefhHIJKlLnNOpqStuUvxX# &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -B buffer_size &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -c count &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -C file_size &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -G rotate_seconds &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -F file &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -i interface &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -j tstamp_type &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -m module &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -M secret &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> --number &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -Q in&lt;span class="p">|&lt;/span>out&lt;span class="p">|&lt;/span>inout &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -r file &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -V file &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -s snaplen &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -T &lt;span class="nb">type&lt;/span> &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -w file &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -W filecount &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -E spi@ipaddr algo:secret,... &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> -y datalinktype &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -z postrotate-command &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -Z user &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> --time-stamp-precision&lt;span class="o">=&lt;/span>tstamp_precision &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> --immediate-mode &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> --version &lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span> expression &lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash"> -A 以ASCII格式打印每个数据包（减去其链接级别标题）。方便捕获网页。
+-b 以ASDOT表示法而不是ASPLAIN表示法打印BGP数据包中的AS编号。
+-B buffer_size
+--buffer-size&lt;span class="o">=&lt;/span>buffer_size
+将操作系统捕获缓冲区大小设置为buffer_size。
+-c count
+收到count个包后退出。
+-C file_size
+在将原始数据包写入保存文件之前，检查该文件当前是否大于file_size，如果是，关闭当前保存文件并打开一个新文件。
+第一个文件之后的文件将使用 -w 标志指定名称 ，后面带一个数字，从1开始向上。
+file_size的单位是数百万字节（1,000,000字节，而不是1,048,576字节）。
+-d 将编译后的数据包匹配代码以人类可读的形式转储到标准输出并停止。
+-dd 将数据包匹配代码转储为 C 程序片段。
+-ddd 将数据包匹配代码转储为十进制数字（以计数开头）。
+-D
+--list-interfaces
+打印系统上可用的网络接口列表以及 tcpdump 可以捕获数据包的列表。
+对于每个网络接口，打印数字和接口名称，可能后跟接口的文本描述。
+可以将接口名称或编号提供给 -i 标志以指定要捕获的接口。
+这对于没有列出命令的系统很有用。
+如果tcpdump是用缺少pcap_findalldevs&lt;span class="o">()&lt;/span>的libpcap建立的，则不支持此选项&lt;span class="o">(&lt;/span>-D&lt;span class="o">)&lt;/span>。
+-e 在每个转储行上打印链接级标题。例如，这可以用于打印诸如以太网和IEEE 802.11之类的协议的MAC层地址。
+-E 使用 spi@ipaddr algo:secret来解密发送到addr并包含安全参数索引值 spi的 IPsec ESP数据包。
+可以用逗号或换行符分隔重复该组合。
+请注意，此时支持为IPv4 ESP数据包设置机密。
+算法可以是 des-cbc， 3des-cbc， blowfish-cbc， rc3-cbc， cast128-cbc或 none。默认为des-cbc。
+只有在启用加密编译tcpdump的情况下才能解密数据包。
+secret是ESP密钥的ASCII文本。如果前面带有0x，则将读取十六进制值。
+此选项在RFC2406提出，不是在RFC1827。
+该选项仅用于调试目的，不鼓励使用此选项和真正的“secret”密钥。通过在命令行上显示IPsec密钥，您可以通过ps和其他场合将其显示给其他人。
+除了上面的语法之外，语法文件名可以用来让tcpdump读取提供的文件。
+文件在收到第一个ESP数据包后打开，所以tcpdump应该具备所有可能需要的特殊权限。
+-f 以数字方式而不是符号方式打印“外来&lt;span class="o">(&lt;/span>foreign&lt;span class="o">)&lt;/span>”IPv4地址。
+“外部”IPv4地址的测试是使用正在进行捕获的接口的IPv4地址和网络掩码完成的。
+-F file
+使用file作为过滤器表达式的输入。命令行上给出的附加表达式将被忽略。
+-G rotate_seconds
+如果指定，每rotate_second秒回转&lt;span class="o">(&lt;/span>rotate&lt;span class="o">)&lt;/span>-w指定的文件。【回转？？？】
+保存文件将具有-w指定的名称，该名称 应包含strftime定义的时间格式。
+如果未指定时间格式，则每个新文件都将覆盖前一个。
+每当生成的文件名不唯一时，tcpdump将覆盖预先存在的数据&lt;span class="p">;&lt;/span> 因此，不建议提供比捕获周期更粗糙的时间规范。
+如果与 -C 选项一起使用，文件名将采用&lt;span class="s2">&amp;#34;file&amp;lt;count&amp;gt;&amp;#34;&lt;/span>的形式。
+-h
+--help 打印tcpdump和libpcap版本字符串，打印用法消息，然后退出。
+--version
+打印tcpdump和libpcap版本字符串并退出。
+-H 尝试检测802.11s草图网格标头。
+-i interface
+--interface&lt;span class="o">=&lt;/span>interface
+指定监听的接口。
+如果未指定，tcpdump将在系统接口列表中搜索编号最小的已配置接口（不包括环回），这可能会变成例如“eth0”。
+在具有2.2或更高版本内核的Linux系统上， 可以使用“any” 的 接口参数来捕获来自所有接口的数据包。
+请注意，“any”设备上的捕获将不会以混杂模式完成。
+如果 支持-D标志，则如果系统上没有任何接口将该数字作为名称，则该标志打印的接口号可用作 接口参数。
+-I
+--monitor-mode
+将接口置于“监控模式&lt;span class="o">(&lt;/span>monitor mode&lt;span class="o">)&lt;/span>”&lt;span class="p">;&lt;/span> 这仅在IEEE 802.11 Wi-Fi接口上受支持，并且仅在某些操作系统上受支持。
+请注意，在监视器模式下，适配器可能与与其关联的网络取消关联，因此您将无法使用具有该适配器的任何无线网络。
+如果您在监视器模式下捕获并且未使用其他适配器连接到另一个网络，则可能会无法访问网络服务器上的文件或解析主机名或网络地址。
+该标志将影响-L 标志的输出 。
+如果未指定-I，则仅显示未处于监控模式时可用的链路层类型&lt;span class="p">;&lt;/span> 如果指定-I，则仅显示处于监视模式时可用的链接层类型。
+--immediate-mode
+在“立即模式&lt;span class="o">(&lt;/span>immediate mode&lt;span class="o">)&lt;/span>”下进行数据包捕获。
+在此模式下，数据包一到达就会传送到tcpdump，而不是为了提高效率而进行缓冲。
+这是打印数据包时的默认设置。
+-j tstamp_type
+--time-stamp-type&lt;span class="o">=&lt;/span>tstamp_type
+将捕获的时间戳类型设置为tstamp_type。
+pcap-tstamp中给出时间戳类型的名称&lt;span class="p">;&lt;/span> 并非所有列出的类型都必须对任何给定的接口有效。
+-J
+--list-time-stamp-types
+列出接口支持的时间戳类型并退出。如果无法为接口设置时间戳类型，则不会列出时间戳类型。
+--time-stamp-precision&lt;span class="o">=&lt;/span>tstamp_precision
+捕获时，将捕获的时间戳精度设置为 tstamp_precision。
+请注意，高精度时间戳（纳秒）的可用性及其实际精度取决于平台和硬件。
+还要注意，当以纳秒级精度将捕获写入保存文件时，时间戳以纳秒分辨率写入，并且文件使用不同的幻数编写，以指示时间戳以秒和纳秒为单位&lt;span class="p">;&lt;/span>
+并非所有读取pcap文件的程序都能读取这些捕获。
+读取保存文件时，将时间戳转换为timestamp_precision指定的精度，并以该分辨率显示它们。
+如果指定的精度小于文件中时间戳的精度，则转换将失去精度。
+为支持的值timestamp_precision是微为微秒分辨率和纳米为十亿分之一秒分辨率。
+默认值为微秒分辨率。
+-K
+--dont-verify-checksums
+不尝试验证IP，TCP或UDP校验和。
+这对于在硬件中执行部分或全部校验和计算的接口非常有用&lt;span class="p">;&lt;/span>
+否则，所有传出的TCP校验和都将被标记为错误。
+-l 使stdout行缓冲。 如果您想在捕获数据时查看数据，则非常有用。
+例如：tcpdump -l &lt;span class="p">|&lt;/span> tee dat
+或： tcpdump -l &amp;gt; dat &lt;span class="p">&amp;amp;&lt;/span> tail -f dat
+请注意，在Windows上，“行缓冲”意味着“无缓冲”，因此如果指定了-l，WinDump将单独写入每个字符。
+-U 在其行为上类似于 -l，但它会导致输出为“数据包缓冲” 因此输出在每个数据包的末尾而不是在每行的末尾写入stdout&lt;span class="p">;&lt;/span>
+这是在所有平台上缓冲的，包括Windows。
+-L
+--list-data-link-types
+在指定模式下列出接口的已知数据链接类型，然后退出。
+已知数据链接类型列表可能取决于指定的模式&lt;span class="p">;&lt;/span>
+例如，在某些平台上，Wi-Fi接口可能在不处于监控模式时支持一组数据链路类型和处于监控模式时的另一组数据链路类型。
+-m module
+从文件模块加载SMI MIB模块定义。可以多次使用此选项将多个MIB模块加载到tcpdump中。
+-M secret
+使用secret作为共享密钥，使用TCP-MD5选项（RFC 2385）验证TCP段中的摘要（如果存在）。
+-n 不要将地址（即主机地址，端口号等）转换为名称。
+-N 不要打印主机名的域名限定。例如，如果你指定这个标记，那么tcpdump将打印&lt;span class="s2">&amp;#34;nic&amp;#34;&lt;/span>而不是&lt;span class="s2">&amp;#34;nic.ddn.mil&amp;#34;&lt;/span>。
+-#
+--number
+在行的开头打印一个可选的包号。
+-O
+--no-optimize
+不要运行数据包匹配代码优化器。仅当您怀疑优化器中存在错误时，此选项才有用。
+-p
+--no-promiscuous-mode
+不要将接口置于混杂模式。
+请注意，由于某些其他原因，接口可能处于混杂模式&lt;span class="p">;&lt;/span>
+因此，&lt;span class="s2">&amp;#34;-p&amp;#34;&lt;/span>不能用作&lt;span class="s2">&amp;#34;ether host {local-hw-addr}&amp;#34;&lt;/span>或&lt;span class="s2">&amp;#34;ether broadcast&amp;#34;&lt;/span>的缩写。
+-Q direction
+--direction&lt;span class="o">=&lt;/span>direction
+选择发送/接收方向上的哪些数据包应该被捕获。可能的值是“in”，“out”和“inout”。并非适用于所有平台。
+-q 快速（安静？）输出。打印较少的协议信息，因此输出线更短。
+-r file
+从文件读取数据包（使用 -w 选项或其他编写pcap或pcapng文件的工具创建 ）。如果文件是&lt;span class="s2">&amp;#34;-&amp;#34;&lt;/span>，则使用标准输入。
+-S
+--absolute-tcp-sequence-numbers
+打印绝对而非相对的TCP序列号&lt;span class="o">(&lt;/span>sequence numbers&lt;span class="o">)&lt;/span>。默认是相对。
+-s snaplen
+--snapshot-length&lt;span class="o">=&lt;/span>snaplen
+Snarf snaplen来自每个数据包的数据字节而不是默认值262144字节。
+由于快照有限而被截断的数据包在输出中用&lt;span class="s2">&amp;#34;[|proto]&amp;#34;&lt;/span>，其中proto 是发生截断的协议级别的名称。
+请注意，拍摄较大的快照会增加处理数据包所需的时间，并有效地减少数据包缓冲量。这可能会导致数据包丢失。
+另请注意，拍摄较小的快照会丢弃传输层上方协议的数据，这会丢失可能很重要的信息。
+例如，NFS和AFS请求和回复非常大，如果选择了太短的快照长度，则很多细节将不可用。
+如果您需要将快照大小减小到默认值以下，则应将snaplen限制为捕获您感兴趣的协议信息的最小数量。
+将snaplen设置 为0会将其设置为默认值262144，以便向后兼容最近的旧版本tcpdump的版本 。
+-T &lt;span class="nb">type&lt;/span>
+强制将&lt;span class="s2">&amp;#34;expression&amp;#34;&lt;/span>选择的数据包解释为指定的类型。
+目前已知的类型是 aodv（Ad-hoc按需距离矢量协议），carp（通用地址冗余协议），
+cnfp（Cisco NetFlow协议）， lmp（链路管理协议）， pgm（实用通用多播），
+pgm_zmtp1（ZMTP/1.0内部PGM/EPGM），resp（REdis序列化协议）， radius（RADIUS），
+rpc（远程过程调用）， rtp（实时应用程序协议）， rtcp（实时应用程序控制协议），
+snmp（简单网络管理协议）， tftp（普通文件传输协议）， 增值税（视觉音频工具），
+wb（分布式白板）， zmtp1（ZeroMQ消息传输协议1.0）和 vxlan（虚拟可扩展局域网）。
+请注意，上面的pgm类型仅影响UDP解释，无论如何，本机PGM始终被识别为IP协议113。
+UDP封装的PGM通常称为&lt;span class="s2">&amp;#34;EPGM&amp;#34;&lt;/span>或&lt;span class="s2">&amp;#34;PGM/UDP&amp;#34;&lt;/span>。
+请注意，上面的pgm_zmtp1类型会同时影响本机PGM和UDP的解释。
+在本机PGM解码期间，ODATA/RDATA分组的应用数据将被解码为具有ZMTP/1.0帧的ZeroMQ数据报。
+在UDP解码期间，除了任何UDP分组之外，任何UDP分组都将被视为封装的PGM分组。
+-t 不在每个转储行上打印时间戳。
+-tt 打印时间戳，自1970年1月1日00:00:00，UTC以及自该时间以来的每秒分数，在每个转储行上。
+-ttt 在每个转储行上的当前行和上一行之间 打印增量（微秒或纳秒分辨率，具体取决于--time-stamp-precision选项）。
+默认值为微秒分辨率。
+-tttt 在每个转储行上打印一个时间戳，以小时，分钟，秒和从午夜开始的一小时一秒为止。
+-ttttt 在每个转储行上的当前行和第一行之间打印增量（微秒或纳秒分辨率，具体取决于 --time-stamp-precision选项）。默认值为微秒分辨率。
+-u 打印未解码的NFS句柄。
+-U
+--packet-buffered
+如果未指定 -w 选项，或者如果指定了 -w 选项但是也指定了 --print 标志，则使打印的数据包输出&lt;span class="s2">&amp;#34;packet-buffered&amp;#34;&lt;/span>；
+即，当打印每个数据包的内容的描述时，它将被写入标准输出，而不是，在不写入终端时，仅在输出缓冲器填满时写入。
+&lt;span class="o">(&lt;/span> i.e., as the description of the contents of each packet is printed, it
+will be written to the standard output, rather than, when not writing to a terminal,
+being written only when the output buffer fills.&lt;span class="o">)&lt;/span>
+如果指定了 -w 选项，则保存的原始数据包输出&lt;span class="s2">&amp;#34;packet-buffered&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+即，在保存每个数据包时，它将被写入输出文件，而不是仅在输出缓冲区填满时才写入。
+该 -U 如果标志将不被支持, 如果旧版本tcpdump内置的libpcap缺少pcap_dump_flush（3PCAP） 函数。
+-v 解析和打印时，产生（略多）详细输出。
+例如，打印IP包中的生存时间，标识，总长度和选项。
+还可以启用其他数据包完整性检查，例如验证IP和ICMP标头校验和。
+使用-w 选项写入文件时 ，每秒报告一次捕获的数据包数。
+-vv 更详细的输出。例如，从NFS回复数据包打印其他字段，并完全解码SMB数据包。
+-vvv 更详细的输出。例如，telnet SB ... SE选项全部打印。与 -X 的Telnet选项被印刷在十六进制为好。
+-V file
+从文件中读取文件名列表。如果文件是&lt;span class="s2">&amp;#34;-&amp;#34;&lt;/span>，则使用标准输入。
+-w file
+将原始数据包写入文件而不是解析并打印出来。
+稍后可以使用-r选项打印它们。如果文件是“ - ”，则使用标准输出。
+如果写入文件或管道，则此输出将被缓冲，因此从文件或管道读取的程序在收到后可能无法在任意时间内看到数据包。
+使用 -U 标志可以在收到数据包后立即写入数据包。
+MIME类型application/vnd.tcpdump.pcap已在IANA注册pcap文件。
+文件扩展名.pcap是最常用的。
+但是，许多操作系统和应用程序将使用扩展（如果存在）并建议添加一个（例如.pcap）
+读取捕获文件时Tcpdump本身不检查扩展名，并且在写入时不添加扩展名（它在文件头中使用幻数）。
+有关文件格式的说明，请参阅 pcap-savefile。
+-W 与 -C 选项一起使用时 ，这将限制创建的文件数量达到指定的数量，并从头开始覆盖文件，从而创建一个“旋转”缓冲区。
+此外，它会将具有足够前导0的文件命名为支持最大文件数，从而允许它们正确排序。
+与 -G 选项一起使用时 ，这将限制创建的旋转转储文件的数量，在达到限制时退出状态0。
+如果两者配合使用 -C 和 -G， 该 -W 选项将目前被忽略，并且只会影响的文件名。
+-x 解析和打印时，除了打印每个数据包的标头外，还要以十六进制格式打印每个数据包的数据（减去其链接级别标题）。
+将打印整个数据包或snaplen字节中较小的一个 。
+请注意，这是整个链路层数据包，因此对于填充（例如以太网）的链路层，当较高层数据包短于所需填充时，也将打印填充字节。
+-xx 解析和打印时，除了打印每个数据包的标头外，还要打印每个数据包的数据， 包括其链接级别标题，以十六进制表示。
+-X 解析和打印时，除了打印每个数据包的标题外，还要以十六进制和ASCII格式打印每个数据包的数据（减去其链接级别标题）。
+这对于分析新协议非常方便。
+-XX 解析和打印时，除了打印每个数据包的标头外，还要以 十六进制和ASCII格式打印每个数据包的数据， 包括其链接级别标题。
+-y datalinktype
+--linktype&lt;span class="o">=&lt;/span>datalinktype
+设置要在将数据包捕获到datalinktype时使用的数据链接类型。
+-z postrotate-command
+与-C 或 -G 选项一起使用时 ，这将使 tcpdump 运行&lt;span class="s2">&amp;#34;postrotate-command file&amp;#34;&lt;/span>，
+其中 file 是每次轮换后关闭的savefile（保存文件，-w创建）。
+例如，指定 -z gzip 或 -z bzip2 将使用gzip或bzip2压缩每个savefile。
+请注意，tcpdump将使用最低优先级并行执行命令，以便不会干扰捕获过程。
+如果您想使用一个本身带有标志或不同参数的命令，您总是可以编写一个shell脚本，
+它将保存文件名作为唯一参数，制作标志和参数排列并执行您想要的命令。
+-Z user
+--relinquish-privileges&lt;span class="o">=&lt;/span>user
+如果 tcpdump 以root运行，打开所述捕获装置或输入savefiles之后，
+但在打开任何savefiles输出之前，将用户ID改为user和组ID改为user的主组。
+默认情况下，在编译时也可以启用此行为。
+expression
+选择要转储的数据包。如果没有给出表达式&lt;span class="o">(&lt;/span>expression&lt;span class="o">)&lt;/span>，则网络上的所有数据包都将被转储。
+否则，只会转储表达式为&lt;span class="s2">&amp;#34;true&amp;#34;&lt;/span>的数据包。
+有关表达式语法，请参阅 pcap-filter。
+该表达式&lt;span class="o">(&lt;/span>expression&lt;span class="o">)&lt;/span>参数可被传递给和tcpdump作为单一壳牌参数，或作为多个shell参数，取其更方便。
+通常，如果表达式包含Shell元字符，例如用于转义协议名称的反斜杠，则更容易将其作为单个引用参数传递，
+而不是转义Shell元字符。在解析之前，多个参数与空格连接在一起。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="指定接口主机写到文件">指定接口+主机，写到文件&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump -i br-lan1 -w x_xxxx.cap -v host xx.xx.xx.xx&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="指定端口范围">指定端口范围&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump -i ens33 udp portrange 67-68 -v&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="捕获和指定主机相关的数据包">捕获和指定主机相关的数据包&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump host sundown&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印指定主机间的流量">打印指定主机间的流量&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump host helios and ( hot or ace )&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>helios 和 hot 、 helios 和 ace之间的流量。&lt;/li>
+&lt;/ul>
+&lt;h2 id="打印所有本地主机和berkeley主机间的流量">打印所有本地主机和Berkeley主机间的流量&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump net ucb-ether&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="通过互联网网关snup打印所有ftp流量请注意引用该表达式是为了防止shell错误地解释括号">通过互联网网关snup打印所有ftp流量(请注意，引用该表达式是为了防止shell（错误地）解释括号）&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump &amp;lsquo;gateway snup and (port ftp or ftp-data)&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="要打印既不是来自本地主机也不是发往本地主机的流量如果你通往另一个网络那么这些东西永远不应该进入你的本地网络">要打印既不是来自本地主机也不是发往本地主机的流量(如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump ip and not net localnet&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印涉及非本地主机的每个tcp对话的开始和结束数据包syn和fin数据包">打印涉及非本地主机的每个TCP对话的&lt;code>开始&lt;/code>和&lt;code>结束&lt;/code>数据包（SYN和FIN数据包）&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump &amp;lsquo;tcp[tcpflags] &amp;amp; (tcp-syn|tcp-fin) != 0 and not src and dst net localnet&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印与端口80之间的所有ipv4-http数据包">打印与端口80之间的所有IPv4 HTTP数据包&lt;/h2>
+&lt;blockquote>
+&lt;p>仅打印包含数据的数据包，而不打印例如SYN和FIN数据包以及仅ACK数据包
+tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2)) - ((tcp[12]&amp;amp;0xf0)&amp;raquo;2)) != 0)&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印通过网关snup发送的长度超过576字节的ip数据包">打印通过网关snup发送的长度超过576字节的IP数据包&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump &amp;lsquo;gateway snup and ip[2:2] &amp;gt; 576&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印未通过以太网广播或多播发送的ip广播或多播数据包">打印未通过以太网广播或多播发送的IP广播或多播数据包&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump &amp;lsquo;ether[0] &amp;amp; 1 = 0 and ip[16] &amp;gt;= 224&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打印所有不是回应请求回复的icmp数据包即不ping数据包">打印所有不是回应请求/回复的ICMP数据包（即不ping数据包）&lt;/h2>
+&lt;blockquote>
+&lt;p>tcpdump &amp;lsquo;icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply&amp;rsquo;&lt;/p>
+&lt;/blockquote>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
+>https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
+linux man page&lt;/p>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
+&lt;h1 id="用法">用法&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
+vmstat &lt;span class="o">[&lt;/span>-f&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-s&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-m&lt;span class="o">]&lt;/span>
+vmstat &lt;span class="o">[&lt;/span>-S unit&lt;span class="o">]&lt;/span>
+vmstat &lt;span class="o">[&lt;/span>-d&lt;span class="o">]&lt;/span>
+vmstat &lt;span class="o">[&lt;/span>-p disk partition&lt;span class="o">]&lt;/span>
+vmstat &lt;span class="o">[&lt;/span>-V&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。
+count 更新次数。如果未指定计数且指定了延迟&lt;span class="o">(&lt;/span>delay&lt;span class="o">)&lt;/span>，则count默认为无穷大。
+-a, --active
+显示活动和非活动内存（2.5.41及之后的版本）
+-f, --forks
+显示自引导以来的fork数。
+这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。
+每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。
+-m, --slabs
+显示slabinfo。【相关字段含义见下面部分】
+-n, --one-header
+标题仅显示一次而不是定期显示。
+-s, --stats
+显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。
+-d, --disk
+报告磁盘信息（2.5.70及之后版本）
+-D, --disk-sum
+报告一些有关磁盘活动的摘要统计信息。
+-p, --partition device
+分区的详细统计信息。 &lt;span class="o">(&lt;/span>2.5.70及之后版本&lt;span class="o">)&lt;/span>.
+-S, --unit character
+更换输出的单位：1000&lt;span class="o">(&lt;/span>k&lt;span class="o">)&lt;/span>，1024&lt;span class="o">(&lt;/span>K&lt;span class="o">)&lt;/span>，1000000&lt;span class="o">(&lt;/span>m&lt;span class="o">)&lt;/span>，1048576&lt;span class="o">(&lt;/span>M&lt;span class="o">)&lt;/span> 字节。
+注意，这不会改变交换&lt;span class="o">(&lt;/span>si/so&lt;span class="o">)&lt;/span>或块&lt;span class="o">(&lt;/span>bi/bo&lt;span class="o">)&lt;/span>字段。
+-t, --timestamp
+为每一行附加时间戳。
+-w, --wide
+宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。
+输出宽度会超过每行80个字符。
+-V, --version
+显示版本信息并退出。
+-h, --help
+显示帮助信息并退出。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="字段描述">字段描述&lt;/h1>
+&lt;h2 id="vm-模式字段描述">VM 模式字段描述&lt;/h2>
+&lt;ul>
+&lt;li>进程
+&lt;ul>
+&lt;li>r: 可运行进程的数量 (正在运行+就绪状态)。&lt;/li>
+&lt;li>b: 处于不可中断睡眠的进程数量。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>内存
+&lt;ul>
+&lt;li>swpd: 使用的虚拟内存量。&lt;/li>
+&lt;li>free: 空闲内存量。(idle)&lt;/li>
+&lt;li>buff: 用作缓冲区(buffer)的内存量。&lt;/li>
+&lt;li>cache: 用作缓存(cache)的内存量。&lt;/li>
+&lt;li>inact: 非活动内存量。（-a选项）&lt;/li>
+&lt;li>active: 活动内存量。（-a选项）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>交换内存
+&lt;ul>
+&lt;li>si: 从磁盘交换的内存量（/s）。&lt;/li>
+&lt;li>so: 交换到磁盘的内存量（/s）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>IO
+&lt;ul>
+&lt;li>bi: 从块设备接收的块数（blocks/s）。&lt;/li>
+&lt;li>bo: 发送到块设备的块数（blocks/ s）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>系统
+&lt;ul>
+&lt;li>in: 每秒的中断数，包括时钟。&lt;/li>
+&lt;li>cs: 每秒上下文切换次数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>CPU
+&lt;ul>
+&lt;li>这些是总CPU时间的占比。&lt;/li>
+&lt;li>us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间)&lt;/li>
+&lt;li>sy: 运行内核代码所花费的时间。 (系统时间)&lt;/li>
+&lt;li>id: 空闲时间。在2.5.41版本之前，这包括IO等待时间。&lt;/li>
+&lt;li>wa: 等待IO的时间。在2.5.41版本之前，包含在空闲状态。&lt;/li>
+&lt;li>st: 从虚拟机中窃取的时间。在Linux 2.6.11之前，未知。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="disk-模式字段描述">DISK 模式字段描述&lt;/h2>
+&lt;ul>
+&lt;li>读(reads)
+&lt;ul>
+&lt;li>total: 完全成功的读总数（次数还是字节？应该是次数，因为换单位(K或M)，数值也不改变）。&lt;/li>
+&lt;li>merged: 分组(groups)读取(导致一个I/O)。&lt;/li>
+&lt;li>sectors: 成功读取的扇区数。&lt;/li>
+&lt;li>ms: 花在读上的&lt;code>毫秒&lt;/code>数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>写(writes)
+&lt;ul>
+&lt;li>total: 完全成功的写总数。&lt;/li>
+&lt;li>merged: 分组写 (导致一个I/O)。&lt;/li>
+&lt;li>sectors: 成功写的扇区数。&lt;/li>
+&lt;li>ms: 花在写上的&lt;code>毫秒&lt;/code>数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>IO(input/output)
+&lt;ul>
+&lt;li>cur: 正在处理的IO。&lt;/li>
+&lt;li>s: 花在I/O上的&lt;code>秒&lt;/code>数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="disk-partition-模式字段描述">DISK PARTITION 模式字段描述&lt;/h2>
+&lt;ul>
+&lt;li>reads: 发送到此分区上的读的总数。&lt;/li>
+&lt;li>read sectors: 分区上读的扇区总数。&lt;/li>
+&lt;li>writes: 发送到此分区上的写的总数。&lt;/li>
+&lt;li>requested writes: 此分区发出的写请求总数。&lt;/li>
+&lt;/ul>
+&lt;h2 id="slab-模式字段描述">SLAB 模式字段描述&lt;/h2>
+&lt;ul>
+&lt;li>cache: 缓存名称。&lt;/li>
+&lt;li>num: 当前活动对象数量。&lt;/li>
+&lt;li>total: 有效/可用对象总数。&lt;/li>
+&lt;li>size: 每个对象的大小。&lt;/li>
+&lt;li>pages: 具有至少一个活动对象的页面数。&lt;/li>
+&lt;/ul>
+&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="显示内存cpu中断fork等总览信息">显示内存、CPU、中断、fork等总览信息&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -s&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="保持更新固定次数">保持更新固定次数&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -a 2 // 每2s更新一次，一直更新
+vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="显示启动以来的fork数量">显示启动以来的fork数量&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -f&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="显示某个分区统计信息">显示某个分区统计信息&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -p sda1&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="更换输出单位">更换输出单位&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -s -S M&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="显示slab内存对象信息">显示slab内存对象信息&lt;/h2>
+&lt;blockquote>
+&lt;p>vmstat -m&lt;/p>
+&lt;/blockquote>
+&lt;h1 id="疑问">疑问&lt;/h1>
+&lt;ul>
+&lt;li>st: 从虚拟机中窃取的时间？&lt;/li>
+&lt;li>磁盘分区的相关字段不理解？&lt;/li>
+&lt;/ul>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>Linux man page&lt;/li>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
+在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
+&lt;h1 id="作用">作用&lt;/h1>
+&lt;ul>
+&lt;li>VLAN可以为网络提供以下作用：
+&lt;ul>
+&lt;li>广播控制&lt;/li>
+&lt;li>带宽利用&lt;/li>
+&lt;li>降低延迟&lt;/li>
+&lt;li>安全性（非设计作用，本身功能所附加出的）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>采用虚拟局域网技术实现交换机以太网的广播隔离。&lt;/li>
+&lt;li>一个VLAN相当于OSI模型第2层的广播域，它能将广播控制在一个VLAN内部。&lt;/li>
+&lt;li>不同VLAN之间或VLAN与LAN/WAN的数据通信必须通过第3层（网络层）完成。&lt;/li>
+&lt;/ul>
+&lt;h1 id="原理划分方式">原理（划分方式）&lt;/h1>
+&lt;h2 id="物理层physical-layer">物理层(physical layer)&lt;/h2>
+&lt;ul>
+&lt;li>以&lt;code>交换机端口&lt;/code>作为划分VLAN的基础。&lt;/li>
+&lt;li>适合规模不大的组织。&lt;/li>
+&lt;/ul>
+&lt;h2 id="数据链路层data-link-layer">数据链路层(data link layer)&lt;/h2>
+&lt;ul>
+&lt;li>以每台主机的&lt;code>MAC地址&lt;/code>作为划分VLAN的基础。&lt;/li>
+&lt;li>实现方法：
+&lt;ul>
+&lt;li>创建一个MAC与VLAN映射的数据库。&lt;/li>
+&lt;li>当网络设备连接到端口后，&lt;code>交换机&lt;/code>向&lt;code>VMPS(VLAN管理策略服务器)&lt;/code>请求这个数据库。&lt;/li>
+&lt;li>找到相应的映射，完成VLAN的分配。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>优点：
+&lt;ul>
+&lt;li>计算机物理位置的不同，也不影响VLAN的运作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>缺点：
+&lt;ul>
+&lt;li>人为建立MAC与VLAN的映射关系；因此导致管理复杂度增加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="网络层">网络层&lt;/h2>
+&lt;ul>
+&lt;li>以&lt;code>IP地址&lt;/code>作为划分VLAN的基础；以子网视为VLAN设置的依据。【？？？】&lt;/li>
+&lt;li>优点：
+&lt;ul>
+&lt;li>网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置VLANs架构的复杂度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>缺点：
+&lt;ul>
+&lt;li>交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 信号</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png" alt="Featured image of post 操作系统 —— 信号" />&lt;h1 id="信号">信号&lt;/h1>
+&lt;ul>
+&lt;li>一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。&lt;/li>
+&lt;li>每种信号类型都对应于某种系统事件。&lt;/li>
+&lt;li>信号的默认行为：&lt;/li>
+&lt;/ul>
+&lt;h2 id="1信号发送和信号接收">1.信号发送和信号接收&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>待处理信号&lt;/code>：一个发出而没有被接收的信号。&lt;/li>
+&lt;li>内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。&lt;/li>
+&lt;li>当目的进程被内核&lt;code>强迫&lt;/code>以某种方式对信号的发送做出反应时，目的进程就接收了信号。&lt;/li>
+&lt;li>Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于&lt;code>进程组(process group)&lt;/code>的。&lt;/li>
+&lt;li>相关函数:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/types.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;signal.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;unistd.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 发送sig指定信号到pid进程
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">kill&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pid_t&lt;/span> &lt;span class="n">pid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">sig&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 向自己发送SIGALRM信号
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">alarm&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">secs&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">typedef&lt;/span> &lt;span class="nf">void&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">sighandler_t&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">sighandler_t&lt;/span> &lt;span class="nf">signal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">signum&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sighandler_t&lt;/span> &lt;span class="n">handler&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2信号处理问题">2.信号处理问题&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>待处理信号被阻塞。&lt;/p>
+&lt;ul>
+&lt;li>例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1]&lt;/li>
+&lt;li>（第2个信号不是SIGINT信号，那是否也还是阻塞？）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>待处理信号不会排队等待。&lt;/p>
+&lt;ul>
+&lt;li>任意类型至多只有一个待处理信号。[疑问][2]&lt;/li>
+&lt;li>（不同类型的信号就可以有多个吗？）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>系统调用可以被中断。&lt;/p>
+&lt;ul>
+&lt;li>如read、wait、accept这样的&lt;code>慢速系统调用&lt;/code>被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为&lt;code>EINTR&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>详见&lt;a class="link" href="./Examples/ex_SIGCHLD.c" >ex_SIGCHLD.c&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>教训：不可以用信号来对其他进程中发生的时间计数&lt;/strong>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-显式地阻塞和取消阻塞信号">3. 显式地阻塞和取消阻塞信号&lt;/h2>
+&lt;p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见&lt;a class="link" href="./Examples/3_ex_procmask_bug.c" >ex3&lt;/a>和&lt;a class="link" href="./Examples/4_ex_procmask_fix_bug.c" >ex4&lt;/a>）&lt;/p>
+&lt;ul>
+&lt;li>相关函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;signal.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="c1">// 设置阻塞、不阻塞、添加到阻塞
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigprocmask&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">how&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">set&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">oset&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 添加signo到set中
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigaddset&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">signo&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 吧signo从set中删除
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigdelset&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">signo&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 初始化set为空集
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigemptyset&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 将每个(所有？)信号添加到set中
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigfillset&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 判断signo是否是set的成员，是返回1，否则0
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigismember&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">signo&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="a拓展">A.拓展&lt;/h2>
+&lt;ul>
+&lt;li>进程组。详见&lt;a class="link" href="../../1.%e8%bf%9b%e7%a8%8b" >1.进程&lt;/a>&lt;/li>
+&lt;li>Linux信号
+&lt;figure
+>
+&lt;a href="https://isshe.site/Linux_signal.png" >
+&lt;img src="https://isshe.site/Linux_signal.png"
+loading="lazy"
+alt="Linux信号">
+&lt;/a>
+&lt;figcaption>Linux信号&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见&lt;a class="link" href="./Examples/ex_SIGCHLD.c" >ex_SIGCHILD.c&lt;/a>】&lt;/li>
+&lt;li>可移植的signal函数。【详见&lt;a class="link" href="../../A.lib/isshe_signal.h" >isshe_signal.h&lt;/a>和&lt;a class="link" href="../../A.lib/isshe_signal.c" >isshe_signal.c&lt;/a>】&lt;/li>
+&lt;li>非本地跳转：可和信号一起实现程序重启功能。【详见&lt;a class="link" href="./Examples/5_ex_restart.c" >ex_restart&lt;/a>，macOS上行为和书本有所不同】
+&lt;ul>
+&lt;li>相关函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;setjmp.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">setjmp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">jmp_buf&lt;/span> &lt;span class="n">env&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">logjmp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">jmp_buf&lt;/span> &lt;span class="n">env&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">retval&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 下面两个可以和信号一起用
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sigsetjmp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigjmp_buf&lt;/span> &lt;span class="n">env&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">savesige&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">siglongjmp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sigjmp_buf&lt;/span> &lt;span class="n">env&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">retval&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="b疑问">B.疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>2.信号处理问题&lt;/code>中：
+[1]第2个信号不是SIGINT信号，那是否也还是阻塞？
+[2]不同类型的信号就可以有多个吗？&lt;/li>
+&lt;/ul>
+&lt;h2 id="c参考">C.参考&lt;/h2>
+&lt;ul>
+&lt;li>《深入理解计算机系统》&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.png" alt="Featured image of post 操作系统 —— 进程" />&lt;h1 id="进程">进程&lt;/h1>
+&lt;p>进程是操作系统中最核心的概念。&lt;/p>
+&lt;ul>
+&lt;li>定义：一个执行中的程序的实例。（对正在运行程序的一个抽象）&lt;/li>
+&lt;li>是资源分配的基本单位。&lt;/li>
+&lt;li>进程提供给应用程序的关键抽象：
+&lt;ul>
+&lt;li>一个独立的&lt;code>逻辑控制流&lt;/code>，它提供一个假象，好像程序独占地使用处理器。&lt;/li>
+&lt;li>一个私有的&lt;code>地址空间&lt;/code>，它提供一个假象，好像程序独占地使用存储器系统。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>逻辑流(逻辑控制流）&lt;/code>：程序计数器PC值的序列。
+&lt;ul>
+&lt;li>异常处理程序、进程、信号处理程序、线程和Java进程都是逻辑流的例子。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>并发流(concurrent flow)&lt;/code>：一个逻辑流的执行在时间上与另一个流重叠。&lt;/li>
+&lt;li>&lt;code>并发&lt;/code>：多条流并发地执行的一般现象称为并发(concurrecy)。&lt;/li>
+&lt;li>&lt;code>多任务(multitasking)&lt;/code>：一个进程和其他进程轮流运行的概念称为多任务。&lt;/li>
+&lt;li>&lt;code>时间片(time slice)&lt;/code>：一个进程执行它的控制流的一部分的每一时间段。&lt;/li>
+&lt;li>&lt;code>并行流(parallel flow)&lt;/code>：两个流运行在不同的处理器上或者不同的计算机上。&lt;/li>
+&lt;li>&lt;code>上下文(context)&lt;/code>：内核重新启动一个被抢占的进程所需要的状态。&lt;/li>
+&lt;li>&lt;code>上下文切换&lt;/code>：内核为每个进程维护一个&lt;code>上下文(context)&lt;/code>，多任务的实现依赖上下文切换。
+&lt;ul>
+&lt;li>1）保存当前进程的上下文；&lt;/li>
+&lt;li>2）恢复某个先前被抢占的进程被保存的上下文；&lt;/li>
+&lt;li>3）将控制传递给这个新恢复的进程；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1进程地址空间">1.进程地址空间&lt;/h2>
+&lt;h3 id="11-典型进程地址空间1">1.1 典型进程地址空间1&lt;/h3>
+&lt;p>&lt;figure
+>
+&lt;a href="https://isshe.site/process_address_map.png" >
+&lt;img src="https://isshe.site/process_address_map.png"
+loading="lazy"
+alt="典型进程地址空间1">
+&lt;/a>
+&lt;figcaption>典型进程地址空间1&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;ul>
+&lt;li>代码段起始地址：
+&lt;ul>
+&lt;li>32位：0x08048000&lt;/li>
+&lt;li>64位：0x00400000&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>进程从用户模式变为内核模式的方法是：中断、故障、陷入系统调用。&lt;/li>
+&lt;/ul>
+&lt;h3 id="12-典型进程地址空间2">1.2 典型进程地址空间2&lt;/h3>
+&lt;p>&lt;figure
+>
+&lt;a href="https://isshe.site/process_address_map2.png" >
+&lt;img src="https://isshe.site/process_address_map2.png"
+loading="lazy"
+alt="典型进程地址空间2">
+&lt;/a>
+&lt;figcaption>典型进程地址空间2&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="2-进程状态">2. 进程状态&lt;/h2>
+&lt;h3 id="21-状态转换图">2.1 状态转换图&lt;/h3>
+&lt;ul>
+&lt;li>&lt;figure
+>
+&lt;a href="https://isshe.site/process_status_change.png" >
+&lt;img src="https://isshe.site/process_status_change.png"
+loading="lazy"
+alt="状态转换图">
+&lt;/a>
+&lt;figcaption>状态转换图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-基本状态">2.2 基本状态&lt;/h3>
+&lt;ul>
+&lt;li>1）运行态：进程实际占用CPU；&lt;/li>
+&lt;li>2）就绪态：可运行；&lt;/li>
+&lt;li>3）阻塞态：除非某种外部事件发生(使进程满足运行条件)，否则进程不能运行。&lt;/li>
+&lt;/ul>
+&lt;h3 id="23-引入的状态">2.3 引入的状态：&lt;/h3>
+&lt;ul>
+&lt;li>创建状态；&lt;/li>
+&lt;li>终止状态；&lt;/li>
+&lt;li>挂起状态；（图中没有）&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-进程控制">3. 进程控制&lt;/h2>
+&lt;h3 id="31-进程创建与终止">3.1 进程创建与终止&lt;/h3>
+&lt;ul>
+&lt;li>导致&lt;code>进程创建&lt;/code>的主要事件：
+&lt;ul>
+&lt;li>1）系统初始化；&lt;/li>
+&lt;li>2）正在运行的程序执行了创建进程的系统调用；&lt;/li>
+&lt;li>3）用户请求创建一个新进程；&lt;/li>
+&lt;li>4）一个批处理作业的初始化；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>导致&lt;code>进程终止&lt;/code>的主要事件：
+&lt;ul>
+&lt;li>1）正常退出（自愿的）
+&lt;ul>
+&lt;li>A.从main返回；&lt;/li>
+&lt;li>B.调用exit；&lt;/li>
+&lt;li>C.调用_exit或_Exit;&lt;/li>
+&lt;li>D.最后一个线程从其启动例程返回；&lt;/li>
+&lt;li>E.从最后一个线程调用pthread_exit()；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>2）出错退出（自愿的）
+&lt;ul>
+&lt;li>调用abort&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>3）严重错误/被其他进程杀死（非自愿）
+&lt;ul>
+&lt;li>接到终止信号；&lt;/li>
+&lt;li>最后一个线程对取消(cancellation)请求做出响应；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>相关函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;stdlib.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;unistd.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 进程创建
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">pid_t&lt;/span> &lt;span class="nf">fork&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 进程退出
+&lt;/span>&lt;span class="c1">// 进行一些清理（关闭文件描述符之类的）,然后返回内核
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="nf">exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 下面两个直接返回内核
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="nf">_Exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">_exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>fork失败的主要原因：
+&lt;ul>
+&lt;li>系统中已经有太多进程。&lt;/li>
+&lt;li>该实际用户ID的进程数超过了系统限制。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-守护进程">4. 守护进程&lt;/h2>
+&lt;ul>
+&lt;li>守护进程：
+&lt;ul>
+&lt;li>一种生存期长的进程。&lt;/li>
+&lt;li>后台运行；&lt;/li>
+&lt;li>没有控制终端；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="41-编程规则">4.1 编程规则&lt;/h3>
+&lt;ul>
+&lt;li>1）调用umask将文件模式创建屏蔽字设置为一个已知的值（通常是0）；【疑问？！】&lt;/li>
+&lt;li>2）调用fork，然后使父进程exit；&lt;/li>
+&lt;li>3）调用setsid创建一个新会话；
+&lt;ul>
+&lt;li>a）进程成为新会话的首进程；&lt;/li>
+&lt;li>b）成为一个新进程组的组长进程；&lt;/li>
+&lt;li>c）没有控制终端；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>4）将当前工作目录更改为根目录；&lt;/li>
+&lt;li>5）关闭不再需要的文件描述符；&lt;/li>
+&lt;li>6）[选]打开/dev/null使进程具有文件描述符0/1/2。
+&lt;ul>
+&lt;li>使所有读标准输入，写标准输出/错误输出的库例程都不会产生效果。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="42-示例">4.2 示例&lt;/h3>
+&lt;ul>
+&lt;li>见&lt;a class="link" href="./Examples/1_daemonize.c" >守护进程示例&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h3 id="43-守护进程的惯例">4.3 守护进程的惯例&lt;/h3>
+&lt;ul>
+&lt;li>锁文件放&lt;code>/var/run&lt;/code>目录，命名为&lt;code>name.pid&lt;/code>。&lt;/li>
+&lt;li>配置放&lt;code>/etc&lt;/code>目录，命名为&lt;code>name.conf&lt;/code>。&lt;/li>
+&lt;li>可用命令行启动。
+&lt;ul>
+&lt;li>通常由&lt;code>/etc/rc*&lt;/code>或&lt;code>/etc/init.d/*&lt;/code>启动。&lt;/li>
+&lt;li>守护进程终止时，应当自动重启。(&lt;code>/etc/inittab&lt;/code>中为守护进程添加&lt;code>respawn&lt;/code>记录项【macOS没有此文件！】)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>守护进程可通过SIGHUP信号，重新读取配置（当配置更新时）。&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-进程实现">5. 进程实现&lt;/h2>
+&lt;ul>
+&lt;li>进程表：操作系统维护的一张表格——一个结构数组。&lt;/li>
+&lt;li>进程表项：也称&lt;code>进程控制块&lt;/code>，是&lt;code>进程表&lt;/code>的表项。&lt;/li>
+&lt;li>典型系统中的一些关键字段：&lt;/li>
+&lt;/ul>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>进程管理&lt;/th>
+&lt;th>存储管理&lt;/th>
+&lt;th>文件管理&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>寄存器&lt;/td>
+&lt;td>正文段指针&lt;/td>
+&lt;td>根目录&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>程序计数器&lt;/td>
+&lt;td>数据段指针&lt;/td>
+&lt;td>工作目录&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>程序状态字&lt;/td>
+&lt;td>堆栈段指针&lt;/td>
+&lt;td>文件描述符&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>堆栈指针&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>用户ID&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>进程状态&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>组ID&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>优先级&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>调度参数&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>进程ID&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>父进程&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>进程组&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>信号&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&amp;hellip;&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="a拓展">A.拓展&lt;/h2>
+&lt;h3 id="a1-进程组">A.1 进程组&lt;/h3>
+&lt;ul>
+&lt;li>进程组：在类UNIX系统中，进程和它的所有子进程以及后裔进程共同组成一个进程组。&lt;/li>
+&lt;li>进程组相关函数:&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>#include &amp;lt;unistd.h&amp;gt;
+// 获取进程组ID
+pid_t getpgrp(void);
+// 改变自己或其他进程的进程组
+// pid == 0: 使用当前进程
+// pgid== 0: pid进程的PID作为进程组ID。
+int setpgid(pid_t pid, pid_t pgid);
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>僵死进程/僵尸进程：终止，但未被回收的进程。
+&lt;ul>
+&lt;li>进程已经终止了，但内核仍保留它的某些状态直到父进程回收它为止。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>相关函数:&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;stdlib.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/types.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;unistd.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/wait.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="n">pid_t&lt;/span> &lt;span class="nf">waitpid&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pid_t&lt;/span> &lt;span class="n">pid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">options&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">pid_t&lt;/span> &lt;span class="nf">wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">sleep&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">secs&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pause&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="a2-子进程回收方式">A.2 子进程回收方式&lt;/h3>
+&lt;ul>
+&lt;li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。
+【详见&lt;a class="link" href="../2.%e4%bf%a1%e5%8f%b7/Examples/2_ex_SIGCHLD.c" >ex_SIGCHLD.c&lt;/a>】&lt;/li>
+&lt;/ul>
+&lt;h3 id="a3-c程序的启动和终止">A.3 C程序的启动和终止&lt;/h3>
+&lt;p>&lt;figure
+>
+&lt;a href="https://isshe.site/c_program_start_end.png" >
+&lt;img src="https://isshe.site/c_program_start_end.png"
+loading="lazy"
+alt="C程序的启动和终止">
+&lt;/a>
+&lt;figcaption>C程序的启动和终止&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>内核使程序执行的唯一方法：exec!&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h3 id="a4-进程资源限制">A.4 进程资源限制&lt;/h3>
+&lt;ul>
+&lt;li>见《Unix环境高级编程》p175&lt;/li>
+&lt;/ul>
+&lt;h3 id="a5-7个exec的关系">A.5 7个exec的关系&lt;/h3>
+&lt;p>&lt;figure
+>
+&lt;a href="https://isshe.site/7_exec_relationship.png" >
+&lt;img src="https://isshe.site/7_exec_relationship.png"
+loading="lazy"
+alt="7个exec的关系">
+&lt;/a>
+&lt;figcaption>7个exec的关系&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="a6-ps命令中进程状态">A.6 ps命令中进程状态&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>R&lt;/code>: TASK_RUNNING，可执行状态。&lt;/li>
+&lt;li>&lt;code>S&lt;/code>: TASK_INTERRUPTIBLE，可中断的睡眠状态。&lt;/li>
+&lt;li>&lt;code>D&lt;/code>: TASK_UNINTERRUPTIBLE，不可中断的睡眠状态。&lt;/li>
+&lt;li>&lt;code>T&lt;/code>: TASK_STOPPED/TASK_TRACED，暂停状态或跟踪状态。&lt;/li>
+&lt;li>&lt;code>Z&lt;/code>: TASK_DEAD – EXIT_ZOMBIE，退出状态，进程成为僵尸进程。&lt;/li>
+&lt;li>&lt;code>X&lt;/code>: TASK_DEAD – EXIT_DEAD，退出状态，进程即将被销毁。&lt;/li>
+&lt;/ul>
+&lt;h2 id="b疑问不懂">B.疑问/不懂&lt;/h2>
+&lt;ul>
+&lt;li>孤儿进程组?&lt;/li>
+&lt;li>文件模式创建屏蔽字是什么？有何作用？(umask()设置的那个))&lt;/li>
+&lt;/ul>
+&lt;h2 id="c参考">C.参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/i_scream_/article/details/51569355" target="_blank" rel="noopener"
+>https://blog.csdn.net/i_scream_/article/details/51569355&lt;/a>&lt;/li>
+&lt;li>《Unix环境高级编程》&lt;/li>
+&lt;li>《现代操作系统》&lt;/li>
+&lt;li>《深入理解计算机系统》&lt;/li>
+&lt;/ul></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
 &lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
 &lt;h1 id="工作过程">工作过程&lt;/h1>
 &lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
@@ -18,7 +1826,7 @@
 &lt;ul>
 &lt;li>地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到&lt;code>应答报文&lt;/code>的主机，不会校验报文的真实性，就会加到ARP缓存中。&lt;/li>
 &lt;li>由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。&lt;/li>
-&lt;/ul></description></item><item><title>DHCP 协议介绍</title><link>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" alt="Featured image of post DHCP 协议介绍" />&lt;h2 id="dhcp">DHCP&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DHCP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" alt="Featured image of post 网络协议 —— DHCP" />&lt;h2 id="dhcp">DHCP&lt;/h2>
 &lt;p>DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。
 DHCP是一个应用层协议。基于&lt;code>UDP&lt;/code>。&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -53,11 +1861,11 @@ style="
 flex-grow: 76;
 flex-basis: 184px"
 >
-&lt;a href="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png" data-size="440x572">
-&lt;img src="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp.png"
+&lt;a href="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png" data-size="440x572">
+&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png"
 width="440"
 height="572"
-srcset="https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, https://isshe.site/p/dhcp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w"
+srcset="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_480x0_resize_box_3.png 480w, https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp_hudbf177609d4e03da36b00b06f63101bd_20695_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="典型DHCP会话的模式">
 &lt;/a>
@@ -146,7 +1954,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>DNS 协议介绍</title><link>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/dns-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpeg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
@@ -354,8 +2162,7 @@ Additional | &amp;lt;empty&amp;gt; |
 >wiki&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
 >wiki中文&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>ICMP 协议介绍</title><link>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/icmp-%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/</guid><description>&lt;p>[TOC]&lt;/p>
-&lt;h2 id="icmp">ICMP&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Mon, 13 Dec 2021 06:52:14 +0000</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.jpg" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
 &lt;ul>
 &lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
 &lt;li>ICMP是互联网协议族的核心协议之一。&lt;/li>
@@ -867,61 +2674,4 @@ Additional | &amp;lt;empty&amp;gt; |
 &lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
 &lt;ul>
 &lt;li>RFC 792&lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Mon, 13 Dec 2021 04:33:35 +0000</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;h2 id="vlan">VLAN&lt;/h2>
-&lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
-在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
-&lt;h1 id="作用">作用&lt;/h1>
-&lt;ul>
-&lt;li>VLAN可以为网络提供以下作用：
-&lt;ul>
-&lt;li>广播控制&lt;/li>
-&lt;li>带宽利用&lt;/li>
-&lt;li>降低延迟&lt;/li>
-&lt;li>安全性（非设计作用，本身功能所附加出的）&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>采用虚拟局域网技术实现交换机以太网的广播隔离。&lt;/li>
-&lt;li>一个VLAN相当于OSI模型第2层的广播域，它能将广播控制在一个VLAN内部。&lt;/li>
-&lt;li>不同VLAN之间或VLAN与LAN/WAN的数据通信必须通过第3层（网络层）完成。&lt;/li>
-&lt;/ul>
-&lt;h1 id="原理划分方式">原理（划分方式）&lt;/h1>
-&lt;h2 id="物理层physical-layer">物理层(physical layer)&lt;/h2>
-&lt;ul>
-&lt;li>以&lt;code>交换机端口&lt;/code>作为划分VLAN的基础。&lt;/li>
-&lt;li>适合规模不大的组织。&lt;/li>
-&lt;/ul>
-&lt;h2 id="数据链路层data-link-layer">数据链路层(data link layer)&lt;/h2>
-&lt;ul>
-&lt;li>以每台主机的&lt;code>MAC地址&lt;/code>作为划分VLAN的基础。&lt;/li>
-&lt;li>实现方法：
-&lt;ul>
-&lt;li>创建一个MAC与VLAN映射的数据库。&lt;/li>
-&lt;li>当网络设备连接到端口后，&lt;code>交换机&lt;/code>向&lt;code>VMPS(VLAN管理策略服务器)&lt;/code>请求这个数据库。&lt;/li>
-&lt;li>找到相应的映射，完成VLAN的分配。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>优点：
-&lt;ul>
-&lt;li>计算机物理位置的不同，也不影响VLAN的运作。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>缺点：
-&lt;ul>
-&lt;li>人为建立MAC与VLAN的映射关系；因此导致管理复杂度增加。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="网络层">网络层&lt;/h2>
-&lt;ul>
-&lt;li>以&lt;code>IP地址&lt;/code>作为划分VLAN的基础；以子网视为VLAN设置的依据。【？？？】&lt;/li>
-&lt;li>优点：
-&lt;ul>
-&lt;li>网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置VLANs架构的复杂度。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>缺点：
-&lt;ul>
-&lt;li>交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。&lt;/li>
-&lt;/ul>
-&lt;/li>
 &lt;/ul></description></item></channel></rss>
