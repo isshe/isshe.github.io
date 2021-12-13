@@ -8,7 +8,7 @@
 用法 vmstat [options] [delay [count]] vmstat [-f] [-s] [-m] vmstat [-S unit] vmstat [-d] vmstat [-p disk partition] vmstat [-V] 选项 delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。 count 更新次数。如果未指定计数且指定了延迟(delay)，则count默认为无穷大。 -a, --active 显示活动和非活动内存（2.5.41及之后的版本） -f, --forks 显示自引导以来的fork数。 这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。 每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。 -m, --slabs 显示slabinfo。【相关字段含义见下面部分】 -n, --one-header 标题仅显示一次而不是定期显示。 -s, --stats 显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。 -d, --disk 报告磁盘信息（2.5.70及之后版本） -D, --disk-sum 报告一些有关磁盘活动的摘要统计信息。 -p, --partition device 分区的详细统计信息。 (2.5.70及之后版本). -S, --unit character 更换输出的单位：1000(k)，1024(K)，1000000(m)，1048576(M) 字节。 注意，这不会改变交换(si/so)或块(bi/bo)字段。 -t, --timestamp 为每一行附加时间戳。 -w, --wide 宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。 输出宽度会超过每行80个字符。 -V, --version 显示版本信息并退出。 -h, --help 显示帮助信息并退出。 字段描述 VM 模式字段描述  进程  r: 可运行进程的数量 (正在运行+就绪状态)。 b: 处于不可中断睡眠的进程数量。   内存  swpd: 使用的虚拟内存量。 free: 空闲内存量。(idle) buff: 用作缓冲区(buffer)的内存量。 cache: 用作缓存(cache)的内存量。 inact: 非活动内存量。（-a选项） active: 活动内存量。（-a选项）   交换内存  si: 从磁盘交换的内存量（/s）。 so: 交换到磁盘的内存量（/s）。   IO  bi: 从块设备接收的块数（blocks/s）。 bo: 发送到块设备的块数（blocks/ s）。   系统  in: 每秒的中断数，包括时钟。 cs: 每秒上下文切换次数。   CPU  这些是总CPU时间的占比。 us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间) sy: 运行内核代码所花费的时间。 (系统时间) id: 空闲时间。在2.">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="vmstat"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T06:52:14+00:00"><meta property="article:modified_time" content="2021-12-13T06:52:14+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="vmstat"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T16:07:25+00:00"><meta property="article:modified_time" content="2021-12-13T16:07:25+00:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— vmstat">
 <meta name=twitter:description content="vmstat 报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。
 用法 vmstat [options] [delay [count]] vmstat [-f] [-s] [-m] vmstat [-S unit] vmstat [-d] vmstat [-p disk partition] vmstat [-V] 选项 delay 更新之间的延迟，以秒为单位。如果未指定延迟，则仅打印一个报告：自引导以来的平均值。 count 更新次数。如果未指定计数且指定了延迟(delay)，则count默认为无穷大。 -a, --active 显示活动和非活动内存（2.5.41及之后的版本） -f, --forks 显示自引导以来的fork数。 这包括fork，vfork和clone系统调用，并且是相当于创建的任务总数。 每个进程由一个或多个任务表示，具体取决于线程用法。此显示不重复（也就是只显示一次）。 -m, --slabs 显示slabinfo。【相关字段含义见下面部分】 -n, --one-header 标题仅显示一次而不是定期显示。 -s, --stats 显示各种事件计数器和内存统计信息。此显示不重复（也就是只显示一次）。 -d, --disk 报告磁盘信息（2.5.70及之后版本） -D, --disk-sum 报告一些有关磁盘活动的摘要统计信息。 -p, --partition device 分区的详细统计信息。 (2.5.70及之后版本). -S, --unit character 更换输出的单位：1000(k)，1024(K)，1000000(m)，1048576(M) 字节。 注意，这不会改变交换(si/so)或块(bi/bo)字段。 -t, --timestamp 为每一行附加时间戳。 -w, --wide 宽屏输出模式（对于具有较高内存量的系统非常有用，其中默认输出模式会受到不必要的列断裂影响）。 输出宽度会超过每行80个字符。 -V, --version 显示版本信息并退出。 -h, --help 显示帮助信息并退出。 字段描述 VM 模式字段描述  进程  r: 可运行进程的数量 (正在运行+就绪状态)。 b: 处于不可中断睡眠的进程数量。   内存  swpd: 使用的虚拟内存量。 free: 空闲内存量。(idle) buff: 用作缓冲区(buffer)的内存量。 cache: 用作缓存(cache)的内存量。 inact: 非活动内存量。（-a选项） active: 活动内存量。（-a选项）   交换内存  si: 从磁盘交换的内存量（/s）。 so: 交换到磁盘的内存量（/s）。   IO  bi: 从块设备接收的块数（blocks/s）。 bo: 发送到块设备的块数（blocks/ s）。   系统  in: 每秒的中断数，包括时钟。 cs: 每秒上下文切换次数。   CPU  这些是总CPU时间的占比。 us: 运行非内核代码所花费的时间。 (用户时间, 包括nice时间) sy: 运行内核代码所花费的时间。 (系统时间) id: 空闲时间。在2."><meta name=twitter:card content="summary_large_image">
@@ -28,7 +28,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 命令 —— vmstat">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_hue1f82669ca730723685f7d5c1bcf2446_46573_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_hue1f82669ca730723685f7d5c1bcf2446_46573_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-vmstat/image_hue1f82669ca730723685f7d5c1bcf2446_46573_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post Linux 命令 —— vmstat">
 </a>
 </div>
 <div class=article-details>
@@ -254,7 +254,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次</p>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— gdb</h2>
@@ -264,7 +264,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次</p>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.0fc4013d2d2472d8a97996f49b5da20d_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-D8QBPS0kctipeZb0m12iDQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— git</h2>
@@ -274,7 +274,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次</p>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— ip</h2>
@@ -284,7 +284,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次</p>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— modprobe</h2>
@@ -294,7 +294,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次</p>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— netstat</h2>
