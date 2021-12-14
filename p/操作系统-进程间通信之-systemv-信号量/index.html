@@ -1,0 +1,326 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="System V 信号量 1. 概述  二值信号量(binary semaphore): 其值为0或1的信号量； 计数信号量(counting semaphore): 其值为0~某个限制值之间的信号量；    以上两种信号量，等待(waiting)操作都等待信号量的值变为大于0；    计数信号量集(set of counting semaphores): 一个或多个信号量(构成一个集合), 其中的每个都是计数信号量。  System V信号量通过此概念给信号量增加了一级复杂度。     当讨论System V信号量时，都是指计数信号量集；当讨论Posix信号量时，都是指计数信号量。
+  约定：  semval: 信号量当前值 semncnt: 等待semval变为大于其当前值的线程数； semzcnt: 等待semval变为0的线程数； semadj: 所指定信号量针对调用进程的调整值；【？？？】    2.信号量集相关数据结构  信号量集结构图 
+struct semid_ds { struct ipc_perm sem_perm; // 操作权限 struct sem *sem_base; // 指向信号量集数组的指针 ushort sem_nsems; // 信号量集中信号量的数量 time_t sem_otime; // 最后semop()的时间 time_t sem_ctime; // 最后创建或IPC_SET的时间 } struct sem { ushort_t semval; // 信号量值 short sempid; // 最后成功semop()/SETVAL, SETALL的PID ushort_t semncnt; // awaiting semval &amp;gt; current vale的数量 ushort_t semzcnt; // awaiting semval = 0 的数量 } // 给信号量集中某个特定的信号量指定一个操作 // 不能静态初始化，顺序根据实现不同而不同 struct sembuf { short sem_num; // 信号量号：0, 1, ."><title>操作系统 —— 进程间通信之 SystemV 信号量</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 进程间通信之 SystemV 信号量">
+<meta property="og:description" content="System V 信号量 1. 概述  二值信号量(binary semaphore): 其值为0或1的信号量； 计数信号量(counting semaphore): 其值为0~某个限制值之间的信号量；    以上两种信号量，等待(waiting)操作都等待信号量的值变为大于0；    计数信号量集(set of counting semaphores): 一个或多个信号量(构成一个集合), 其中的每个都是计数信号量。  System V信号量通过此概念给信号量增加了一级复杂度。     当讨论System V信号量时，都是指计数信号量集；当讨论Posix信号量时，都是指计数信号量。
+  约定：  semval: 信号量当前值 semncnt: 等待semval变为大于其当前值的线程数； semzcnt: 等待semval变为0的线程数； semadj: 所指定信号量针对调用进程的调整值；【？？？】    2.信号量集相关数据结构  信号量集结构图 
+struct semid_ds { struct ipc_perm sem_perm; // 操作权限 struct sem *sem_base; // 指向信号量集数组的指针 ushort sem_nsems; // 信号量集中信号量的数量 time_t sem_otime; // 最后semop()的时间 time_t sem_ctime; // 最后创建或IPC_SET的时间 } struct sem { ushort_t semval; // 信号量值 short sempid; // 最后成功semop()/SETVAL, SETALL的PID ushort_t semncnt; // awaiting semval &amp;gt; current vale的数量 ushort_t semzcnt; // awaiting semval = 0 的数量 } // 给信号量集中某个特定的信号量指定一个操作 // 不能静态初始化，顺序根据实现不同而不同 struct sembuf { short sem_num; // 信号量号：0, 1, .">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="信号量"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png">
+<meta name=twitter:title content="操作系统 —— 进程间通信之 SystemV 信号量">
+<meta name=twitter:description content="System V 信号量 1. 概述  二值信号量(binary semaphore): 其值为0或1的信号量； 计数信号量(counting semaphore): 其值为0~某个限制值之间的信号量；    以上两种信号量，等待(waiting)操作都等待信号量的值变为大于0；    计数信号量集(set of counting semaphores): 一个或多个信号量(构成一个集合), 其中的每个都是计数信号量。  System V信号量通过此概念给信号量增加了一级复杂度。     当讨论System V信号量时，都是指计数信号量集；当讨论Posix信号量时，都是指计数信号量。
+  约定：  semval: 信号量当前值 semncnt: 等待semval变为大于其当前值的线程数； semzcnt: 等待semval变为0的线程数； semadj: 所指定信号量针对调用进程的调整值；【？？？】    2.信号量集相关数据结构  信号量集结构图 
+struct semid_ds { struct ipc_perm sem_perm; // 操作权限 struct sem *sem_base; // 指向信号量集数组的指针 ushort sem_nsems; // 信号量集中信号量的数量 time_t sem_otime; // 最后semop()的时间 time_t sem_ctime; // 最后创建或IPC_SET的时间 } struct sem { ushort_t semval; // 信号量值 short sempid; // 最后成功semop()/SETVAL, SETALL的PID ushort_t semncnt; // awaiting semval &amp;gt; current vale的数量 ushort_t semzcnt; // awaiting semval = 0 的数量 } // 给信号量集中某个特定的信号量指定一个操作 // 不能静态初始化，顺序根据实现不同而不同 struct sembuf { short sem_num; // 信号量号：0, 1, ."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_1600x0_resize_box_3.png 1600w" width=800 height=420 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/ style=background-color:#995ead;color:#fff>
+进程间通信
+</a>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>操作系统 —— 进程间通信之 SystemV 信号量</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=system-v-信号量>System V 信号量</h1>
+<h2 id=1-概述>1. 概述</h2>
+<ul>
+<li>二值信号量(binary semaphore): 其值为0或1的信号量；</li>
+<li>计数信号量(counting semaphore): 其值为0~某个限制值之间的信号量；</li>
+</ul>
+<blockquote>
+<ul>
+<li>以上两种信号量，等待(waiting)操作都等待信号量的值变为大于0；</li>
+</ul>
+</blockquote>
+<ul>
+<li>计数信号量集(set of counting semaphores): 一个或多个信号量(构成一个集合), 其中的每个都是计数信号量。
+<ul>
+<li>System V信号量通过此概念给信号量增加了一级复杂度。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>当讨论System V信号量时，都是指<code>计数信号量集</code>；当讨论Posix信号量时，都是指<code>计数信号量</code>。</p>
+</blockquote>
+<ul>
+<li>约定：
+<ul>
+<li>semval: 信号量当前值</li>
+<li>semncnt: 等待semval变为大于其当前值的线程数；</li>
+<li>semzcnt: 等待semval变为0的线程数；</li>
+<li>semadj: 所指定信号量针对调用进程的调整值；【？？？】</li>
+</ul>
+</li>
+</ul>
+<h2 id=2信号量集相关数据结构>2.信号量集相关数据结构</h2>
+<p><figure class=gallery-image style=flex-grow:190;flex-basis:457px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png data-size=564x296>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png width=564 height=296 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_1024x0_resize_box_3.png 1024w" loading=lazy alt=信号量集结构图>
+</a>
+<figcaption>信号量集结构图</figcaption>
+</figure></p>
+<pre tabindex=0><code>struct semid_ds {
+    struct ipc_perm     sem_perm;   // 操作权限
+    struct sem          *sem_base;  // 指向信号量集数组的指针
+    ushort              sem_nsems;  // 信号量集中信号量的数量
+    time_t              sem_otime;  // 最后semop()的时间
+    time_t              sem_ctime;  // 最后创建或IPC_SET的时间
+}
+
+struct sem {
+    ushort_t    semval;     // 信号量值
+    short       sempid;     // 最后成功semop()/SETVAL, SETALL的PID
+    ushort_t    semncnt;    // awaiting semval &gt; current vale的数量
+    ushort_t    semzcnt;    // awaiting semval = 0 的数量
+}
+
+// 给信号量集中某个特定的信号量指定一个操作
+// 不能静态初始化，顺序根据实现不同而不同
+struct sembuf {
+    short   sem_num;        // 信号量号：0, 1, ..., nsems-1
+    short   sem_op;         // 信号量操作：&lt;0, 0, &gt;0
+    short   sem_flg;        // 操作标记：0, IPC_NOWAIT, SEM_UNDO
+}
+
+// 此数据结构由用户定义，系统中没有定义
+union semun {
+    int             val;    // SETVAL使用
+    struct semid_ds *buf;   // IPC_SET/IPC_STAT使用
+    ushort          *array; // GETALL/SETALL使用
+}
+</code></pre><h2 id=3-相关函数>3. 相关函数</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/sem.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// 创建或访问一个信号量集
+</span><span class=c1>// @nsems: 指定集合中的信号量数
+</span><span class=c1>// @oflag:
+</span><span class=c1>//  * IPC_CREAT: 不存在就创建，返回ID
+</span><span class=c1>//  * IPC_EXCL: 不管是否存在，都返回-1；
+</span><span class=c1>//  * IPC_CREAT|IPC_EXCL: 存在返回-1；不存在，创建，返回ID；
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>semget</span><span class=p>(</span><span class=n>key_t</span> <span class=n>key</span><span class=p>,</span> <span class=kt>int</span> <span class=n>nsems</span><span class=p>,</span> <span class=kt>int</span> <span class=n>oflag</span><span class=p>);</span>
+
+<span class=c1>// 信号量操纵函数
+</span><span class=c1>// @opsptr-&gt;sem_op:
+</span><span class=c1>//  * &gt; 0：加到信号量当前值上(semval)；如果指定SEM_UNDO标志，从相应信号量的semadj值中减去sem_op;
+</span><span class=c1>//  * = 0: 调用者希望等待信号量变为0；
+</span><span class=c1>//  * &lt; 0: 等待信号量值变为`&gt;=sem_op的绝对值`
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>semop</span><span class=p>(</span><span class=kt>int</span> <span class=n>semid</span><span class=p>,</span> <span class=k>struct</span> <span class=n>sembuf</span> <span class=o>*</span><span class=n>opsptr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>nops</span><span class=p>);</span>
+
+<span class=c1>// 对一个信号量执行各种控制操作
+</span><span class=c1>// @cmd: GETVAL/SETVAL/GETPID/GETNCNT/GETZCNT/GETALL/SETALL/IPC_RMID/IPC_SET/IPC_STAT
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>semctl</span><span class=p>(</span><span class=kt>int</span> <span class=n>semid</span><span class=p>,</span> <span class=kt>int</span> <span class=n>semnum</span><span class=p>,</span> <span class=kt>int</span> <span class=n>cmd</span><span class=p>,</span> <span class=p>...</span> <span class=cm>/*union semun org*/</span><span class=p>);</span>
+</code></pre></div><h2 id=3-注意>3. 注意</h2>
+<ul>
+<li>semget()并不初始化信号量，初始化工作需要通过semctl来完成。这会存在问题如多次初始化。【详见<a class=link href=Examples/6_ex_lock_sv_sem.c>示例6_ex</a>】
+<ul>
+<li>解决方案是：指定<code>IPC_CREAT|IPC_EXCL</code>，保证只有一个进程创建信号量并初始化信号量。
+<ul>
+<li>其他进程semget会放着EEXIST错误，并再次调用semget()。（一次不指定IPC_CREAT，也不指定IPC_EXCL）</li>
+<li>创建和初始化分为两步，这个方案还是存在竞争问题：
+<ul>
+<li>进程A进行创建(semget)后，未进行初始化(semctl), 时间片到；进程B进行信号量操作（但是信号量还未初始化）。</li>
+<li>解决办法是：
+<ul>
+<li>调用以IPC_STAT命令semctl，等待sem_otime变为非零值。</li>
+<li>原因：System V手册保证semget创建一个新的信号量集时，semid_ds的sem_otime成员一定被初始化为0。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>semop()睡眠时, 如果被中断，会返回<code>EINTR</code>错误；
+<ul>
+<li>semop()是需被所捕获的信号中断的<code>慢系统调用</code>。</li>
+</ul>
+</li>
+<li>删除信号量将导致等待此信号量的(睡眠中的)线程返回<code>EIDRM(identifier removed)</code>错误。</li>
+<li>指定SEM_UNDO时，进程结束后，信号量会被还原。</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/systemv/>systemv</a>
+<a href=/tags/%E4%BF%A1%E5%8F%B7%E9%87%8F/>信号量</a>
+<a href=/tags/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/>进程间通信</a>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.1ac0b2d4f163ff16004b7025bd30874b_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-GsCy1PFj/xYAS3AlvTCHSw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.b05c1e269aedee6fcf2290a4d4e4c913_hu2d611c5ade1df2c5480a88cbaf90139f_68661_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" data-hash="md5-sFweJprt7m/PIpCk1OTJEw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 消息队列</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.cf3b11299eba0cb27f69d4d77cc3b980_hu2b38632246c801a0071d06acf9f6a1dc_72126_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-zzsRKZ66DLJ/adTXfMO5gA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-概述>1. 概述</a></li>
+<li><a href=#2信号量集相关数据结构>2.信号量集相关数据结构</a></li>
+<li><a href=#3-相关函数>3. 相关函数</a></li>
+<li><a href=#3-注意>3. 注意</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

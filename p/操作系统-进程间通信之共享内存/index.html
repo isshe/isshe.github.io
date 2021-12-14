@@ -1,0 +1,339 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Posix共享内存区  共享内存区是可用IPC形式中最快的。 一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。 非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互  非共享缓冲区读文件传给另一个进程写  共享缓冲区读文件传给另一个进程写：2次内核与进程的交互  共享缓冲区读文件传给另一个进程写   1. 相关函数 1.1 mmap  mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。 使用此函数有3个目的：  使用普通文件以提供内存映射I/O； 使用特殊文件以提供匿名内存映射； 使用shm_open以提供无亲缘关系进程间的Posix共享内存区。   映射文件示意图：  映射文件示意图   #include &amp;lt;sys/mman.h&amp;gt; // addr: 指定fd映射到的进程内空间的起始地址； // len: 映射的长度——字节数； // offset: 从被映射文件开头起offset字节开始映射； // prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE) // * PROT_NONE Pages may not be accessed. // * PROT_READ Pages may be read. // * PROT_WRITE Pages may be written. // * PROT_EXEC Pages may be executed."><title>操作系统 —— 进程间通信之共享内存</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 进程间通信之共享内存">
+<meta property="og:description" content="Posix共享内存区  共享内存区是可用IPC形式中最快的。 一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。 非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互  非共享缓冲区读文件传给另一个进程写  共享缓冲区读文件传给另一个进程写：2次内核与进程的交互  共享缓冲区读文件传给另一个进程写   1. 相关函数 1.1 mmap  mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。 使用此函数有3个目的：  使用普通文件以提供内存映射I/O； 使用特殊文件以提供匿名内存映射； 使用shm_open以提供无亲缘关系进程间的Posix共享内存区。   映射文件示意图：  映射文件示意图   #include &amp;lt;sys/mman.h&amp;gt; // addr: 指定fd映射到的进程内空间的起始地址； // len: 映射的长度——字节数； // offset: 从被映射文件开头起offset字节开始映射； // prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE) // * PROT_NONE Pages may not be accessed. // * PROT_READ Pages may be read. // * PROT_WRITE Pages may be written. // * PROT_EXEC Pages may be executed.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="posix"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png">
+<meta name=twitter:title content="操作系统 —— 进程间通信之共享内存">
+<meta name=twitter:description content="Posix共享内存区  共享内存区是可用IPC形式中最快的。 一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。 非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互  非共享缓冲区读文件传给另一个进程写  共享缓冲区读文件传给另一个进程写：2次内核与进程的交互  共享缓冲区读文件传给另一个进程写   1. 相关函数 1.1 mmap  mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。 使用此函数有3个目的：  使用普通文件以提供内存映射I/O； 使用特殊文件以提供匿名内存映射； 使用shm_open以提供无亲缘关系进程间的Posix共享内存区。   映射文件示意图：  映射文件示意图   #include &amp;lt;sys/mman.h&amp;gt; // addr: 指定fd映射到的进程内空间的起始地址； // len: 映射的长度——字节数； // offset: 从被映射文件开头起offset字节开始映射； // prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE) // * PROT_NONE Pages may not be accessed. // * PROT_READ Pages may be read. // * PROT_WRITE Pages may be written. // * PROT_EXEC Pages may be executed."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_1600x0_resize_box_3.png 1600w" width=800 height=500 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/ style=background-color:#995ead;color:#fff>
+进程间通信
+</a>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>操作系统 —— 进程间通信之共享内存</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=posix共享内存区>Posix共享内存区</h1>
+<ul>
+<li>共享内存区是可用IPC形式中最快的。</li>
+<li>一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。</li>
+<li>非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互
+<figure class=gallery-image style=flex-grow:316;flex-basis:760px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory.png data-size=643x203>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory.png width=643 height=203 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory_hu14c3c2b250d77b78963b2714c0c42146_56702_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory_hu14c3c2b250d77b78963b2714c0c42146_56702_1024x0_resize_box_3.png 1024w" loading=lazy alt=非共享缓冲区读文件传给另一个进程写>
+</a>
+<figcaption>非共享缓冲区读文件传给另一个进程写</figcaption>
+</figure></li>
+<li>共享缓冲区读文件传给另一个进程写：2次内核与进程的交互
+<figure class=gallery-image style=flex-grow:263;flex-basis:633px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory.png data-size=728x276>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory.png width=728 height=276 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory_hu8d3362a879cbee064063185e6c9d201b_72726_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory_hu8d3362a879cbee064063185e6c9d201b_72726_1024x0_resize_box_3.png 1024w" loading=lazy alt=共享缓冲区读文件传给另一个进程写>
+</a>
+<figcaption>共享缓冲区读文件传给另一个进程写</figcaption>
+</figure></li>
+</ul>
+<h2 id=1-相关函数>1. 相关函数</h2>
+<h3 id=11-mmap>1.1 mmap</h3>
+<ul>
+<li>mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。</li>
+<li>使用此函数有3个目的：
+<ul>
+<li>使用普通文件以提供内存映射I/O；</li>
+<li>使用特殊文件以提供匿名内存映射；</li>
+<li>使用shm_open以提供无亲缘关系进程间的Posix共享内存区。</li>
+</ul>
+</li>
+<li>映射文件示意图：
+<figure class=gallery-image style=flex-grow:159;flex-basis:383px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png data-size=641x401>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png width=641 height=401 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_1024x0_resize_box_3.png 1024w" loading=lazy alt=映射文件示意图>
+</a>
+<figcaption>映射文件示意图</figcaption>
+</figure></li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/mman.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// addr: 指定fd映射到的进程内空间的起始地址；
+</span><span class=c1>// len: 映射的长度——字节数；
+</span><span class=c1>// offset: 从被映射文件开头起offset字节开始映射；
+</span><span class=c1>// prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE)
+</span><span class=c1>//  * PROT_NONE   Pages may not be accessed.
+</span><span class=c1>//  * PROT_READ   Pages may be read.
+</span><span class=c1>//  * PROT_WRITE  Pages may be written.
+</span><span class=c1>//  * PROT_EXEC   Pages may be executed.
+</span><span class=c1>// flag: 很多歌，具体见man
+</span><span class=c1>//  * MAP_PRIVATE: 变动私有，不改变低层支撑对象；
+</span><span class=c1>//  * MAP_SHARED: 变动共享，其他进程可见，改变低层支撑对象；
+</span><span class=c1>//  * MAP_FIXED: 准确地解释addr参数；【？？？】
+</span><span class=c1>// 返回：成功——映射起始地址；失败——MAP_FAILED，设置errno
+</span><span class=c1></span><span class=kt>void</span> <span class=o>*</span><span class=nf>mmap</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>addr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>len</span><span class=p>,</span> <span class=kt>int</span> <span class=n>prot</span><span class=p>,</span> <span class=kt>int</span> <span class=n>flags</span><span class=p>,</span> <span class=kt>int</span> <span class=n>fd</span><span class=p>,</span> <span class=n>off_t</span> <span class=n>offset</span><span class=p>);</span>
+</code></pre></div><h3 id=12-munmap>1.2 munmap</h3>
+<ul>
+<li>munmap: 从某个进程的地址空间删除一个映射关系。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/mman.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>munmap</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>addr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>len</span><span class=p>);</span>
+</code></pre></div><h3 id=13-msync>1.3 msync</h3>
+<ul>
+<li>msync: 同步内存与硬盘上的内容。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/mman.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// flags: 
+</span><span class=c1>//  * MS_ASYNC: 执行异步写（写操作入内核队列，就返回）
+</span><span class=c1>//  * MS_SYNC: 执行同步写（写操作完成后才返回）
+</span><span class=c1>//  （以上两个指定一个，但不能都指定）
+</span><span class=c1>//  * MS_INVALIDATE: 使高速缓存的数据失效
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>msync</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>addr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>len</span><span class=p>,</span> <span class=kt>int</span> <span class=n>flags</span><span class=p>);</span>
+</code></pre></div><h2 id=2-文件内存映射>2. 文件内存映射</h2>
+<p>内存映射一个普通文件时，内存中映射区的大小(mmap的第2个参数)通常等于改文件的大小。
+详见<a class=link href=Examples/2_ex_shm_increase2.c>示例</a></p>
+<h2 id=3-匿名内存映射>3. 匿名内存映射</h2>
+<p>使用非匿名内存映射时，需要在文件系统中创建一个文件，进行open并write一些数据进行初始化。
+如果目的是提供一个父子进程共享的内存映射，匿名内存映射则能简化上述流程。
+创建匿名映射的方法：</p>
+<ul>
+<li>mmap的flag参数指定<code>MAP_SHARED|MAP_ANON</code>, fd = -1。</li>
+<li>这样的内存区会被初始化为0；
+详见<a class=link href=Examples/3_ex_increase_map_anon.c>示例</a></li>
+</ul>
+<h2 id=a-注意>A. 注意</h2>
+<ul>
+<li>从移植性考虑，MAP_FIXED不应该指定。</li>
+<li>可移植的代码，应该把addr指定为NULL，并且不指定MAP_FIXED。</li>
+<li>mmap成功返回后，fd可关闭。</li>
+<li>不是所有文件都能mmap。</li>
+</ul>
+<h2 id=b问题>B.问题</h2>
+<ul>
+<li>为什么使用mmap？
+<ul>
+<li>不用调用read/write/lseek，简化了代码。</li>
+</ul>
+</li>
+<li>当映射的内存大于文件大小？等于文件大小？
+<ul>
+<li>macOS的man手册中，明确说明，文件映射的内存不是<code>页</code>的倍数时会被扩充。【详见<a class=link href=Examples/5_ex_shm_test_filesize_mmapsize.c>示例</a>】</li>
+<li>等于：
+<ul>
+<li><figure class=gallery-image style=flex-grow:161;flex-basis:388px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.png data-size=555x343>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.png width=555 height=343 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_1024x0_resize_box_3.png 1024w" loading=lazy>
+</a>
+</figure></li>
+</ul>
+</li>
+<li>大于：
+<ul>
+<li><strong>SIGBUS意味着：是在内存映射区访问，但是超出了低层支撑对象的大小。</strong></li>
+<li><figure class=gallery-image style=flex-grow:253;flex-basis:607px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png data-size=772x305>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png width=772 height=305 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize_hueaf53458f6fab3edec03c90ea3bdf4fb_70764_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize_hueaf53458f6fab3edec03c90ea3bdf4fb_70764_1024x0_resize_box_3.png 1024w" loading=lazy>
+</a>
+</figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如何映射一个持续增长的文件？
+<ul>
+<li>映射比文件大的多的区域，随着文件增长再对相应区域进行访问。</li>
+<li>详见<a class=link href=Examples/6_ex_shm_test2_map_inc_file.c>示例</a></li>
+</ul>
+</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/posix/>posix</a>
+<a href=/tags/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>共享内存</a>
+<a href=/tags/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/>进程间通信</a>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.1ac0b2d4f163ff16004b7025bd30874b_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-GsCy1PFj/xYAS3AlvTCHSw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之管道" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之管道</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-相关函数>1. 相关函数</a>
+<ol>
+<li><a href=#11-mmap>1.1 mmap</a></li>
+<li><a href=#12-munmap>1.2 munmap</a></li>
+<li><a href=#13-msync>1.3 msync</a></li>
+</ol>
+</li>
+<li><a href=#2-文件内存映射>2. 文件内存映射</a></li>
+<li><a href=#3-匿名内存映射>3. 匿名内存映射</a></li>
+<li><a href=#a-注意>A. 注意</a></li>
+<li><a href=#b问题>B.问题</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

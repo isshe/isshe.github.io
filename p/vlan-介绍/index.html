@@ -8,7 +8,7 @@
 作用  VLAN可以为网络提供以下作用：  广播控制 带宽利用 降低延迟 安全性（非设计作用，本身功能所附加出的）   采用虚拟局域网技术实现交换机以太网的广播隔离。 一个VLAN相当于OSI模型第2层的广播域，它能将广播控制在一个VLAN内部。 不同VLAN之间或VLAN与LAN/WAN的数据通信必须通过第3层（网络层）完成。  原理（划分方式） 物理层(physical layer)  以交换机端口作为划分VLAN的基础。 适合规模不大的组织。  数据链路层(data link layer)  以每台主机的MAC地址作为划分VLAN的基础。 实现方法：  创建一个MAC与VLAN映射的数据库。 当网络设备连接到端口后，交换机向VMPS(VLAN管理策略服务器)请求这个数据库。 找到相应的映射，完成VLAN的分配。   优点：  计算机物理位置的不同，也不影响VLAN的运作。   缺点：  人为建立MAC与VLAN的映射关系；因此导致管理复杂度增加。    网络层  以IP地址作为划分VLAN的基础；以子网视为VLAN设置的依据。【？？？】 优点：  网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置VLANs架构的复杂度。   缺点：  交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。    ">
 <meta property="og:url" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="vlan"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="computer network"><meta property="article:published_time" content="2021-12-12T11:35:47-04:00"><meta property="article:modified_time" content="2021-12-12T11:35:47-04:00"><meta property="og:image" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="VLAN"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2021-12-12T11:35:47-04:00"><meta property="article:modified_time" content="2021-12-12T11:35:47-04:00"><meta property="og:image" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg">
 <meta name=twitter:title content="VLAN 介绍">
 <meta name=twitter:description content="VLAN VLAN - 虚拟局域网（Virtual Local Area Network）。 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）
 作用  VLAN可以为网络提供以下作用：  广播控制 带宽利用 降低延迟 安全性（非设计作用，本身功能所附加出的）   采用虚拟局域网技术实现交换机以太网的广播隔离。 一个VLAN相当于OSI模型第2层的广播域，它能将广播控制在一个VLAN内部。 不同VLAN之间或VLAN与LAN/WAN的数据通信必须通过第3层（网络层）完成。  原理（划分方式） 物理层(physical layer)  以交换机端口作为划分VLAN的基础。 适合规模不大的组织。  数据链路层(data link layer)  以每台主机的MAC地址作为划分VLAN的基础。 实现方法：  创建一个MAC与VLAN映射的数据库。 当网络设备连接到端口后，交换机向VMPS(VLAN管理策略服务器)请求这个数据库。 找到相应的映射，完成VLAN的分配。   优点：  计算机物理位置的不同，也不影响VLAN的运作。   缺点：  人为建立MAC与VLAN的映射关系；因此导致管理复杂度增加。    网络层  以IP地址作为划分VLAN的基础；以子网视为VLAN设置的依据。【？？？】 优点：  网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置VLANs架构的复杂度。   缺点：  交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。    "><meta name=twitter:card content="summary_large_image">
@@ -28,7 +28,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
-<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_800x0_resize_q75_box.jpg srcset="/p/vlan-%E4%BB%8B%E7%BB%8D/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_800x0_resize_q75_box.jpg 800w, /p/vlan-%E4%BB%8B%E7%BB%8D/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post VLAN 介绍">
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_800x0_resize_q75_box.jpg srcset="/p/vlan-%E4%BB%8B%E7%BB%8D/image_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_800x0_resize_q75_box.jpg 800w, /p/vlan-%E4%BB%8B%E7%BB%8D/image_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_1600x0_resize_q75_box.jpg 1600w" width=800 height=480 loading=lazy alt="Featured image of post VLAN 介绍">
 </a>
 </div>
 <div class=article-details>
@@ -117,11 +117,11 @@ extended">
 </section>
 <footer class=article-footer>
 <section class=article-tags>
-<a href=/tags/vlan/>vlan</a>
+<a href=/tags/vlan/>VLAN</a>
 <a href=/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/>网络协议</a>
 <a href=/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/>计算机网络</a>
 <a href=/tags/protocol/>protocol</a>
-<a href=/tags/computer-network/>computer network</a>
+<a href=/tags/computer-network/>Computer Network</a>
 </section>
 <section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
 <span>Licensed under CC BY-NC-SA 4.0</span>
@@ -133,6 +133,16 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— DNS</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
 <div class=article-image>
 <img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DHCP" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
@@ -143,19 +153,9 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
-<div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.fd4d21163b2097db780a3c19226469da_hu55e9525b31cc013ff4b823f79d803bd9_80202_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-/U0hFjsgl9t4CjwZImRp2g==">
-</div>
-<div class=article-details>
-<h2 class=article-title>网络协议 —— DNS</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
 <div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— ARP</h2>
@@ -165,7 +165,7 @@ extended">
 <article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/>
 <div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— ICMP</h2>

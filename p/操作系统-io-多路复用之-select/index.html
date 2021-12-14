@@ -1,0 +1,390 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="select select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。
+1. select #include &amp;lt;sys/select.h&amp;gt; int select(int nfds, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict errorfds, struct timeval *restrict timeout);  作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。 参数：  nfds: 待测试的最大描述符+1； readfds: 监听读的fd集合； writefds: 监听写得fd集合； errorfds: 监听异常的fd集合； timeout: 等待超时时间。  NULL: 永远等下去； 非NULL且不为值0: 等待指定时间； 非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）     返回： 返回：  成功：就绪描述符数目 超时：0 出错：-1    2. 描述符就绪条件  读就绪：  该套接字接收缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。  高于水位，认为可读。   该套接字的读半部关闭(接收了FIN的TCP连接)。  返回EOF   该套接字是一个监听套接字且已完成的连接数不为0。  此时accept通常不阻塞。   其上有一个套接字错误待处理。  读操作不阻塞、返回-1，并设置errno。 待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。     写就绪：  发送缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。 该连接的写半部关闭。  此时写，会产生SIGPIPE信号。   使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。 其上有一个套接字错误待处理。   异常就绪：（？！）  套接字存在带外数据或者仍处于带外标记。  注意：当某个套接字上发生错误时，它将由select标记为可读又可写。     汇总：    条件 可读吗？ 可写吗？ 异常吗？     有数据可读 +     关闭连接的读一半 +     给监听套接字准备好新连接 +     有可用于写得空间  +    关闭连接的写一半  +    待处理错误 + +    TCP带外数据   +      3."><title>操作系统 —— IO 多路复用之 select</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— IO 多路复用之 select">
+<meta property="og:description" content="select select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。
+1. select #include &amp;lt;sys/select.h&amp;gt; int select(int nfds, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict errorfds, struct timeval *restrict timeout);  作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。 参数：  nfds: 待测试的最大描述符+1； readfds: 监听读的fd集合； writefds: 监听写得fd集合； errorfds: 监听异常的fd集合； timeout: 等待超时时间。  NULL: 永远等下去； 非NULL且不为值0: 等待指定时间； 非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）     返回： 返回：  成功：就绪描述符数目 超时：0 出错：-1    2. 描述符就绪条件  读就绪：  该套接字接收缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。  高于水位，认为可读。   该套接字的读半部关闭(接收了FIN的TCP连接)。  返回EOF   该套接字是一个监听套接字且已完成的连接数不为0。  此时accept通常不阻塞。   其上有一个套接字错误待处理。  读操作不阻塞、返回-1，并设置errno。 待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。     写就绪：  发送缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。 该连接的写半部关闭。  此时写，会产生SIGPIPE信号。   使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。 其上有一个套接字错误待处理。   异常就绪：（？！）  套接字存在带外数据或者仍处于带外标记。  注意：当某个套接字上发生错误时，它将由select标记为可读又可写。     汇总：    条件 可读吗？ 可写吗？ 异常吗？     有数据可读 +     关闭连接的读一半 +     给监听套接字准备好新连接 +     有可用于写得空间  +    关闭连接的写一半  +    待处理错误 + +    TCP带外数据   +      3.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:tag" content="IO 多路复用"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.png">
+<meta name=twitter:title content="操作系统 —— IO 多路复用之 select">
+<meta name=twitter:description content="select select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。
+1. select #include &amp;lt;sys/select.h&amp;gt; int select(int nfds, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict errorfds, struct timeval *restrict timeout);  作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。 参数：  nfds: 待测试的最大描述符+1； readfds: 监听读的fd集合； writefds: 监听写得fd集合； errorfds: 监听异常的fd集合； timeout: 等待超时时间。  NULL: 永远等下去； 非NULL且不为值0: 等待指定时间； 非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）     返回： 返回：  成功：就绪描述符数目 超时：0 出错：-1    2. 描述符就绪条件  读就绪：  该套接字接收缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。  高于水位，认为可读。   该套接字的读半部关闭(接收了FIN的TCP连接)。  返回EOF   该套接字是一个监听套接字且已完成的连接数不为0。  此时accept通常不阻塞。   其上有一个套接字错误待处理。  读操作不阻塞、返回-1，并设置errno。 待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。     写就绪：  发送缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。 该连接的写半部关闭。  此时写，会产生SIGPIPE信号。   使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。 其上有一个套接字错误待处理。   异常就绪：（？！）  套接字存在带外数据或者仍处于带外标记。  注意：当某个套接字上发生错误时，它将由select标记为可读又可写。     汇总：    条件 可读吗？ 可写吗？ 异常吗？     有数据可读 +     关闭连接的读一半 +     给监听套接字准备好新连接 +     有可用于写得空间  +    关闭连接的写一半  +    待处理错误 + +    TCP带外数据   +      3."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_1600x0_resize_box_3.png 1600w" width=800 height=563 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 select">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>操作系统 —— IO 多路复用之 select</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=select>select</h1>
+<p>select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。</p>
+<h2 id=1-select>1. select</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/select.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+ <span class=kt>int</span> <span class=nf>select</span><span class=p>(</span><span class=kt>int</span> <span class=n>nfds</span><span class=p>,</span> <span class=n>fd_set</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>readfds</span><span class=p>,</span> <span class=n>fd_set</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>writefds</span><span class=p>,</span>
+         <span class=n>fd_set</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>errorfds</span><span class=p>,</span> <span class=k>struct</span> <span class=n>timeval</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>timeout</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。</li>
+<li>参数：
+<ul>
+<li>nfds: 待测试的最大描述符+1；</li>
+<li>readfds: 监听读的fd集合；</li>
+<li>writefds: 监听写得fd集合；</li>
+<li>errorfds: 监听异常的fd集合；</li>
+<li>timeout: 等待超时时间。
+<ul>
+<li>NULL: 永远等下去；</li>
+<li>非NULL且不为值0: 等待指定时间；</li>
+<li>非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回：</li>
+<li>返回：
+<ul>
+<li>成功：就绪描述符数目</li>
+<li>超时：0</li>
+<li>出错：-1</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-描述符就绪条件>2. 描述符就绪条件</h2>
+<ul>
+<li>读就绪：
+<ul>
+<li>该套接字接收缓冲区的数据字节数<code>>=</code>套接字缓冲区<code>低水位标记</code>的当前大小。
+<ul>
+<li>高于水位，认为可读。</li>
+</ul>
+</li>
+<li>该套接字的读半部关闭(接收了FIN的TCP连接)。
+<ul>
+<li>返回EOF</li>
+</ul>
+</li>
+<li>该套接字是一个监听套接字且已完成的连接数不为0。
+<ul>
+<li>此时accept通常不阻塞。</li>
+</ul>
+</li>
+<li>其上有一个套接字错误待处理。
+<ul>
+<li>读操作不阻塞、返回-1，并设置errno。</li>
+<li>待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>写就绪：
+<ul>
+<li>发送缓冲区的数据字节数<code>>=</code>套接字缓冲区低水位标记的当前大小。</li>
+<li>该连接的写半部关闭。
+<ul>
+<li>此时写，会产生<code>SIGPIPE</code>信号。</li>
+</ul>
+</li>
+<li>使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。</li>
+<li>其上有一个套接字错误待处理。</li>
+</ul>
+</li>
+<li>异常就绪：（？！）
+<ul>
+<li>套接字存在带外数据或者仍处于带外标记。
+<ul>
+<li>注意：当某个套接字上发生错误时，它将由select标记为<code>可读又可写</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>汇总：
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>可读吗？</th>
+<th>可写吗？</th>
+<th>异常吗？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有数据可读</td>
+<td>+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>关闭连接的读一半</td>
+<td>+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>给监听套接字准备好新连接</td>
+<td>+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>有可用于写得空间</td>
+<td></td>
+<td>+</td>
+<td></td>
+</tr>
+<tr>
+<td>关闭连接的写一半</td>
+<td></td>
+<td>+</td>
+<td></td>
+</tr>
+<tr>
+<td>待处理错误</td>
+<td>+</td>
+<td>+</td>
+<td></td>
+</tr>
+<tr>
+<td>TCP带外数据</td>
+<td></td>
+<td></td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id=3-shutdown>3. shutdown</h2>
+<p>终止网络连接的通常方法是close函数，但是close有两个限制：（可以用shutdown来避免）。</p>
+<ul>
+<li>close把描述符的引用计数-1，仅在计数为0时才关闭套接字。</li>
+<li>close终止读和写两个方向的数据传送。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/socket.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>shutdown</span><span class=p>(</span><span class=kt>int</span> <span class=n>sockfd</span><span class=p>,</span> <span class=kt>int</span> <span class=n>howto</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>
+<p>作用：关闭网络连接。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>howto:
+<ul>
+<li>SHUT_RD: 关闭连接的读一半。</li>
+<li>SHUT_WR: 关闭连接的写一半。</li>
+<li>SHUT_RDWR: 读写都关闭。（与调用两次shutdown等效。）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>返回：</p>
+<ul>
+<li>成功：0</li>
+<li>失败：Exxx值</li>
+</ul>
+</li>
+</ul>
+<h2 id=a-注意拓展>A. 注意、拓展</h2>
+<ul>
+<li>timeval结构允许指定微秒级的分辨率，然而内核支持的真实分辨率往往粗糙得多。</li>
+<li>timeval结构能支持select不支持的值。</li>
+<li>如果select的三个fds都设置为NULL，则可以得到一个比sleep函数更为精确的定时器。</li>
+<li>使用select的最常见错误：
+<ul>
+<li>忘记对最大描述符+1；</li>
+<li>忘记描述符集是<code>值——结果</code>参数。</li>
+</ul>
+</li>
+<li>接收低水位标记和发送低水位标记的作用是什么？
+<ul>
+<li>目的在于：允许应用进程控制在select返回可读/可写条件之前，有多少数据可读或有多大空间可用于写。</li>
+<li>例如：如果我们知道除非至少存在64字节数据，否则我们的应用程序无事可做，那么可以将接受低水位标记设置为64。防止过早唤醒。</li>
+</ul>
+</li>
+<li>任何UDP套接字只要其<code>发送低水位标记``&lt;=</code>发送缓冲区大小，就总是可写的。（因为UDP不需要连接）</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+<a href=/tags/io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/>IO 多路复用</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— IO 多路复用之 epoll</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 poll" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— IO 多路复用之 poll</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进线程同步之读写锁" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进线程同步之读写锁</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-select>1. select</a></li>
+<li><a href=#2-描述符就绪条件>2. 描述符就绪条件</a></li>
+<li><a href=#3-shutdown>3. shutdown</a></li>
+<li><a href=#a-注意拓展>A. 注意、拓展</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

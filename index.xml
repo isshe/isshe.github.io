@@ -1,4 +1,45 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2021 13:45:24 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Mon, 13 Dec 2021 13:45:24 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 14 Dec 2021 03:14:49 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Tue, 14 Dec 2021 03:14:49 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
+&lt;h2 id="1-什么是读写锁">1. 什么是读写锁&lt;/h2>
+&lt;ul>
+&lt;li>互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）
+&lt;ul>
+&lt;li>独占锁。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>读写锁区分读和写，同时只能一个线程写(写时不能读)；允许同时多个线程读(读时没有写)。
+&lt;ul>
+&lt;li>读为共享锁，写为独占锁。&lt;/li>
+&lt;li>读比写更频繁的应用中，用读写锁更好。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-读写锁的分配规则">2. 读写锁的分配规则&lt;/h2>
+&lt;ul>
+&lt;li>只要没有线程持有读写锁&lt;code>用于写&lt;/code>，任意数目的线程可以持有该读写锁&lt;code>用于读&lt;/code>。&lt;/li>
+&lt;li>仅当没有线程持有读写锁时(用于读或写)，才能分配读写锁&lt;code>用于写&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-相关函数">3. 相关函数&lt;/h2>
+&lt;ul>
+&lt;li>静态分配用&lt;code>PTHREAD_RWLOCK_INITIALIZER&lt;/code>进行初始化。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;pthread.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 加锁、解锁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_rdlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_tryrdlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_wrlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_trywrlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlock_unlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlock_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 属性初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_getpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_setpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Mon, 13 Dec 2021 13:45:24 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
 &lt;p>我是一个南方人，一直以来，都不太愿意去了解这些同胞受难的事情，不愿意面对；同时，也不知道该以什么样的心情去面对。&lt;/p>
 &lt;p>我不确定一个人、一个军队，在祖国强盛、自己满怀荣光的情况下，如何能够做出这样的事情。
 一个人为之，或许可以称之为堕落；一个军队，大概是集体兽化了吧。&lt;/p>
@@ -77,7 +118,85 @@
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.png" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
+&lt;p>NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。
+注册/注销/开启/关闭是四个不同的操作，不要混淆。
+相关讨论，主要以网络设备为主。&lt;/p>
+&lt;h2 id="设备注册">设备注册&lt;/h2>
+&lt;p>触发网络设备&lt;code>注册&lt;/code>的情况：&lt;/p>
+&lt;ul>
+&lt;li>加载NIC设备驱动程序：内建在内核，则引导期间初始化；模块形式，则在运行期间初始化。
+&lt;ul>
+&lt;li>例如，注册PCI设备驱动程序时，会导致&lt;code>pci_driver-&amp;gt;probe&lt;/code>被调用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>插入可热插拔网络设备：内核通知其驱动程序，驱动程序注册该设备。
+注册流程：以ethernet设备为例，流程都是一样，只是细节不同。&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>示例可见：drivers/net/ethernet/intel/e100.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">xxx_probe&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">module_init&lt;/span>
+&lt;span class="o">|&lt;/span>
+&lt;span class="o">|---&amp;gt;&lt;/span>&lt;span class="n">dev&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">alloc_etherdev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">driver_private_structure&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="n">alloc_etherdev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sizeof_priv&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;eth%d&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ether_setup&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="n">dev&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">kmalloc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">net_device&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">sizeof_prive&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">padding&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="n">ether_setup&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="n">strcpy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;eth%d&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="k">return&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span>
+&lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="n">netdev_boot_setup_check&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span>
+&lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="n">register_netdev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span>
+&lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="n">register_netdevice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="注销">注销&lt;/h2>
+&lt;p>触发网络设备&lt;code>注销&lt;/code>的情况：&lt;/p>
+&lt;ul>
+&lt;li>卸载NIC去而被驱动程序：模块形式的设备驱动程序被卸载，相关联的NIC都需要被注销。
+&lt;ul>
+&lt;li>例如，卸载PCI设备驱动程序时，会导致&lt;code>pci_driver-&amp;gt;remove&lt;/code>被调用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>删除可热拔插网络设备。
+注销流程：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">xxx_remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_one&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">module_exit&lt;/span>
+&lt;span class="o">|&lt;/span>
+&lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="n">unregister_netdev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span>
+&lt;span class="o">|&lt;/span> &lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="n">unregister_netdevice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">|---&amp;gt;&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">...&lt;/span>
+&lt;span class="o">|&lt;/span>
+&lt;span class="o">+---&amp;gt;&lt;/span> &lt;span class="n">free_netdev&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>注销总是会调用&lt;code>unregister_netdevice&lt;/code>和&lt;code>free_netdev&lt;/code>。
+&lt;ul>
+&lt;li>有时显式调用free_netdev，有时则通过&lt;code>dev-&amp;gt;destructor&lt;/code>间接调用。
+&lt;ul>
+&lt;li>只有少数虚拟设备的设备驱动程序采用这种方法，如，net/8021q/vlan.c&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="更多示例信息">更多示例信息&lt;/h2>
+&lt;p>见&lt;a class="link" href="../5.%e7%bd%91%e7%bb%9c/3.net_device%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/Readme.md" >net_device&lt;/a>&lt;/p>
+&lt;h2 id="a问题">A.问题&lt;/h2>
+&lt;ul>
+&lt;li>设备是何时以及如何在内核注册的？&lt;/li>
+&lt;li>网络设备如何利用网络设备数据库注册，并指派一个net_device结构的实例？&lt;/li>
+&lt;li>net_device结构如何组织到hash表和列表，以便各种查询？&lt;/li>
+&lt;li>net_device实例如何初始化？&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>一部分由内核核心完成，一部分由其设备驱动完成。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
+&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
 &lt;p>gdb - GNU调试器。&lt;/p>
 &lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
 GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
@@ -227,7 +346,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
 >https://man.linuxde.net/gdb&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.png" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
 &lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
@@ -288,7 +407,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -457,7 +576,7 @@ ip neigh del 192.168.2.149 dev ens33&lt;/p>
 &lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
 >https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
 &lt;li>linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
 &lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
 &lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
 &lt;ul>
@@ -644,7 +763,7 @@ netstat -ie
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示listening监听状态的连接">显示LISTENING(监听)状态的连接&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -l
 &lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="3-疑问">3. 疑问&lt;/h1>
-&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.png" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
+&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
 &lt;h1 id="隧道">隧道&lt;/h1>
 &lt;p>场景：家里内网机器 A 想要访问公司的内网机器 B。
 条件：需要一个公网机器 C （假设IP是 1.1.1.1）。&lt;/p>
@@ -857,7 +976,7 @@ strace -ttt ls&lt;/p>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/strace" target="_blank" rel="noopener"
 >https://man.linuxde.net/strace&lt;/a>&lt;/li>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpg" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.png" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
 &lt;p>tcpdump - dump traffic on a network（转储网络上的流量）。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">tcpdump &lt;span class="o">[&lt;/span> -AbdDefhHIJKlLnNOpqStuUvxX# &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -B buffer_size &lt;span class="o">]&lt;/span>
@@ -1308,6 +1427,484 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;h1 id="参考">参考&lt;/h1>
 &lt;ul>
 &lt;li>Linux man page&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
+&lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
+&lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：打开一个epoll文件描述符。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>size： Linux 2.6.8后不再使用，但是必须大于0。&lt;/li>
+&lt;li>flags：
+&lt;ul>
+&lt;li>0：和epoll_create行为一样。&lt;/li>
+&lt;li>O_CLOEXEC: 进程退出时关闭文件描述符。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>失败：-1，设置errno；否则：&lt;/li>
+&lt;li>返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。&lt;/li>
+&lt;li>当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-epoll_ctl">2. epoll_ctl&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">typedef&lt;/span> &lt;span class="k">union&lt;/span> &lt;span class="n">epoll_data&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ptr&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">u32&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">uint64_t&lt;/span> &lt;span class="n">u64&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span> &lt;span class="n">epoll_data_t&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">events&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* Epoll events */&lt;/span>
+&lt;span class="n">epoll_data_t&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* User data variable */&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_ctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">op&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：epoll文件描述符的控制接口。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>epfd: epoll fd，epoll文件描述符；&lt;/li>
+&lt;li>op:
+&lt;ul>
+&lt;li>EPOLL_CTL_ADD：注册fd到epfd；&lt;/li>
+&lt;li>EPOLL_CTL_MOD：修改与fd的关联evnet事件。&lt;/li>
+&lt;li>EPOLL_CTL_DEL：从epfd中删除fd；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>fd: 要操作(op)的fd；&lt;/li>
+&lt;li>event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>正常：0；&lt;/li>
+&lt;li>异常：-1，设置errno；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>数据结构说明；
+&lt;ul>
+&lt;li>&lt;code>struct epoll_event&lt;/code>的&lt;code>events&lt;/code>的是位掩码的形式，取值是：
+&lt;ul>
+&lt;li>EPOLLIN: 相关文件可读。(read)&lt;/li>
+&lt;li>EPOLLOUT: 相关文件可写。(write)&lt;/li>
+&lt;li>EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。)&lt;/li>
+&lt;li>EPOLLPRI: 有紧急数据可读。&lt;/li>
+&lt;li>EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置）&lt;/li>
+&lt;li>EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置）&lt;/li>
+&lt;li>EPOLLET: 相关文件描述符设置为&lt;code>边缘触发&lt;/code>。（默认是水平触发）&lt;/li>
+&lt;li>EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。&lt;/li>
+&lt;li>EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。
+&lt;ul>
+&lt;li>当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-epoll_wait">3. epoll_wait&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_pwait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sigmask&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：等待epoll文件描述符上的I/O事件。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>epfd：epoll文件描述符；&lt;/li>
+&lt;li>events：等待的目标事件；&lt;/li>
+&lt;li>maxevents：返回的最大事件数量；&lt;/li>
+&lt;li>timeout：epoll_wait阻塞超时，单位微秒。发生以下事件解除阻塞：
+&lt;ul>
+&lt;li>监听的文件描述符有事件发出/传递；&lt;/li>
+&lt;li>被信号处理函数中断；&lt;/li>
+&lt;li>超时；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>sigmask：屏蔽信号集？！【疑问】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>正常：就绪的文件描述符数量&lt;/li>
+&lt;li>异常：-1，并设置errno&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-触发形式">4. 触发形式&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>水平触发：（默认是水平触发）&lt;/p>
+&lt;ul>
+&lt;li>触发条件：只要有&lt;code>数据&lt;/code>可读/可写，即可触发。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>边缘触发：（使用EPOLLET设置为边缘触发）&lt;/p>
+&lt;ul>
+&lt;li>触发条件：有&lt;code>新数据&lt;/code>可读/可写，即可触发。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>两种触发的不同在于：一次新数据，水平触发可能触发多次，边缘触发只会触发一次。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="epoll的优点">epoll的优点&lt;/h1>
+&lt;p>select/poll的两个主要性能问题，就是epoll的优点：&lt;/p>
+&lt;ul>
+&lt;li>select/poll需要轮询查找就绪的描述符，epoll直接返回就绪的信息。&lt;/li>
+&lt;li>描述符集合需要从用户空间拷贝到内核空间。
+&lt;ul>
+&lt;li>epoll的add/remove也是需要拷贝；&lt;/li>
+&lt;li>对于就绪描述符，使用mmap进行内存共享，避免拷贝；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="a-问题拓展">A. 问题/拓展&lt;/h1>
+&lt;ul>
+&lt;li>可读：缓冲区非空，并且数据量超过读阈值。&lt;/li>
+&lt;li>可写：缓冲区未满。&lt;/li>
+&lt;li>什么时候使用poll/select, 什么时候使用epoll?
+&lt;ul>
+&lt;li>满足以下几个条件，用epoll，否则用poll：
+&lt;ul>
+&lt;li>使用的是Linux系统，并且有epoll系统调用；&lt;/li>
+&lt;li>需要处理得是大的&lt;code>活动描述符集&lt;/code>（至少1000）；&lt;/li>
+&lt;li>描述符集是相对稳定的。（因为epoll添加/删除描述符花销和poll一样很大，需要进入/离开内核空间）；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 poll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 poll" />&lt;h1 id="poll">poll&lt;/h1>
+&lt;h1 id="相关函数">相关函数&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;poll.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">pollfd&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* file descriptor */&lt;/span>
+&lt;span class="kt">short&lt;/span> &lt;span class="n">events&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* events to look for */&lt;/span>
+&lt;span class="kt">short&lt;/span> &lt;span class="n">revents&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* events returned */&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">poll&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">struct&lt;/span> &lt;span class="n">pollfd&lt;/span> &lt;span class="n">fds&lt;/span>&lt;span class="p">[],&lt;/span> &lt;span class="n">nfds_t&lt;/span> &lt;span class="n">nfds&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：类似于select。（指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。）&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>fds[]: 指向一个结构数组第一个元素的指针。&lt;/li>
+&lt;li>nfds: 指定fds中的元素个数。&lt;/li>
+&lt;li>timeout:
+&lt;ul>
+&lt;li>&lt;code>INFTIM&lt;/code>： 永远等待；(INFTIM被定义为一个负值)&lt;/li>
+&lt;li>&lt;code>0&lt;/code>：立即返回；&lt;/li>
+&lt;li>&lt;code>&amp;gt; 0&lt;/code>: 等待指定数据的&lt;code>毫秒&lt;/code>数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：就绪描述符数目&lt;/li>
+&lt;li>超时：0&lt;/li>
+&lt;li>出错：-1&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>数据结构说明：
+&lt;ul>
+&lt;li>events: 要测试的条件；&lt;/li>
+&lt;li>revents: 返回描述符的状态。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>events/revents标记：
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>常值&lt;/th>
+&lt;th>说明&lt;/th>
+&lt;th>能作为evnets的输入吗？&lt;/th>
+&lt;th>能作为revents的输入吗？&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>POLLIN&lt;/td>
+&lt;td>普通或优先级带数据可读&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLRDNORM&lt;/td>
+&lt;td>普通数据可读&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLRDBAND&lt;/td>
+&lt;td>优先级带数据可读&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLPRI&lt;/td>
+&lt;td>高优先级数据可读&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLOUT&lt;/td>
+&lt;td>普通数据可写&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLWRNORM&lt;/td>
+&lt;td>普通数据可写&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLWRBAND&lt;/td>
+&lt;td>优先级带数据可写&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLERR&lt;/td>
+&lt;td>发生错误&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLHUP&lt;/td>
+&lt;td>发生挂起&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>POLLNVAL&lt;/td>
+&lt;td>描述符不是一个打开的文件&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="数据分类">数据分类&lt;/h1>
+&lt;p>poll识别三类数据：普通(normal)、优先级带(priority band)、高优先级(high priority)&lt;/p>
+&lt;ul>
+&lt;li>普通数据：
+&lt;ul>
+&lt;li>所有正规TCP、UDP数据；&lt;/li>
+&lt;li>TCP连接读半部关闭时；（FIN）&lt;/li>
+&lt;li>TCP连接存在错误；（RST、超时）&lt;/li>
+&lt;li>监听套接字上游新的连接可用；（多数实现为普通，也有实现为优先级带数据）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>优先级带：
+&lt;ul>
+&lt;li>TCP的带外数据；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>高优先级：&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 select</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 select" />&lt;h1 id="select">select&lt;/h1>
+&lt;p>select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。&lt;/p>
+&lt;h2 id="1-select">1. select&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/select.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">nfds&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fd_set&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">readfds&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fd_set&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">writefds&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">fd_set&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">errorfds&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">timeval&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">restrict&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>nfds: 待测试的最大描述符+1；&lt;/li>
+&lt;li>readfds: 监听读的fd集合；&lt;/li>
+&lt;li>writefds: 监听写得fd集合；&lt;/li>
+&lt;li>errorfds: 监听异常的fd集合；&lt;/li>
+&lt;li>timeout: 等待超时时间。
+&lt;ul>
+&lt;li>NULL: 永远等下去；&lt;/li>
+&lt;li>非NULL且不为值0: 等待指定时间；&lt;/li>
+&lt;li>非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：就绪描述符数目&lt;/li>
+&lt;li>超时：0&lt;/li>
+&lt;li>出错：-1&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-描述符就绪条件">2. 描述符就绪条件&lt;/h2>
+&lt;ul>
+&lt;li>读就绪：
+&lt;ul>
+&lt;li>该套接字接收缓冲区的数据字节数&lt;code>&amp;gt;=&lt;/code>套接字缓冲区&lt;code>低水位标记&lt;/code>的当前大小。
+&lt;ul>
+&lt;li>高于水位，认为可读。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>该套接字的读半部关闭(接收了FIN的TCP连接)。
+&lt;ul>
+&lt;li>返回EOF&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>该套接字是一个监听套接字且已完成的连接数不为0。
+&lt;ul>
+&lt;li>此时accept通常不阻塞。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>其上有一个套接字错误待处理。
+&lt;ul>
+&lt;li>读操作不阻塞、返回-1，并设置errno。&lt;/li>
+&lt;li>待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>写就绪：
+&lt;ul>
+&lt;li>发送缓冲区的数据字节数&lt;code>&amp;gt;=&lt;/code>套接字缓冲区低水位标记的当前大小。&lt;/li>
+&lt;li>该连接的写半部关闭。
+&lt;ul>
+&lt;li>此时写，会产生&lt;code>SIGPIPE&lt;/code>信号。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。&lt;/li>
+&lt;li>其上有一个套接字错误待处理。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>异常就绪：（？！）
+&lt;ul>
+&lt;li>套接字存在带外数据或者仍处于带外标记。
+&lt;ul>
+&lt;li>注意：当某个套接字上发生错误时，它将由select标记为&lt;code>可读又可写&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>汇总：
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>条件&lt;/th>
+&lt;th>可读吗？&lt;/th>
+&lt;th>可写吗？&lt;/th>
+&lt;th>异常吗？&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>有数据可读&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>关闭连接的读一半&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>给监听套接字准备好新连接&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>有可用于写得空间&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>关闭连接的写一半&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>待处理错误&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>+&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>TCP带外数据&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>+&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-shutdown">3. shutdown&lt;/h2>
+&lt;p>终止网络连接的通常方法是close函数，但是close有两个限制：（可以用shutdown来避免）。&lt;/p>
+&lt;ul>
+&lt;li>close把描述符的引用计数-1，仅在计数为0时才关闭套接字。&lt;/li>
+&lt;li>close终止读和写两个方向的数据传送。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/socket.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">shutdown&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">sockfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">howto&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>作用：关闭网络连接。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>参数：&lt;/p>
+&lt;ul>
+&lt;li>howto:
+&lt;ul>
+&lt;li>SHUT_RD: 关闭连接的读一半。&lt;/li>
+&lt;li>SHUT_WR: 关闭连接的写一半。&lt;/li>
+&lt;li>SHUT_RDWR: 读写都关闭。（与调用两次shutdown等效。）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>返回：&lt;/p>
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="a-注意拓展">A. 注意、拓展&lt;/h2>
+&lt;ul>
+&lt;li>timeval结构允许指定微秒级的分辨率，然而内核支持的真实分辨率往往粗糙得多。&lt;/li>
+&lt;li>timeval结构能支持select不支持的值。&lt;/li>
+&lt;li>如果select的三个fds都设置为NULL，则可以得到一个比sleep函数更为精确的定时器。&lt;/li>
+&lt;li>使用select的最常见错误：
+&lt;ul>
+&lt;li>忘记对最大描述符+1；&lt;/li>
+&lt;li>忘记描述符集是&lt;code>值——结果&lt;/code>参数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>接收低水位标记和发送低水位标记的作用是什么？
+&lt;ul>
+&lt;li>目的在于：允许应用进程控制在select返回可读/可写条件之前，有多少数据可读或有多大空间可用于写。&lt;/li>
+&lt;li>例如：如果我们知道除非至少存在64字节数据，否则我们的应用程序无事可做，那么可以将接受低水位标记设置为64。防止过早唤醒。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>任何UDP套接字只要其&lt;code>发送低水位标记``&amp;lt;=&lt;/code>发送缓冲区大小，就总是可写的。（因为UDP不需要连接）&lt;/li>
 &lt;/ul></description></item><item><title>操作系统 —— 信号</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png" alt="Featured image of post 操作系统 —— 信号" />&lt;h1 id="信号">信号&lt;/h1>
 &lt;ul>
 &lt;li>一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。&lt;/li>
@@ -1422,6 +2019,280 @@ alt="Linux信号">
 &lt;h2 id="c参考">C.参考&lt;/h2>
 &lt;ul>
 &lt;li>《深入理解计算机系统》&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 线程</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png" alt="Featured image of post 操作系统 —— 线程" />&lt;h1 id="线程">线程&lt;/h1>
+&lt;ul>
+&lt;li>当一个程序由exec启动执行时，系统将创建一个称为&lt;code>初始线程(initail thread)&lt;/code>或&lt;code>主线程(main thread)&lt;/code>的单个线程。&lt;/li>
+&lt;li>线程取消在&lt;code>8.5&lt;/code>章，被取消的线程要释放相关资源（锁等），需要注意。&lt;/li>
+&lt;li>线程创建可能比进程创建快10~100倍；&lt;/li>
+&lt;li>线程或者是&lt;code>可汇合的(joinable)&lt;/code>或者是&lt;code>脱离/分离的(detached)&lt;/code>。（默认&lt;code>可汇合的&lt;/code>）
+&lt;ul>
+&lt;li>可汇合的线程可以被其他线程回收其资源和杀死。
+&lt;ul>
+&lt;li>当可汇合的线程终止时，其线程ID和退出状态将保留，直到另一个线程调用pthread_join;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>线程是运行在进程上下文中的逻辑流。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-共享及私有">1. 共享及私有&lt;/h2>
+&lt;p>线程共享的内容：&lt;/p>
+&lt;ul>
+&lt;li>进程指令；&lt;/li>
+&lt;li>大多数数据；&lt;/li>
+&lt;li>打开的文件（如描述符）；&lt;/li>
+&lt;li>信号处理程序和信号处置；&lt;/li>
+&lt;li>当前工作目录；&lt;/li>
+&lt;li>用户ID和组ID；
+线程私有的内容：&lt;/li>
+&lt;li>线程ID；&lt;/li>
+&lt;li>寄存器集合（包括程序计数器和栈指针）；&lt;/li>
+&lt;li>栈；&lt;/li>
+&lt;li>栈指针；&lt;/li>
+&lt;li>程序计数器；&lt;/li>
+&lt;li>errno；&lt;/li>
+&lt;li>信号掩码；&lt;/li>
+&lt;li>优先级；&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-相关函数">2. 相关函数&lt;/h2>
+&lt;h3 id="21-pthread_create">2.1 pthread_create&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;pthread.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_create&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="kr">thread&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">pthread_attr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">start_routine&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">arg&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：创建线程&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>tid：线程ID；这是&lt;code>结果&lt;/code>参数；&lt;/li>
+&lt;li>attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值；&lt;/li>
+&lt;li>start_routine: 创建的线程所需要执行的函数；称为&lt;code>线程启动函数(thread start function)&lt;/code>;&lt;/li>
+&lt;li>arg: 参数；如果有多个，则打包成一个结构即可；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-pthread_join">2.2 pthread_join&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_t&lt;/span> &lt;span class="n">tid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">**&lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：等待一个线程结束/终止；（不是任意一个线程的终止都能等待）&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>tid：等待线程的线程id；&lt;/li>
+&lt;li>status：等待线程的终止状态；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="23-pthread_self">2.3 pthread_self&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">pthread_t&lt;/span> &lt;span class="nf">pthread_self&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：获取自身的线程ID；&lt;/li>
+&lt;li>参数：无&lt;/li>
+&lt;li>返回：调用线程的线程ID；&lt;/li>
+&lt;/ul>
+&lt;h3 id="24-pthread_detach">2.4 pthread_detach&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_detach&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_t&lt;/span> &lt;span class="n">tid&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：将指定线程变为脱离的。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>tid：线程id；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>通常用法：&lt;code>pthread_detach(pthread_self());&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="25-pthread_exit">2.5 pthread_exit&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">void&lt;/span> &lt;span class="nf">pthread_exit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">status&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：线程退出&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>status: 退出状态；不能指向局部于调用线程的对象，如该线程启动函数中的某个局部变量；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>通常用法：&lt;code>pthread_detach(pthread_self());&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="26-pthread_cancel">2.6 pthread_cancel&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cancel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_t&lt;/span> &lt;span class="n">tid&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：退出指定线程&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>tid: 线程ID；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="27-pthread_once">2.7 pthread_once&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;pthread.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="n">pthread_once_t&lt;/span> &lt;span class="n">once_control&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">PTHREAD_ONCE_INIT&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_once&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_once_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">once_control&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">init_routine&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：初始化线程——初始化与线程例程相关的状态。
+&lt;ul>
+&lt;li>当需要&lt;code>动态&lt;/code>初始化多个线程共享的全局变量时，pthread_once是很有用的；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>once_control：全局或者静态变量，总是被初始化为&lt;code>PTHREAD_ONCE_INIT&lt;/code>;&lt;/li>
+&lt;li>init_routine：初始化例程。第一次用once_control调用pthread_once时，会调用init_routine;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>成功：0&lt;/li>
+&lt;li>失败：Exxx值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-共享变量">3. 共享变量&lt;/h2>
+&lt;p>一个变量是&lt;code>共享的&lt;/code>，当且仅当多个线程引用这个变量的某个实例。（访问相同的东西）
+解答以下问题，有助于理解C程序中一个变量是否是共享的：&lt;/p>
+&lt;ul>
+&lt;li>线程的基础存储器模型是什么？
+&lt;ul>
+&lt;li>一组并发线程运行在一个进程的上下文中；每个线程有自己的线程上下文；&lt;/li>
+&lt;li>寄存器是不共享的；虚拟存储器是共享的；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>根据这个模型，变量实例是如何映射到存储器的？&lt;/li>
+&lt;li>有多少线程引用这些实例？&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-线程的终止">4. 线程的终止&lt;/h2>
+&lt;ul>
+&lt;li>线程的终止方式：
+&lt;ul>
+&lt;li>自身显式终止：pthread_exit;&lt;/li>
+&lt;li>他人显式终止：pthread_join;&lt;/li>
+&lt;li>隐式终止：函数返回；&lt;/li>
+&lt;li>某个线程调用exit函数；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-线程安全">5. 线程安全&lt;/h2>
+&lt;p>线程安全：被多个并发线程反复调用，仍然能一直产生正确的结果。
+4类线程不安全函数：&lt;/p>
+&lt;ul>
+&lt;li>不保护共享变量的函数；&lt;/li>
+&lt;li>保持跨越多个调用的状态的函数；
+&lt;ul>
+&lt;li>当前结果依赖前面的结果。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">next&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// 返回0-32767的伪随机书
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">rand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">next&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">next&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="mi">1103515245&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">12345&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">next&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="mi">65536&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="mi">32768&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 为rand()设置种子
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="nf">srand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">seed&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">next&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">seed&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>返回指向静态变量的指针的函数；
+&lt;ul>
+&lt;li>正在被一个线程使用的结果可能会被另一个线程悄悄覆盖。&lt;/li>
+&lt;li>解决方法：
+&lt;ul>
+&lt;li>1.重写；传递结果参数；&lt;/li>
+&lt;li>2.使用&lt;code>加锁-拷贝&lt;/code>技术；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>调用线程不安全函数的函数；
+&lt;ul>
+&lt;li>加锁可能可以转变为线程安全函数；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-可重入性">6. 可重入性&lt;/h2>
+&lt;ul>
+&lt;li>可重入性：被多个线程调用时，不会引用任何共享数据。（因此不需要同步操作）
+&lt;ul>
+&lt;li>可重入函数是线程安全函数的一个真子集。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>显式可重入：函数都是值传递，所有数据引用都是本地的自动栈变量。（没有引用静态或全局变量）&lt;/li>
+&lt;li>隐式可重入：&lt;code>显式重入&lt;/code>基础上，允许引用传递的参数（即传递指针）。&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>// 隐式可重入示例
+int rand_r(unsigned int *nextp)
+{
+*nextp = *nextp * 1103515245 + 12345;
+return (unsigned int)(*nextp / 65536) % 32768;
+}
+&lt;/code>&lt;/pre>&lt;h2 id="7-竞争">7. 竞争&lt;/h2>
+&lt;ul>
+&lt;li>现成话的程序必须对任何可行的轨迹线都正确工作。&lt;/li>
+&lt;li>&lt;a class="link" href="Examples/1_3_ex_sharing_thread.c" >示例1_3_ex&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="8-死锁">8. 死锁&lt;/h2>
+&lt;ul>
+&lt;li>信号量引入一种潜在的运行时错误：死锁(deadlock)。
+&lt;ul>
+&lt;li>一组线程被阻塞，等待一个永远不会为真的条件。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>互斥锁加锁规则：用相同的顺序加锁。&lt;/li>
+&lt;/ul>
+&lt;h2 id="a拓展">A.拓展&lt;/h2>
+&lt;ul>
+&lt;li>预线程化：生成一个管理线程+多个工作线程；
+&lt;ul>
+&lt;li>用一个&lt;code>有限&lt;/code>缓冲区存储数据，这些数据被工作线程处理。
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 284;
+flex-basis: 681px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png" data-size="679x239">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png"
+width="679"
+height="239"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading_hu6d86b1b4a5aabba4c58c9dd2ddcba887_57880_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading_hu6d86b1b4a5aabba4c58c9dd2ddcba887_57880_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul></description></item><item><title>操作系统 —— 进程</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.png" alt="Featured image of post 操作系统 —— 进程" />&lt;h1 id="进程">进程&lt;/h1>
 &lt;p>进程是操作系统中最核心的概念。&lt;/p>
 &lt;ul>
@@ -1803,6 +2674,941 @@ alt="7个exec的关系">
 &lt;li>《Unix环境高级编程》&lt;/li>
 &lt;li>《现代操作系统》&lt;/li>
 &lt;li>《深入理解计算机系统》&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 信号量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/posix_semabphore_functions.png" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" />&lt;h1 id="posix信号量">Posix信号量&lt;/h1>
+&lt;p>信号量是一种提供不同进程间或一个进程的不同线程间同步手段的原语。
+Posix提供两类信号量：&lt;/p>
+&lt;ul>
+&lt;li>有名(named)信号量&lt;/li>
+&lt;li>基于内存(memory-base)的信号量。【macOS不支持】
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 120;
+flex-basis: 288px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/posix_semabphore_functions.png" data-size="366x305">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/posix_semabphore_functions.png"
+width="366"
+height="305"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/posix_semabphore_functions_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/posix_semabphore_functions_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Posix信号量的函数调用">
+&lt;/a>
+&lt;figcaption>Posix信号量的函数调用&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>Posix有名信号量至少具有岁内核的持续性。&lt;/li>
+&lt;li>Posix信号量是计数信号量。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1相关函数">1.相关函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;fcntl.h&amp;gt; /* For O_* constants */&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/stat.h&amp;gt; /* For mode constants */&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;semaphore.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 打开
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nf">sem_open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">oflag&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nf">sem_open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">oflag&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">mode_t&lt;/span> &lt;span class="n">mode&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 关闭
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_close&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 删除
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_unlink&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// &amp;#34;加锁&amp;#34;——测试指定信号量的值，如果大于0，将它-1
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_trywait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_timedwait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">timespec&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">abs_timeout&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// “解锁”——信号量+1
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_post&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 获取信号量的值(macOS不支持)
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_getvalue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sval&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 基于内存的信号量(macOS不支持)
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">shared&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">unsigned&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">sem_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sem_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sem&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="a拓展">A.拓展&lt;/h2>
+&lt;ul>
+&lt;li>信号量、互斥锁、条件变量之间的差异：
+&lt;ul>
+&lt;li>互斥锁必须由给它上锁的线程解锁；信号量的挂出(解锁)却不必在同一线程执行。&lt;/li>
+&lt;li>互斥锁要么被锁住，要么被解开。（二值状态）&lt;/li>
+&lt;li>信号量有一个与之关联的状态（计数值），信号量的挂出操作总是被记住。【？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>macOS不支持基于内存的信号量。&lt;/li>
+&lt;li>使用FIFO实现Posix信号量
+&lt;ul>
+&lt;li>打开读fd和写fd；&lt;/li>
+&lt;li>sem_wait()读出一个字节；没有字节可读，就阻塞；&lt;/li>
+&lt;li>sem_post()写入一个字节；&lt;/li>
+&lt;li>这个实现应该不能用于进程间。（除非共享内存？）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/one_server_multi_client.png" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" />&lt;h1 id="posix共享内存区">Posix共享内存区&lt;/h1>
+&lt;p>Posix.1提供了两种无亲缘关系进程间共享内存区的方法：（都需要调用mmap）&lt;/p>
+&lt;ul>
+&lt;li>内存映射文件(memory-mapped file)：由open函数打开，由mmap函数把得到的描述符映射到当前进程地址空间中的一个文件。&lt;/li>
+&lt;li>共享内存区对象(share-memory object)：由shm_open打开一个Posix.1 IPC名字，所返回的描述符由mmap函数映射到当前进程的地址空间。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-相关函数">1. 相关函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/mman.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;fcntl.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/types.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/stat.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;unistd.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 只是打开一个内存区对象，返回fd
+&lt;/span>&lt;span class="c1">// oflag: 必须函数O_RDONLY、O_RDWR中的一个。
+&lt;/span>&lt;span class="c1">// mode:
+&lt;/span>&lt;span class="c1">// * 指定权限为，在指定了O_CREAT的前提下使用。
+&lt;/span>&lt;span class="c1">// * 与mq_open和sem_open不同，shm_open的mode参数必须指定。
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">shm_open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">oflag&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">...);&lt;/span>
+&lt;span class="c1">// 删除一个共享内存区对象的名字。（删除一个名字不会影响低层支撑对象的现有引用。）
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">shm_unlink&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 裁剪普通文件或者共享内存区对象
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">ftruncate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">off_t&lt;/span> &lt;span class="n">length&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">//获取打开的共享内存对象的信息
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">fstat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">fildes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">stat&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-示例">2. 示例&lt;/h2>
+&lt;ul>
+&lt;li>共享计数器持续+1
+&lt;ul>
+&lt;li>&lt;a class="link" href="Examples/6_1_ex_pxshm_server1.c" >示例6_1&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="Examples/6_2_ex_pxshm_client1.c" >示例6_2&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>向服务器发送消息
+&lt;ul>
+&lt;li>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 151;
+flex-basis: 363px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/one_server_multi_client.png" data-size="461x304">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/one_server_multi_client.png"
+width="461"
+height="304"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/one_server_multi_client_hu884d2f2f6c651f24e84f37946b6832f5_75534_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/one_server_multi_client_hu884d2f2f6c651f24e84f37946b6832f5_75534_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="a注意">A.注意&lt;/h2>
+&lt;ul>
+&lt;li>在macOS 10.14.5中，shm_open并不会创建对应的同名文件。
+&lt;ul>
+&lt;li>详见&lt;a class="link" href="Examples/1_ex_shm_create.c" >示例1&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="b问题">B.问题&lt;/h2>
+&lt;ul>
+&lt;li>为什么shm_open不直接返回共享内存的地址？
+&lt;ul>
+&lt;li>因为Posix.1的共享内存发明之前，mmap已经存在。&lt;/li>
+&lt;li>mmap使用的是已打开的描述符。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>是否支持亲缘进程间使用？先映射，再fork，是否还能使用？
+&lt;ul>
+&lt;li>支持。父进程中open/shm_open；fork后，分别mmap。&lt;/li>
+&lt;li>详见&lt;a class="link" href="Examples/5_ex_pxshm_test3.c" >示例5_ex&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>是否支持无亲缘进程间使用？
+&lt;ul>
+&lt;li>支持。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
+&lt;ul>
+&lt;li>消息队列可认为是一个消息链表。具有&lt;code>随内核的持续性&lt;/code>&lt;/li>
+&lt;li>有读权限的线程可以从队列中取走信息；&lt;/li>
+&lt;li>有写权限的线程可以从队列中放置信息；&lt;/li>
+&lt;li>允许异步事件通知。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-相关函数">1. 相关函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;mqueue.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="c1">// 打开消息队列
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="n">mqd_t&lt;/span> &lt;span class="nf">mq_open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">oflag&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">...&lt;/span>
+&lt;span class="cm">/* mode_t mode, struct mq_attr *attr */&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 关闭消息队列，调用进程不用，但不会被删除消息队列
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">mq_close&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mqd_t&lt;/span> &lt;span class="n">mqdes&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 从系统中删除消息队列
+&lt;/span>&lt;span class="c1">// mq_unlink(const char *name);
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="c1">//
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">mq_notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mqd_t&lt;/span> &lt;span class="n">mqdes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">sigevent&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">notification&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="a-posix消息队列和systemv消息队列的区别">A. Posix消息队列和SystemV消息队列的区别&lt;/h2>
+&lt;ul>
+&lt;li>Posix消息队列的&lt;code>读&lt;/code>总是返回最高优先级的最早消息；System V消息队列的&lt;code>读&lt;/code>可以返回任意指定优先级的消息。&lt;/li>
+&lt;li>往&lt;code>空队列&lt;/code>放置一个消息时，Posix消息队列允许产生一个信号或者启动一个线程。System V没有类似的机制。&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 信号量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" />&lt;h1 id="system-v-信号量">System V 信号量&lt;/h1>
+&lt;h2 id="1-概述">1. 概述&lt;/h2>
+&lt;ul>
+&lt;li>二值信号量(binary semaphore): 其值为0或1的信号量；&lt;/li>
+&lt;li>计数信号量(counting semaphore): 其值为0~某个限制值之间的信号量；&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;ul>
+&lt;li>以上两种信号量，等待(waiting)操作都等待信号量的值变为大于0；&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>计数信号量集(set of counting semaphores): 一个或多个信号量(构成一个集合), 其中的每个都是计数信号量。
+&lt;ul>
+&lt;li>System V信号量通过此概念给信号量增加了一级复杂度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>当讨论System V信号量时，都是指&lt;code>计数信号量集&lt;/code>；当讨论Posix信号量时，都是指&lt;code>计数信号量&lt;/code>。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>约定：
+&lt;ul>
+&lt;li>semval: 信号量当前值&lt;/li>
+&lt;li>semncnt: 等待semval变为大于其当前值的线程数；&lt;/li>
+&lt;li>semzcnt: 等待semval变为0的线程数；&lt;/li>
+&lt;li>semadj: 所指定信号量针对调用进程的调整值；【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2信号量集相关数据结构">2.信号量集相关数据结构&lt;/h2>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 190;
+flex-basis: 457px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png" data-size="564x296">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png"
+width="564"
+height="296"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="信号量集结构图">
+&lt;/a>
+&lt;figcaption>信号量集结构图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;pre tabindex="0">&lt;code>struct semid_ds {
+struct ipc_perm sem_perm; // 操作权限
+struct sem *sem_base; // 指向信号量集数组的指针
+ushort sem_nsems; // 信号量集中信号量的数量
+time_t sem_otime; // 最后semop()的时间
+time_t sem_ctime; // 最后创建或IPC_SET的时间
+}
+struct sem {
+ushort_t semval; // 信号量值
+short sempid; // 最后成功semop()/SETVAL, SETALL的PID
+ushort_t semncnt; // awaiting semval &amp;gt; current vale的数量
+ushort_t semzcnt; // awaiting semval = 0 的数量
+}
+// 给信号量集中某个特定的信号量指定一个操作
+// 不能静态初始化，顺序根据实现不同而不同
+struct sembuf {
+short sem_num; // 信号量号：0, 1, ..., nsems-1
+short sem_op; // 信号量操作：&amp;lt;0, 0, &amp;gt;0
+short sem_flg; // 操作标记：0, IPC_NOWAIT, SEM_UNDO
+}
+// 此数据结构由用户定义，系统中没有定义
+union semun {
+int val; // SETVAL使用
+struct semid_ds *buf; // IPC_SET/IPC_STAT使用
+ushort *array; // GETALL/SETALL使用
+}
+&lt;/code>&lt;/pre>&lt;h2 id="3-相关函数">3. 相关函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/sem.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 创建或访问一个信号量集
+&lt;/span>&lt;span class="c1">// @nsems: 指定集合中的信号量数
+&lt;/span>&lt;span class="c1">// @oflag:
+&lt;/span>&lt;span class="c1">// * IPC_CREAT: 不存在就创建，返回ID
+&lt;/span>&lt;span class="c1">// * IPC_EXCL: 不管是否存在，都返回-1；
+&lt;/span>&lt;span class="c1">// * IPC_CREAT|IPC_EXCL: 存在返回-1；不存在，创建，返回ID；
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">semget&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key_t&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">nsems&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">oflag&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 信号量操纵函数
+&lt;/span>&lt;span class="c1">// @opsptr-&amp;gt;sem_op:
+&lt;/span>&lt;span class="c1">// * &amp;gt; 0：加到信号量当前值上(semval)；如果指定SEM_UNDO标志，从相应信号量的semadj值中减去sem_op;
+&lt;/span>&lt;span class="c1">// * = 0: 调用者希望等待信号量变为0；
+&lt;/span>&lt;span class="c1">// * &amp;lt; 0: 等待信号量值变为`&amp;gt;=sem_op的绝对值`
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">semop&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">semid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">sembuf&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">opsptr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">nops&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 对一个信号量执行各种控制操作
+&lt;/span>&lt;span class="c1">// @cmd: GETVAL/SETVAL/GETPID/GETNCNT/GETZCNT/GETALL/SETALL/IPC_RMID/IPC_SET/IPC_STAT
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">semctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">semid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">semnum&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="cm">/*union semun org*/&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-注意">3. 注意&lt;/h2>
+&lt;ul>
+&lt;li>semget()并不初始化信号量，初始化工作需要通过semctl来完成。这会存在问题如多次初始化。【详见&lt;a class="link" href="Examples/6_ex_lock_sv_sem.c" >示例6_ex&lt;/a>】
+&lt;ul>
+&lt;li>解决方案是：指定&lt;code>IPC_CREAT|IPC_EXCL&lt;/code>，保证只有一个进程创建信号量并初始化信号量。
+&lt;ul>
+&lt;li>其他进程semget会放着EEXIST错误，并再次调用semget()。（一次不指定IPC_CREAT，也不指定IPC_EXCL）&lt;/li>
+&lt;li>创建和初始化分为两步，这个方案还是存在竞争问题：
+&lt;ul>
+&lt;li>进程A进行创建(semget)后，未进行初始化(semctl), 时间片到；进程B进行信号量操作（但是信号量还未初始化）。&lt;/li>
+&lt;li>解决办法是：
+&lt;ul>
+&lt;li>调用以IPC_STAT命令semctl，等待sem_otime变为非零值。&lt;/li>
+&lt;li>原因：System V手册保证semget创建一个新的信号量集时，semid_ds的sem_otime成员一定被初始化为0。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>semop()睡眠时, 如果被中断，会返回&lt;code>EINTR&lt;/code>错误；
+&lt;ul>
+&lt;li>semop()是需被所捕获的信号中断的&lt;code>慢系统调用&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>删除信号量将导致等待此信号量的(睡眠中的)线程返回&lt;code>EIDRM(identifier removed)&lt;/code>错误。&lt;/li>
+&lt;li>指定SEM_UNDO时，进程结束后，信号量会被还原。&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
+&lt;h2 id="1-概述">1. 概述&lt;/h2>
+&lt;ul>
+&lt;li>System V 共享内存区在概念上类似于Posix共享内存区；
+&lt;ul>
+&lt;li>Posix共享内存区：先调用shm_open，后调用mmap;&lt;/li>
+&lt;li>System V 共享内存区：先调用shmget, 后调用shmat;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-shmget函数">2. shmget函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/shm.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">shmget&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key_t&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">shmflg&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>key: ftok的返回值或者IPC_PRIVATE。
+&lt;ul>
+&lt;li>如果key=IPC_PRIVATE并且shmflg指定IPC_CREAT标记，则创建共享内存区。&lt;/li>
+&lt;li>如果没有key对应的共享内存标识符并且指定IPC_CREAT，则创建共享内存区。&lt;/li>
+&lt;li>创建内存区会初始化内存区为0。（size字节）&lt;/li>
+&lt;li>创建共享内存区会分配&lt;code>shmid_ds结构&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c"> &lt;span class="k">struct&lt;/span> &lt;span class="n">shmid_ds&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">ipc_perm&lt;/span> &lt;span class="n">shm_perm&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* operation permissions */&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">shm_segsz&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* size of segment in bytes */&lt;/span>
+&lt;span class="n">pid_t&lt;/span> &lt;span class="n">shm_lpid&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* pid of last shm op */&lt;/span>
+&lt;span class="n">pid_t&lt;/span> &lt;span class="n">shm_cpid&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* pid of creator */&lt;/span>
+&lt;span class="kt">short&lt;/span> &lt;span class="n">shm_nattch&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* # of current attaches */&lt;/span>
+&lt;span class="n">time_t&lt;/span> &lt;span class="n">shm_atime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* last shmat() time*/&lt;/span>
+&lt;span class="n">time_t&lt;/span> &lt;span class="n">shm_dtime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* last shmdt() time */&lt;/span>
+&lt;span class="n">time_t&lt;/span> &lt;span class="n">shm_ctime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* last change by shmctl() */&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">shm_internal&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* sysv stupidity */&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>size: 大小&lt;/li>
+&lt;li>shmflg： 标记&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：共享内存区标识符(整数)&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-shmat函数">3. shmat函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nf">shmat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">shmid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">shmaddr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">shmflg&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：把shmget创建/打开的共享内存区连接到调用进程的地址空间；&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>shmid: shmget返回的标识符，共享内存区的ID；&lt;/li>
+&lt;li>shmaddr：如果是NULL，则系统进行选址（推荐）；
+&lt;ul>
+&lt;li>不为NULL：
+&lt;ul>
+&lt;li>shmflg指定了&lt;code>SHM_RND&lt;/code>，连接到shmaddr指定的地址；&lt;/li>
+&lt;li>shmflg没有指定&lt;code>SHM_RND&lt;/code>，连接到shmaddr指定的地址向下舍入的一个SHMLBA常值；&lt;/li>
+&lt;li>LBA表示：低端边界地址(lower bounder address)【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>shmflg: 标记/权限；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：成功，映射区的起始地址；失败，-1。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-shmdt函数">4. shmdt函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="n">shmdt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">shmaddr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：断开与共享内存区的连接。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>shmaddr：共享内存区地址&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：成功0，失败-1&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-shmctl函数">5. shmctl函数&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">shmctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">shmid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">shmid_ds&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：对一个共享内存区进行控制/操作。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>shmid: 共享内存区ID；&lt;/li>
+&lt;li>cmd: 控制命令，IPC_RMID/IPC_SET/IPC_STAT;&lt;/li>
+&lt;li>buff: 传参/传结果的结构&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：成功0，失败-1&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-system-v共享内存区的限制">6. System V共享内存区的限制&lt;/h2>
+&lt;p>和System V消息队列、System V信号量一样，System V共享内存区也存在特定的系统限制。&lt;/p>
+&lt;ul>
+&lt;li>详见&lt;a class="link" href="Examples/5_ex_svshm_limites.c" >示例5_ex&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="a-问题">A. 问题&lt;/h2>
+&lt;ul>
+&lt;li>shmget是否要求文件存在？
+&lt;ul>
+&lt;li>要求文件存在。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>是否支持亲缘进程间使用？
+&lt;ul>
+&lt;li>支持。&lt;/li>
+&lt;li>具体哪里进行拆分，没有进行测试。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>是否支持无亲缘进程间使用？
+&lt;ul>
+&lt;li>支持。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>读/写超过共享内存区范围会怎样？
+&lt;ul>
+&lt;li>大小分页后，最后不足1页：
+&lt;ul>
+&lt;li>访问不超过此页，不会报错；&lt;/li>
+&lt;li>超过，则段错误(segmentation fault)。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>【和&lt;a class="link" href="../7.%e5%85%b1%e4%ba%ab%e5%86%85%e5%ad%98%e5%8c%ba/Readme.md" >7.B&lt;/a>类似】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Posix共享内存区和SystemV共享内存区有什么差别？
+&lt;ul>
+&lt;li>Posix共享内存区对象的大小可以再任意时刻通过调用ftruncate&lt;code>改变&lt;/code>；&lt;/li>
+&lt;li>SystemV共享内存区对象的大小是调用shmget创建时&lt;code>固定&lt;/code>的。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="b-注意">B. 注意&lt;/h2>
+&lt;ul>
+&lt;li>shmget创建或打开共享内存区时，并没有给调用进程提供访问该内存区的手段。（因此要调用shmat）&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" />&lt;h1 id="消息队列">消息队列&lt;/h1>
+&lt;ul>
+&lt;li>&lt;strong>在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】&lt;/strong>
+&lt;ul>
+&lt;li>详见&lt;a class="link" href="../Readme.md" >此Readme 2.4节&lt;/a>&lt;/li>
+&lt;li>若需要客户进程和服务器进程之间的双向数据流，用&lt;code>UNIX域套接字&lt;/code>或&lt;code>全双工管道&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>队列：消息队列。信息的链接表，存储在内核中，由标识符标识。&lt;/li>
+&lt;li>队列ID：消息队列标识符。&lt;/li>
+&lt;li>与队列关联的数据结构：定义队列的&lt;code>当前&lt;/code>状态&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">struct&lt;/span> &lt;span class="n">msqid_ds&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">ipc_perm&lt;/span> &lt;span class="n">msg_perm&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">msgqnum_t&lt;/span> &lt;span class="n">msg_qnum&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 队列里的消息长度/数量
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">msglen_t&lt;/span> &lt;span class="n">msg_qbytes&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 队列中能容纳的最大字节数
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">pid_t&lt;/span> &lt;span class="n">msg_lspid&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 最后msgsnd()的pid
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">pid_t&lt;/span> &lt;span class="n">msg_lrpid&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 最后msgrcv()的pid
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">time_t&lt;/span> &lt;span class="n">msg_stime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 最后msgsnd()的时间
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">time_t&lt;/span> &lt;span class="n">msg_rtime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 最后msgrcv()的时间
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">time_t&lt;/span> &lt;span class="n">msg_ctime&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 最后改变时间
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="1-消息队列的系统限制">1. 消息队列的系统限制&lt;/h2>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 396;
+flex-basis: 951px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png" data-size="682x172">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png"
+width="682"
+height="172"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="消息队列的系统限制">
+&lt;/a>
+&lt;figcaption>消息队列的系统限制&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;ul>
+&lt;li>导出的：这种限制来源于其他限制。
+&lt;ul>
+&lt;li>如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-相关函数">2. 相关函数&lt;/h2>
+&lt;ul>
+&lt;li>key转换标识符的规则，见&lt;a class="link" href="../Readme.md" >Readme&lt;/a>&lt;/li>
+&lt;li>创建新队列、引用现有队列。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/msg.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// key: 键
+&lt;/span>&lt;span class="c1">// 返回：标识符/队列ID
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">msgget&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key_t&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">flag&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>队列控制函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/msg.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="c1">// cmd:
+&lt;/span>&lt;span class="c1">// * IPC_STAT: 取队列的smqid_ds结构，存放在buf中
+&lt;/span>&lt;span class="c1">// * IPC_SET: 将buf中的msg_perm.uid/gid/mode/msg_qbytes等复制到队列对应的msqid_ds结构中。
+&lt;/span>&lt;span class="c1">// * IPC_RMID: 删除队列及其中的所有数据，删除立即生效。
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">msgctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">msqid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">msqid_ds&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>放数据到队列中&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/msg.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * msqid: 队列标识
+&lt;/span>&lt;span class="cm"> * ptr: 指向类似以下的结构
+&lt;/span>&lt;span class="cm"> * * struct my_msg {
+&lt;/span>&lt;span class="cm"> * long my_type; // 数据类型【？？？】
+&lt;/span>&lt;span class="cm"> * char my_test[nbytes]; // 数据
+&lt;/span>&lt;span class="cm"> * }
+&lt;/span>&lt;span class="cm"> * nbytes: 数据大小
+&lt;/span>&lt;span class="cm"> * flag:
+&lt;/span>&lt;span class="cm"> * * IPC_NOWAIT: 队列满，返回-1，errno = EAGAIN
+&lt;/span>&lt;span class="cm"> * * 否则，阻塞到
+&lt;/span>&lt;span class="cm"> * * 等待到队列空；
+&lt;/span>&lt;span class="cm"> * * 队列被删除, 返回-1, errno = EIDRM；
+&lt;/span>&lt;span class="cm"> * * 收到信号，并从信号处理程序返回；返回-1, errno = EINTR；
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">msgsnd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">msqid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ptr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">nbytes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">flag&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>从队列中取数据&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/msg.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * type: 指定想要消息的类型。
+&lt;/span>&lt;span class="cm"> * * type == 0: 队列中的第一个消息；
+&lt;/span>&lt;span class="cm"> * * type &amp;gt; 0 : 队列中第一个类型为type的消息；
+&lt;/span>&lt;span class="cm"> * * type &amp;lt; 0 : 返回队列中消息类型值&amp;lt;=`type绝对值`的消息。如果多个，则返回类型值最小的[第一个]消息。
+&lt;/span>&lt;span class="cm"> * flag:
+&lt;/span>&lt;span class="cm"> * * IPC_NOWAIT: 队列空，立即返回-1, errno = ENOMSG;
+&lt;/span>&lt;span class="cm"> * * 否则，阻塞到
+&lt;/span>&lt;span class="cm"> * * 等待到队列有需要的数据；
+&lt;/span>&lt;span class="cm"> * * 队列被删除, 返回-1, errno = EIDRM；
+&lt;/span>&lt;span class="cm"> * * 收到信号，并从信号处理程序返回；返回-1, errno = EINTR；
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">msgrcv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">msqid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ptr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">nbytes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">flag&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-注意">3. 注意&lt;/h2>
+&lt;ul>
+&lt;li>对于&amp;quot;在新的应用程序中，不应再使用消息队列&amp;quot;，貌似现在很多系统还在使用，不确定是否说的是一个东西，需要时要再了解。&lt;/li>
+&lt;/ul>
+&lt;h2 id="a拓展">A.拓展&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="http://www.cnblogs.com/itfly8/p/5155983.html" target="_blank" rel="noopener"
+>分布式消息队列&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="http://www.cnblogs.com/itfly8/p/5156155.html" target="_blank" rel="noopener"
+>消息队列&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="b-参考">B. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《UNIX环境高级编程 第三版》&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之FIFO</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之FIFO" />&lt;h1 id="fifo">FIFO&lt;/h1>
+&lt;ul>
+&lt;li>FIFO有时被称为命名管道。&lt;/li>
+&lt;li>FIFO是一种文件类型。&lt;/li>
+&lt;li>支持在无亲缘进程间使用。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-fifo创建">1. FIFO创建&lt;/h2>
+&lt;ul>
+&lt;li>创建FIFO类似于创建文件；FIFO的路径名存在于文件系统中。&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-创建fifo">2. 创建FIFO&lt;/h2>
+&lt;ul>
+&lt;li>相关函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/stat.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">mkfifo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mode_t&lt;/span> &lt;span class="n">mode&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 在fd表示的目录相关位置，创建一个FIFO。
+&lt;/span>&lt;span class="c1">// * path为绝对路径，则忽略fd
+&lt;/span>&lt;span class="c1">// * path为相对路径，则fd参数是一个打开的目录的文件描述符。路径名和目录有关【？？？】
+&lt;/span>&lt;span class="c1">// * path为相对路径，并且fd参数有特殊值AT_FDCWD，则路径名以当前目录开始。
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">mkfifoat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mode_t&lt;/span> &lt;span class="n">mode&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-其他">3. 其他&lt;/h2>
+&lt;ul>
+&lt;li>open一个FIFO时，非阻塞标记(O_NONBLOCK)会产生的影响：
+&lt;ul>
+&lt;li>一般情况下(没有指定O_NONBLOCK)，
+&lt;ul>
+&lt;li>只读open要阻塞到其他进程为写打开此FIFO为止；&lt;/li>
+&lt;li>只写open要阻塞到其他进程为读打开此FIFO为止；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如果指定了O_NONBLOCK，则：
+&lt;ul>
+&lt;li>只读open时，立即返回。【返回啥？正常返回？】&lt;/li>
+&lt;li>只写open时，如果没有其他进程为读打开此FIFO，则此只写open返回-1，errno置为ENXIO。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>若write一个没有进程为读打开的FIFO，则产生信号SIGPIPE。（类似pipe）&lt;/li>
+&lt;li>若FIFO的最后一个写进程关闭了该FIFO，则将为改FIFO的读进程产生一个文件结束标记。（类似于pipe）&lt;/li>
+&lt;li>FIFO的两种用途：
+&lt;ul>
+&lt;li>shell命令使用FIFO将数据从一条管道传送到另一条时，无需创建中间临时文件；&lt;/li>
+&lt;li>客户——服务器进程应用中，FIFO用作汇聚点，在客户和服务器进程间传递数据；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4管道和fifo的限制">4.管道和FIFO的限制&lt;/h2>
+&lt;ul>
+&lt;li>OPEN_MAX: 一个进程在任意时刻打开的最大描述符数。（sysconf函数获取）
+&lt;ul>
+&lt;li>示例见&lt;a class="link" href="Examples/3_ex_pipeconf.c" >3_ex_pipeconf.c&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>PIPE_BUF: 可原子写管道/FIFO的最大数据量。（pathconf/fpathconf函数获取）
+&lt;ul>
+&lt;li>示例见&lt;a class="link" href="Examples/3_ex_pipeconf.c" >3_ex_pipeconf.c&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="a-疑问">A. 疑问&lt;/h2>
+&lt;h2 id="b-参考">B. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《unix环境高级编程 第三版》&lt;/li>
+&lt;li>《UNIX网络编程 卷2 进程间通信 第2版》&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png" alt="Featured image of post 操作系统 —— 进程间通信之共享内存" />&lt;h1 id="posix共享内存区">Posix共享内存区&lt;/h1>
+&lt;ul>
+&lt;li>共享内存区是可用IPC形式中最快的。&lt;/li>
+&lt;li>一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。&lt;/li>
+&lt;li>非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 316;
+flex-basis: 760px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory.png" data-size="643x203">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory.png"
+width="643"
+height="203"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory_hu14c3c2b250d77b78963b2714c0c42146_56702_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/not_share_memory_hu14c3c2b250d77b78963b2714c0c42146_56702_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="非共享缓冲区读文件传给另一个进程写">
+&lt;/a>
+&lt;figcaption>非共享缓冲区读文件传给另一个进程写&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>共享缓冲区读文件传给另一个进程写：2次内核与进程的交互
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 263;
+flex-basis: 633px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory.png" data-size="728x276">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory.png"
+width="728"
+height="276"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory_hu8d3362a879cbee064063185e6c9d201b_72726_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/share_memory_hu8d3362a879cbee064063185e6c9d201b_72726_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="共享缓冲区读文件传给另一个进程写">
+&lt;/a>
+&lt;figcaption>共享缓冲区读文件传给另一个进程写&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-相关函数">1. 相关函数&lt;/h2>
+&lt;h3 id="11-mmap">1.1 mmap&lt;/h3>
+&lt;ul>
+&lt;li>mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。&lt;/li>
+&lt;li>使用此函数有3个目的：
+&lt;ul>
+&lt;li>使用普通文件以提供内存映射I/O；&lt;/li>
+&lt;li>使用特殊文件以提供匿名内存映射；&lt;/li>
+&lt;li>使用shm_open以提供无亲缘关系进程间的Posix共享内存区。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>映射文件示意图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 383px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png" data-size="641x401">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.png"
+width="641"
+height="401"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file_hu2b38632246c801a0071d06acf9f6a1dc_72126_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="映射文件示意图">
+&lt;/a>
+&lt;figcaption>映射文件示意图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/mman.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// addr: 指定fd映射到的进程内空间的起始地址；
+&lt;/span>&lt;span class="c1">// len: 映射的长度——字节数；
+&lt;/span>&lt;span class="c1">// offset: 从被映射文件开头起offset字节开始映射；
+&lt;/span>&lt;span class="c1">// prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE)
+&lt;/span>&lt;span class="c1">// * PROT_NONE Pages may not be accessed.
+&lt;/span>&lt;span class="c1">// * PROT_READ Pages may be read.
+&lt;/span>&lt;span class="c1">// * PROT_WRITE Pages may be written.
+&lt;/span>&lt;span class="c1">// * PROT_EXEC Pages may be executed.
+&lt;/span>&lt;span class="c1">// flag: 很多歌，具体见man
+&lt;/span>&lt;span class="c1">// * MAP_PRIVATE: 变动私有，不改变低层支撑对象；
+&lt;/span>&lt;span class="c1">// * MAP_SHARED: 变动共享，其他进程可见，改变低层支撑对象；
+&lt;/span>&lt;span class="c1">// * MAP_FIXED: 准确地解释addr参数；【？？？】
+&lt;/span>&lt;span class="c1">// 返回：成功——映射起始地址；失败——MAP_FAILED，设置errno
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nf">mmap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">len&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">prot&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">off_t&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="12-munmap">1.2 munmap&lt;/h3>
+&lt;ul>
+&lt;li>munmap: 从某个进程的地址空间删除一个映射关系。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/mman.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">munmap&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">len&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="13-msync">1.3 msync&lt;/h3>
+&lt;ul>
+&lt;li>msync: 同步内存与硬盘上的内容。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/mman.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// flags:
+&lt;/span>&lt;span class="c1">// * MS_ASYNC: 执行异步写（写操作入内核队列，就返回）
+&lt;/span>&lt;span class="c1">// * MS_SYNC: 执行同步写（写操作完成后才返回）
+&lt;/span>&lt;span class="c1">// （以上两个指定一个，但不能都指定）
+&lt;/span>&lt;span class="c1">// * MS_INVALIDATE: 使高速缓存的数据失效
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">msync&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size_t&lt;/span> &lt;span class="n">len&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-文件内存映射">2. 文件内存映射&lt;/h2>
+&lt;p>内存映射一个普通文件时，内存中映射区的大小(mmap的第2个参数)通常等于改文件的大小。
+详见&lt;a class="link" href="Examples/2_ex_shm_increase2.c" >示例&lt;/a>&lt;/p>
+&lt;h2 id="3-匿名内存映射">3. 匿名内存映射&lt;/h2>
+&lt;p>使用非匿名内存映射时，需要在文件系统中创建一个文件，进行open并write一些数据进行初始化。
+如果目的是提供一个父子进程共享的内存映射，匿名内存映射则能简化上述流程。
+创建匿名映射的方法：&lt;/p>
+&lt;ul>
+&lt;li>mmap的flag参数指定&lt;code>MAP_SHARED|MAP_ANON&lt;/code>, fd = -1。&lt;/li>
+&lt;li>这样的内存区会被初始化为0；
+详见&lt;a class="link" href="Examples/3_ex_increase_map_anon.c" >示例&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="a-注意">A. 注意&lt;/h2>
+&lt;ul>
+&lt;li>从移植性考虑，MAP_FIXED不应该指定。&lt;/li>
+&lt;li>可移植的代码，应该把addr指定为NULL，并且不指定MAP_FIXED。&lt;/li>
+&lt;li>mmap成功返回后，fd可关闭。&lt;/li>
+&lt;li>不是所有文件都能mmap。&lt;/li>
+&lt;/ul>
+&lt;h2 id="b问题">B.问题&lt;/h2>
+&lt;ul>
+&lt;li>为什么使用mmap？
+&lt;ul>
+&lt;li>不用调用read/write/lseek，简化了代码。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>当映射的内存大于文件大小？等于文件大小？
+&lt;ul>
+&lt;li>macOS的man手册中，明确说明，文件映射的内存不是&lt;code>页&lt;/code>的倍数时会被扩充。【详见&lt;a class="link" href="Examples/5_ex_shm_test_filesize_mmapsize.c" >示例&lt;/a>】&lt;/li>
+&lt;li>等于：
+&lt;ul>
+&lt;li>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 161;
+flex-basis: 388px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.png" data-size="555x343">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.png"
+width="555"
+height="343"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>大于：
+&lt;ul>
+&lt;li>&lt;strong>SIGBUS意味着：是在内存映射区访问，但是超出了低层支撑对象的大小。&lt;/strong>&lt;/li>
+&lt;li>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 253;
+flex-basis: 607px"
+>
+&lt;a href="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png" data-size="772x305">
+&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png"
+width="772"
+height="305"
+srcset="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize_hueaf53458f6fab3edec03c90ea3bdf4fb_70764_480x0_resize_box_3.png 480w, https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize_hueaf53458f6fab3edec03c90ea3bdf4fb_70764_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如何映射一个持续增长的文件？
+&lt;ul>
+&lt;li>映射比文件大的多的区域，随着文件增长再对相应区域进行访问。&lt;/li>
+&lt;li>详见&lt;a class="link" href="Examples/6_ex_shm_test2_map_inc_file.c" >示例&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之管道</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之管道" />&lt;h1 id="管道">管道&lt;/h1>
+&lt;ul>
+&lt;li>管道的局限性
+&lt;ul>
+&lt;li>半双工：数据只能在一个方向上流动；&lt;/li>
+&lt;li>只能在具有共同祖先的两个进程间使用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-管道创建">1. 管道创建&lt;/h2>
+&lt;ul>
+&lt;li>相关函数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;unistd.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pipe&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">]);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>fd[0]&lt;/code>为读而打开；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>fd[1]&lt;/code>为写而打开；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>fd[1]&lt;/code>的输出是&lt;code>fd[0]&lt;/code>的输入；【？！】&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>PIPE_BUF&lt;/code>规定内核的管道缓冲区的大小。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>pathconf&lt;/code>及&lt;code>fpathconf&lt;/code>可以确定PIPE_BUF的值。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>当管道的一端被关闭后，适用的规则：&lt;/p>
+&lt;ul>
+&lt;li>当读(read)一个写端被关闭的管道，在所有数据被读取后，read返回0；&lt;/li>
+&lt;li>当写(write)一个读端被关闭的管道，则产生信号&lt;code>SIGPIPE&lt;/code>。
+&lt;ul>
+&lt;li>忽略/捕捉信号并从信号处理程序返回后，write返回-1，errno=EPIPE。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="a-疑问">A. 疑问&lt;/h1>
+&lt;ul>
+&lt;li>&lt;code>fd[1]&lt;/code>的输出是&lt;code>fd[0]&lt;/code>的输入？
+&lt;ul>
+&lt;li>&lt;code>fd[1]写端&lt;/code>往管道写数据，即&lt;code>fd[1]&lt;/code>的输出。&lt;/li>
+&lt;li>&lt;code>fd[0]读端&lt;/code>从管道读数据，即&lt;code>fd[0]&lt;/code>的输入。&lt;/li>
+&lt;li>详见示例：&lt;a class="link" href="Examples/2_ex_pipe_copy_file_to_less_or_more.c" >2_ex_pipe_copy_file_toless_or_more.c&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>多个进程使用相同的&lt;code>fd[2]&lt;/code>的时候，管道的读写是怎么样的？
+&lt;ul>
+&lt;li>管道是多个进程共用的，谁都可以写，也都可以读。因此写入/读取的信息可能混杂在一起。&lt;/li>
+&lt;li>详见示例：&lt;a class="link" href="Examples/3_ex_read_and_write.c" >3_ex_read_and_write.c&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.png" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
+&lt;ul>
+&lt;li>互斥锁及条件变量是同步的基本组成部分。&lt;/li>
+&lt;li>互斥锁及条件变量出自&lt;code>Posix.1&lt;/code>线程标准；
+&lt;ul>
+&lt;li>可以用来同步一个进程内的各个线程；&lt;/li>
+&lt;li>也可以用在进程间同步：互斥锁放在多个进程的共享内存区中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1互斥锁">1.互斥锁&lt;/h2>
+&lt;ul>
+&lt;li>互斥锁：相互排斥，是最基本的同步形式。&lt;/li>
+&lt;li>作用：保护临界区（critical region）。
+&lt;ul>
+&lt;li>保护的是数据：临界区中被操纵的数据；进程/线程共享的数据。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>互斥锁是&lt;code>协作性&lt;/code>锁，也就是锁无法防止一些进程/线程不先获取锁就访问数据。（需要靠自觉）&lt;/li>
+&lt;/ul>
+&lt;h3 id="11-相关函数">1.1 相关函数&lt;/h3>
+&lt;ul>
+&lt;li>静态分配使用&lt;code>PTHREAD_MUTEX_INITIALIZER&lt;/code>进行初始化&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;pthread.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 互斥锁初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutex_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mutex&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">pthread_mutexattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutex_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mutex&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 上锁、解锁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutex_lock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mptr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutex_trylock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mptr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutex_unlock&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mptr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 属性初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_mutexattr_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutexattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">pthread_mutexattr_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_mutexattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1">// 属性设置：进程间共享等（MACOS和LINUX相关函数有所不同）
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="c1">// 均返回：成功：0，失败：正的Exxx值
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-条件变量">2. 条件变量&lt;/h2>
+&lt;ul>
+&lt;li>互斥锁用于上锁，条件变量用于等待。&lt;/li>
+&lt;li>每个条件变量总是与一个互斥锁相关联。&lt;/li>
+&lt;/ul>
+&lt;h3 id="21-相关函数">2.1 相关函数&lt;/h3>
+&lt;ul>
+&lt;li>静态分配使用&lt;code>PTHREAD_COND_INITIALIZER&lt;/code>进行初始化&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;pthread.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="c1">// 条件变量初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="n">pthread_condattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 线程睡眠，进行等待
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mutex&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 唤醒等待线程——等待在相应条件变量上的线程
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_signal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 唤醒等待线程——等待在相应条件变量上的多个线程
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_broadcast&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 时间是绝对时间：返回时刻的系统时间。不是时间差。
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_cond_timedwait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_cond_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cond&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">pthread_mutex_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">mutex&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">const&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">timespec&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">abstime&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">timespec&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">time_t&lt;/span> &lt;span class="n">tv_sec&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// seconds
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">tv_nsec&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// nanoseconds
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 属性初始化、销毁
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">pthread_condattr_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_condattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_condattr_destroy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_condattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="c1">// 属性设置：进程间共享等（MACOS和LINUX相关函数有所不同: MACOX没有条件变量属性设置函数）
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-注意">2. 注意&lt;/h2>
+&lt;ul>
+&lt;li>条件的检测是在互斥锁的保护下进行的；
+&lt;ul>
+&lt;li>条件变量进行等待前，会释放持有的互斥锁。&lt;/li>
+&lt;li>【详见&lt;a class="link" href="Examples/2_ex_prod_cons_cond.c" >2_ex&lt;/a>】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="a-拓展">A. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>生产者-消费者问题，也称为&lt;code>有界缓冲区&lt;/code>问题。
+&lt;ul>
+&lt;li>当生产者-消费者使用管道、消息队列(SystemV/Posix)进行通信时，同步是&lt;code>隐式的(implicit)&lt;/code>，由内核执行同步。&lt;/li>
+&lt;li>当使用内存共享时，生产者/消费者必须执行某种&lt;code>显式的(explicit)&lt;/code>的同步。&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>

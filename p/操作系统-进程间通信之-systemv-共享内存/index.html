@@ -1,0 +1,341 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="System V 共享内存区 1. 概述  System V 共享内存区在概念上类似于Posix共享内存区；  Posix共享内存区：先调用shm_open，后调用mmap; System V 共享内存区：先调用shmget, 后调用shmat;    2. shmget函数 #include &amp;lt;sys/shm.h&amp;gt; int shmget(key_t key, size_t size, int shmflg);  作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。 参数：  key: ftok的返回值或者IPC_PRIVATE。  如果key=IPC_PRIVATE并且shmflg指定IPC_CREAT标记，则创建共享内存区。 如果没有key对应的共享内存标识符并且指定IPC_CREAT，则创建共享内存区。 创建内存区会初始化内存区为0。（size字节） 创建共享内存区会分配shmid_ds结构  struct shmid_ds { struct ipc_perm shm_perm; /* operation permissions */ int shm_segsz; /* size of segment in bytes */ pid_t shm_lpid; /* pid of last shm op */ pid_t shm_cpid; /* pid of creator */ short shm_nattch; /* # of current attaches */ time_t shm_atime; /* last shmat() time*/ time_t shm_dtime; /* last shmdt() time */ time_t shm_ctime; /* last change by shmctl() */ void *shm_internal; /* sysv stupidity */ };  size: 大小 shmflg： 标记   返回：共享内存区标识符(整数)  3."><title>操作系统 —— 进程间通信之 SystemV 共享内存</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 进程间通信之 SystemV 共享内存">
+<meta property="og:description" content="System V 共享内存区 1. 概述  System V 共享内存区在概念上类似于Posix共享内存区；  Posix共享内存区：先调用shm_open，后调用mmap; System V 共享内存区：先调用shmget, 后调用shmat;    2. shmget函数 #include &amp;lt;sys/shm.h&amp;gt; int shmget(key_t key, size_t size, int shmflg);  作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。 参数：  key: ftok的返回值或者IPC_PRIVATE。  如果key=IPC_PRIVATE并且shmflg指定IPC_CREAT标记，则创建共享内存区。 如果没有key对应的共享内存标识符并且指定IPC_CREAT，则创建共享内存区。 创建内存区会初始化内存区为0。（size字节） 创建共享内存区会分配shmid_ds结构  struct shmid_ds { struct ipc_perm shm_perm; /* operation permissions */ int shm_segsz; /* size of segment in bytes */ pid_t shm_lpid; /* pid of last shm op */ pid_t shm_cpid; /* pid of creator */ short shm_nattch; /* # of current attaches */ time_t shm_atime; /* last shmat() time*/ time_t shm_dtime; /* last shmdt() time */ time_t shm_ctime; /* last change by shmctl() */ void *shm_internal; /* sysv stupidity */ };  size: 大小 shmflg： 标记   返回：共享内存区标识符(整数)  3.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg">
+<meta name=twitter:title content="操作系统 —— 进程间通信之 SystemV 共享内存">
+<meta name=twitter:description content="System V 共享内存区 1. 概述  System V 共享内存区在概念上类似于Posix共享内存区；  Posix共享内存区：先调用shm_open，后调用mmap; System V 共享内存区：先调用shmget, 后调用shmat;    2. shmget函数 #include &amp;lt;sys/shm.h&amp;gt; int shmget(key_t key, size_t size, int shmflg);  作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。 参数：  key: ftok的返回值或者IPC_PRIVATE。  如果key=IPC_PRIVATE并且shmflg指定IPC_CREAT标记，则创建共享内存区。 如果没有key对应的共享内存标识符并且指定IPC_CREAT，则创建共享内存区。 创建内存区会初始化内存区为0。（size字节） 创建共享内存区会分配shmid_ds结构  struct shmid_ds { struct ipc_perm shm_perm; /* operation permissions */ int shm_segsz; /* size of segment in bytes */ pid_t shm_lpid; /* pid of last shm op */ pid_t shm_cpid; /* pid of creator */ short shm_nattch; /* # of current attaches */ time_t shm_atime; /* last shmat() time*/ time_t shm_dtime; /* last shmdt() time */ time_t shm_ctime; /* last change by shmctl() */ void *shm_internal; /* sysv stupidity */ };  size: 大小 shmflg： 标记   返回：共享内存区标识符(整数)  3."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_800x0_resize_q75_box.jpg srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_800x0_resize_q75_box.jpg 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_1600x0_resize_q75_box.jpg 1600w" width=800 height=373 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/ style=background-color:#995ead;color:#fff>
+进程间通信
+</a>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>操作系统 —— 进程间通信之 SystemV 共享内存</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=system-v-共享内存区>System V 共享内存区</h1>
+<h2 id=1-概述>1. 概述</h2>
+<ul>
+<li>System V 共享内存区在概念上类似于Posix共享内存区；
+<ul>
+<li>Posix共享内存区：先调用shm_open，后调用mmap;</li>
+<li>System V 共享内存区：先调用shmget, 后调用shmat;</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-shmget函数>2. shmget函数</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/shm.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>shmget</span><span class=p>(</span><span class=n>key_t</span> <span class=n>key</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>size</span><span class=p>,</span> <span class=kt>int</span> <span class=n>shmflg</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。</li>
+<li>参数：
+<ul>
+<li>key: ftok的返回值或者IPC_PRIVATE。
+<ul>
+<li>如果key=IPC_PRIVATE并且shmflg指定IPC_CREAT标记，则创建共享内存区。</li>
+<li>如果没有key对应的共享内存标识符并且指定IPC_CREAT，则创建共享内存区。</li>
+<li>创建内存区会初始化内存区为0。（size字节）</li>
+<li>创建共享内存区会分配<code>shmid_ds结构</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>     <span class=k>struct</span> <span class=n>shmid_ds</span> <span class=p>{</span>
+         <span class=k>struct</span> <span class=n>ipc_perm</span>  <span class=n>shm_perm</span><span class=p>;</span>     <span class=cm>/* operation permissions */</span>
+         <span class=kt>int</span>              <span class=n>shm_segsz</span><span class=p>;</span>    <span class=cm>/* size of segment in bytes */</span>
+         <span class=n>pid_t</span>            <span class=n>shm_lpid</span><span class=p>;</span>     <span class=cm>/* pid of last shm op */</span>
+         <span class=n>pid_t</span>            <span class=n>shm_cpid</span><span class=p>;</span>     <span class=cm>/* pid of creator */</span>
+         <span class=kt>short</span>            <span class=n>shm_nattch</span><span class=p>;</span>   <span class=cm>/* # of current attaches */</span>
+         <span class=n>time_t</span>           <span class=n>shm_atime</span><span class=p>;</span>    <span class=cm>/* last shmat() time*/</span>
+         <span class=n>time_t</span>           <span class=n>shm_dtime</span><span class=p>;</span>    <span class=cm>/* last shmdt() time */</span>
+         <span class=n>time_t</span>           <span class=n>shm_ctime</span><span class=p>;</span>    <span class=cm>/* last change by shmctl() */</span>
+         <span class=kt>void</span>            <span class=o>*</span><span class=n>shm_internal</span><span class=p>;</span> <span class=cm>/* sysv stupidity */</span>
+     <span class=p>};</span>
+</code></pre></div></li>
+<li>size: 大小</li>
+<li>shmflg： 标记</li>
+</ul>
+</li>
+<li>返回：共享内存区标识符(整数)</li>
+</ul>
+<h2 id=3-shmat函数>3. shmat函数</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>void</span> <span class=o>*</span><span class=nf>shmat</span><span class=p>(</span><span class=kt>int</span> <span class=n>shmid</span><span class=p>,</span> <span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>shmaddr</span><span class=p>,</span> <span class=kt>int</span> <span class=n>shmflg</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：把shmget创建/打开的共享内存区连接到调用进程的地址空间；</li>
+<li>参数：
+<ul>
+<li>shmid: shmget返回的标识符，共享内存区的ID；</li>
+<li>shmaddr：如果是NULL，则系统进行选址（推荐）；
+<ul>
+<li>不为NULL：
+<ul>
+<li>shmflg指定了<code>SHM_RND</code>，连接到shmaddr指定的地址；</li>
+<li>shmflg没有指定<code>SHM_RND</code>，连接到shmaddr指定的地址向下舍入的一个SHMLBA常值；</li>
+<li>LBA表示：低端边界地址(lower bounder address)【？？？】</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>shmflg: 标记/权限；</li>
+</ul>
+</li>
+<li>返回：成功，映射区的起始地址；失败，-1。</li>
+</ul>
+<h2 id=4-shmdt函数>4. shmdt函数</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=n>shmdt</span><span class=p>(</span><span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>shmaddr</span><span class=p>)</span>
+</code></pre></div><ul>
+<li>作用：断开与共享内存区的连接。</li>
+<li>参数：
+<ul>
+<li>shmaddr：共享内存区地址</li>
+</ul>
+</li>
+<li>返回：成功0，失败-1</li>
+</ul>
+<h2 id=5-shmctl函数>5. shmctl函数</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=nf>shmctl</span><span class=p>(</span><span class=kt>int</span> <span class=n>shmid</span><span class=p>,</span> <span class=kt>int</span> <span class=n>cmd</span><span class=p>,</span> <span class=k>struct</span> <span class=n>shmid_ds</span> <span class=o>*</span><span class=n>buf</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：对一个共享内存区进行控制/操作。</li>
+<li>参数：
+<ul>
+<li>shmid: 共享内存区ID；</li>
+<li>cmd: 控制命令，IPC_RMID/IPC_SET/IPC_STAT;</li>
+<li>buff: 传参/传结果的结构</li>
+</ul>
+</li>
+<li>返回：成功0，失败-1</li>
+</ul>
+<h2 id=6-system-v共享内存区的限制>6. System V共享内存区的限制</h2>
+<p>和System V消息队列、System V信号量一样，System V共享内存区也存在特定的系统限制。</p>
+<ul>
+<li>详见<a class=link href=Examples/5_ex_svshm_limites.c>示例5_ex</a></li>
+</ul>
+<h2 id=a-问题>A. 问题</h2>
+<ul>
+<li>shmget是否要求文件存在？
+<ul>
+<li>要求文件存在。</li>
+</ul>
+</li>
+<li>是否支持亲缘进程间使用？
+<ul>
+<li>支持。</li>
+<li>具体哪里进行拆分，没有进行测试。</li>
+</ul>
+</li>
+<li>是否支持无亲缘进程间使用？
+<ul>
+<li>支持。</li>
+</ul>
+</li>
+<li>读/写超过共享内存区范围会怎样？
+<ul>
+<li>大小分页后，最后不足1页：
+<ul>
+<li>访问不超过此页，不会报错；</li>
+<li>超过，则段错误(segmentation fault)。</li>
+</ul>
+</li>
+<li>【和<a class=link href=../7.%e5%85%b1%e4%ba%ab%e5%86%85%e5%ad%98%e5%8c%ba/Readme.md>7.B</a>类似】</li>
+</ul>
+</li>
+<li>Posix共享内存区和SystemV共享内存区有什么差别？
+<ul>
+<li>Posix共享内存区对象的大小可以再任意时刻通过调用ftruncate<code>改变</code>；</li>
+<li>SystemV共享内存区对象的大小是调用shmget创建时<code>固定</code>的。</li>
+</ul>
+</li>
+</ul>
+<h2 id=b-注意>B. 注意</h2>
+<ul>
+<li>shmget创建或打开共享内存区时，并没有给调用进程提供访问该内存区的手段。（因此要调用shmat）</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/systemv/>systemv</a>
+<a href=/tags/%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>共享内存</a>
+<a href=/tags/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/>进程间通信</a>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.cf3b11299eba0cb27f69d4d77cc3b980_hu2b38632246c801a0071d06acf9f6a1dc_72126_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-zzsRKZ66DLJ/adTXfMO5gA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.b05c1e269aedee6fcf2290a4d4e4c913_hu2d611c5ade1df2c5480a88cbaf90139f_68661_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" data-hash="md5-sFweJprt7m/PIpCk1OTJEw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 消息队列</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-概述>1. 概述</a></li>
+<li><a href=#2-shmget函数>2. shmget函数</a></li>
+<li><a href=#3-shmat函数>3. shmat函数</a></li>
+<li><a href=#4-shmdt函数>4. shmdt函数</a></li>
+<li><a href=#5-shmctl函数>5. shmctl函数</a></li>
+<li><a href=#6-system-v共享内存区的限制>6. System V共享内存区的限制</a></li>
+<li><a href=#a-问题>A. 问题</a></li>
+<li><a href=#b-注意>B. 注意</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

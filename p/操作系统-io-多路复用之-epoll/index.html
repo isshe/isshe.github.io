@@ -1,0 +1,363 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="epoll I/O事件通知设施(I/O event notification facility)。
+1. epoll_create #include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  作用：打开一个epoll文件描述符。 参数：  size： Linux 2.6.8后不再使用，但是必须大于0。 flags：  0：和epoll_create行为一样。 O_CLOEXEC: 进程退出时关闭文件描述符。     返回：  失败：-1，设置errno；否则： 返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。 当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。    2. epoll_ctl typedef union epoll_data { void *ptr; int fd; uint32_t u32; uint64_t u64; } epoll_data_t; struct epoll_event { uint32_t events; /* Epoll events */ epoll_data_t data; /* User data variable */ }; int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);  作用：epoll文件描述符的控制接口。 参数：  epfd: epoll fd，epoll文件描述符； op:  EPOLL_CTL_ADD：注册fd到epfd； EPOLL_CTL_MOD：修改与fd的关联evnet事件。 EPOLL_CTL_DEL：从epfd中删除fd；   fd: 要操作(op)的fd； event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；   返回：  正常：0； 异常：-1，设置errno；   数据结构说明；  struct epoll_event的events的是位掩码的形式，取值是：  EPOLLIN: 相关文件可读。(read) EPOLLOUT: 相关文件可写。(write) EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。) EPOLLPRI: 有紧急数据可读。 EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置） EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置） EPOLLET: 相关文件描述符设置为边缘触发。（默认是水平触发） EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。 EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。  当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。   EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】      3."><title>操作系统 —— IO 多路复用之 epoll</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— IO 多路复用之 epoll">
+<meta property="og:description" content="epoll I/O事件通知设施(I/O event notification facility)。
+1. epoll_create #include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  作用：打开一个epoll文件描述符。 参数：  size： Linux 2.6.8后不再使用，但是必须大于0。 flags：  0：和epoll_create行为一样。 O_CLOEXEC: 进程退出时关闭文件描述符。     返回：  失败：-1，设置errno；否则： 返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。 当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。    2. epoll_ctl typedef union epoll_data { void *ptr; int fd; uint32_t u32; uint64_t u64; } epoll_data_t; struct epoll_event { uint32_t events; /* Epoll events */ epoll_data_t data; /* User data variable */ }; int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);  作用：epoll文件描述符的控制接口。 参数：  epfd: epoll fd，epoll文件描述符； op:  EPOLL_CTL_ADD：注册fd到epfd； EPOLL_CTL_MOD：修改与fd的关联evnet事件。 EPOLL_CTL_DEL：从epfd中删除fd；   fd: 要操作(op)的fd； event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；   返回：  正常：0； 异常：-1，设置errno；   数据结构说明；  struct epoll_event的events的是位掩码的形式，取值是：  EPOLLIN: 相关文件可读。(read) EPOLLOUT: 相关文件可写。(write) EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。) EPOLLPRI: 有紧急数据可读。 EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置） EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置） EPOLLET: 相关文件描述符设置为边缘触发。（默认是水平触发） EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。 EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。  当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。   EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】      3.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:tag" content="IO 多路复用"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg">
+<meta name=twitter:title content="操作系统 —— IO 多路复用之 epoll">
+<meta name=twitter:description content="epoll I/O事件通知设施(I/O event notification facility)。
+1. epoll_create #include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  作用：打开一个epoll文件描述符。 参数：  size： Linux 2.6.8后不再使用，但是必须大于0。 flags：  0：和epoll_create行为一样。 O_CLOEXEC: 进程退出时关闭文件描述符。     返回：  失败：-1，设置errno；否则： 返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。 当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。    2. epoll_ctl typedef union epoll_data { void *ptr; int fd; uint32_t u32; uint64_t u64; } epoll_data_t; struct epoll_event { uint32_t events; /* Epoll events */ epoll_data_t data; /* User data variable */ }; int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);  作用：epoll文件描述符的控制接口。 参数：  epfd: epoll fd，epoll文件描述符； op:  EPOLL_CTL_ADD：注册fd到epfd； EPOLL_CTL_MOD：修改与fd的关联evnet事件。 EPOLL_CTL_DEL：从epfd中删除fd；   fd: 要操作(op)的fd； event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；   返回：  正常：0； 异常：-1，设置errno；   数据结构说明；  struct epoll_event的events的是位掩码的形式，取值是：  EPOLLIN: 相关文件可读。(read) EPOLLOUT: 相关文件可写。(write) EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。) EPOLLPRI: 有紧急数据可读。 EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置） EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置） EPOLLET: 相关文件描述符设置为边缘触发。（默认是水平触发） EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。 EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。  当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。   EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】      3."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image_hu6485f23e60e2e8e9568294bae27898e8_22406_800x0_resize_q75_box.jpg srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image_hu6485f23e60e2e8e9568294bae27898e8_22406_800x0_resize_q75_box.jpg 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image_hu6485f23e60e2e8e9568294bae27898e8_22406_1600x0_resize_q75_box.jpg 1600w" width=800 height=903 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 epoll">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>操作系统 —— IO 多路复用之 epoll</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=epoll>epoll</h1>
+<p>I/O事件通知设施(I/O event notification facility)。</p>
+<h2 id=1-epoll_create>1. epoll_create</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/epoll.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>epoll_create</span><span class=p>(</span><span class=kt>int</span> <span class=n>size</span><span class=p>);</span>
+<span class=kt>int</span> <span class=nf>epoll_create1</span><span class=p>(</span><span class=kt>int</span> <span class=n>flags</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：打开一个epoll文件描述符。</li>
+<li>参数：
+<ul>
+<li>size： Linux 2.6.8后不再使用，但是必须大于0。</li>
+<li>flags：
+<ul>
+<li>0：和epoll_create行为一样。</li>
+<li>O_CLOEXEC: 进程退出时关闭文件描述符。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回：
+<ul>
+<li>失败：-1，设置errno；否则：</li>
+<li>返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。</li>
+<li>当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-epoll_ctl>2. epoll_ctl</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=k>typedef</span> <span class=k>union</span> <span class=n>epoll_data</span> <span class=p>{</span>
+    <span class=kt>void</span>        <span class=o>*</span><span class=n>ptr</span><span class=p>;</span>
+    <span class=kt>int</span>          <span class=n>fd</span><span class=p>;</span>
+    <span class=kt>uint32_t</span>     <span class=n>u32</span><span class=p>;</span>
+    <span class=kt>uint64_t</span>     <span class=n>u64</span><span class=p>;</span>
+<span class=p>}</span> <span class=n>epoll_data_t</span><span class=p>;</span>
+
+<span class=k>struct</span> <span class=n>epoll_event</span> <span class=p>{</span>
+    <span class=kt>uint32_t</span>     <span class=n>events</span><span class=p>;</span>      <span class=cm>/* Epoll events */</span>
+    <span class=n>epoll_data_t</span> <span class=n>data</span><span class=p>;</span>        <span class=cm>/* User data variable */</span>
+<span class=p>};</span>
+
+
+<span class=kt>int</span> <span class=nf>epoll_ctl</span><span class=p>(</span><span class=kt>int</span> <span class=n>epfd</span><span class=p>,</span> <span class=kt>int</span> <span class=n>op</span><span class=p>,</span> <span class=kt>int</span> <span class=n>fd</span><span class=p>,</span> <span class=k>struct</span> <span class=n>epoll_event</span> <span class=o>*</span><span class=n>event</span><span class=p>);</span>  
+</code></pre></div><ul>
+<li>作用：epoll文件描述符的控制接口。</li>
+<li>参数：
+<ul>
+<li>epfd: epoll fd，epoll文件描述符；</li>
+<li>op:
+<ul>
+<li>EPOLL_CTL_ADD：注册fd到epfd；</li>
+<li>EPOLL_CTL_MOD：修改与fd的关联evnet事件。</li>
+<li>EPOLL_CTL_DEL：从epfd中删除fd；</li>
+</ul>
+</li>
+<li>fd: 要操作(op)的fd；</li>
+<li>event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；</li>
+</ul>
+</li>
+<li>返回：
+<ul>
+<li>正常：0；</li>
+<li>异常：-1，设置errno；</li>
+</ul>
+</li>
+<li>数据结构说明；
+<ul>
+<li><code>struct epoll_event</code>的<code>events</code>的是位掩码的形式，取值是：
+<ul>
+<li>EPOLLIN: 相关文件可读。(read)</li>
+<li>EPOLLOUT: 相关文件可写。(write)</li>
+<li>EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。)</li>
+<li>EPOLLPRI: 有紧急数据可读。</li>
+<li>EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置）</li>
+<li>EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置）</li>
+<li>EPOLLET: 相关文件描述符设置为<code>边缘触发</code>。（默认是水平触发）</li>
+<li>EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。</li>
+<li>EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。
+<ul>
+<li>当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。</li>
+</ul>
+</li>
+<li>EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=3-epoll_wait>3. epoll_wait</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=nf>epoll_wait</span><span class=p>(</span><span class=kt>int</span> <span class=n>epfd</span><span class=p>,</span> <span class=k>struct</span> <span class=n>epoll_event</span> <span class=o>*</span><span class=n>events</span><span class=p>,</span>
+               <span class=kt>int</span> <span class=n>maxevents</span><span class=p>,</span> <span class=kt>int</span> <span class=n>timeout</span><span class=p>);</span>
+<span class=kt>int</span> <span class=nf>epoll_pwait</span><span class=p>(</span><span class=kt>int</span> <span class=n>epfd</span><span class=p>,</span> <span class=k>struct</span> <span class=n>epoll_event</span> <span class=o>*</span><span class=n>events</span><span class=p>,</span>
+               <span class=kt>int</span> <span class=n>maxevents</span><span class=p>,</span> <span class=kt>int</span> <span class=n>timeout</span><span class=p>,</span>
+               <span class=k>const</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=n>sigmask</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>作用：等待epoll文件描述符上的I/O事件。</li>
+<li>参数：
+<ul>
+<li>epfd：epoll文件描述符；</li>
+<li>events：等待的目标事件；</li>
+<li>maxevents：返回的最大事件数量；</li>
+<li>timeout：epoll_wait阻塞超时，单位微秒。发生以下事件解除阻塞：
+<ul>
+<li>监听的文件描述符有事件发出/传递；</li>
+<li>被信号处理函数中断；</li>
+<li>超时；</li>
+</ul>
+</li>
+<li>sigmask：屏蔽信号集？！【疑问】</li>
+</ul>
+</li>
+<li>返回：
+<ul>
+<li>正常：就绪的文件描述符数量</li>
+<li>异常：-1，并设置errno</li>
+</ul>
+</li>
+</ul>
+<h2 id=4-触发形式>4. 触发形式</h2>
+<ul>
+<li>
+<p>水平触发：（默认是水平触发）</p>
+<ul>
+<li>触发条件：只要有<code>数据</code>可读/可写，即可触发。</li>
+</ul>
+</li>
+<li>
+<p>边缘触发：（使用EPOLLET设置为边缘触发）</p>
+<ul>
+<li>触发条件：有<code>新数据</code>可读/可写，即可触发。</li>
+</ul>
+</li>
+<li>
+<p>两种触发的不同在于：一次新数据，水平触发可能触发多次，边缘触发只会触发一次。</p>
+</li>
+</ul>
+<h1 id=epoll的优点>epoll的优点</h1>
+<p>select/poll的两个主要性能问题，就是epoll的优点：</p>
+<ul>
+<li>select/poll需要轮询查找就绪的描述符，epoll直接返回就绪的信息。</li>
+<li>描述符集合需要从用户空间拷贝到内核空间。
+<ul>
+<li>epoll的add/remove也是需要拷贝；</li>
+<li>对于就绪描述符，使用mmap进行内存共享，避免拷贝；</li>
+</ul>
+</li>
+</ul>
+<h1 id=a-问题拓展>A. 问题/拓展</h1>
+<ul>
+<li>可读：缓冲区非空，并且数据量超过读阈值。</li>
+<li>可写：缓冲区未满。</li>
+<li>什么时候使用poll/select, 什么时候使用epoll?
+<ul>
+<li>满足以下几个条件，用epoll，否则用poll：
+<ul>
+<li>使用的是Linux系统，并且有epoll系统调用；</li>
+<li>需要处理得是大的<code>活动描述符集</code>（至少1000）；</li>
+<li>描述符集是相对稳定的。（因为epoll添加/删除描述符花销和poll一样很大，需要进入/离开内核空间）；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+<a href=/tags/io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/>IO 多路复用</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 poll" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— IO 多路复用之 poll</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 select" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— IO 多路复用之 select</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进线程同步之读写锁" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进线程同步之读写锁</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.dcf872567259486920712acd679c8845_hu6d86b1b4a5aabba4c58c9dd2ddcba887_57880_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 线程" data-hash="md5-3PhyVnJZSGkgcSrNZ5yIRQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 线程</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-epoll_create>1. epoll_create</a></li>
+<li><a href=#2-epoll_ctl>2. epoll_ctl</a></li>
+<li><a href=#3-epoll_wait>3. epoll_wait</a></li>
+<li><a href=#4-触发形式>4. 触发形式</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

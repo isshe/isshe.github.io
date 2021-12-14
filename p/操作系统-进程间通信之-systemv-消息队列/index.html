@@ -1,0 +1,313 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="消息队列  在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】  详见此Readme 2.4节 若需要客户进程和服务器进程之间的双向数据流，用UNIX域套接字或全双工管道。   队列：消息队列。信息的链接表，存储在内核中，由标识符标识。 队列ID：消息队列标识符。 与队列关联的数据结构：定义队列的当前状态  struct msqid_ds { struct ipc_perm msg_perm; msgqnum_t msg_qnum; // 队列里的消息长度/数量  msglen_t msg_qbytes; // 队列中能容纳的最大字节数  pid_t msg_lspid; // 最后msgsnd()的pid  pid_t msg_lrpid; // 最后msgrcv()的pid  time_t msg_stime; // 最后msgsnd()的时间  time_t msg_rtime; // 最后msgrcv()的时间  time_t msg_ctime; // 最后改变时间 } 1. 消息队列的系统限制  消息队列的系统限制 
+ 导出的：这种限制来源于其他限制。  如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。    2. 相关函数  key转换标识符的规则，见Readme 创建新队列、引用现有队列。  #include &amp;lt;sys/msg."><title>操作系统 —— 进程间通信之 SystemV 消息队列</title>
+<link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 进程间通信之 SystemV 消息队列">
+<meta property="og:description" content="消息队列  在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】  详见此Readme 2.4节 若需要客户进程和服务器进程之间的双向数据流，用UNIX域套接字或全双工管道。   队列：消息队列。信息的链接表，存储在内核中，由标识符标识。 队列ID：消息队列标识符。 与队列关联的数据结构：定义队列的当前状态  struct msqid_ds { struct ipc_perm msg_perm; msgqnum_t msg_qnum; // 队列里的消息长度/数量  msglen_t msg_qbytes; // 队列中能容纳的最大字节数  pid_t msg_lspid; // 最后msgsnd()的pid  pid_t msg_lrpid; // 最后msgrcv()的pid  time_t msg_stime; // 最后msgsnd()的时间  time_t msg_rtime; // 最后msgrcv()的时间  time_t msg_ctime; // 最后改变时间 } 1. 消息队列的系统限制  消息队列的系统限制 
+ 导出的：这种限制来源于其他限制。  如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。    2. 相关函数  key转换标识符的规则，见Readme 创建新队列、引用现有队列。  #include &amp;lt;sys/msg.">
+<meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="消息队列"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png">
+<meta name=twitter:title content="操作系统 —— 进程间通信之 SystemV 消息队列">
+<meta name=twitter:description content="消息队列  在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】  详见此Readme 2.4节 若需要客户进程和服务器进程之间的双向数据流，用UNIX域套接字或全双工管道。   队列：消息队列。信息的链接表，存储在内核中，由标识符标识。 队列ID：消息队列标识符。 与队列关联的数据结构：定义队列的当前状态  struct msqid_ds { struct ipc_perm msg_perm; msgqnum_t msg_qnum; // 队列里的消息长度/数量  msglen_t msg_qbytes; // 队列中能容纳的最大字节数  pid_t msg_lspid; // 最后msgsnd()的pid  pid_t msg_lrpid; // 最后msgrcv()的pid  time_t msg_stime; // 最后msgsnd()的时间  time_t msg_rtime; // 最后msgrcv()的时间  time_t msg_ctime; // 最后改变时间 } 1. 消息队列的系统限制  消息队列的系统限制 
+ 导出的：这种限制来源于其他限制。  如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。    2. 相关函数  key转换标识符的规则，见Readme 创建新队列、引用现有队列。  #include &amp;lt;sys/msg."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_1600x0_resize_box_3.png 1600w" width=800 height=202 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/ style=background-color:#995ead;color:#fff>
+进程间通信
+</a>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+操作系统
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>操作系统 —— 进程间通信之 SystemV 消息队列</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 13, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=消息队列>消息队列</h1>
+<ul>
+<li><strong>在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】</strong>
+<ul>
+<li>详见<a class=link href=../Readme.md>此Readme 2.4节</a></li>
+<li>若需要客户进程和服务器进程之间的双向数据流，用<code>UNIX域套接字</code>或<code>全双工管道</code>。</li>
+</ul>
+</li>
+<li>队列：消息队列。信息的链接表，存储在内核中，由标识符标识。</li>
+<li>队列ID：消息队列标识符。</li>
+<li>与队列关联的数据结构：定义队列的<code>当前</code>状态</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=k>struct</span> <span class=n>msqid_ds</span> <span class=p>{</span>
+    <span class=k>struct</span> <span class=n>ipc_perm</span> <span class=n>msg_perm</span><span class=p>;</span>
+    <span class=n>msgqnum_t</span>       <span class=n>msg_qnum</span><span class=p>;</span>       <span class=c1>// 队列里的消息长度/数量
+</span><span class=c1></span>    <span class=n>msglen_t</span>        <span class=n>msg_qbytes</span><span class=p>;</span>     <span class=c1>// 队列中能容纳的最大字节数
+</span><span class=c1></span>    <span class=n>pid_t</span>           <span class=n>msg_lspid</span><span class=p>;</span>      <span class=c1>// 最后msgsnd()的pid
+</span><span class=c1></span>    <span class=n>pid_t</span>           <span class=n>msg_lrpid</span><span class=p>;</span>      <span class=c1>// 最后msgrcv()的pid
+</span><span class=c1></span>    <span class=n>time_t</span>          <span class=n>msg_stime</span><span class=p>;</span>      <span class=c1>// 最后msgsnd()的时间
+</span><span class=c1></span>    <span class=n>time_t</span>          <span class=n>msg_rtime</span><span class=p>;</span>      <span class=c1>// 最后msgrcv()的时间
+</span><span class=c1></span>    <span class=n>time_t</span>          <span class=n>msg_ctime</span><span class=p>;</span>      <span class=c1>// 最后改变时间
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><h2 id=1-消息队列的系统限制>1. 消息队列的系统限制</h2>
+<p><figure class=gallery-image style=flex-grow:396;flex-basis:951px>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png data-size=682x172>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png width=682 height=172 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_1024x0_resize_box_3.png 1024w" loading=lazy alt=消息队列的系统限制>
+</a>
+<figcaption>消息队列的系统限制</figcaption>
+</figure></p>
+<ul>
+<li>导出的：这种限制来源于其他限制。
+<ul>
+<li>如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-相关函数>2. 相关函数</h2>
+<ul>
+<li>key转换标识符的规则，见<a class=link href=../Readme.md>Readme</a></li>
+<li>创建新队列、引用现有队列。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/msg.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// key: 键
+</span><span class=c1>// 返回：标识符/队列ID
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>msgget</span><span class=p>(</span><span class=n>key_t</span> <span class=n>key</span><span class=p>,</span> <span class=kt>int</span> <span class=n>flag</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>队列控制函数</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/msg.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=c1>// cmd:
+</span><span class=c1>// * IPC_STAT: 取队列的smqid_ds结构，存放在buf中
+</span><span class=c1>// * IPC_SET: 将buf中的msg_perm.uid/gid/mode/msg_qbytes等复制到队列对应的msqid_ds结构中。
+</span><span class=c1>// * IPC_RMID: 删除队列及其中的所有数据，删除立即生效。
+</span><span class=c1></span><span class=kt>int</span> <span class=n>msgctl</span><span class=p>(</span><span class=kt>int</span> <span class=n>msqid</span><span class=p>,</span> <span class=kt>int</span> <span class=n>cmd</span><span class=p>,</span> <span class=k>struct</span> <span class=n>msqid_ds</span> <span class=o>*</span><span class=n>buf</span><span class=p>)</span>
+</code></pre></div><ul>
+<li>放数据到队列中</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/msg.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cm>/*
+</span><span class=cm> * msqid: 队列标识
+</span><span class=cm> * ptr: 指向类似以下的结构
+</span><span class=cm> *      * struct my_msg {
+</span><span class=cm> *          long my_type;           // 数据类型【？？？】
+</span><span class=cm> *          char my_test[nbytes];   // 数据
+</span><span class=cm> *      }
+</span><span class=cm> * nbytes: 数据大小
+</span><span class=cm> * flag:
+</span><span class=cm> *  * IPC_NOWAIT: 队列满，返回-1，errno = EAGAIN
+</span><span class=cm> *    * 否则，阻塞到
+</span><span class=cm> *      * 等待到队列空；
+</span><span class=cm> *      * 队列被删除, 返回-1, errno = EIDRM；
+</span><span class=cm> *      * 收到信号，并从信号处理程序返回；返回-1, errno = EINTR；
+</span><span class=cm> */</span>
+<span class=kt>int</span> <span class=nf>msgsnd</span><span class=p>(</span><span class=kt>int</span> <span class=n>msqid</span><span class=p>,</span> <span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>ptr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>nbytes</span><span class=p>,</span> <span class=kt>int</span> <span class=n>flag</span><span class=p>);</span>
+</code></pre></div><ul>
+<li>从队列中取数据</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/msg.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cm>/*
+</span><span class=cm> * type: 指定想要消息的类型。
+</span><span class=cm> *  * type == 0: 队列中的第一个消息；
+</span><span class=cm> *  * type &gt; 0 : 队列中第一个类型为type的消息；
+</span><span class=cm> *  * type &lt; 0 : 返回队列中消息类型值&lt;=`type绝对值`的消息。如果多个，则返回类型值最小的[第一个]消息。
+</span><span class=cm> * flag:
+</span><span class=cm> *  * IPC_NOWAIT: 队列空，立即返回-1, errno = ENOMSG;
+</span><span class=cm> *    * 否则，阻塞到
+</span><span class=cm> *      * 等待到队列有需要的数据；
+</span><span class=cm> *      * 队列被删除, 返回-1, errno = EIDRM；
+</span><span class=cm> *      * 收到信号，并从信号处理程序返回；返回-1, errno = EINTR；
+</span><span class=cm> */</span>
+<span class=kt>int</span> <span class=nf>msgrcv</span><span class=p>(</span><span class=kt>int</span> <span class=n>msqid</span><span class=p>,</span> <span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>ptr</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>nbytes</span><span class=p>,</span> <span class=kt>long</span> <span class=n>type</span><span class=p>,</span> <span class=kt>int</span> <span class=n>flag</span><span class=p>);</span>
+</code></pre></div><h2 id=3-注意>3. 注意</h2>
+<ul>
+<li>对于"在新的应用程序中，不应再使用消息队列"，貌似现在很多系统还在使用，不确定是否说的是一个东西，需要时要再了解。</li>
+</ul>
+<h2 id=a拓展>A.拓展</h2>
+<ul>
+<li><a class=link href=http://www.cnblogs.com/itfly8/p/5155983.html target=_blank rel=noopener>分布式消息队列</a></li>
+<li><a class=link href=http://www.cnblogs.com/itfly8/p/5156155.html target=_blank rel=noopener>消息队列</a></li>
+</ul>
+<h2 id=b-参考>B. 参考</h2>
+<ul>
+<li>《UNIX环境高级编程 第三版》</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/systemv/>systemv</a>
+<a href=/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>消息队列</a>
+<a href=/tags/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/>进程间通信</a>
+<a href=/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/>操作系统</a>
+<a href=/tags/application/>application</a>
+<a href=/tags/linux/>linux</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.1ac0b2d4f163ff16004b7025bd30874b_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-GsCy1PFj/xYAS3AlvTCHSw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-消息队列的系统限制>1. 消息队列的系统限制</a></li>
+<li><a href=#2-相关函数>2. 相关函数</a></li>
+<li><a href=#3-注意>3. 注意</a></li>
+<li><a href=#a拓展>A.拓展</a></li>
+<li><a href=#b-参考>B. 参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
