@@ -13,6 +13,8 @@
 <meta name=twitter:description content="netstat 显示当前的连接情况。（UDP、TCP、UNIX、ICMP等） 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。
 1. 介绍 1.1 用法 netstat [-vWeenNcCF] [&amp;lt;Af&amp;gt;] -r netstat {-V|--version|-h|--help} netstat [-vWnNcaeol] [&amp;lt;Socket&amp;gt; ...] netstat { [-vWeenNac] -i | [-cWnNe] -M | -s } 1.2 选项 -r, --route 显示路由表 -i, --interfaces 显示接口列表 -g, --groups 显示多播组成员 -s, --statistics 显示网络统计信息 -M, --masquerade display masqueraded connections【？？？】 -v, --verbose 详细 -W, --wide 不要截断IP地址 -n, --numeric 不要解析IP成域名（直接使用IP，不经过域名服务器） --numeric-hosts 不要解析主机名 --numeric-ports 不要解析端口名 --numeric-users 不要解析用户名 -N, --symbolic 解析硬件名 【？？？】 -e, --extend 显示更多信息 -p, --programs 显示进程ID和进程名 -c, --continuous 持续列出网络状态 -l, --listening 显示LISTENING状态的连接 -a, --all, --listening 显示所有连接(默认: 显示CONNECTED的连接) -o, --timers 显示计时器 【netstat -to】 -F, --fib 显示转发信息库（Forwarding Information Base），默认显示 -C, --cache 显示路由缓存(routing cache)而不是FIB -t, --tcp 显示TCP信息 -u, --udp 显示UDP信息 -w, --raw 实现raw信息 -x, --unix 显示unix信息 --ax25 显示AMPR AX."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
 <body class="article-page has-toc">
 <script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
@@ -134,22 +136,12 @@ netstat -ie
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— ip</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.d07b135a6e76b4e4a6f8bc0d9c5ed7c9_hu890b4a84832ec272513434c344ebda9b_82374_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-0HsTWm52tOSm+LwNnF7XyQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— tcpdump</h2>
+<h2 class=article-title>Linux 命令 —— git</h2>
 </div>
 </a>
 </article>
@@ -164,12 +156,12 @@ netstat -ie
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.1b23b553b0c123bceb9d86df821a7b1d_hu2b4e3663007b28b46c3e8d77ab82b719_82735_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-GyO1U7DBI7zrnYbfghp7HQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— gdb</h2>
+<h2 class=article-title>Linux 命令 —— vmstat</h2>
 </div>
 </a>
 </article>
@@ -180,6 +172,16 @@ netstat -ie
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— ssh</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>

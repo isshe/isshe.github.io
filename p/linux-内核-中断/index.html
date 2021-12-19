@@ -13,6 +13,8 @@
 <meta name=twitter:description content="中断 1. 硬件中断注册 #include &amp;lt;linux/interrupt.h&amp;gt; static inline int __must_check request_irq(unsigned int irq, irq_handler_t handler, unsigned long flags, const char *name, void *dev)  作用：申请一个中断线。 参数：  irq: 中断线号 handler: 中断处理函数 flags: name: dev:    2. 硬件中断释放 #include &amp;lt;linux/interrupt.h&amp;gt; const void *free_irq(unsigned int irq, void *dev_id);  作用：释放一个中断线。如果没有其他设备注册该IRQ线，就关闭该IRQ。 参数：  irq: 中断线号。 dev_id: 设备标识。    3. 中断类型 网络设备常见的中断事件类型：
  接收一帧：最常见、标准的情况。 传输失败； DMA传输已成功完成；  drivers/net/3c59x.c有相关范例。   设备有足够内存处理新传输；  4."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
 <body class="article-page has-toc">
 <script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
