@@ -37,6 +37,7 @@ break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法�
  将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。 以下是一些常用的GDB命令:
 break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger"><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -271,12 +272,22 @@ gdb <span class=nb>test</span>
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.d07b135a6e76b4e4a6f8bc0d9c5ed7c9_hu890b4a84832ec272513434c344ebda9b_82374_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-0HsTWm52tOSm+LwNnF7XyQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— tcpdump</h2>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>
@@ -291,32 +302,22 @@ gdb <span class=nb>test</span>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.fd4d21163b2097db780a3c19226469da_hu55e9525b31cc013ff4b823f79d803bd9_80202_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-/U0hFjsgl9t4CjwZImRp2g==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— netstat</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— modprobe</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
 <div class=article-image>
 <img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— strace</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.1b23b553b0c123bceb9d86df821a7b1d_hu2b4e3663007b28b46c3e8d77ab82b719_82735_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-GyO1U7DBI7zrnYbfghp7HQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— vmstat</h2>
 </div>
 </a>
 </article>

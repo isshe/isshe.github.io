@@ -10,6 +10,7 @@
 <meta name=twitter:title content="操作系统 —— 进程间通信之FIFO">
 <meta name=twitter:description content="FIFO  FIFO有时被称为命名管道。 FIFO是一种文件类型。 支持在无亲缘进程间使用。  1. FIFO创建  创建FIFO类似于创建文件；FIFO的路径名存在于文件系统中。  2. 创建FIFO  相关函数  #include &amp;lt;sys/stat.h&amp;gt;int mkfifo(const char *path, mode_t mode); // 在fd表示的目录相关位置，创建一个FIFO。 // * path为绝对路径，则忽略fd // * path为相对路径，则fd参数是一个打开的目录的文件描述符。路径名和目录有关【？？？】 // * path为相对路径，并且fd参数有特殊值AT_FDCWD，则路径名以当前目录开始。 int mkfifoat(int fd, const char *path, mode_t mode); 3. 其他  open一个FIFO时，非阻塞标记(O_NONBLOCK)会产生的影响：  一般情况下(没有指定O_NONBLOCK)，  只读open要阻塞到其他进程为写打开此FIFO为止； 只写open要阻塞到其他进程为读打开此FIFO为止；   如果指定了O_NONBLOCK，则：  只读open时，立即返回。【返回啥？正常返回？】 只写open时，如果没有其他进程为读打开此FIFO，则此只写open返回-1，errno置为ENXIO。     若write一个没有进程为读打开的FIFO，则产生信号SIGPIPE。（类似pipe） 若FIFO的最后一个写进程关闭了该FIFO，则将为改FIFO的读进程产生一个文件结束标记。（类似于pipe） FIFO的两种用途：  shell命令使用FIFO将数据从一条管道传送到另一条时，无需创建中间临时文件； 客户——服务器进程应用中，FIFO用作汇聚点，在客户和服务器进程间传递数据；    4."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.jpg">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -141,6 +142,26 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.cf3b11299eba0cb27f69d4d77cc3b980_hu2b38632246c801a0071d06acf9f6a1dc_72126_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-zzsRKZ66DLJ/adTXfMO5gA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/>
 <div class=article-image>
 <img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之管道" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
@@ -161,32 +182,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/map_file.cf3b11299eba0cb27f69d4d77cc3b980_hu2b38632246c801a0071d06acf9f6a1dc_72126_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-zzsRKZ66DLJ/adTXfMO5gA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
 <div class=article-image>
 <img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
 </div>
 </a>
 </article>

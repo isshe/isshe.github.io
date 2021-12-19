@@ -16,6 +16,7 @@ struct semid_ds { struct ipc_perm sem_perm; // 操作权限 struct sem *sem_base
   约定：  semval: 信号量当前值 semncnt: 等待semval变为大于其当前值的线程数； semzcnt: 等待semval变为0的线程数； semadj: 所指定信号量针对调用进程的调整值；【？？？】    2.信号量集相关数据结构  信号量集结构图 
 struct semid_ds { struct ipc_perm sem_perm; // 操作权限 struct sem *sem_base; // 指向信号量集数组的指针 ushort sem_nsems; // 信号量集中信号量的数量 time_t sem_otime; // 最后semop()的时间 time_t sem_ctime; // 最后创建或IPC_SET的时间 } struct sem { ushort_t semval; // 信号量值 short sempid; // 最后成功semop()/SETVAL, SETALL的PID ushort_t semncnt; // awaiting semval &amp;gt; current vale的数量 ushort_t semzcnt; // awaiting semval = 0 的数量 } // 给信号量集中某个特定的信号量指定一个操作 // 不能静态初始化，顺序根据实现不同而不同 struct sembuf { short sem_num; // 信号量号：0, 1, ."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.png">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -229,22 +230,22 @@ union semun {
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之管道" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之管道</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
 </div>
 </a>
 </article>
