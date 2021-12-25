@@ -13,7 +13,7 @@
 <meta name=twitter:description content="select select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。
 1. select #include &amp;lt;sys/select.h&amp;gt; int select(int nfds, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict errorfds, struct timeval *restrict timeout);  作用：指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。 参数：  nfds: 待测试的最大描述符+1； readfds: 监听读的fd集合； writefds: 监听写得fd集合； errorfds: 监听异常的fd集合； timeout: 等待超时时间。  NULL: 永远等下去； 非NULL且不为值0: 等待指定时间； 非NULL且值为0: 不等待，检查描述符后立即返回。（轮询）     返回： 返回：  成功：就绪描述符数目 超时：0 出错：-1    2. 描述符就绪条件  读就绪：  该套接字接收缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。  高于水位，认为可读。   该套接字的读半部关闭(接收了FIN的TCP连接)。  返回EOF   该套接字是一个监听套接字且已完成的连接数不为0。  此时accept通常不阻塞。   其上有一个套接字错误待处理。  读操作不阻塞、返回-1，并设置errno。 待处理错误，可通过getsockoptvidkSO_ERROR套接字获取并清除。     写就绪：  发送缓冲区的数据字节数&amp;gt;=套接字缓冲区低水位标记的当前大小。 该连接的写半部关闭。  此时写，会产生SIGPIPE信号。   使用非阻塞connect的套接字已建立连接，或者connect已经以失败告终。 其上有一个套接字错误待处理。   异常就绪：（？！）  套接字存在带外数据或者仍处于带外标记。  注意：当某个套接字上发生错误时，它将由select标记为可读又可写。     汇总：    条件 可读吗？ 可写吗？ 异常吗？     有数据可读 +     关闭连接的读一半 +     给监听套接字准备好新连接 +     有可用于写得空间  +    关闭连接的写一半  +    待处理错误 + +    TCP带外数据   +      3."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.jpg">
-<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -36,7 +36,7 @@ extended">
 </div>
 <div class=article-details>
 <header class=article-category>
-<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#eab3ae;color:#fff>
 操作系统
 </a>
 </header>
@@ -304,12 +304,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.dcf872567259486920712acd679c8845_hu6d86b1b4a5aabba4c58c9dd2ddcba887_57880_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 线程" data-hash="md5-3PhyVnJZSGkgcSrNZ5yIRQ==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 线程</h2>
+<h2 class=article-title>操作系统 —— 进线程同步之互斥锁、条件变量</h2>
 </div>
 </a>
 </article>

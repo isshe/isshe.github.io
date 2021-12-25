@@ -22,7 +22,7 @@
  AbstractFactory: 抽象工厂；声明具体工厂的接口——声明了一个创建抽象产品对象的接口。 ConcreteFactory: 具体工厂；继承自抽象工厂，实现了创建具体产品对象的操作。 AbstractProduct: 抽象产品；声明具体产品的接口——声明了一类产品对象的接口。 ConcreteProduct: 具体产品；继承自抽象产品，定义了一个将被具体工厂创建的产品对象，实现了抽象产品的接口， Client: 仅使用由抽象工厂和抽象产品类声明的接口——不使用具体工厂、具体产品的接口/方法。    工作方式：
  运行时创建具体工厂对象，具体工厂对象创建具体产品对象。 客户使用不同的具体工厂对象，创建不同的具体产品对象。 抽象工厂将产品对象的创建延迟到具体工厂。    2. 解决什么问题？如何解决？  需联合使用一系列产品的时候，可使用此模式 其他见【4.使用场景】  3. 优缺点是什么？ 3.1 优点  分离了具体的类：  工厂封装创建产品对象的过程，将客户和类的实现分离。客户通过抽象接口操纵实例。 具体产品的类名也在具体工厂的实现中被分离，它们不会出现在客户代码中。   易于交换产品系列：  一个具体工厂类在一个应用中仅出现一次——它初始化的时候； 改变具体工厂类即可改变产品配置——具体工厂类A换为具体工厂类B,则产品配置从A也更换到B。   有利于产品的一致性：【？？？】  一个系列的产品对象被设计成一起工作的时候，一个应用一次只能使用同一个系列中的对象。【？？？】    3.2 缺点  难以添加新种类的产品，需改代码。（拓展性受到限制）  抽象工厂类确定了可以被创建的产品集合，要新增就要修改此类——它及它的子类都要变化。    4."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
-<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -237,22 +237,22 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.7bd87ea30596f8b88461cd7488ebb365_hub0bc657ad31b110e47045ee0ac7e408b_22439_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-e9h+owWW+LiEYc10iOuzZQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 模板方法模式</h2>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.f9429e6c6f20b367f1ef79a3a4cd148a_hu8ca9ff7362688b461397facff0e6ed9b_16668_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 单件模式" data-hash="md5-+UKebG8gs2fx73mjpM0Uig==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 外观模式</h2>
+<h2 class=article-title>设计模式 —— 单件模式</h2>
 </div>
 </a>
 </article>
@@ -267,12 +267,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.5b785662e59e7154416497c95bcd1e9e_hu1f629ad2e90a079156899ab8241b7de5_156283_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-W3hWYuWecVRBZJfJW80eng==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.4ce09f29da8c76e58f7cb5f426b2ff52_hua4fa13d1bdf22ddd96376562d855ae4a_134997_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 观察者模式" data-hash="md5-TOCfKdqMduWPfLX0JrL/Ug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+<h2 class=article-title>设计模式 —— 观察者模式</h2>
 </div>
 </a>
 </article>

@@ -22,7 +22,7 @@
  xxx_probe/module_init | |---&amp;gt;dev = alloc_etherdev(sizeof(driver_private_structure)) | | | +---&amp;gt; alloc_etherdev(sizeof_priv, &amp;#34;eth%d&amp;#34;, ether_setup) | | | |---&amp;gt; dev = kmalloc(sizeof(net_device)) + sizeof_prive + padding) | |---&amp;gt; ether_setup(dev) | |---&amp;gt; strcpy(dev-&amp;gt;name, &amp;#34;eth%d&amp;#34;) | +---&amp;gt; return(dev) | ... ... ... |---&amp;gt; netdev_boot_setup_check(dev) | ... ... ... +---&amp;gt; register_netdev(dev) | +---&amp;gt; register_netdevice(dev) 注销 触发网络设备注销的情况：
  卸载NIC去而被驱动程序：模块形式的设备驱动程序被卸载，相关联的NIC都需要被注销。  例如，卸载PCI设备驱动程序时，会导致pci_driver-&amp;gt;remove被调用。   删除可热拔插网络设备。 注销流程：  xxx_remove(_one)/module_exit | |---&amp;gt; unregister_netdev(dev) | | | +---&amp;gt; unregister_netdevice(dev) |---&amp;gt; ."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg">
-<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>

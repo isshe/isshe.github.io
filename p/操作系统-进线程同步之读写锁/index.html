@@ -10,7 +10,7 @@
 <meta name=twitter:title content="操作系统 —— 进线程同步之读写锁">
 <meta name=twitter:description content="读写锁 1. 什么是读写锁  互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）  独占锁。   读写锁区分读和写，同时只能一个线程写(写时不能读)；允许同时多个线程读(读时没有写)。  读为共享锁，写为独占锁。 读比写更频繁的应用中，用读写锁更好。    2. 读写锁的分配规则  只要没有线程持有读写锁用于写，任意数目的线程可以持有该读写锁用于读。 仅当没有线程持有读写锁时(用于读或写)，才能分配读写锁用于写。  3. 相关函数  静态分配用PTHREAD_RWLOCK_INITIALIZER进行初始化。  #include &amp;lt;pthread.h&amp;gt; // 初始化、销毁 int pthread_rwlock_init(pthread_rwlock_t *lock, const pthread_rwlockattr_t *attr); int pthread_rwlock_destroy(pthread_rwlock_t *lock); // 加锁、解锁 int pthread_rwlock_rdlock(pthread_rwlock_t *lock); int pthread_rwlock_tryrdlock(pthread_rwlock_t *lock); int pthread_rwlock_wrlock(pthread_rwlock_t *lock); int pthread_rwlock_trywrlock(pthread_rwlock_t *lock); int pthread_rwlock_unlock(pthread_rwlock_t *lock); // 属性初始化、销毁 int pthread_rwlockattr_init(pthread_rwlockattr_t *attr); int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr); // 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *attr, int *pshared); int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared); "><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg">
-<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
 </head>
@@ -36,7 +36,7 @@ extended">
 <a href=/categories/%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/ style=background-color:#9278e2;color:#fff>
 进线程同步
 </a>
-<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#6f53ae;color:#fff>
+<a href=/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ style=background-color:#eab3ae;color:#fff>
 操作系统
 </a>
 </header>
@@ -130,42 +130,42 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.90b39cdd9bb2ca10932404bab31af250_huec7bd37c00e9f0f66a7da81ead81d61e_182649_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 信号" data-hash="md5-kLOc3ZuyyhCTJAS6sxryUA==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 信号</h2>
+<h2 class=article-title>操作系统 —— IO 多路复用之 epoll</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.4bf2335a98bd1515921cbc5a0c5a1d8b_hu575c6395d5e84185e674e7125c58f205_133704_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程" data-hash="md5-S/IzWpi9FRWSHLxaDFodiw==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之管道" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之管道</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.b841352646c368e3d11bbf4727910450_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_250x150_fill_q75_box_smart1.jpeg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-uEE1JkbDaOPRG79HJ5EEUA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 select" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+<h2 class=article-title>操作系统 —— IO 多路复用之 select</h2>
 </div>
 </a>
 </article>
