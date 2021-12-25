@@ -1,0 +1,373 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="工厂方法 工厂方法模式(Factory Method Pattern)又称为：
+ 工厂模式； 虚拟构造器(Virtual Constructor)模式 多态工厂(Polymorphic Factory)模式 它属于类创建型模式。  1. 基础概念   定义/意图：
+ 定义一个创建对象的接口，让子类决定实例化哪一个类。 工厂方法使一个类的实例化延迟到其子类。 框架使用抽象类定义和维护对象之间的关系。    类图：  类图 
+  出场嘉宾
+ 产品/Product: 定义产品。 具体产品/Concrete Product: 定义具体的产品，继承自产品。 创建者/Creator：工厂；工厂的抽象类，声明工厂方法。  创建者可以定义一个默认的缺省实现，返回一个缺省的具体产品。   具体创建者/Concrete Creator: 具体工厂；继承自工厂，用于创建具体产品。    2. 解决什么问题？如何解决？ 3. 优缺点是什么？ 3.1 优点  【简单工厂的优点】 将创建对象的代码集中在一个对象或一个方法中，避免重复代码。 实例化对象时，依赖接口，不依赖具体类。【？！】 添加新产品时，不需修改旧代码，只需添加新的具体产品和具体创建者。  3.2 缺点  必须创建创建者的子类，无论用户想创建的具体产品是一个还是多个。（成对添加）  4. 使用场景是什么？  当一个类不知道它所创建的对象的类的时候。 当一个类希望由它的子类来指定所创建的对象的时候。 当类将创建对象的职责委托给一个或多个子类，并且将这些子类(代理者)是代理者这一信息局部化的时候。  5."><title>设计模式 —— 工厂方法模式</title>
+<link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 工厂方法模式">
+<meta property="og:description" content="工厂方法 工厂方法模式(Factory Method Pattern)又称为：
+ 工厂模式； 虚拟构造器(Virtual Constructor)模式 多态工厂(Polymorphic Factory)模式 它属于类创建型模式。  1. 基础概念   定义/意图：
+ 定义一个创建对象的接口，让子类决定实例化哪一个类。 工厂方法使一个类的实例化延迟到其子类。 框架使用抽象类定义和维护对象之间的关系。    类图：  类图 
+  出场嘉宾
+ 产品/Product: 定义产品。 具体产品/Concrete Product: 定义具体的产品，继承自产品。 创建者/Creator：工厂；工厂的抽象类，声明工厂方法。  创建者可以定义一个默认的缺省实现，返回一个缺省的具体产品。   具体创建者/Concrete Creator: 具体工厂；继承自工厂，用于创建具体产品。    2. 解决什么问题？如何解决？ 3. 优缺点是什么？ 3.1 优点  【简单工厂的优点】 将创建对象的代码集中在一个对象或一个方法中，避免重复代码。 实例化对象时，依赖接口，不依赖具体类。【？！】 添加新产品时，不需修改旧代码，只需添加新的具体产品和具体创建者。  3.2 缺点  必须创建创建者的子类，无论用户想创建的具体产品是一个还是多个。（成对添加）  4. 使用场景是什么？  当一个类不知道它所创建的对象的类的时候。 当一个类希望由它的子类来指定所创建的对象的时候。 当类将创建对象的职责委托给一个或多个子类，并且将这些子类(代理者)是代理者这一信息局部化的时候。  5.">
+<meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP.png">
+<meta name=twitter:title content="设计模式 —— 工厂方法模式">
+<meta name=twitter:description content="工厂方法 工厂方法模式(Factory Method Pattern)又称为：
+ 工厂模式； 虚拟构造器(Virtual Constructor)模式 多态工厂(Polymorphic Factory)模式 它属于类创建型模式。  1. 基础概念   定义/意图：
+ 定义一个创建对象的接口，让子类决定实例化哪一个类。 工厂方法使一个类的实例化延迟到其子类。 框架使用抽象类定义和维护对象之间的关系。    类图：  类图 
+  出场嘉宾
+ 产品/Product: 定义产品。 具体产品/Concrete Product: 定义具体的产品，继承自产品。 创建者/Creator：工厂；工厂的抽象类，声明工厂方法。  创建者可以定义一个默认的缺省实现，返回一个缺省的具体产品。   具体创建者/Concrete Creator: 具体工厂；继承自工厂，用于创建具体产品。    2. 解决什么问题？如何解决？ 3. 优缺点是什么？ 3.1 优点  【简单工厂的优点】 将创建对象的代码集中在一个对象或一个方法中，避免重复代码。 实例化对象时，依赖接口，不依赖具体类。【？！】 添加新产品时，不需修改旧代码，只需添加新的具体产品和具体创建者。  3.2 缺点  必须创建创建者的子类，无论用户想创建的具体产品是一个还是多个。（成对添加）  4. 使用场景是什么？  当一个类不知道它所创建的对象的类的时候。 当一个类希望由它的子类来指定所创建的对象的时候。 当类将创建对象的职责委托给一个或多个子类，并且将这些子类(代理者)是代理者这一信息局部化的时候。  5."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP.png">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP_hufe6ca094cbe3a218ed959e6cdc7c305d_25557_800x0_resize_box_3.png srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP_hufe6ca094cbe3a218ed959e6cdc7c305d_25557_800x0_resize_box_3.png 800w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP_hufe6ca094cbe3a218ed959e6cdc7c305d_25557_1600x0_resize_box_3.png 1600w" width=800 height=386 loading=lazy alt="Featured image of post 设计模式 —— 工厂方法模式">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/ style=background-color:#5471b0;color:#fff>
+设计模式
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>设计模式 —— 工厂方法模式</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 12, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=工厂方法>工厂方法</h1>
+<p>工厂方法模式(Factory Method Pattern)又称为：</p>
+<ul>
+<li>工厂模式；</li>
+<li>虚拟构造器(Virtual Constructor)模式</li>
+<li>多态工厂(Polymorphic Factory)模式
+它属于类创建型模式。</li>
+</ul>
+<h2 id=1-基础概念>1. 基础概念</h2>
+<ul>
+<li>
+<p>定义/意图：</p>
+<ul>
+<li>定义一个创建对象的接口，让子类决定实例化哪一个类。</li>
+<li>工厂方法使一个类的实例化延迟到其子类。</li>
+<li>框架使用抽象类定义和维护对象之间的关系。</li>
+</ul>
+</li>
+<li>
+<p>类图：
+<figure class=gallery-image style=flex-grow:217;flex-basis:520px>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png data-size=788x363>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png width=788 height=363 srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hubb814909749ccb8edb1429126b62c316_29214_480x0_resize_box_3.png 480w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hubb814909749ccb8edb1429126b62c316_29214_1024x0_resize_box_3.png 1024w" loading=lazy alt=类图>
+</a>
+<figcaption>类图</figcaption>
+</figure></p>
+</li>
+<li>
+<p>出场嘉宾</p>
+<ul>
+<li>产品/Product: 定义产品。</li>
+<li>具体产品/Concrete Product: 定义具体的产品，继承自产品。</li>
+<li>创建者/Creator：工厂；工厂的抽象类，声明工厂方法。
+<ul>
+<li>创建者可以定义一个默认的缺省实现，返回一个缺省的具体产品。</li>
+</ul>
+</li>
+<li>具体创建者/Concrete Creator: 具体工厂；继承自工厂，用于创建具体产品。</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-解决什么问题如何解决>2. 解决什么问题？如何解决？</h2>
+<h2 id=3-优缺点是什么>3. 优缺点是什么？</h2>
+<h3 id=31-优点>3.1 优点</h3>
+<ul>
+<li>【简单工厂的优点】</li>
+<li>将创建对象的代码集中在一个对象或一个方法中，避免重复代码。</li>
+<li>实例化对象时，依赖接口，不依赖具体类。【？！】</li>
+<li>添加新产品时，不需修改旧代码，只需添加新的具体产品和具体创建者。</li>
+</ul>
+<h3 id=32-缺点>3.2 缺点</h3>
+<ul>
+<li>必须创建创建者的子类，无论用户想创建的具体产品是一个还是多个。（成对添加）</li>
+</ul>
+<h2 id=4-使用场景是什么>4. 使用场景是什么？</h2>
+<ul>
+<li>当一个类不知道它所创建的对象的类的时候。</li>
+<li>当一个类希望由它的子类来指定所创建的对象的时候。</li>
+<li>当类将创建对象的职责委托给一个或多个子类，并且将这些子类(代理者)是代理者这一信息局部化的时候。</li>
+</ul>
+<h2 id=5-注意>5. 注意</h2>
+<ul>
+<li>
+<p>工厂方法模式主要有两种不同情况：</p>
+<ul>
+<li>1）Creator类是一个抽象类，并且不提供工厂方法的实现。</li>
+<li>2）Creator类是具体类，并且提供工厂方法的一个缺省实现。</li>
+</ul>
+</li>
+<li>
+<p>参数化工厂方法：一个工厂方法可以创建多种产品。</p>
+</li>
+<li>
+<p>特定语言的变化和问题。【？！】</p>
+</li>
+<li>
+<p>C++中，工厂方法通常是需函数并且是纯虚函数。</p>
+</li>
+<li>
+<p>在Creator的构造器中不要调用工厂方法——在具体Concrete Creator中该方法还不可以。【？！】</p>
+</li>
+<li>
+<p>使用模板以避免创建子类。（解决第一个缺点）【？！】</p>
+</li>
+<li>
+<p>进行命名约定。</p>
+</li>
+</ul>
+<h2 id=6-应用实例>6. 应用实例？</h2>
+<ul>
+<li>日志记录器：同时支持多种日志记录方式，如文件记录、数据库记录等。</li>
+</ul>
+<h2 id=x-疑问>x. 疑问</h2>
+<ul>
+<li>工厂方法(Factory Method)和创建者(Creator)是否总是抽象的？
+<ul>
+<li>不。可以定义一个默认的工厂方法来产生具体产品。这样一来，即使没有具体创建者，也可以创建产品。</li>
+</ul>
+</li>
+<li>工厂方法模式和简单工厂模式的区别？</li>
+<li>C++中，模板如何使用？</li>
+<li>什么是依赖倒置原则？
+<ul>
+<li>依赖倒置原则：要依赖抽象，不要依赖具体的类。</li>
+<li>这个原则说明了：不能让高层组件依赖低层组件，而且，不管是高层还是低层组件，都应该依赖抽象。</li>
+<li>示例：
+<figure class=gallery-image style=flex-grow:145;flex-basis:348px>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B.png data-size=635x437>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B.png width=635 height=437 srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B_huf5a20b34a6a2b71247bb728693802091_98002_480x0_resize_box_3.png 480w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B_huf5a20b34a6a2b71247bb728693802091_98002_1024x0_resize_box_3.png 1024w" loading=lazy alt=依赖倒置原则示例>
+</a>
+<figcaption>依赖倒置原则示例</figcaption>
+</figure>
+<ul>
+<li>Pizza是一个抽象</li>
+<li>PizzaStore(高层组件)和XXXStylePizza(低层组件)都依赖Pizza(抽象)，而不是高层组件直接依赖低层组件。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如何避免违反依赖倒置原则？
+<ul>
+<li>变量不可以持有具体类的引用。
+<ul>
+<li>如果使用new，就会持有具体类的引用，可以用工厂来避开。</li>
+</ul>
+</li>
+<li>不要让类派生自具体类，应派生自一个抽象（接口）
+<ul>
+<li>如果派生自具体类，就会依赖具体类。</li>
+</ul>
+</li>
+<li>不要覆盖基类中已实现的方法。
+<ul>
+<li>如果覆盖，说明基类不是真正适合被继承的抽象。基类中已实现的方法，应所有子类共享。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=y-拓展>y. 拓展</h2>
+<ul>
+<li>C++模板</li>
+<li>使用多个工厂方法：抽象工厂中定义多个工厂方法。</li>
+<li>对象复用：具体创建者把创建的对象保存下来，下次创建的时候先查询，如果没有再创建。
+<ul>
+<li>只适合某些对象可以复用的情况。</li>
+</ul>
+</li>
+</ul>
+<h2 id=z-参考>z. 参考</h2>
+<ul>
+<li>《Head First设计模式》 p118</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/>设计模式</a>
+<a href=/tags/design-pattern/>Design Pattern</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 模板方法模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.5b785662e59e7154416497c95bcd1e9e_hu1f629ad2e90a079156899ab8241b7de5_156283_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-W3hWYuWecVRBZJfJW80eng==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 迭代器模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_hu529bcb407ef01bc0200901c2da9427ff_24123_3cd25cdf4f10dc74637ae6e254597b79.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-XlzLibmUXUQzTj+yojJ8vw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 适配器模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.f9429e6c6f20b367f1ef79a3a4cd148a_hu8ca9ff7362688b461397facff0e6ed9b_16668_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 单件模式" data-hash="md5-+UKebG8gs2fx73mjpM0Uig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 单件模式</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-基础概念>1. 基础概念</a></li>
+<li><a href=#2-解决什么问题如何解决>2. 解决什么问题？如何解决？</a></li>
+<li><a href=#3-优缺点是什么>3. 优缺点是什么？</a>
+<ol>
+<li><a href=#31-优点>3.1 优点</a></li>
+<li><a href=#32-缺点>3.2 缺点</a></li>
+</ol>
+</li>
+<li><a href=#4-使用场景是什么>4. 使用场景是什么？</a></li>
+<li><a href=#5-注意>5. 注意</a></li>
+<li><a href=#6-应用实例>6. 应用实例？</a></li>
+<li><a href=#x-疑问>x. 疑问</a></li>
+<li><a href=#y-拓展>y. 拓展</a></li>
+<li><a href=#z-参考>z. 参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

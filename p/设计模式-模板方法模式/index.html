@@ -1,0 +1,338 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="模板方法模式——用继承改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：定义一个操作的算法的骨架，将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。 别名：无 类图：  类图  出场嘉宾  AbstrackClass：抽象类  定义抽象的原语操作(primitive operation)，各个步骤的具体实现交给子类。 实现一个模板方法，定义一个算法的步骤。 实现不变的部分。   ConcreteClass：具体类  实现原语操作，完成特定步骤的具体实现。 实现变动的部分。     协作/工作流程  AbstrackClass实现不变的部分（或骨架）； ConcreteClass实现变动的部分； AbstrackClass 和 ConcreteClass 实现整个操作/算法。   效果  模板方法是一种代码复用的基本技术。在类库中尤为重要。 模板方法导致一种反向的控制结构——&amp;ldquo;好莱坞原则&amp;rdquo;——即&amp;quot;别找我们，我们会找你&amp;quot;——父类调用子类的操作。 模板方法可能调用下列类型的操作：  具体的操作：ConcreteClass或对客户类的操作。 具体的AbstractClass的操作：即通常对子类有用的操作。 原语操作：即抽象操作 工厂方法 钩子操作(hook operation)：提供缺省的行为，子类可在必要时进行扩展。      2. 优缺点是什么？ 2.1 优点  提供更好的扩展性； 减少重复代码。  2."><title>设计模式 —— 模板方法模式</title>
+<link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 模板方法模式">
+<meta property="og:description" content="模板方法模式——用继承改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：定义一个操作的算法的骨架，将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。 别名：无 类图：  类图  出场嘉宾  AbstrackClass：抽象类  定义抽象的原语操作(primitive operation)，各个步骤的具体实现交给子类。 实现一个模板方法，定义一个算法的步骤。 实现不变的部分。   ConcreteClass：具体类  实现原语操作，完成特定步骤的具体实现。 实现变动的部分。     协作/工作流程  AbstrackClass实现不变的部分（或骨架）； ConcreteClass实现变动的部分； AbstrackClass 和 ConcreteClass 实现整个操作/算法。   效果  模板方法是一种代码复用的基本技术。在类库中尤为重要。 模板方法导致一种反向的控制结构——&amp;ldquo;好莱坞原则&amp;rdquo;——即&amp;quot;别找我们，我们会找你&amp;quot;——父类调用子类的操作。 模板方法可能调用下列类型的操作：  具体的操作：ConcreteClass或对客户类的操作。 具体的AbstractClass的操作：即通常对子类有用的操作。 原语操作：即抽象操作 工厂方法 钩子操作(hook operation)：提供缺省的行为，子类可在必要时进行扩展。      2. 优缺点是什么？ 2.1 优点  提供更好的扩展性； 减少重复代码。  2.">
+<meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta name=twitter:title content="设计模式 —— 模板方法模式">
+<meta name=twitter:description content="模板方法模式——用继承改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：定义一个操作的算法的骨架，将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。 别名：无 类图：  类图  出场嘉宾  AbstrackClass：抽象类  定义抽象的原语操作(primitive operation)，各个步骤的具体实现交给子类。 实现一个模板方法，定义一个算法的步骤。 实现不变的部分。   ConcreteClass：具体类  实现原语操作，完成特定步骤的具体实现。 实现变动的部分。     协作/工作流程  AbstrackClass实现不变的部分（或骨架）； ConcreteClass实现变动的部分； AbstrackClass 和 ConcreteClass 实现整个操作/算法。   效果  模板方法是一种代码复用的基本技术。在类库中尤为重要。 模板方法导致一种反向的控制结构——&amp;ldquo;好莱坞原则&amp;rdquo;——即&amp;quot;别找我们，我们会找你&amp;quot;——父类调用子类的操作。 模板方法可能调用下列类型的操作：  具体的操作：ConcreteClass或对客户类的操作。 具体的AbstractClass的操作：即通常对子类有用的操作。 原语操作：即抽象操作 工厂方法 钩子操作(hook operation)：提供缺省的行为，子类可在必要时进行扩展。      2. 优缺点是什么？ 2.1 优点  提供更好的扩展性； 减少重复代码。  2."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_800x0_resize_box_3.png srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_800x0_resize_box_3.png 800w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_1600x0_resize_box_3.png 1600w" width=800 height=532 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/ style=background-color:#5471b0;color:#fff>
+设计模式
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>设计模式 —— 模板方法模式</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 12, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=模板方法模式用继承改变算法>模板方法模式——用继承改变算法</h1>
+<ul>
+<li>目标：
+<ul>
+<li>初接触此模式时，熟悉最常用的使用方式。</li>
+<li>有更深的理解后，再研究其他使用方法。</li>
+</ul>
+</li>
+</ul>
+<h2 id=1-基础概念>1. 基础概念</h2>
+<ul>
+<li>定义/意图：定义一个操作的算法的<code>骨架</code>，将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</li>
+<li>别名：无</li>
+<li>类图：
+<figure class=gallery-image style=flex-grow:150;flex-basis:360px>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png data-size=592x394>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png width=592 height=394 srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_480x0_resize_box_3.png 480w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_1024x0_resize_box_3.png 1024w" loading=lazy alt=类图>
+</a>
+<figcaption>类图</figcaption>
+</figure></li>
+<li>出场嘉宾
+<ul>
+<li>AbstrackClass：抽象类
+<ul>
+<li>定义抽象的<code>原语操作(primitive operation)</code>，各个步骤的具体实现交给子类。</li>
+<li>实现一个模板方法，定义一个算法的步骤。</li>
+<li>实现不变的部分。</li>
+</ul>
+</li>
+<li>ConcreteClass：具体类
+<ul>
+<li>实现原语操作，完成特定步骤的具体实现。</li>
+<li>实现变动的部分。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>协作/工作流程
+<ul>
+<li>AbstrackClass实现不变的部分（或骨架）；</li>
+<li>ConcreteClass实现变动的部分；</li>
+<li>AbstrackClass 和 ConcreteClass 实现整个操作/算法。</li>
+</ul>
+</li>
+<li>效果
+<ul>
+<li>模板方法是一种<code>代码复用</code>的<code>基本技术</code>。在类库中尤为重要。</li>
+<li>模板方法导致一种反向的控制结构——&ldquo;好莱坞原则&rdquo;——即"别找我们，我们会找你"——父类调用子类的操作。</li>
+<li>模板方法可能调用下列类型的操作：
+<ul>
+<li>具体的操作：ConcreteClass或对客户类的操作。</li>
+<li>具体的AbstractClass的操作：即通常对子类有用的操作。</li>
+<li>原语操作：即抽象操作</li>
+<li>工厂方法</li>
+<li>钩子操作(hook operation)：提供缺省的行为，子类可在必要时进行扩展。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-优缺点是什么>2. 优缺点是什么？</h2>
+<h3 id=21-优点>2.1 优点</h3>
+<ul>
+<li>提供更好的扩展性；</li>
+<li>减少重复代码。</li>
+</ul>
+<h3 id=22-缺点>2.2 缺点</h3>
+<ul>
+<li>每个算法都要定义一个子类。</li>
+</ul>
+<h2 id=3-使用场景是什么>3. 使用场景是什么？</h2>
+<ul>
+<li>一个算法，多数操作相同，少数不同。
+<ul>
+<li>一次性实现一个算法不变的部分，并将可变的行为留给子类来实现。</li>
+<li>子类中公共行为应该被提取到父类中，避免代码重复。</li>
+</ul>
+</li>
+<li>需要控制子类扩展。在某些特定点调用"hook"操作，允许在这些点进行扩展。</li>
+</ul>
+<h2 id=4-注意>4. 注意</h2>
+<ul>
+<li>需要注意的实现问题：
+<ul>
+<li>使用访问控制。
+<ul>
+<li>C++中，模板方法调用的原语操作可以被定义为保护成员，保证它们只被模板方法调用</li>
+<li>C++中，必须重定义的原语操作需定义为纯虚函数。（重定义：父类提供接口，子类实现。）</li>
+<li>C++中，模板方法不需重定义，不需定义为纯虚函数。</li>
+</ul>
+</li>
+<li>尽量减少原语操作。
+<ul>
+<li>减少子类需要重定义的原语操作。原语操作越多，子类实现越冗长。</li>
+</ul>
+</li>
+<li>命名约定：给应被重定义的操作加上<code>特定前缀</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id=5-应用实例>5. 应用实例？</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id=w-待办>w. 待办</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id=x-疑问>x. 疑问</h2>
+<ul>
+<li>策略模式使用<code>委托</code>，委托是指？ConcreteStrategy委托给Context？</li>
+</ul>
+<h2 id=y-拓展>y. 拓展</h2>
+<ul>
+<li>相关模式：
+<ul>
+<li>工厂模式：可被模板方法调用。</li>
+<li>策略模式：使用<code>委托</code>来改变整个算法。（模板方法使用<code>继承</code>来改变算法的一部分）
+<ul>
+<li>委托【？？？】</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=z-参考>z. 参考</h2>
+<ul>
+<li>《设计模式：可复用面向对象软件的基础》</li>
+<li>《Head First设计模式》</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/>设计模式</a>
+<a href=/tags/design-pattern/>Design Pattern</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 迭代器模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.7bd87ea30596f8b88461cd7488ebb365_hub0bc657ad31b110e47045ee0ac7e408b_22439_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-e9h+owWW+LiEYc10iOuzZQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_hu529bcb407ef01bc0200901c2da9427ff_24123_3cd25cdf4f10dc74637ae6e254597b79.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-XlzLibmUXUQzTj+yojJ8vw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 适配器模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 外观模式</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-基础概念>1. 基础概念</a></li>
+<li><a href=#2-优缺点是什么>2. 优缺点是什么？</a>
+<ol>
+<li><a href=#21-优点>2.1 优点</a></li>
+<li><a href=#22-缺点>2.2 缺点</a></li>
+</ol>
+</li>
+<li><a href=#3-使用场景是什么>3. 使用场景是什么？</a></li>
+<li><a href=#4-注意>4. 注意</a></li>
+<li><a href=#5-应用实例>5. 应用实例？</a></li>
+<li><a href=#w-待办>w. 待办</a></li>
+<li><a href=#x-疑问>x. 疑问</a></li>
+<li><a href=#y-拓展>y. 拓展</a></li>
+<li><a href=#z-参考>z. 参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

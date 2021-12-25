@@ -1,0 +1,335 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="第四章 分组密码的模式 DES和AES都属于分组密码，它们只能加密固定长度的明文。 如果需要加密任意长度的明文，则需进行迭代，而分组密码的迭代方法，就称为分组密码的模式。
+分组密码与流密码 密码算法可以分为分组密码和流密码。 流密码：一次性密码本 分组密码：DES、AES、3DES等大多数堆成密码算法。
+模式分类  ECB：Electronic CodeBook mode，电子密码本模式。 CBC：Cipher Block Chaining mode，密码分组链接模式。 CFB：Cipher FeedBack mode，密文反馈模式。 OFB：Output FeedBack mode，输出反馈模式。 CTR：CounTeR mode，计数器模式。 GCM：Galois/Counter Mode, 。  初始化向量 由于加密第一个分组时，不存在“前一个密文分组”，因此事先准备一个长度为一个分组的bit序列来代替。此序列称为初始化向量(Initialization Vector, IV)
+ 初始化向量必须使用不可预测的随机数。  ECB模式 电子密码本模式：切割明文为多个分组，逐个加密。（容易有安全漏洞，不要使用）
+ 加解密过程图示  加解密过程图示   CBC模式 密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）
+ 特点  无法直接对中间分组进行加密。 一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）   加解密过程图示  加解密过程图示   CFB模式 密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。
+ 特点  依赖上一个密文分组。   加解密过程图示  加解密过程图示   OFB模式 输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。"><title>图解密码技术 —— 第 4 章-分组密码的模式</title>
+<link rel=canonical href=https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="图解密码技术 —— 第 4 章-分组密码的模式">
+<meta property="og:description" content="第四章 分组密码的模式 DES和AES都属于分组密码，它们只能加密固定长度的明文。 如果需要加密任意长度的明文，则需进行迭代，而分组密码的迭代方法，就称为分组密码的模式。
+分组密码与流密码 密码算法可以分为分组密码和流密码。 流密码：一次性密码本 分组密码：DES、AES、3DES等大多数堆成密码算法。
+模式分类  ECB：Electronic CodeBook mode，电子密码本模式。 CBC：Cipher Block Chaining mode，密码分组链接模式。 CFB：Cipher FeedBack mode，密文反馈模式。 OFB：Output FeedBack mode，输出反馈模式。 CTR：CounTeR mode，计数器模式。 GCM：Galois/Counter Mode, 。  初始化向量 由于加密第一个分组时，不存在“前一个密文分组”，因此事先准备一个长度为一个分组的bit序列来代替。此序列称为初始化向量(Initialization Vector, IV)
+ 初始化向量必须使用不可预测的随机数。  ECB模式 电子密码本模式：切割明文为多个分组，逐个加密。（容易有安全漏洞，不要使用）
+ 加解密过程图示  加解密过程图示   CBC模式 密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）
+ 特点  无法直接对中间分组进行加密。 一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）   加解密过程图示  加解密过程图示   CFB模式 密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。
+ 特点  依赖上一个密文分组。   加解密过程图示  加解密过程图示   OFB模式 输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。">
+<meta property="og:url" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2021-12-25T02:22:19-04:00"><meta property="article:modified_time" content="2021-12-25T02:22:19-04:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png">
+<meta name=twitter:title content="图解密码技术 —— 第 4 章-分组密码的模式">
+<meta name=twitter:description content="第四章 分组密码的模式 DES和AES都属于分组密码，它们只能加密固定长度的明文。 如果需要加密任意长度的明文，则需进行迭代，而分组密码的迭代方法，就称为分组密码的模式。
+分组密码与流密码 密码算法可以分为分组密码和流密码。 流密码：一次性密码本 分组密码：DES、AES、3DES等大多数堆成密码算法。
+模式分类  ECB：Electronic CodeBook mode，电子密码本模式。 CBC：Cipher Block Chaining mode，密码分组链接模式。 CFB：Cipher FeedBack mode，密文反馈模式。 OFB：Output FeedBack mode，输出反馈模式。 CTR：CounTeR mode，计数器模式。 GCM：Galois/Counter Mode, 。  初始化向量 由于加密第一个分组时，不存在“前一个密文分组”，因此事先准备一个长度为一个分组的bit序列来代替。此序列称为初始化向量(Initialization Vector, IV)
+ 初始化向量必须使用不可预测的随机数。  ECB模式 电子密码本模式：切割明文为多个分组，逐个加密。（容易有安全漏洞，不要使用）
+ 加解密过程图示  加解密过程图示   CBC模式 密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）
+ 特点  无法直接对中间分组进行加密。 一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）   加解密过程图示  加解密过程图示   CFB模式 密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。
+ 特点  依赖上一个密文分组。   加解密过程图示  加解密过程图示   OFB模式 输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_800x0_resize_box_3.png srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_800x0_resize_box_3.png 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_1600x0_resize_box_3.png 1600w" width=800 height=640 loading=lazy alt="Featured image of post 图解密码技术 —— 第 4 章-分组密码的模式">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/ style=background-color:#6476dd;color:#fff>
+读书笔记
+</a>
+<a href=/categories/%E5%9B%BE%E8%A7%A3%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/ style=background-color:#845ac0;color:#fff>
+图解编码技术
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>图解密码技术 —— 第 4 章-分组密码的模式</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 25, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=第四章-分组密码的模式>第四章 分组密码的模式</h2>
+<p>DES和AES都属于分组密码，它们只能加密固定长度的明文。
+如果需要加密任意长度的明文，则需进行迭代，而分组密码的<code>迭代方法</code>，就称为分组密码的<code>模式</code>。</p>
+<h1 id=分组密码与流密码>分组密码与流密码</h1>
+<p>密码算法可以分为<code>分组密码</code>和<code>流密码</code>。
+流密码：一次性密码本
+分组密码：DES、AES、3DES等大多数堆成密码算法。</p>
+<h1 id=模式分类>模式分类</h1>
+<ul>
+<li>ECB：Electronic CodeBook mode，电子密码本模式。</li>
+<li>CBC：Cipher Block Chaining mode，密码分组链接模式。</li>
+<li>CFB：Cipher FeedBack mode，密文反馈模式。</li>
+<li>OFB：Output FeedBack mode，输出反馈模式。</li>
+<li>CTR：CounTeR mode，计数器模式。</li>
+<li>GCM：Galois/Counter Mode, 。</li>
+</ul>
+<h1 id=初始化向量>初始化向量</h1>
+<p>由于加密第一个分组时，不存在“前一个密文分组”，因此事先准备一个长度为一个分组的bit序列来代替。此序列称为<code>初始化向量(Initialization Vector, IV)</code></p>
+<ul>
+<li>初始化向量必须使用不可预测的随机数。</li>
+</ul>
+<h1 id=ecb模式>ECB模式</h1>
+<p>电子密码本模式：切割明文为多个分组，逐个加密。（容易有安全漏洞，不要使用）</p>
+<ul>
+<li>加解密过程图示
+<figure class=gallery-image style=flex-grow:94;flex-basis:226px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F.png data-size=645x682>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F.png width=645 height=682 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F_hu7ecde839eb6d51b1857e39ce5dd3f8b3_162421_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F_hu7ecde839eb6d51b1857e39ce5dd3f8b3_162421_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示>
+</a>
+<figcaption>加解密过程图示</figcaption>
+</figure></li>
+</ul>
+<h1 id=cbc模式>CBC模式</h1>
+<p>密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）</p>
+<ul>
+<li>特点
+<ul>
+<li>无法直接对中间分组进行加密。</li>
+<li>一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）</li>
+</ul>
+</li>
+<li>加解密过程图示
+<figure class=gallery-image style=flex-grow:120;flex-basis:289px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F.png data-size=761x631>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F.png width=761 height=631 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F_hu3be73bfcea363edf0f0f1f59f6a0c8bb_183106_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F_hu3be73bfcea363edf0f0f1f59f6a0c8bb_183106_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示>
+</a>
+<figcaption>加解密过程图示</figcaption>
+</figure></li>
+</ul>
+<h1 id=cfb模式>CFB模式</h1>
+<p>密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。</p>
+<ul>
+<li>特点
+<ul>
+<li>依赖上一个密文分组。</li>
+</ul>
+</li>
+<li>加解密过程图示
+<figure class=gallery-image style=flex-grow:125;flex-basis:300px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png data-size=724x579>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png width=724 height=579 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示>
+</a>
+<figcaption>加解密过程图示</figcaption>
+</figure></li>
+</ul>
+<h1 id=ofb模式>OFB模式</h1>
+<p>输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。</p>
+<ul>
+<li>特点
+<ul>
+<li>不依赖上一个密文分组。生成秘钥流的操作和进行XOR运算的操作可以并行。</li>
+</ul>
+</li>
+<li>加解密过程图示
+<figure class=gallery-image style=flex-grow:202;flex-basis:486px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1.png data-size=712x351>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1.png width=712 height=351 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1_hu508cf6a6abac82f5e009a0c8d3ab1ab6_74921_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1_hu508cf6a6abac82f5e009a0c8d3ab1ab6_74921_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示1>
+</a>
+<figcaption>加解密过程图示1</figcaption>
+</figure>
+<figure class=gallery-image style=flex-grow:205;flex-basis:493px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png data-size=719x350>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png width=719 height=350 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示2>
+</a>
+<figcaption>加解密过程图示2</figcaption>
+</figure></li>
+</ul>
+<h1 id=ctr模式>CTR模式</h1>
+<p>计数器模式：通过将逐次累加的计数器进行加密来生成密钥流的<code>流密码</code>。</p>
+<ul>
+<li>加解密过程图示
+<figure class=gallery-image style=flex-grow:65;flex-basis:157px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F.png data-size=557x849>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F.png width=557 height=849 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F_hu5a2e720e635339f7b6eaee2b47809400_178710_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F_hu5a2e720e635339f7b6eaee2b47809400_178710_1024x0_resize_box_3.png 1024w" loading=lazy alt=加解密过程图示>
+</a>
+<figcaption>加解密过程图示</figcaption>
+</figure></li>
+</ul>
+<h2 id=计数器的生成方法>计数器的生成方法</h2>
+<p>以128bit长度分组为例：</p>
+<ul>
+<li>前8个字节为<code>nonce</code>，每次加密时必须都不同。</li>
+<li>后8字节为分组序号，逐次累加。</li>
+</ul>
+<h1 id=gcm模式>GCM模式</h1>
+<ul>
+<li>第八章</li>
+</ul>
+<h1 id=模式对比>模式对比</h1>
+<p><figure class=gallery-image style=flex-grow:116;flex-basis:279px>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8.png data-size=770x662>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8.png width=770 height=662 srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8_hu3efced2bed820da608802f081e2bbe72_281537_480x0_resize_box_3.png 480w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8_hu3efced2bed820da608802f081e2bbe72_281537_1024x0_resize_box_3.png 1024w" loading=lazy alt=模式对比>
+</a>
+<figcaption>模式对比</figcaption>
+</figure></p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记</a>
+<a href=/tags/%E5%9B%BE%E8%A7%A3%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/>图解编码技术</a>
+<a href=/tags/study-notes/>Study Notes</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC10%E7%AB%A0-%E8%AF%81%E4%B9%A6/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC10%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.5f52aef6157a0e660f811beba9e0fd0a_hu2e7e2dc6b5698adf438a5a1e13a72e96_65561_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第10章-证书" data-hash="md5-X1Ku9hV6DmYPgRvrqeD9Cg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第10章-证书</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-5-%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-5-%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.4996f2bab4f9ab8850dc86aa701f2be6_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第 5 章-公钥密码" data-hash="md5-SZbyurT5q4hQ3IaqcB8r5g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第 5 章-公钥密码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC11%E7%AB%A0-%E7%A7%98%E9%92%A5/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC11%E7%AB%A0-%E7%A7%98%E9%92%A5/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第11章-秘钥" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第11章-秘钥</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC8%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC8%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.d955855e0618621babc052b5dbe20fc5_hu75bfb8e699f04dc0c75c201fe548798b_46326_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第8章-消息认证码" data-hash="md5-2VWFXgYYYhurwFK12+IPxQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第8章-消息认证码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-1-%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-1-%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.d07b135a6e76b4e4a6f8bc0d9c5ed7c9_hu890b4a84832ec272513434c344ebda9b_82374_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第 1 章-环游密码世界" data-hash="md5-0HsTWm52tOSm+LwNnF7XyQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第 1 章-环游密码世界</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#第四章-分组密码的模式>第四章 分组密码的模式</a></li>
+</ol>
+<ol>
+<li><a href=#计数器的生成方法>计数器的生成方法</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

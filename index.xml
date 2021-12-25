@@ -1,4 +1,777 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 14 Dec 2021 03:14:49 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Tue, 14 Dec 2021 03:14:49 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Dec 2021 02:22:19 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
+&lt;p>我是一个南方人，一直以来，都不太愿意去了解这些同胞受难的事情，不愿意面对；同时，也不知道该以什么样的心情去面对。&lt;/p>
+&lt;p>我不确定一个人、一个军队，在祖国强盛、自己满怀荣光的情况下，如何能够做出这样的事情。
+一个人为之，或许可以称之为堕落；一个军队，大概是集体兽化了吧。&lt;/p>
+&lt;p>何为人？这个提问出自《一人之下》。&lt;/p>
+&lt;p>“张三”说：法律是道德的最低标准，我们不应该以不违法来标榜自己。
+我也是这么认为的。
+但是对于我个人来说，我希望我更有原则，更加旗帜鲜明：&lt;/p>
+&lt;ul>
+&lt;li>旗帜鲜明地表达自己的立场——热爱自己、热爱家人、热爱祖国、热爱这片土地；&lt;/li>
+&lt;li>旗帜鲜明地反对屠杀之类禽兽行为；&lt;/li>
+&lt;/ul>
+&lt;p>牢记历史，热爱和平。&lt;/p></description></item><item><title>图解密码技术 —— 第 1 章-环游密码世界</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-1-%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-1-%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-1-%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.png" alt="Featured image of post 图解密码技术 —— 第 1 章-环游密码世界" />&lt;h2 id="第一章-环游密码世界">第一章 环游密码世界&lt;/h2>
+&lt;h1 id="名词">名词&lt;/h1>
+&lt;p>&lt;code>明文&lt;/code>：加密前的消息。
+&lt;code>密文&lt;/code>：加密后的消息。
+&lt;code>加密&lt;/code>：把明文转换为密文的操作。
+&lt;code>解密&lt;/code>：把密文还原为明文的操作。
+&lt;code>破译&lt;/code>：接收者以外的人试图将密文还原为明文。
+&lt;code>秘钥&lt;/code>：加密解密的钥匙。
+&lt;code>对称密码&lt;/code>：加密、解密使用同一秘钥。
+&lt;code>非对称密码&lt;/code>：加密、解密使用不同秘钥。（也称为&lt;code>公钥密码&lt;/code>）
+&lt;code>混合密码系统&lt;/code>：结合&lt;code>对称密码&lt;/code>和&lt;code>公钥密码&lt;/code>的加密方式。
+&lt;code>单向散列函数(one-way hash function)&lt;/code>：用于保证数据的完整性(integrity)。防篡改。
+&lt;code>消息认证码(message authentication code)&lt;/code>：用于确认消息是否来自期望的对象。防篡改、防伪装(认证)。
+&lt;code>数字签名(digital signature)&lt;/code>: 防篡改、防伪装、防止否认。
+&lt;code>伪随机数生成器(Pseudo Random Number Generator, PRNG)&lt;/code>: 一种模拟产生随机数的算法。&lt;/p>
+&lt;h1 id="密码常识">密码常识&lt;/h1>
+&lt;ul>
+&lt;li>不要使用保密的密码算法&lt;/li>
+&lt;li>使用低强度的密码比不进行任何加密更危险&lt;/li>
+&lt;li>任何密码总有一天都会被破解&lt;/li>
+&lt;li>密码只是信息安全的一部分&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第 2 章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-2-%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-2-%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-2-%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第 2 章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
+&lt;h1 id="历史上著名的密码">历史上著名的密码&lt;/h1>
+&lt;ul>
+&lt;li>凯撒密码&lt;/li>
+&lt;li>简单替换密码&lt;/li>
+&lt;li>Enigma&lt;/li>
+&lt;/ul>
+&lt;h1 id="破译方法">破译方法&lt;/h1>
+&lt;ul>
+&lt;li>暴力攻击&lt;/li>
+&lt;li>频率分析&lt;/li>
+&lt;/ul>
+&lt;h1 id="凯撒密码">凯撒密码&lt;/h1>
+&lt;p>通过将明文中使用的字母表&amp;quot;平移&amp;quot;来进行加密。
+秘钥空间：26
+破解方式：直接暴力破解。&lt;/p>
+&lt;h1 id="简单替换密码">简单替换密码&lt;/h1>
+&lt;ul>
+&lt;li>更改26个字母的对应关系。如A表示X（A不再是A）。&lt;/li>
+&lt;li>秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000&lt;/li>
+&lt;li>破解方式：频率分析&lt;/li>
+&lt;/ul>
+&lt;h1 id="enigma">Enigma&lt;/h1>
+&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第 3 章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-3-%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-3-%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-3-%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第 3 章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
+&lt;p>用相同的秘钥进行加密和解密。&lt;/p>
+&lt;h1 id="比特序列">比特序列&lt;/h1>
+&lt;ul>
+&lt;li>编码：将现实中的东西映射为比特序列。
+&lt;ul>
+&lt;li>ASCII&lt;/li>
+&lt;li>UTF-8&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="xor异或">XOR——异或&lt;/h1>
+&lt;p>XOR: exclusive or, 异或。&lt;/p>
+&lt;ul>
+&lt;li>异或类似于加密解密过程：
+&lt;ul>
+&lt;li>消息A&lt;code>异或&lt;/code>秘钥B = X&lt;/li>
+&lt;li>X &lt;code>异或&lt;/code> B = A&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="一次性密码本">一次性密码本&lt;/h1>
+&lt;p>原理：将明文与一串随机的比特序列进行XOR运算。
+无法破解的原因：密文 XOR 破解秘钥得到的有意义明文，可能有多个，无法确定具体是哪个明文。&lt;/p>
+&lt;h1 id="des">DES&lt;/h1>
+&lt;p>DES: Data Encryption Standard。&lt;/p>
+&lt;ul>
+&lt;li>美国联邦信息处理标准中采用的一种对称密码。&lt;/li>
+&lt;li>一种将64bit明文加密成64bit密文的对称密码算法。&lt;/li>
+&lt;li>秘钥长度是56bit。（实际64bit，但由于每隔7bit设置一个错误检查bit，因此是56bit）&lt;/li>
+&lt;li>如果明文长于64bit，则需要迭代加密。&lt;/li>
+&lt;/ul>
+&lt;h2 id="差分分析">差分分析&lt;/h2>
+&lt;p>思路：改变一部分明文并分析密文如何随之改变。&lt;/p>
+&lt;h2 id="线性分析">线性分析&lt;/h2>
+&lt;p>思路：将明文和密文的一些对应比特进行XOR并计算其结果为0的概率。&lt;/p>
+&lt;h2 id="三重des">三重DES&lt;/h2>
+&lt;p>3DES(TDEA)：将DES重复3次。
+分组长度为：&lt;code>64 * 3 = 192&lt;/code>&lt;/p>
+&lt;h1 id="aes">AES&lt;/h1>
+&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第 4 章-分组密码的模式</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png" alt="Featured image of post 图解密码技术 —— 第 4 章-分组密码的模式" />&lt;h2 id="第四章-分组密码的模式">第四章 分组密码的模式&lt;/h2>
+&lt;p>DES和AES都属于分组密码，它们只能加密固定长度的明文。
+如果需要加密任意长度的明文，则需进行迭代，而分组密码的&lt;code>迭代方法&lt;/code>，就称为分组密码的&lt;code>模式&lt;/code>。&lt;/p>
+&lt;h1 id="分组密码与流密码">分组密码与流密码&lt;/h1>
+&lt;p>密码算法可以分为&lt;code>分组密码&lt;/code>和&lt;code>流密码&lt;/code>。
+流密码：一次性密码本
+分组密码：DES、AES、3DES等大多数堆成密码算法。&lt;/p>
+&lt;h1 id="模式分类">模式分类&lt;/h1>
+&lt;ul>
+&lt;li>ECB：Electronic CodeBook mode，电子密码本模式。&lt;/li>
+&lt;li>CBC：Cipher Block Chaining mode，密码分组链接模式。&lt;/li>
+&lt;li>CFB：Cipher FeedBack mode，密文反馈模式。&lt;/li>
+&lt;li>OFB：Output FeedBack mode，输出反馈模式。&lt;/li>
+&lt;li>CTR：CounTeR mode，计数器模式。&lt;/li>
+&lt;li>GCM：Galois/Counter Mode, 。&lt;/li>
+&lt;/ul>
+&lt;h1 id="初始化向量">初始化向量&lt;/h1>
+&lt;p>由于加密第一个分组时，不存在“前一个密文分组”，因此事先准备一个长度为一个分组的bit序列来代替。此序列称为&lt;code>初始化向量(Initialization Vector, IV)&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>初始化向量必须使用不可预测的随机数。&lt;/li>
+&lt;/ul>
+&lt;h1 id="ecb模式">ECB模式&lt;/h1>
+&lt;p>电子密码本模式：切割明文为多个分组，逐个加密。（容易有安全漏洞，不要使用）&lt;/p>
+&lt;ul>
+&lt;li>加解密过程图示
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 94;
+flex-basis: 226px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F.png" data-size="645x682">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F.png"
+width="645"
+height="682"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F_hu7ecde839eb6d51b1857e39ce5dd3f8b3_162421_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/ECB%E6%A8%A1%E5%BC%8F_hu7ecde839eb6d51b1857e39ce5dd3f8b3_162421_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示">
+&lt;/a>
+&lt;figcaption>加解密过程图示&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h1 id="cbc模式">CBC模式&lt;/h1>
+&lt;p>密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）&lt;/p>
+&lt;ul>
+&lt;li>特点
+&lt;ul>
+&lt;li>无法直接对中间分组进行加密。&lt;/li>
+&lt;li>一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>加解密过程图示
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 120;
+flex-basis: 289px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F.png" data-size="761x631">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F.png"
+width="761"
+height="631"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F_hu3be73bfcea363edf0f0f1f59f6a0c8bb_183106_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F_hu3be73bfcea363edf0f0f1f59f6a0c8bb_183106_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示">
+&lt;/a>
+&lt;figcaption>加解密过程图示&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h1 id="cfb模式">CFB模式&lt;/h1>
+&lt;p>密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。&lt;/p>
+&lt;ul>
+&lt;li>特点
+&lt;ul>
+&lt;li>依赖上一个密文分组。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>加解密过程图示
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 125;
+flex-basis: 300px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png" data-size="724x579">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png"
+width="724"
+height="579"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示">
+&lt;/a>
+&lt;figcaption>加解密过程图示&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h1 id="ofb模式">OFB模式&lt;/h1>
+&lt;p>输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。&lt;/p>
+&lt;ul>
+&lt;li>特点
+&lt;ul>
+&lt;li>不依赖上一个密文分组。生成秘钥流的操作和进行XOR运算的操作可以并行。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>加解密过程图示
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 202;
+flex-basis: 486px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1.png" data-size="712x351">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1.png"
+width="712"
+height="351"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1_hu508cf6a6abac82f5e009a0c8d3ab1ab6_74921_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1_hu508cf6a6abac82f5e009a0c8d3ab1ab6_74921_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示1">
+&lt;/a>
+&lt;figcaption>加解密过程图示1&lt;/figcaption>
+&lt;/figure>
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 205;
+flex-basis: 493px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png" data-size="719x350">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png"
+width="719"
+height="350"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示2">
+&lt;/a>
+&lt;figcaption>加解密过程图示2&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h1 id="ctr模式">CTR模式&lt;/h1>
+&lt;p>计数器模式：通过将逐次累加的计数器进行加密来生成密钥流的&lt;code>流密码&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>加解密过程图示
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 65;
+flex-basis: 157px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F.png" data-size="557x849">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F.png"
+width="557"
+height="849"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F_hu5a2e720e635339f7b6eaee2b47809400_178710_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CTR%E6%A8%A1%E5%BC%8F_hu5a2e720e635339f7b6eaee2b47809400_178710_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="加解密过程图示">
+&lt;/a>
+&lt;figcaption>加解密过程图示&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;h2 id="计数器的生成方法">计数器的生成方法&lt;/h2>
+&lt;p>以128bit长度分组为例：&lt;/p>
+&lt;ul>
+&lt;li>前8个字节为&lt;code>nonce&lt;/code>，每次加密时必须都不同。&lt;/li>
+&lt;li>后8字节为分组序号，逐次累加。&lt;/li>
+&lt;/ul>
+&lt;h1 id="gcm模式">GCM模式&lt;/h1>
+&lt;ul>
+&lt;li>第八章&lt;/li>
+&lt;/ul>
+&lt;h1 id="模式对比">模式对比&lt;/h1>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 116;
+flex-basis: 279px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8.png" data-size="770x662">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8.png"
+width="770"
+height="662"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8_hu3efced2bed820da608802f081e2bbe72_281537_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-4-%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BE%83%E8%A1%A8_hu3efced2bed820da608802f081e2bbe72_281537_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="模式对比">
+&lt;/a>
+&lt;figcaption>模式对比&lt;/figcaption>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第 5 章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-5-%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-5-%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-5-%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第 5 章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
+&lt;h1 id="秘钥配送问题">秘钥配送问题&lt;/h1>
+&lt;ul>
+&lt;li>解决方法
+&lt;ul>
+&lt;li>事先共享秘钥&lt;/li>
+&lt;li>密钥分配中心&lt;/li>
+&lt;li>Diffie-Hellman密钥交换&lt;/li>
+&lt;li>公钥密码&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="rsa">RSA&lt;/h1>
+&lt;p>RSA是一种公钥密码算法。名字来源于三位作者的姓。&lt;/p>
+&lt;ul>
+&lt;li>Ron Rivest、Adi Shamir、Leonard Adleman&lt;/li>
+&lt;/ul>
+&lt;h2 id="rsa加密">RSA加密&lt;/h2>
+&lt;pre tabindex="0">&lt;code>密文 = 明文 ^ E mode N
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>在RSA中，明文、密钥、密文都是数字。&lt;/li>
+&lt;li>密文等于明文的E次方对N取模）&lt;/li>
+&lt;li>E = Encryption&lt;/li>
+&lt;li>N = Number&lt;/li>
+&lt;li>&lt;code>E&lt;/code>和&lt;code>N&lt;/code>的组合就是&lt;code>公钥&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="rsa解密">RSA解密&lt;/h2>
+&lt;pre tabindex="0">&lt;code>明文 = 密文 ^ D mod N
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>D = Decryption&lt;/li>
+&lt;li>N = Number&lt;/li>
+&lt;li>&lt;code>D&lt;/code>和&lt;code>N&lt;/code>的组合就是&lt;code>私钥&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="求n">求N&lt;/h2>
+&lt;pre tabindex="0">&lt;code>N = p x q
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;code>p&lt;/code>和&lt;code>q&lt;/code>是质数，由伪随机数生成器生成。&lt;/li>
+&lt;/ul>
+&lt;h2 id="求l">求L&lt;/h2>
+&lt;pre tabindex="0">&lt;code>L = lcm(p - 1, q - 1)
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>lcm：取最小公倍数&lt;/li>
+&lt;/ul>
+&lt;h2 id="求e">求E&lt;/h2>
+&lt;pre tabindex="0">&lt;code>1 &amp;lt; E &amp;lt; L
+gcd(E, L) = 1
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>gcd: 最大公约数&lt;/li>
+&lt;li>E和L最大公约数是1（互质）&lt;/li>
+&lt;/ul>
+&lt;h2 id="求d">求D&lt;/h2>
+&lt;pre tabindex="0">&lt;code>1 &amp;lt; D &amp;lt; L
+E x D mode L = 1
+&lt;/code>&lt;/pre>&lt;h1 id="中间人攻击">中间人攻击&lt;/h1>
+&lt;ul>
+&lt;li>攻击方式：
+&lt;ul>
+&lt;li>A和B用公钥密码通讯。&lt;/li>
+&lt;li>中间人X对A冒充B，对B冒充A。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>中间人攻击对所有公钥密码对是有效的。&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第 6 章-混合密码系统</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86.png" alt="Featured image of post 图解密码技术 —— 第 6 章-混合密码系统" />&lt;h2 id="第六章-混合密码系统">第六章 混合密码系统&lt;/h2>
+&lt;p>用对称密码提高速度，用公钥密码保护会话密钥。&lt;/p>
+&lt;ul>
+&lt;li>对称密码：用于加密消息/数据。&lt;/li>
+&lt;li>公钥密码：用于加密密钥/会话密钥。&lt;/li>
+&lt;li>对称密码和公钥密码的密钥长度必须具备同等强度。
+&lt;ul>
+&lt;li>考虑长期运用时，公钥密码的强度应该要高于对称密码。&lt;/li>
+&lt;li>因为对称密码的会话密钥被破解，只会影响到本次通信，而公钥被破译，会影响过去到未来所有通信内容。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>密钥强度对比：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>对称密码AES&lt;/th>
+&lt;th>公钥密码RSA&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>128&lt;/td>
+&lt;td>3072&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>192&lt;/td>
+&lt;td>7680&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>256&lt;/td>
+&lt;td>15360&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h1 id="问题">问题&lt;/h1>
+&lt;ul>
+&lt;li>对称密码：
+&lt;ul>
+&lt;li>密钥传送问题&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>公钥密码：
+&lt;ul>
+&lt;li>中间人攻击&lt;/li>
+&lt;li>速度慢&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="混合密码加密过程">混合密码加密过程&lt;/h1>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 80;
+flex-basis: 193px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.png" data-size="677x838">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.png"
+width="677"
+height="838"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86_huaffa7cd0d92005921c7eed2441c40670_130886_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86_huaffa7cd0d92005921c7eed2441c40670_130886_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="混合密码加密过程">
+&lt;/a>
+&lt;figcaption>混合密码加密过程&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h1 id="混合密码解密过程">混合密码解密过程&lt;/h1>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 97;
+flex-basis: 235px"
+>
+&lt;a href="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86.png" data-size="759x775">
+&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86.png"
+width="759"
+height="775"
+srcset="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86_huce499116c1ee92a66b3c57558ac556af_127191_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC-6-%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86_huce499116c1ee92a66b3c57558ac556af_127191_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="混合密码解密过程">
+&lt;/a>
+&lt;figcaption>混合密码解密过程&lt;/figcaption>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第10章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC10%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC10%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC10%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.jpg" alt="Featured image of post 图解密码技术 —— 第10章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
+&lt;blockquote>
+&lt;p>这章不是太理解。&lt;/p>
+&lt;/blockquote>
+&lt;h1 id="什么是证书">什么是证书？&lt;/h1>
+&lt;p>&lt;code>证书&lt;/code>：记录个人信息及公钥，并由&lt;code>认证机构&lt;/code>施加&lt;code>数字签名&lt;/code>.
+&lt;code>证书&lt;/code>是&lt;code>公钥证书&lt;/code>的简称。&lt;/p>
+&lt;h1 id="证书的应用场景">证书的应用场景？&lt;/h1>
+&lt;h1 id="什么是公钥基础设施">什么是公钥基础设施？&lt;/h1>
+&lt;p>&lt;code>公钥基础设施(PKI, Public-key Infrastructure)&lt;/code>: 为了能更有效运用公钥而制定的一系列规范和规格的总称。&lt;/p>
+&lt;h1 id="公钥基础设置pki的组成要素是什么">公钥基础设置（PKI）的组成要素是什么？&lt;/h1>
+&lt;ul>
+&lt;li>用户：使用PKI的人。&lt;/li>
+&lt;li>认证机构：颁发证书的人。&lt;/li>
+&lt;li>仓库：保存证书的数据库。&lt;/li>
+&lt;/ul>
+&lt;h1 id="为什么需要证书">为什么需要证书？&lt;/h1></description></item><item><title>图解密码技术 —— 第11章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC11%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC11%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC11%E7%AB%A0-%E7%A7%98%E9%92%A5/image.jpg" alt="Featured image of post 图解密码技术 —— 第11章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
+&lt;h1 id="什么是秘钥">什么是秘钥？&lt;/h1>
+&lt;p>秘钥：一个巨大的数字。&lt;/p>
+&lt;blockquote>
+&lt;p>数字本身的大小不重要，重要的是&lt;code>秘钥空间&lt;/code>的大小。
+&lt;strong>秘钥与明文是等价的。&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;h1 id="常见的秘钥">常见的秘钥？&lt;/h1>
+&lt;ul>
+&lt;li>DES秘钥：实质长度56bit(7bytes)。&lt;/li>
+&lt;li>DES-EDE2秘钥：实质长度112bit(14bytes)。&lt;/li>
+&lt;li>DES-EDE3秘钥：实质长度168bit(21bytes)。&lt;/li>
+&lt;li>AES秘钥：128/192/256bit&lt;/li>
+&lt;/ul>
+&lt;h1 id="如何管理秘钥">如何管理秘钥？&lt;/h1>
+&lt;blockquote>
+&lt;p>需要清楚：信息的机密性不应该依赖于密码算法本身，而是应该依赖于妥善保管的秘钥。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>生成秘钥：
+&lt;ul>
+&lt;li>用随机数生成秘钥；
+&lt;ul>
+&lt;li>&lt;strong>密码学用途的伪随机数生成器必须是专门针对密码学用途而设计的。&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>用口令生成秘钥；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>配送秘钥：
+&lt;ul>
+&lt;li>事先共享秘钥;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>更新秘钥：
+&lt;ul>
+&lt;li>定期更新，例如每发送1000字节数据更新一次。&lt;/li>
+&lt;li>更新方式：将当前秘钥的散列值作为下一个秘钥。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>这种防止破译过去的通信内容的机制，称为&lt;code>向后安全&lt;/code>。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>
+&lt;p>保存秘钥&lt;/p>
+&lt;ul>
+&lt;li>对秘钥进行加密：有助于减少需要保管的秘钥数量。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>作废秘钥&lt;/p>
+&lt;ul>
+&lt;li>为什么要作废秘钥？
+&lt;ul>
+&lt;li>不再需要的秘钥及时作废，防止被解密。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如何作废秘钥？
+&lt;ul>
+&lt;li>彻底删除秘钥。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="秘钥的分类">秘钥的分类？&lt;/h1>
+&lt;ul>
+&lt;li>对称、非对称。&lt;/li>
+&lt;li>用于认证、用于机密性。&lt;/li>
+&lt;/ul>
+&lt;h1 id="diffie-hellman秘钥交换">Diffie-Hellman秘钥交换&lt;/h1>
+&lt;ul>
+&lt;li>实际并没有交换秘钥，而是通过计算生成相同的秘钥，因此也称为&lt;code>Diffie-Hellman秘钥协商&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;h1 id="什么是基于口令的密码password-based-encryption-pbe">什么是基于口令的密码(password based Encryption, PBE)？&lt;/h1>
+&lt;ul>
+&lt;li>根据口令生成秘钥，再用秘钥进行加密的方法。&lt;/li>
+&lt;li>KEK：通过口令生成的秘钥。&lt;/li>
+&lt;li>CEK：通过随机数生成器生成的秘钥。&lt;/li>
+&lt;/ul>
+&lt;h1 id="什么是盐盐的作用是什么">什么是盐？盐的作用是什么？&lt;/h1>
+&lt;ul>
+&lt;li>盐：伪随机数生成器生成的随机数，和口令一起通过单向散列函数生成秘钥(KEK)。&lt;/li>
+&lt;li>作用：用来防御字典攻击。
+&lt;ul>
+&lt;li>字典攻击：准备大量候选KEK，逐一进行尝试。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="什么是拉伸">什么是拉伸？&lt;/h1>
+&lt;ul>
+&lt;li>拉伸：讲单向散列函数进行多次迭代的方法。&lt;/li>
+&lt;li>通过拉伸可以改良PBE。&lt;/li>
+&lt;/ul>
+&lt;h1 id="如何生成安全的口令">如何生成安全的口令？&lt;/h1>
+&lt;ul>
+&lt;li>使用只有自己才能知道的信息。（大原则）
+&lt;ul>
+&lt;li>不要使用对自己重要的事物的名字。&lt;/li>
+&lt;li>不要使用关于自己的信息。&lt;/li>
+&lt;li>不要使用别人见过的信息。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>将多个不同的口令分开使用。&lt;/li>
+&lt;li>有效利用笔记。&lt;/li>
+&lt;li>理解口令的局限性。
+&lt;ul>
+&lt;li>当对口令字符/长度进行限制时，秘钥的长度(bit)并不太长，可能可以通过暴力破解。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用口令生成器和管理工具。&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第12章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC12%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC12%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC12%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第12章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
+&lt;h1 id="随机数的作用使用场景是什么">随机数的作用？使用场景是什么？&lt;/h1>
+&lt;ul>
+&lt;li>生成秘钥：用于对称密码和消息认证码。&lt;/li>
+&lt;li>生成秘钥对：用于公钥密码和数字签名。&lt;/li>
+&lt;li>生成初始化向量(IV)：用于分组密码的CBC/CFB/OFB模式。&lt;/li>
+&lt;li>生成nonce：用于防御重放共计以及分组密码的CTR模式等。&lt;/li>
+&lt;li>生成盐：用于基于口令的密码等。&lt;/li>
+&lt;/ul>
+&lt;h1 id="随机数的性质">随机数的性质&lt;/h1>
+&lt;ul>
+&lt;li>随机性——不存在统计学偏差，是完全杂乱的数列。&lt;/li>
+&lt;li>不可预测性——不能从过去的数列推测下一个出现的数。&lt;/li>
+&lt;li>不可重现性——除非将数列本身保存下来，否则不能重现相同的数列。
+以上3个性质，越往下越严格。&lt;/li>
+&lt;/ul>
+&lt;h1 id="随机数强度">随机数强度&lt;/h1>
+&lt;ul>
+&lt;li>弱伪随机数：只有随机性。&lt;/li>
+&lt;li>强伪随机数：具有随机性+不可预测性。&lt;/li>
+&lt;li>真随机数：同时具备上面三个性质。&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第13章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC13%E7%AB%A0-pgp/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC13%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC13%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第13章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
+&lt;ul>
+&lt;li>PGP: Pretty Good Privacy.&lt;/li>
+&lt;li>是&lt;code>Philip Zimmermann&lt;/code>编写的密码软件。&lt;/li>
+&lt;/ul>
+&lt;h1 id="pgp有什么用">PGP有什么用？&lt;/h1>
+&lt;ul>
+&lt;li>可以保护处于极端状况(如:&lt;code>性命攸关&lt;/code>)下的人们的隐私。&lt;/li>
+&lt;/ul>
+&lt;h1 id="什么是opengpg">什么是OpenGPG？&lt;/h1>
+&lt;ul>
+&lt;li>OpenGPG：对秘闻和数字签名进行定义的标准规范：RFC1991/RFC2440/RFC4880/RFC5581/RFC6637。&lt;/li>
+&lt;li>GUN遵照OpenGPG(RFC4880)规范编写了GnuPG自由软件。&lt;/li>
+&lt;/ul>
+&lt;h1 id="什么是信任网">什么是信任网？&lt;/h1>
+&lt;ul>
+&lt;li>PGP采用的确认&lt;code>公钥&lt;/code>合法性的方法。&lt;/li>
+&lt;li>注意：&lt;code>公钥是否合法&lt;/code>和&lt;code>所有者是否可信&lt;/code>是两个不同的问题，因为尽管公钥合法，其所有者也可以是不可信的。&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第14章-SSL-TLS</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/image.jpg" alt="Featured image of post 图解密码技术 —— 第14章-SSL-TLS" />&lt;p>SSL/TLS为了更安全的通信&lt;/p>
+&lt;h1 id="什么是ssltls">什么是SSL/TLS？&lt;/h1>
+&lt;ul>
+&lt;li>是世界上应用最广泛的密码通信方法。&lt;/li>
+&lt;li>SSL: Secure Socket Layer.&lt;/li>
+&lt;li>TLS: Transport Layer Security.
+&lt;ul>
+&lt;li>相当于SSL的后续版本。&lt;/li>
+&lt;li>由(下层)TLS记录协议(TLS record protocol)和(上层)TLS握手协议(TLS handshake protocol)这两层协议叠加而成。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="tls记录协议">TLS记录协议&lt;/h1>
+&lt;p>TLS记录协议负责：消息的压缩、加密、数据的认证。&lt;/p>
+&lt;h1 id="tls握手协议">TLS握手协议&lt;/h1>
+&lt;ul>
+&lt;li>TLS握手协议：加密之外的其他各种操作。
+&lt;ul>
+&lt;li>握手协议&lt;/li>
+&lt;li>密码规格变更协议&lt;/li>
+&lt;li>警告协议&lt;/li>
+&lt;li>应用数据协议&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第7章-单向散列函数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC7%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC7%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC7%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第7章-单向散列函数" />&lt;h2 id="第七章-单向散列函数">第七章 单向散列函数&lt;/h2>
+&lt;p>单向散列函数(one-way hash function): 可以根据消息的内容，计算出散列值。&lt;/p>
+&lt;ul>
+&lt;li>散列值可以被用于检查消息的完整性。&lt;/li>
+&lt;li>输入：消息(message)；输出：散列值(hash value)。&lt;/li>
+&lt;/ul>
+&lt;h1 id="性质">性质&lt;/h1>
+&lt;p>抗碰撞性：collision resistance，难以发生碰撞。
+单向性：one-way，无法通过散列值反算出消息的性质。&lt;/p>
+&lt;h1 id="术语">术语&lt;/h1>
+&lt;ul>
+&lt;li>单向散列函数：消息摘要函数、哈希函数、杂凑函数。&lt;/li>
+&lt;li>消息：原像。&lt;/li>
+&lt;li>散列值：消息摘要、指纹。&lt;/li>
+&lt;li>完整性：一致性。&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第8章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC8%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC8%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC8%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第8章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
+&lt;p>消息认证码： Message Authentication Code，MAC。&lt;/p>
+&lt;ul>
+&lt;li>是一种确认完整性并进行认证的技术。&lt;/li>
+&lt;li>是一种与秘钥相关联的单向散列函数。
+输入：任意长度的消息 + 共享秘钥。
+输出：固定长度的数据。
+&lt;strong>消息认证码使用的秘钥必须是密码学安全的、高强度的伪随机生成器。如果是人为选定，则会增加秘钥被推测的风险&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h1 id="消息验证码能与不能">消息验证码能与不能&lt;/h1>
+&lt;ul>
+&lt;li>不能保证消息的机密性；&lt;/li>
+&lt;li>不能防止否认；&lt;/li>
+&lt;li>能识别出篡改行为；&lt;/li>
+&lt;li>能对消息进行认证；（合法）&lt;/li>
+&lt;/ul>
+&lt;h1 id="消息验证码的局限性">消息验证码的局限性&lt;/h1>
+&lt;ul>
+&lt;li>无法防止否认；
+&lt;ul>
+&lt;li>无法防止否认的本质是：相同的秘钥有多于1个人获得。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第9章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC9%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC9%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC9%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg" alt="Featured image of post 图解密码技术 —— 第9章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
+&lt;p>公钥密码：存在加密秘钥(公钥)和解密秘钥（私钥）。用公钥加密。
+数字签名：签名秘钥（私钥）和验证秘钥（公钥）。用私钥加密。
+&lt;strong>数字签名并不是为了保证机密性。&lt;/strong>&lt;/p>
+&lt;h1 id="签名的生成和验证">签名的生成和验证&lt;/h1>
+&lt;p>签名秘钥：私钥。用于对消息进行签名——生成签名。只能一人持有。
+验证秘钥：公钥。用于验证消息的签名——验证签名。可以多人持有。&lt;/p>
+&lt;h1 id="对消息签名的过程">对消息签名的过程&lt;/h1>
+&lt;ul>
+&lt;li>A用自己的私钥进行加密。&lt;/li>
+&lt;li>A将签名和消息发送给B。&lt;/li>
+&lt;li>B用A的公钥进行解密（签名验证）。&lt;/li>
+&lt;li>B将解密后的消息与A发过来的消息进行对比。一致，则验证成功，否则，验证失败。&lt;/li>
+&lt;/ul>
+&lt;h1 id="对消息散列值签名的过程">对消息散列值签名的过程&lt;/h1>
+&lt;blockquote>
+&lt;p>公钥密码算法较慢，如果直接对消息进行签名，会比较耗时。&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>A用&lt;code>单向散列函数&lt;/code>计算消息的散列值。&lt;/li>
+&lt;li>A用私钥对散列值进行加密。&lt;/li>
+&lt;li>A将消息和签名发送给B。&lt;/li>
+&lt;li>B用A的g公钥对收到的签名进行解密。&lt;/li>
+&lt;li>B将签名解密后得到的散列值与A发送的消息的散列值进行对比。一致，验证成功，否则，验证失败。&lt;/li>
+&lt;/ul>
+&lt;h1 id="应用场景">应用场景&lt;/h1>
+&lt;ul>
+&lt;li>信息公告
+&lt;ul>
+&lt;li>确保是目标组织发布的目标公告，法制被篡改。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>软件下载
+&lt;ul>
+&lt;li>软件下载完成后，验证签名，防止软件遭到篡改。（并不能检测软件是否是恶意的）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>公钥证书。
+&lt;ul>
+&lt;li>验证数字签名时，需要合法的公钥。对公钥进行签名得到的就是公钥证书。【第三方？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>SSL/TLS。
+&lt;ul>
+&lt;li>使用服务器证书验证服务器身份。&lt;/li>
+&lt;li>服务器证书：加上数字签名的服务器公钥。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="总结">总结&lt;/h1>
+&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.jpg" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
+&lt;h1 id="1-记录">1. 记录&lt;/h1>
+&lt;blockquote>
+&lt;p>postgresql 以 12 版本为例&lt;/p>
+&lt;/blockquote>
+&lt;p>我们需要先打开 postgresql 的慢查询日志，此为前置条件，先记录下我们时间较长的查询。&lt;/p>
+&lt;ul>
+&lt;li>编辑配置文件：&lt;code>/var/postgres12/data/postgresql.conf&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>#log_min_duration_statement = -1 # -1 is disabled, 0 logs all statements
+# and their durations, &amp;gt; 0 logs only
+# statements running at least this number
+# of milliseconds
+&lt;/code>&lt;/pre>&lt;p>修改 &lt;code>-1&lt;/code> 为 &lt;code>200&lt;/code>，表示大于等于 200 毫秒的操作将被记录到日志。&lt;/p>
+&lt;ul>
+&lt;li>重载配置&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>/path/to/pg_ctl reload -D /path/to/pgdata
+&lt;/code>&lt;/pre>&lt;h1 id="2-获取慢查询语句">2. 获取慢查询语句&lt;/h1>
+&lt;h2 id="21-切-postgresql-超户">2.1 切 postgresql 超户&lt;/h2>
+&lt;pre tabindex="0">&lt;code>sudo su - postgres
+&lt;/code>&lt;/pre>&lt;h2 id="22--获取慢查询语句">2.2 获取慢查询语句&lt;/h2>
+&lt;ul>
+&lt;li>打开日志文件&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>less /path/to/pg_log/postgresql.log
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>跳到文件末尾&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>Shift + G
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>查询关键字 &lt;code>duration&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>因为被记录的日志格式形如：&lt;/p>
+&lt;pre tabindex="0">&lt;code>duration xxx ms select ….
+&lt;/code>&lt;/pre>&lt;h1 id="3-分析">3. 分析&lt;/h1>
+&lt;ul>
+&lt;li>连接 postgresql 服务器&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>path/to/psql -U postgres -d &amp;lt;database&amp;gt;
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>打开计时&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>\timing
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>语句分析&lt;/li>
+&lt;/ul>
+&lt;pre tabindex="0">&lt;code>explain select max(id) as max_id from test_table where created &amp;lt; now() - interval '24 hours';
+QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------
+Finalize Aggregate (cost=12673.45..12673.46 rows=1 width=8)
+-&amp;gt; Gather (cost=12673.24..12673.45 rows=2 width=8)
+Workers Planned: 2
+-&amp;gt; Partial Aggregate (cost=11673.24..11673.25 rows=1 width=8)
+-&amp;gt; Parallel Seq Scan on test_table (cost=0.00..10631.80 rows=416575 width=8)
+Filter: (created &amp;lt; (now() - '24:00:00'::interval))
+(6 rows)
+&lt;/code>&lt;/pre>&lt;p>&lt;code>explain&lt;/code> 是显示查询计划，不会真正执行，所以甚至 update 也可以放在 explain 后面。
+但是要注意，不能是 &lt;code>explain analyze&lt;/code> ，带了 &lt;code>analyze&lt;/code> 就真跑了，所以这个不能用于 &lt;code>DML&lt;/code> 。&lt;/p>
+&lt;blockquote>
+&lt;p>DQL: SELECT
+DML: UPDATE/DELETE/INSERT
+DDL: CREATE TABLE/VIEW/INDEX/SYN/CLUSTER
+DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
+&lt;/blockquote>
+&lt;p>另外可以看到结果中显示的是 &lt;code>Seq Scan&lt;/code>，顺序扫描，所以可以为它创建一个索引，变成 &lt;code>Index Scan&lt;/code>。&lt;/p>
+&lt;pre tabindex="0">&lt;code>create index test_index on test_table (created);
+&lt;/code>&lt;/pre>&lt;p>然后再次分析，如果时间没有明显减少，可以再去掉此索引。
+重复以上步骤，即可逐步减少系统中的慢查询。&lt;/p></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Tue, 14 Dec 2021 03:14:49 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
 &lt;h2 id="1-什么是读写锁">1. 什么是读写锁&lt;/h2>
 &lt;ul>
 &lt;li>互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）
@@ -39,19 +812,7 @@
 &lt;span class="c1">// 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_getpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_setpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Mon, 13 Dec 2021 13:45:24 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
-&lt;p>我是一个南方人，一直以来，都不太愿意去了解这些同胞受难的事情，不愿意面对；同时，也不知道该以什么样的心情去面对。&lt;/p>
-&lt;p>我不确定一个人、一个军队，在祖国强盛、自己满怀荣光的情况下，如何能够做出这样的事情。
-一个人为之，或许可以称之为堕落；一个军队，大概是集体兽化了吧。&lt;/p>
-&lt;p>何为人？这个提问出自《一人之下》。&lt;/p>
-&lt;p>“张三”说：法律是道德的最低标准，我们不应该以不违法来标榜自己。
-我也是这么认为的。
-但是对于我个人来说，我希望我更有原则，更加旗帜鲜明：&lt;/p>
-&lt;ul>
-&lt;li>旗帜鲜明地表达自己的立场——我热爱自己、热爱家人、热爱祖国、热爱这片土地；&lt;/li>
-&lt;li>旗帜鲜明地反对屠杀之类禽兽行为；&lt;/li>
-&lt;/ul>
-&lt;p>牢记历史，热爱和平。&lt;/p></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
 &lt;h2 id="1-硬件中断注册">1. 硬件中断注册&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;linux/interrupt.h&amp;gt;&lt;/span>&lt;span class="cp">
 &lt;/span>&lt;span class="cp">&lt;/span>
@@ -118,7 +879,7 @@
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
 &lt;p>NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。
 注册/注销/开启/关闭是四个不同的操作，不要混淆。
 相关讨论，主要以网络设备为主。&lt;/p>
@@ -196,7 +957,7 @@
 &lt;/blockquote>
 &lt;ul>
 &lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.png" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
 &lt;p>gdb - GNU调试器。&lt;/p>
 &lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
 GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
@@ -705,7 +1466,7 @@ modprobe &lt;span class="o">[&lt;/span>--dump-modversions&lt;span class="o">]&lt
 &lt;li>lsmod&lt;/li>
 &lt;li>modinfo&lt;/li>
 &lt;/ul>
-&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
+&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
 &lt;p>显示当前的连接情况。（UDP、TCP、UNIX、ICMP等）
 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。&lt;/p>
 &lt;h1 id="1-介绍">1. 介绍&lt;/h1>
@@ -2967,7 +3728,7 @@ ushort *array; // GETALL/SETALL使用
 &lt;/li>
 &lt;li>删除信号量将导致等待此信号量的(睡眠中的)线程返回&lt;code>EIDRM(identifier removed)&lt;/code>错误。&lt;/li>
 &lt;li>指定SEM_UNDO时，进程结束后，信号量会被还原。&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
 &lt;h2 id="1-概述">1. 概述&lt;/h2>
 &lt;ul>
 &lt;li>System V 共享内存区在概念上类似于Posix共享内存区；
@@ -3523,7 +4284,7 @@ loading="lazy"
 &lt;li>详见示例：&lt;a class="link" href="Examples/3_ex_read_and_write.c" >3_ex_read_and_write.c&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.png" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
 &lt;ul>
 &lt;li>互斥锁及条件变量是同步的基本组成部分。&lt;/li>
 &lt;li>互斥锁及条件变量出自&lt;code>Posix.1&lt;/code>线程标准；
@@ -3609,7 +4370,7 @@ loading="lazy"
 &lt;li>当使用内存共享时，生产者/消费者必须执行某种&lt;code>显式的(explicit)&lt;/code>的同步。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.png" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -3814,7 +4575,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
@@ -4022,7 +4783,7 @@ Additional | &amp;lt;empty&amp;gt; |
 >wiki&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
 >wiki中文&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 12 Dec 2021 11:24:32 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.jpg" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 12 Dec 2021 11:24:32 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.png" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
 &lt;ul>
 &lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
 &lt;li>ICMP是互联网协议族的核心协议之一。&lt;/li>
@@ -4534,4 +5295,2396 @@ Additional | &amp;lt;empty&amp;gt; |
 &lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
 &lt;ul>
 &lt;li>RFC 792&lt;/li>
+&lt;/ul></description></item><item><title>安全 —— 使用 Snyk 及 Nessus 进行漏洞扫描</title><link>https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result-2.png" alt="Featured image of post 安全 —— 使用 Snyk 及 Nessus 进行漏洞扫描" />&lt;h2 id="漏洞扫描">漏洞扫描&lt;/h2>
+&lt;p>本文主要介绍如何使用 nessus 进行主机扫描以及使用 snyk 进行 Docker 镜像扫描。&lt;/p>
+&lt;h1 id="1-主机扫描">1. 主机扫描&lt;/h1>
+&lt;h2 id="11-安装-nessus">1.1 安装 nessus&lt;/h2>
+&lt;p>&lt;strong>注意：需要空间 20 GB。&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>打开 &lt;a class="link" href="https://zh-cn.tenable.com/products/nessus/nessus-essentials?tns_redirect=true" target="_blank" rel="noopener"
+>nessus 官网&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>注册：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 469px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-register.png" data-size="3140x1604">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-register.png"
+width="3140"
+height="1604"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-register_hu780409c1713e97edd04b669cb3f13748_507634_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-register_hu780409c1713e97edd04b669cb3f13748_507634_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>进入 &lt;a class="link" href="https://www.tenable.com/downloads/nessus?loginAttempted=true" target="_blank" rel="noopener"
+>nessus 下载页&lt;/a> 下载：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 471px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-download.png" data-size="3142x1600">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-download.png"
+width="3142"
+height="1600"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-download_hu3c0c55725435535745d4c5dadeb6d520_514622_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-download_hu3c0c55725435535745d4c5dadeb6d520_514622_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>安装&lt;/p>
+&lt;pre tabindex="0">&lt;code>rpm -i Nessus-8.15.1-es7.x86_64.rpm
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>启动&lt;/p>
+&lt;pre tabindex="0">&lt;code>/bin/systemctl start nessusd.service
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>进入管理界面: https://10.0.0.199:8834/&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>设置账号密码&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>初始化及编译插件
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 468px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-compile.png" data-size="3142x1610">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-compile.png"
+width="3142"
+height="1610"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-compile_huc8647e0dc9bfb43b19d0bfa305627377_3087719_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-compile_huc8647e0dc9bfb43b19d0bfa305627377_3087719_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="12-使用-nessus">1.2 使用 nessus&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>添加 scan
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 470px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan.png" data-size="3142x1604">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan.png"
+width="3142"
+height="1604"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan_huc197ac790863802dff381fdbec8cca91_470563_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan_huc197ac790863802dff381fdbec8cca91_470563_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 469px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan-2.png" data-size="3142x1606">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan-2.png"
+width="3142"
+height="1606"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan-2_hu1cc2944a9a920f8507848a031401f469_285415_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-add-scan-2_hu1cc2944a9a920f8507848a031401f469_285415_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>执行 scan 并查看结果
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 469px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result.png" data-size="3140x1606">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result.png"
+width="3140"
+height="1606"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result_hu08e52e8f0c435f11c4a58a104394ceae_314671_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result_hu08e52e8f0c435f11c4a58a104394ceae_314671_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 468px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result-2.png" data-size="3142x1608">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result-2.png"
+width="3142"
+height="1608"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result-2_hu25becd0d15f5f01f393bc39526b60421_473024_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/nessus-result-2_hu25becd0d15f5f01f393bc39526b60421_473024_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="2-容器扫描">2. 容器扫描&lt;/h1>
+&lt;h2 id="21-安装-snyk">2.1 安装 snyk&lt;/h2>
+&lt;p>&lt;strong>如果你的容器在 docker hub 等 registries 中，可以不用在本地安装 snyk。&lt;/strong>&lt;/p>
+&lt;pre tabindex="0">&lt;code>wget https://static.snyk.io/cli/latest/snyk-linux
+mv ./snyk-linux /usr/local/bin/snyk
+chmod +x /usr/local/bin/snyk
+&lt;/code>&lt;/pre>&lt;h2 id="22-使用-snyk">2.2 使用 snyk&lt;/h2>
+&lt;p>无论使用云端还是本地版本，都需要注册 snyk 账号。
+请在 &lt;a class="link" href="https://app.snyk.io/" target="_blank" rel="noopener"
+>snyk 官网&lt;/a>注册。&lt;/p>
+&lt;h3 id="221-使用云端-snyk">2.2.1 使用云端 snyk&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>添加项目：点击 Add Project
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 469px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project.png" data-size="3142x1606">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project.png"
+width="3142"
+height="1606"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project_hu4c8e13dccdf0c7ed559b9752eb53521f_460492_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project_hu4c8e13dccdf0c7ed559b9752eb53521f_460492_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>选择 registries
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 468px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-registries.png" data-size="3138x1606">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-registries.png"
+width="3138"
+height="1606"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-registries_hu6d5b5ca4d3d416540fea53457f1617de_330773_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-registries_hu6d5b5ca4d3d416540fea53457f1617de_330773_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>选择镜像
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 203;
+flex-basis: 488px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-image.png" data-size="3140x1542">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-image.png"
+width="3140"
+height="1542"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-image_hu2ce46411078a2cb7c51486f8737b9cb3_210695_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-add-project-select-image_hu2ce46411078a2cb7c51486f8737b9cb3_210695_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>查看结果
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 194;
+flex-basis: 467px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result.png" data-size="3138x1610">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result.png"
+width="3138"
+height="1610"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result_hue9603be147c2d4eec31b14c8841a9520_520281_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result_hue9603be147c2d4eec31b14c8841a9520_520281_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 195;
+flex-basis: 468px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result-2.png" data-size="3142x1610">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result-2.png"
+width="3142"
+height="1610"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result-2_hu0d136ca52f2a1e49a588ff1642afd4cf_334601_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-result-2_hu0d136ca52f2a1e49a588ff1642afd4cf_334601_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>可以看到具体的漏洞情况以及解决方法。&lt;/p>
+&lt;h3 id="221-使用本地-snyk">2.2.1 使用本地 snyk&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>登录：&lt;code>snyk auth &amp;lt;Token&amp;gt;&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>Token 在页面端生成&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>扫描：&lt;code>snyk container test &amp;lt;Image name&amp;gt;&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>结果：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 152;
+flex-basis: 366px"
+>
+&lt;a href="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-local-result.png" data-size="2232x1460">
+&lt;img src="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-local-result.png"
+width="2232"
+height="1460"
+srcset="https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-local-result_hu7179c7f9762e323eb87b539f6c0643ef_629003_480x0_resize_box_3.png 480w, https://isshe.site/p/%E5%AE%89%E5%85%A8-%E4%BD%BF%E7%94%A8-snyk-%E5%8F%8A-nessus-%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/images/snyk-local-result_hu7179c7f9762e323eb87b539f6c0643ef_629003_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 代理模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 代理模式" />&lt;h1 id="代理模式">代理模式&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>定义/意图：为某个对象提供一种代理，以控制对这个对象的访问。&lt;/p>
+&lt;ul>
+&lt;li>控制对象的访问；只有需要时才创建、初始化。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>别名：Proxy，Surrogate&lt;code>[ˈsɜ:rəgət]&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 191;
+flex-basis: 458px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="627x328">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="627"
+height="328"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram_hub0bc657ad31b110e47045ee0ac7e408b_22439_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram_hub0bc657ad31b110e47045ee0ac7e408b_22439_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>可能的对象图
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 376;
+flex-basis: 904px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.png" data-size="524x139">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.png"
+width="524"
+height="139"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram_hu5f455159e5a15331f999b11eee4a3509_10198_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram_hu5f455159e5a15331f999b11eee4a3509_10198_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="对象图">
+&lt;/a>
+&lt;figcaption>对象图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>出场嘉宾&lt;/p>
+&lt;ul>
+&lt;li>Subject:
+&lt;ul>
+&lt;li>定义RealSubject和Proxy的共用接口。使得可以在任何使用RealSubject的地方使用Proxy。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Proxy: 代理。继承自Subject。
+&lt;ul>
+&lt;li>保存RealSubject的引用。&lt;/li>
+&lt;li>提供与RealSubject相同的接口，以代替RealSubject。&lt;/li>
+&lt;li>控制对RealSubject的存取/访问，并可能负责创建、删除。&lt;/li>
+&lt;li>针对类型的功能：
+&lt;ul>
+&lt;li>远程代理：负责对请求及参数进行编码，编发送给不同地址空间的实体。&lt;/li>
+&lt;li>虚拟代理：可缓存真实对象的附加信息，以延迟对真实对象的访问/创建。如，图片代理缓存图片的大小，尺寸。&lt;/li>
+&lt;li>保护代理：检查调用者的权限，保护真实对象。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>RealSubject:
+&lt;ul>
+&lt;li>真实的对象，被Proxy代表的实体。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Client:
+&lt;ul>
+&lt;li>使用Subject。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>协作/工作流程&lt;/p>
+&lt;ul>
+&lt;li>Client向Proxy进行请求。&lt;/li>
+&lt;li>Proxy进行相关附加操作后，对请求进行转发或其他操作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>可以隐藏被代理对象不再同一地址空间的事实。&lt;/li>
+&lt;li>可以最优化，根据要求创建对象(管理对象)。&lt;/li>
+&lt;li>可以对被代理对象进行保护。&lt;/li>
+&lt;li>可以对被访问对象进行一些额外/附加操作。&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>代码调用层次加深，复杂度更高。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。&lt;/li>
+&lt;li>使用代理模式的常见情况：
+&lt;ul>
+&lt;li>远程代理：为一个对象在不同的地址空间提供&lt;code>局部代表&lt;/code>。&lt;/li>
+&lt;li>虚拟代理：根据需要创建开销很大的对象。一些已知的东西由代理进行提供，只有最必须时，才进行目标对象创建。&lt;/li>
+&lt;li>保护代理：控制对原始对象的访问，提供访问保护。&lt;/li>
+&lt;li>智能指引：取代简单指针，访问对象时，执行一些附加操作。典型用途：
+&lt;ul>
+&lt;li>对指向的实际对象引用计数，当对象没有引用时，自动释放对象。（也称为智能指针/Smart Pointers）&lt;/li>
+&lt;li>第一次引用一个持久对象时，将它装入内存。【持久化对象？？？】&lt;/li>
+&lt;li>访问实际对象前，检查是否锁定，以确保其他对象不能修改它。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>实现注意：
+&lt;ul>
+&lt;li>Proxy并不总是需要知道RealSubject的类型。
+&lt;ul>
+&lt;li>如果Proxy&lt;code>类&lt;/code>能通过一个抽象接口处理它的实体，则无需为每一个RealSubject&lt;code>类&lt;/code>都生成一个Proxy&lt;code>类&lt;/code>；Proxy可以统一处理所有RealSubject类。&lt;/li>
+&lt;li>如果Proxy要实例化RealSubject，则必须知道具体的类。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 单件模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 单件模式" />&lt;h1 id="单件模式独一无二的对象">单件模式——独一无二的对象&lt;/h1>
+&lt;p>初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：&lt;/p>
+&lt;ul>
+&lt;li>创建对象的时候，如何知道现在只有一个？&lt;/li>
+&lt;li>如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象）&lt;/li>
+&lt;li>如何获取/访问这个唯一对象？&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。&lt;/li>
+&lt;li>原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 225;
+flex-basis: 542px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="472x209">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="472"
+height="209"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Singleton：单件类。
+&lt;ul>
+&lt;li>定义一个接口，允许客户访问唯一实例。此接口是一个类操作。&lt;/li>
+&lt;li>负责创建唯一实例。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>系统中，有些东西只需要一份就够了，因此要保证只有一份。&lt;/li>
+&lt;li>解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>对唯一实例的创建是受控的——不允许直接创建（new或变量）。&lt;/li>
+&lt;li>对唯一实例的访问是受控的。&lt;/li>
+&lt;li>缩小命名空间。
+&lt;ul>
+&lt;li>此模式是对全局变量的一种改进。&lt;/li>
+&lt;li>避免了存储唯一实例的全局变量污染命名空间。&lt;/li>
+&lt;li>（同一命名空间内，两个名字相同，就会冲突。）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>允许对操作和表示的精化。【？！】
+&lt;ul>
+&lt;li>&lt;code>单件类&lt;/code>可以有子类。&lt;/li>
+&lt;li>可以使用所&lt;code>需的拓展类&lt;/code>在&lt;code>运行时&lt;/code>配置应用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>允许可变的数目的实例。&lt;/li>
+&lt;li>比类操作更灵活。
+&lt;ul>
+&lt;li>如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>多个模块共用的全局数据库/配置。&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>保证一个唯一的实例。&lt;/li>
+&lt;li>C++实现注意：如果将单件定义为一个全局或静态的对象，然后依赖自动的初始化，是不够的，原因：
+&lt;ul>
+&lt;li>不能保证静态对象只有一个实例会被声明。&lt;/li>
+&lt;li>可能没有足够的信息初始化实例。（可能需要在运行时获取信息）&lt;/li>
+&lt;li>C++没有定义转换单元（Translation unit）上全局对象的构造器的调用顺序。【？！】&lt;/li>
+&lt;li>无论是否使用，都会被创建。（一开始就创建了）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>如何拓展单件类？&lt;/li>
+&lt;li>&lt;code>5. 注意&lt;/code>里面第2点第3个原因，不理解！&lt;/li>
+&lt;li>&lt;code>单件注册表&lt;/code>？&lt;/li>
+&lt;li>《设计模式：可复用面向对象软件的基础》里面好像没有考虑线程安全？&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 外观模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.png" alt="Featured image of post 设计模式 —— 外观模式" />&lt;h1 id="外观模式让接口更简单">外观模式——让接口更简单&lt;/h1>
+&lt;blockquote>
+&lt;p>外观模式：Facade /fəˈsɑːd/&lt;/p>
+&lt;/blockquote>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：&lt;code>让接口更简单&lt;/code>
+&lt;ul>
+&lt;li>为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。&lt;/li>
+&lt;li>&lt;figure
+>
+&lt;a href="https://isshe.site/Facade.png" >
+&lt;img src="https://isshe.site/Facade.png"
+loading="lazy"
+alt="使用外观模式">
+&lt;/a>
+&lt;figcaption>使用外观模式&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>别名：&lt;/li>
+&lt;li>类图/结构：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 262;
+flex-basis: 630px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.png" data-size="607x231">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.png"
+width="607"
+height="231"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct_hu769c2cc54f67243d0c04bf7a939c27e8_60141_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct_hu769c2cc54f67243d0c04bf7a939c27e8_60141_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Facade：外观
+&lt;ul>
+&lt;li>知道哪些子系统负责处理哪些请求；&lt;/li>
+&lt;li>将客户请求代理给适当的子系统；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Subsystem Classes：其他子系统类
+&lt;ul>
+&lt;li>实现子系统的功能；&lt;/li>
+&lt;li>处理由Facede指派的任务；&lt;/li>
+&lt;li>没有Facade的任何信息；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>客户 -&amp;gt; Facade -&amp;gt; Subsystem&lt;/li>
+&lt;li>客户发送请求给Facede；&lt;/li>
+&lt;li>Facede将请求适当转发到子系统；&lt;/li>
+&lt;li>子系统完成请求工作，返回请求结果给Facede；&lt;/li>
+&lt;li>Facede返回请求结果给客户；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>降低系统间的通信和相互依赖关系。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>对客户屏蔽子系统组件，减少客户处理得对象数目并使得子系统使用更方便。&lt;/li>
+&lt;li>实现了子系统和客户之间的松耦合关系。&lt;/li>
+&lt;li>Facade模式有助于建立层次 结构系统。&lt;/li>
+&lt;li>如应用需要，可以不限制它们使用子系统类。&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>当需要为一个复杂的子系统提供一个简单接口时；&lt;/li>
+&lt;li>客户程序与抽象类的实现部分之间存在着较大的依赖性。
+&lt;ul>
+&lt;li>引入外观模式将这个子系统与客户一级其他子系统分离，提高子系统的独立性和可移植性。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>构建一个层次结构的子系统时，可以用外观模式来定义子系统中每层的入口点。
+&lt;ul>
+&lt;li>如果子系统间相互依赖，可以让它们仅通过外观模式进行通讯，从而简化依赖关系。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>实现时注意：
+&lt;ul>
+&lt;li>降低客户-子系统的耦合度。使用&lt;code>抽象类实现Facade&lt;/code>而&lt;code>它的具体子类对应于不同的子系统实现&lt;/code>。&lt;/li>
+&lt;li>公共子系统类与私有子系统类。
+&lt;ul>
+&lt;li>子系统公共接口：包含所有用户程序可以访问的类。&lt;/li>
+&lt;li>子系统私有接口：仅用于对子系统进行扩充。&lt;/li>
+&lt;li>Facade类是公共接口的一部分。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>将一个系统划分为多个子系统有利于降低系统的复杂度。&lt;/li>
+&lt;li>个人理解：这个就类似于ios里面的捷径App，一个捷径可以包含多种操作。&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 工厂方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP.png" alt="Featured image of post 设计模式 —— 工厂方法模式" />&lt;h1 id="工厂方法">工厂方法&lt;/h1>
+&lt;p>工厂方法模式(Factory Method Pattern)又称为：&lt;/p>
+&lt;ul>
+&lt;li>工厂模式；&lt;/li>
+&lt;li>虚拟构造器(Virtual Constructor)模式&lt;/li>
+&lt;li>多态工厂(Polymorphic Factory)模式
+它属于类创建型模式。&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>定义/意图：&lt;/p>
+&lt;ul>
+&lt;li>定义一个创建对象的接口，让子类决定实例化哪一个类。&lt;/li>
+&lt;li>工厂方法使一个类的实例化延迟到其子类。&lt;/li>
+&lt;li>框架使用抽象类定义和维护对象之间的关系。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 217;
+flex-basis: 520px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="788x363">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="788"
+height="363"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hubb814909749ccb8edb1429126b62c316_29214_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hubb814909749ccb8edb1429126b62c316_29214_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>出场嘉宾&lt;/p>
+&lt;ul>
+&lt;li>产品/Product: 定义产品。&lt;/li>
+&lt;li>具体产品/Concrete Product: 定义具体的产品，继承自产品。&lt;/li>
+&lt;li>创建者/Creator：工厂；工厂的抽象类，声明工厂方法。
+&lt;ul>
+&lt;li>创建者可以定义一个默认的缺省实现，返回一个缺省的具体产品。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>具体创建者/Concrete Creator: 具体工厂；继承自工厂，用于创建具体产品。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>【简单工厂的优点】&lt;/li>
+&lt;li>将创建对象的代码集中在一个对象或一个方法中，避免重复代码。&lt;/li>
+&lt;li>实例化对象时，依赖接口，不依赖具体类。【？！】&lt;/li>
+&lt;li>添加新产品时，不需修改旧代码，只需添加新的具体产品和具体创建者。&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>必须创建创建者的子类，无论用户想创建的具体产品是一个还是多个。（成对添加）&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>当一个类不知道它所创建的对象的类的时候。&lt;/li>
+&lt;li>当一个类希望由它的子类来指定所创建的对象的时候。&lt;/li>
+&lt;li>当类将创建对象的职责委托给一个或多个子类，并且将这些子类(代理者)是代理者这一信息局部化的时候。&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>工厂方法模式主要有两种不同情况：&lt;/p>
+&lt;ul>
+&lt;li>1）Creator类是一个抽象类，并且不提供工厂方法的实现。&lt;/li>
+&lt;li>2）Creator类是具体类，并且提供工厂方法的一个缺省实现。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>参数化工厂方法：一个工厂方法可以创建多种产品。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>特定语言的变化和问题。【？！】&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>C++中，工厂方法通常是需函数并且是纯虚函数。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在Creator的构造器中不要调用工厂方法——在具体Concrete Creator中该方法还不可以。【？！】&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>使用模板以避免创建子类。（解决第一个缺点）【？！】&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>进行命名约定。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>日志记录器：同时支持多种日志记录方式，如文件记录、数据库记录等。&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>工厂方法(Factory Method)和创建者(Creator)是否总是抽象的？
+&lt;ul>
+&lt;li>不。可以定义一个默认的工厂方法来产生具体产品。这样一来，即使没有具体创建者，也可以创建产品。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>工厂方法模式和简单工厂模式的区别？&lt;/li>
+&lt;li>C++中，模板如何使用？&lt;/li>
+&lt;li>什么是依赖倒置原则？
+&lt;ul>
+&lt;li>依赖倒置原则：要依赖抽象，不要依赖具体的类。&lt;/li>
+&lt;li>这个原则说明了：不能让高层组件依赖低层组件，而且，不管是高层还是低层组件，都应该依赖抽象。&lt;/li>
+&lt;li>示例：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 145;
+flex-basis: 348px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B.png" data-size="635x437">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B.png"
+width="635"
+height="437"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B_huf5a20b34a6a2b71247bb728693802091_98002_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99%E7%A4%BA%E4%BE%8B_huf5a20b34a6a2b71247bb728693802091_98002_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="依赖倒置原则示例">
+&lt;/a>
+&lt;figcaption>依赖倒置原则示例&lt;/figcaption>
+&lt;/figure>
+&lt;ul>
+&lt;li>Pizza是一个抽象&lt;/li>
+&lt;li>PizzaStore(高层组件)和XXXStylePizza(低层组件)都依赖Pizza(抽象)，而不是高层组件直接依赖低层组件。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>如何避免违反依赖倒置原则？
+&lt;ul>
+&lt;li>变量不可以持有具体类的引用。
+&lt;ul>
+&lt;li>如果使用new，就会持有具体类的引用，可以用工厂来避开。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>不要让类派生自具体类，应派生自一个抽象（接口）
+&lt;ul>
+&lt;li>如果派生自具体类，就会依赖具体类。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>不要覆盖基类中已实现的方法。
+&lt;ul>
+&lt;li>如果覆盖，说明基类不是真正适合被继承的抽象。基类中已实现的方法，应所有子类共享。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>C++模板&lt;/li>
+&lt;li>使用多个工厂方法：抽象工厂中定义多个工厂方法。&lt;/li>
+&lt;li>对象复用：具体创建者把创建的对象保存下来，下次创建的时候先查询，如果没有再创建。
+&lt;ul>
+&lt;li>只适合某些对象可以复用的情况。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《Head First设计模式》 p118&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 抽象工厂模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 抽象工厂模式" />&lt;h1 id="设计模式readme模板">设计模式Readme模板&lt;/h1>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>定义：提供一个创建一系列相关或相互依赖对象的接口，而无需指定他们具体的类。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 381px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="1013x637">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="1013"
+height="637"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>出场嘉宾&lt;/p>
+&lt;ul>
+&lt;li>AbstractFactory: 抽象工厂；声明具体工厂的接口——&lt;code>声明了&lt;/code>一个创建抽象产品&lt;code>对象&lt;/code>的接口。&lt;/li>
+&lt;li>ConcreteFactory: 具体工厂；继承自抽象工厂，&lt;code>实现了&lt;/code>创建具体产品对象的操作。&lt;/li>
+&lt;li>AbstractProduct: 抽象产品；声明具体产品的接口——&lt;code>声明了&lt;/code>一类产品对象的接口。&lt;/li>
+&lt;li>ConcreteProduct: 具体产品；继承自抽象产品，定义了一个将被具体工厂创建的&lt;code>产品对象&lt;/code>，&lt;code>实现了&lt;/code>抽象产品的接口，&lt;/li>
+&lt;li>Client: &lt;code>仅&lt;/code>使用由抽象工厂和抽象产品类声明的接口——不使用具体工厂、具体产品的接口/方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>工作方式：&lt;/p>
+&lt;ul>
+&lt;li>运行时创建&lt;code>具体工厂对象&lt;/code>，具体工厂对象创建&lt;code>具体产品对象&lt;/code>。&lt;/li>
+&lt;li>客户使用不同的具体工厂对象，创建不同的具体产品对象。&lt;/li>
+&lt;li>抽象工厂将产品对象的创建延迟到具体工厂。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>需联合使用一系列产品的时候，可使用此模式&lt;/li>
+&lt;li>其他见【4.使用场景】&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>分离了具体的类：
+&lt;ul>
+&lt;li>工厂封装创建产品对象的过程，将客户和类的实现分离。客户通过抽象接口操纵实例。&lt;/li>
+&lt;li>具体产品的类名也在具体工厂的实现中被分离，它们不会出现在客户代码中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>易于交换产品系列：
+&lt;ul>
+&lt;li>一个&lt;code>具体工厂类&lt;/code>在一个应用中仅出现一次——它初始化的时候；&lt;/li>
+&lt;li>改变&lt;code>具体工厂类&lt;/code>即可改变产品配置——&lt;code>具体工厂类A&lt;/code>换为&lt;code>具体工厂类B&lt;/code>,则产品配置从A也更换到B。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>有利于产品的一致性：【？？？】
+&lt;ul>
+&lt;li>一个系列的&lt;code>产品对象&lt;/code>被设计成一起工作的时候，一个应用一次只能使用同一个系列中的对象。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>难以添加新种类的产品，需改代码。（拓展性受到限制）
+&lt;ul>
+&lt;li>抽象工厂类确定了可以被创建的产品集合，要新增就要修改此类——它及它的子类都要变化。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>一个系统要独立于它的产品的创建、组合和表示时。【不理解？！】&lt;/li>
+&lt;li>一个系统要由多个产品系列中的一个来配置时。&lt;/li>
+&lt;li>当要强调一系列相关的产品对象的设计以便进行&lt;code>联合使用&lt;/code>时。&lt;/li>
+&lt;li>当你提供一个产品类库，而只想显示它们的接口而不是实现时。&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意实现">5. 注意/实现&lt;/h2>
+&lt;ul>
+&lt;li>将[具体]工厂作为单件：一个应用中一般每个产品系列只需一个具体工厂的实例。&lt;/li>
+&lt;li>抽象工厂只声明接口，不创建产品。创建产品由具体工厂来做。
+&lt;ul>
+&lt;li>通常做法：每个产品定义一个工厂方法。&lt;a class="link" href="../4.%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f" >见工厂方法模式&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>定义可扩展的工厂：解决3.2中缺点1
+&lt;ul>
+&lt;li>更灵活但不太安全的设计：给创建对象的操作增加一个参数，该参数指定将被创建的对象的种类。【？？？】
+&lt;ul>
+&lt;li>C++中，只有当产品对象可以被请求它们的客户安全的强制类型转换才能使用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>InterView的&lt;code>Kit&lt;/code>&lt;/li>
+&lt;li>ET++&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>对定义不理解，理解后，进行备注&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>工厂方法模式和抽象工厂模式的区别是什么？
+&lt;ul>
+&lt;li>抽象工厂模式通常使用工厂方法模式来实现。&lt;/li>
+&lt;li>添加一个新的产品，工厂方法修改工厂，抽象工厂新建新工厂。&lt;/li>
+&lt;li>工厂方法模式:
+&lt;ul>
+&lt;li>使用的是&lt;code>类&lt;/code>;&lt;/li>
+&lt;li>通过继承创建就对象——拓展一个父类，并覆盖父类的工厂方法【？？？】&lt;/li>
+&lt;li>用途：把客户代码从实例化的具体类中解耦 或 当不清楚要实例化具体类时使用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>抽象工厂模式
+&lt;ul>
+&lt;li>使用的是&lt;code>对象&lt;/code>。&lt;/li>
+&lt;li>通过对象的组合创建对象【？？？】&lt;/li>
+&lt;li>用途：创建产品家族或把集合所制造的相关产品。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>《Head First 设计模式》里的比较图
+&lt;ul>
+&lt;li>工厂方法模式
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 89;
+flex-basis: 215px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract1.png" data-size="891x993">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract1.png"
+width="891"
+height="993"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract1_hu3ad49710914f4c7c611c3ec038e122ea_218589_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract1_hu3ad49710914f4c7c611c3ec038e122ea_218589_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="工厂方法模式">
+&lt;/a>
+&lt;figcaption>工厂方法模式&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>抽象工厂模式
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 91;
+flex-basis: 220px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract2.png" data-size="896x977">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract2.png"
+width="896"
+height="977"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract2_hub21b9d9ba8c98aea8f5b827a3dfb3432_245501_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract2_hub21b9d9ba8c98aea8f5b827a3dfb3432_245501_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="抽象工厂模式">
+&lt;/a>
+&lt;figcaption>抽象工厂模式&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>5中的&lt;code>定义可扩展的工厂&lt;/code>不理解？哪里不安全？类型转换？哪里灵活？怎么灵活？&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>依赖倒置原则：要依赖抽象，不要依赖具体的类。
+这个原则说明了：不能让高层组件依赖低层组件，而且，不管是高层还是低层组件，都应该依赖抽象。&lt;/li>
+&lt;li>单件模式&lt;/li>
+&lt;li>&lt;a class="link" href="../4.%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f" >工厂方法模式&lt;/a>&lt;/li>
+&lt;li>如果有多个可能的产品系列，具体工厂也可以使用原型模式来实现。&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《Head First设计模式》p144页开始&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 模板方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 模板方法模式" />&lt;h1 id="模板方法模式用继承改变算法">模板方法模式——用继承改变算法&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：定义一个操作的算法的&lt;code>骨架&lt;/code>，将一些步骤延迟到子类中。模板方法模式使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。&lt;/li>
+&lt;li>别名：无&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 150;
+flex-basis: 360px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="592x394">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="592"
+height="394"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>AbstrackClass：抽象类
+&lt;ul>
+&lt;li>定义抽象的&lt;code>原语操作(primitive operation)&lt;/code>，各个步骤的具体实现交给子类。&lt;/li>
+&lt;li>实现一个模板方法，定义一个算法的步骤。&lt;/li>
+&lt;li>实现不变的部分。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ConcreteClass：具体类
+&lt;ul>
+&lt;li>实现原语操作，完成特定步骤的具体实现。&lt;/li>
+&lt;li>实现变动的部分。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>AbstrackClass实现不变的部分（或骨架）；&lt;/li>
+&lt;li>ConcreteClass实现变动的部分；&lt;/li>
+&lt;li>AbstrackClass 和 ConcreteClass 实现整个操作/算法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>效果
+&lt;ul>
+&lt;li>模板方法是一种&lt;code>代码复用&lt;/code>的&lt;code>基本技术&lt;/code>。在类库中尤为重要。&lt;/li>
+&lt;li>模板方法导致一种反向的控制结构——&amp;ldquo;好莱坞原则&amp;rdquo;——即&amp;quot;别找我们，我们会找你&amp;quot;——父类调用子类的操作。&lt;/li>
+&lt;li>模板方法可能调用下列类型的操作：
+&lt;ul>
+&lt;li>具体的操作：ConcreteClass或对客户类的操作。&lt;/li>
+&lt;li>具体的AbstractClass的操作：即通常对子类有用的操作。&lt;/li>
+&lt;li>原语操作：即抽象操作&lt;/li>
+&lt;li>工厂方法&lt;/li>
+&lt;li>钩子操作(hook operation)：提供缺省的行为，子类可在必要时进行扩展。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>提供更好的扩展性；&lt;/li>
+&lt;li>减少重复代码。&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>每个算法都要定义一个子类。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>一个算法，多数操作相同，少数不同。
+&lt;ul>
+&lt;li>一次性实现一个算法不变的部分，并将可变的行为留给子类来实现。&lt;/li>
+&lt;li>子类中公共行为应该被提取到父类中，避免代码重复。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>需要控制子类扩展。在某些特定点调用&amp;quot;hook&amp;quot;操作，允许在这些点进行扩展。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>需要注意的实现问题：
+&lt;ul>
+&lt;li>使用访问控制。
+&lt;ul>
+&lt;li>C++中，模板方法调用的原语操作可以被定义为保护成员，保证它们只被模板方法调用&lt;/li>
+&lt;li>C++中，必须重定义的原语操作需定义为纯虚函数。（重定义：父类提供接口，子类实现。）&lt;/li>
+&lt;li>C++中，模板方法不需重定义，不需定义为纯虚函数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>尽量减少原语操作。
+&lt;ul>
+&lt;li>减少子类需要重定义的原语操作。原语操作越多，子类实现越冗长。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>命名约定：给应被重定义的操作加上&lt;code>特定前缀&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>策略模式使用&lt;code>委托&lt;/code>，委托是指？ConcreteStrategy委托给Context？&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>相关模式：
+&lt;ul>
+&lt;li>工厂模式：可被模板方法调用。&lt;/li>
+&lt;li>策略模式：使用&lt;code>委托&lt;/code>来改变整个算法。（模板方法使用&lt;code>继承&lt;/code>来改变算法的一部分）
+&lt;ul>
+&lt;li>委托【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 状态模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 状态模式" />&lt;h1 id="状态state模式">状态(State)模式&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：允许一个对象再起内部状态改变时改变它的行为。对象看起来似乎修改了它的类。&lt;/li>
+&lt;li>别名：状态对象(Objects for States)&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 208;
+flex-basis: 500px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="578x277">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="578"
+height="277"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram_huc03f68792e55e175b4455a14e3ef74ad_21728_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram_huc03f68792e55e175b4455a14e3ef74ad_21728_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Context: 上下文、环境
+&lt;ul>
+&lt;li>定义客户感兴趣的接口。&lt;/li>
+&lt;li>维护一个ConcreteState子类的实例，表示当前状态。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>State：状态，抽象类/接口
+&lt;ul>
+&lt;li>定义一个接口，以封装与Context的特定状态相关的行为。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ConcreteState：具体状态
+&lt;ul>
+&lt;li>定义一个具体的状态，实现一个与Context的一个状态的相关的行为。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>Context保存一个ConcreteState对象，表示当前状态。&lt;/li>
+&lt;li>Context将与状态相关的请求委托给当前的ConcreteState对象处理。&lt;/li>
+&lt;li>Context可将自身作为一个参数传递给处理请求的状态对象。&lt;/li>
+&lt;li>Context是客户使用的主要接口。&lt;/li>
+&lt;li>Context和ConcreteState都可以决定哪一个状态是后继状态。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>状态模式将特定状态相关的行为局部化，并且将不同状态的行为分割开。&lt;/li>
+&lt;li>状态模式使得状态转换显式化。【？？？】
+&lt;ul>
+&lt;li>为不同的状态引入独立的对象使得转换变得更加明确。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>状态对象可被共享：可被多个Context共享。&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>增加了对象的数目。&lt;/li>
+&lt;li>C++里面容易导致头文件循环引用。解决方法，见C++示例的TCPState.h文件&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>一个对象的行为取决于它的状态，并且他必须在运行时刻根据状态改变它的行为。&lt;/li>
+&lt;li>一个操作中含有庞大/多分支的条件语句，且这些分支依赖于该对象的状态。
+&lt;ul>
+&lt;li>状态模式将每一个条件分支放入一个独立的类中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>实现时需要考虑的问题：
+&lt;ul>
+&lt;li>谁定义状态转换：Context还是ConcreteState？
+&lt;ul>
+&lt;li>Context可以实现，但是用ConcreteState通常更灵活更合适。（需要Context增加接口，供ConcreteState改变状态）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>基于表的另一种方法。
+&lt;ul>
+&lt;li>详见四人帮《设计模式》204页。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>创建和销毁ConcreteState对象。
+&lt;ul>
+&lt;li>提前创建，不销毁。
+&lt;ul>
+&lt;li>状态改变频繁，则考虑此方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>需要时创建，不需要时销毁。
+&lt;ul>
+&lt;li>当将要进入的状态在运行时是不可知的，并且上下文不经常改变状态，则考虑此方法。&lt;/li>
+&lt;li>当ConcreteState对象存储大量信息，且不常改变状态，考虑此方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用动态继承。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>转换显式化，如何才算显式化？&lt;/li>
+&lt;li>什么是动态继承？&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>相关模式：
+&lt;ul>
+&lt;li>Singleton：单例模式，状态对象通常是单例模式。&lt;/li>
+&lt;li>Flyweight：享元模式。解释何时、怎样共享状态对象。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 策略模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 策略模式" />&lt;h1 id="策略模式用委托改变算法">策略模式——用委托改变算法&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：
+&lt;ul>
+&lt;li>定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。&lt;/li>
+&lt;li>本模式使得算法可以独立于使用它的客户而变化。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>别名：Policy（政策）&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 203;
+flex-basis: 488px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="717x352">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="717"
+height="352"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram_hu771149e49c462b26432a5b0e1acd417c_27093_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram_hu771149e49c462b26432a5b0e1acd417c_27093_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Strategy：策略，定义算法的公共接口。
+&lt;ul>
+&lt;li>Context使用这个接口来调用某个ConcreteStrategy定义的算法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ConcreteStrategy：具体策略，实现具体的算法。&lt;/li>
+&lt;li>Context：上下文
+&lt;ul>
+&lt;li>用已成而ConcreteStrategy对象来配置；【？？？】&lt;/li>
+&lt;li>维护一个对Strategy对象的引用；&lt;/li>
+&lt;li>可定义一个接口来让Strategy访问它的数据。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>Strategy和Context相互作用，以实现选定的算法。
+&lt;ul>
+&lt;li>Context将算法需要的参数传给Strategy，或&lt;/li>
+&lt;li>Context将自己作为参数传给Strategy。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Context将它的客户的请求转发给它的Strategy。
+&lt;ul>
+&lt;li>客户通常创建并传递一个ConcreteStrategy对象给该Context（客户仅与Context交互）。&lt;/li>
+&lt;li>客户通常可以选择一系列的ConcreteStrategy。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>Strategy类层次为Context定义了一系列可供重用的算法/行为。&lt;/li>
+&lt;li>提供一个代替继承的方法。
+&lt;ul>
+&lt;li>继承提供了另一种支持多种算法/行为的方法——直接生成Context的子类，但提供不同的行为。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>消除了一些条件语句（客户进行指定，不需要switch和if）&lt;/li>
+&lt;li>可提供相同行为的不同实现。&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>客户必须了解各种ConcreteStrategy。&lt;/li>
+&lt;li>Strategy和Context之间的通信开销——某些ConcreteStrategy可能永远用不上某些参数。&lt;/li>
+&lt;li>增加了对象的数目。&lt;/li>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>许多相关的类仅仅是行为异。&amp;ldquo;策略&amp;quot;提供了一种用多个行为中的一个来配置一个类的方法。&lt;/li>
+&lt;li>需要使用一个算法的不同变体。&lt;/li>
+&lt;li>算法使用客户端不应该知道的数据。&lt;/li>
+&lt;li>一个类定义类多种行为，并且这些行为在这个类的操作中已多个条件语句的形式出现。
+&lt;ul>
+&lt;li>将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>需要考虑的实现问题：
+&lt;ul>
+&lt;li>Strategy和Context接口必须使得ConcreteStrategy能够有效访问它所需要的Context中的任何数据。
+&lt;ul>
+&lt;li>方法一：Context将数据作为参数传递给Strategy
+&lt;ul>
+&lt;li>缺点：Context可能发送一些Stratege不需要的数据。&lt;/li>
+&lt;li>优点：Context和Strategy解耦。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>方法二：Context将自身作为参数传递给Strategy，Strategy再显式想Context请求数据或者存储Context的一个引用（这样就根本不需要再传递任何东西）
+&lt;ul>
+&lt;li>缺点：Context和Strategy紧密耦合。&lt;/li>
+&lt;li>优点：传递数据少。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使Strategy对象成为可选的。
+&lt;ul>
+&lt;li>如果想要不使用额外的Strategy对象的情况下，Context仍有意义的话，可以：
+&lt;ul>
+&lt;li>访问某个Strategy对象前，先检查是否存在，存在就使用，不存在就使用默认（缺省）的行为。&lt;/li>
+&lt;li>优点：用户只在需要时，才需要了解ConcreteStrategy对象。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>C++中，只有满足下面的条件才能将Strategy作为&lt;code>模板参数&lt;/code>：
+&lt;ul>
+&lt;li>1.可以在编译时选择Strategy；&lt;/li>
+&lt;li>2.它不需要在运行时改变&lt;/li>
+&lt;li>示例：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="c1">// Context
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">template&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">AStrategy&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="k">class&lt;/span> &lt;span class="nc">Context&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="nf">Operation&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">theStrategy&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DoAlgorithm&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">private&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="n">AStrategy&lt;/span> &lt;span class="n">theStrategy&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// Strategy
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="k">class&lt;/span> &lt;span class="nc">MyStrategy&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">public&lt;/span>&lt;span class="o">:&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="n">DoAlgorithm&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">Context&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">MyStrategy&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">aContext&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 简单工厂模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 简单工厂模式" />&lt;h1 id="简单工厂模式">简单工厂模式&lt;/h1>
+&lt;ul>
+&lt;li>别称：静态工厂方法&lt;/li>
+&lt;li>简单工厂并不是一种模式，而是一种编程习惯。——《Head First设计模式》&lt;/li>
+&lt;li>代码比较简单，就不写代码的Readme了&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：无&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 155;
+flex-basis: 373px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="441x283">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="441"
+height="283"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram_hu9641347351fb55904fe95979a1ea9ec9_12938_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram_hu9641347351fb55904fe95979a1ea9ec9_12938_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>产品/Product：产品，抽象类（或接口）&lt;/li>
+&lt;li>具体产品/Concrete Product：具体产品，继承/实现Product&lt;/li>
+&lt;li>工厂/Creator：工厂，用于生产Product&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;p>无&lt;/p>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>把变化集中到一块，易于管理。&lt;/li>
+&lt;li>&amp;ldquo;消费对象&amp;quot;不需要直接创建具体产品(Concrete Product)，把对象创建和使用分开。&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>工厂类集中了多个其他类，违反了高内聚责任分配原则。【？！】&lt;/li>
+&lt;li>有新的&lt;code>具体产品&lt;/code>时，需要修改代码，不符合开闭原则。&lt;/li>
+&lt;li>随着&lt;code>具体产品&lt;/code>增加，判断添加回变多，维护回变难。&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>这些缺点在&lt;code>工厂方法模式&lt;/code>中得到解决。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>工厂类负责创建的对象固定、较小。（变动不频繁）&lt;/li>
+&lt;li>对创建对象的逻辑不关心。&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>由于简单工厂模式容易违反高内聚责任分配原则，因此一般只在较简单的情况下应用。&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>无&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>工厂方法模式&lt;/li>
+&lt;li>抽象工厂模式&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 组合模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 组合模式" />&lt;h1 id="组合模式">组合模式&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：将对象组合成树形结构以表示&lt;code>部分-整体&lt;/code>的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。&lt;/li>
+&lt;li>别名：Composite&lt;/li>
+&lt;li>类图1：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 126;
+flex-basis: 303px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="528x417">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="528"
+height="417"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram_hu69318f5e689d278930c659afc06e18d5_32592_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram_hu69318f5e689d278930c659afc06e18d5_32592_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>类图2：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 129;
+flex-basis: 309px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2.png" data-size="1065x825">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2.png"
+width="1065"
+height="825"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2_hu2547485081b815049047097541279633_233559_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2_hu2547485081b815049047097541279633_233559_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>典型对象图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 100;
+flex-basis: 240px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram.png" data-size="401x400">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram.png"
+width="401"
+height="400"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram_hu6b5056fb0e38f8f68f1de8ab5ac4a88a_19258_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram_hu6b5056fb0e38f8f68f1de8ab5ac4a88a_19258_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="对象图">
+&lt;/a>
+&lt;figcaption>对象图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Component: 组合
+&lt;ul>
+&lt;li>为组合中的对象声明接口。&lt;/li>
+&lt;li>在适当情况下，实现公共接口的缺省行为。&lt;/li>
+&lt;li>声明一个接口用于&lt;code>访问&lt;/code>和&lt;code>管理&lt;/code>Component组件。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Leaf: 叶节点，叶子部件
+&lt;ul>
+&lt;li>在组合中表示叶节点对象，叶节点没有子节点。&lt;/li>
+&lt;li>定义节点对象的具体的行为。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Composite: 组合部件，有孩子的部件。
+&lt;ul>
+&lt;li>定义有孩子节点的节点的行为。&lt;/li>
+&lt;li>存储孩子节点。&lt;/li>
+&lt;li>在Component接口中实现与子节点有关的操作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Client：
+&lt;ul>
+&lt;li>通过Component接口操纵组合部件的对象。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>Client使用Component接口与组合结构中的对象(Composite/Leaf)进行交互。&lt;/li>
+&lt;li>如果接收者是叶节点，则直接处理请求。&lt;/li>
+&lt;li>如果接收者是Composite，通常转发请求给它的子部件，在转发之前或之后，可能执行一些辅助操作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>定义包含&lt;code>基本对象&lt;/code>和&lt;code>组合对象&lt;/code>的类层次结构。
+&lt;ul>
+&lt;li>基本对象可以被组合成更复杂的组合对象&lt;/li>
+&lt;li>组合对象可以被再组合。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>简化客户代码。
+&lt;ul>
+&lt;li>客户可以统一地使用&lt;code>基本对象&lt;/code>和&lt;code>组合对象&lt;/code>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>更容易增加新类型的组件。&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>使得设计变得更一般化。
+&lt;ul>
+&lt;li>更容易增加新组件的同时，也使得限制组合中的组件变得困难。&lt;/li>
+&lt;li>有时可能会希望一个组合只能有某些特定的组件。使用Composite时，不能依赖类型系统施加这些约束。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>想表示对象的&lt;code>部分-整体&lt;/code>层次结构。&lt;/li>
+&lt;li>希望用户忽略组合对象与单个对象的不同。统一地使用组合结构中的所有对象。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>实现组合模式需要考虑的问题：
+&lt;ul>
+&lt;li>显式的父组件引用。
+&lt;ul>
+&lt;li>&lt;code>保持子组件都父组件的引用&lt;/code>能简化组合结构的遍历和管理。&lt;/li>
+&lt;li>通常在Component类中定义父组件引用。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>共享组件。
+&lt;ul>
+&lt;li>可以减少对存储的需求。&lt;/li>
+&lt;li>当一个组件只有一个父组件时，很难共享组件。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>最大化Component接口。
+&lt;ul>
+&lt;li>组合模式的目的之一是：使得用户不知道他们正在使用的是Leaf还是Composite。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>声明管理子组件的操作。
+&lt;ul>
+&lt;li>是在Component中进行声明，并使得对Leaf也有意义呢？还是只在Composite中声明？
+&lt;ul>
+&lt;li>需要在&lt;code>安全性&lt;/code>和&lt;code>透明性&lt;/code>之间做出权衡：
+&lt;ul>
+&lt;li>在Component中声明，会具有更好的透明性——Leaf和Composite有一致的接口。&lt;/li>
+&lt;li>在Composite中声明，会具有更好的安全性——在类似C++静态类型语言中，任何对Leaf的不必要操作(Remove/Add)，都能在编译时被发现。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Component是否应该事先一个Component列表？
+&lt;ul>
+&lt;li>有时候可能想要在Component类中将子节点定义为一个实例变量，方便访问和管理这些子节点。但对于叶节点，会造成空间浪费。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>子组件排序。&lt;/li>
+&lt;li>使用高速缓冲存储改善性能。
+&lt;ul>
+&lt;li>Composite可以缓冲存储实际结果。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>应该由谁来删除Component。
+&lt;ul>
+&lt;li>当一个Composite被销毁时，通常由此Composite负责删除其子节点。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>存储组件最好用哪一种数据结构？
+&lt;ul>
+&lt;li>存储子节点可以用：链表，数组、树、Hash表。选取取决于效率。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>相关模式：
+&lt;ul>
+&lt;li>装饰者模式(Decorator)：常和组合模式一起使用。当装饰和组合一起使用时，它们通常由一个公共的父类。&lt;/li>
+&lt;li>Flyweight: 让你共享组件，但不能再引用它们的父组件。&lt;/li>
+&lt;li>迭代器模式(Iterator): 可以用来遍历Composite。&lt;/li>
+&lt;li>访问者模式(Visitor): 将本来应该分布在Composite和Leaf类中的操作和行为局部化。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 装饰者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.png" alt="Featured image of post 设计模式 —— 装饰者模式" />&lt;h1 id="装饰者模式不改变接口但加入责任">装饰者模式——不改变接口，但加入责任&lt;/h1>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>定义：&lt;strong>动态&lt;/strong>地给一个&lt;strong>对象&lt;/strong>添加一些额外的职责。&lt;/p>
+&lt;ul>
+&lt;li>注意是针对&lt;code>对象&lt;/code>而不是&lt;code>类&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 169;
+flex-basis: 407px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png" data-size="780x459">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png"
+width="780"
+height="459"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram_hue33f08942c564290cfaa213924c33a5d_47603_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram_hue33f08942c564290cfaa213924c33a5d_47603_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>出场嘉宾：&lt;/p>
+&lt;ul>
+&lt;li>[基础]组件(Conponent): 被装饰者，定义一个对象接口（Java：接口，C++：抽象类）；&lt;/li>
+&lt;li>具体[基础]组件(Concrete Conponent): 定义一个具体的基础组件对象，可以给这个对象添加一些职责（装饰该对象）。&lt;/li>
+&lt;li>装饰者(Decorator): 维持一个指向组件&lt;strong>对象&lt;/strong>的指针，并定义一个与组件接口一致的接口。(指针是为了知道所修饰的是什么)&lt;/li>
+&lt;li>具体装饰者(Concrete Decorator): 可以向具体组件添加职责（修饰）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>解决用继承给对象添加功能不够灵活的问题。
+&lt;ul>
+&lt;li>通常拓展一个类都是用继承的方法，这是静态拓展，随着拓展增多，子类会膨胀。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>解决方法：具体组件和修饰者都继承自公共的类，使一个对象能装饰另一个对象。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>拓展功能时，提供比继承更有弹性的解决方案。（可增加、删除职责）
+&lt;ul>
+&lt;li>比静态继承更灵活。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>可通过动态的方式在运行时选择不同的具体装饰类，实现不同的行为。&lt;/li>
+&lt;li>可以对一个对象进行多次修饰（甚至多次相同的修饰）。&lt;/li>
+&lt;li>符合&lt;code>开闭原则&lt;/code>，具体组件和具体修饰者可以独立变化，用户根据需要添加组件或装饰者，原代码不需修改。&lt;/li>
+&lt;li>装饰者可以在所&lt;code>委托的装饰者行为&lt;/code>之前或之后加上自己的行为，以达到特定的目的&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>可能有许多小对象，排错难度加大、代码阅读难度加大。&lt;/li>
+&lt;li>可能不同的东西，继承自一个公共类。（个人理解）&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>在不影响其他对象的情况下，已&lt;code>动态&lt;/code>、&lt;code>透明&lt;/code>的方式给单个&lt;code>对象&lt;/code>添加职责。&lt;/li>
+&lt;li>处理那些可以撤销的职责。
+&lt;ul>
+&lt;li>怎么实现撤销？？？&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>当不能使用子类/继承的方法进行扩充时。
+&lt;ul>
+&lt;li>情况一：类定义被隐藏，因此无法用于生成子类。&lt;/li>
+&lt;li>情况二：有大量独立的扩展，为支持每一种组合将产生大量子类。（使子类书目爆炸性增长）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>1）接口一致性：必须有一个公共的父类。&lt;/li>
+&lt;li>2）省略抽象的装饰者类：当仅需添加一个职责时，没有必要定义抽象的装饰者类。&lt;/li>
+&lt;li>3）保持组件(Component)类的简单性：
+&lt;ul>
+&lt;li>它是公共接口，保持简单很重要；&lt;/li>
+&lt;li>它应集中定义接口，不应存储数据&lt;/li>
+&lt;li>赋予太多功能会使子类存在不需要的功能的可能性大大增加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>4）改变对象外壳与改变对象内核：可以将Decorator看做是对象的外壳。【内核&amp;hellip;: Strategy策略模式】&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>星巴兹饮料调配——《Head First设计模式》&lt;/li>
+&lt;li>游戏里面人物捏脸？！&lt;/li>
+&lt;li>单个主体组件+多个其他附属组件 这类的东西（人+衣服、首饰？蛋糕+蜡烛、碟子？）。&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>如何实现撤销一个对象的职责/功能？&lt;/li>
+&lt;li>如何优雅地释放内存？（具体装饰者一个一个被new出来，但是如何释放呢？）&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>模式简化：
+&lt;ul>
+&lt;li>简化方式一：去除组件(Conponent)——只有一个具体组件时，则直接让装饰者继承自这个具体组件。&lt;/li>
+&lt;li>简化方式二：去除修饰者(Decorator)——只有一个具体修饰者时，则让具体修饰者继承自组件(Conponent)。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>C++编程规则：
+&lt;ul>
+&lt;li>在多态基类中，定义析构函数为virtual。&lt;/li>
+&lt;li>使基类的析构函数为public + virtual或者 protected + nonvirtual；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>策略模式：？？？&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://www.zhihu.com/question/41538182" target="_blank" rel="noopener"
+>虚析构函数&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 观察者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png" alt="Featured image of post 设计模式 —— 观察者模式" />&lt;h1 id="观察者模式">观察者模式&lt;/h1>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义：定义了对象之间的&lt;code>一对多&lt;/code>依赖，这样依赖，当一个对象改变状态时，它的所有依赖者都会收到通知并自动更新。&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 382px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png" data-size="792x497">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png"
+width="792"
+height="497"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram_hua4fa13d1bdf22ddd96376562d855ae4a_134997_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram_hua4fa13d1bdf22ddd96376562d855ae4a_134997_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>主题(Subject)：出版者、被观察者、&lt;/li>
+&lt;li>观察者(Observer)：订阅者、&lt;/li>
+&lt;li>具体主题(Concrete Subject): 对主题的实现&lt;/li>
+&lt;li>具体观察者(Concrete Observer): 对观察者的实现&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>观察者模式就和报纸订阅/取消订阅、邮件订阅/取消订阅类似。
+出版者（主题）+ 订阅者（观察者）=观察者模式&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>（易用、低耦合、高度协作）解决一个对象状态改变通知其他多个对象的问题。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-优点">3.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>支持&lt;code>一对多&lt;/code>通信。&lt;/li>
+&lt;li>符合&lt;code>开闭原则&lt;/code>。【疑问？？？】&lt;/li>
+&lt;li>在主题和观察者之间建立一个抽象的耦合。【抽象的耦合？？？】&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-缺点">3.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>当一个&lt;code>主题&lt;/code>的&lt;code>观察者&lt;/code>过多时，通知会比较耗费时间。&lt;/li>
+&lt;li>当 &lt;code>主题&lt;/code> 和 &lt;code>观察者&lt;/code>有循环依赖时，会导致循环调用。&lt;/li>
+&lt;li>&lt;code>观察者&lt;/code>无法知道变化过程，只能知道变化结果。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>一个对象要通知其他[多个]对象自己改变时（可能并不知道这些对象是谁）；&lt;/li>
+&lt;li>一个对象要导致其他[多个]对象自己改变时；&lt;/li>
+&lt;li>需要创建触发链时；&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-应用实例">5. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>天气预报服务器数据更新，客户端实时展示更新后的数据。（《Head First设计模式》示例）&lt;/li>
+&lt;li>电子商务网站向多个用户推送商品信息。&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>观察者&lt;/code>如何对感兴趣的事情进行订阅、取消订阅？
+&lt;ul>
+&lt;li>&lt;code>主题&lt;/code>提供注册接口，以供观察者对主题进行订阅；&lt;/li>
+&lt;li>&lt;code>主题&lt;/code>提供取消订阅接口，以供观察者对主题进行取消订阅；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>主题&lt;/code>如何存储&lt;code>观察者&lt;/code>？
+&lt;ul>
+&lt;li>可存储在数组或其他数据结构中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>主题&lt;/code>如何通知&lt;code>观察者&lt;/code>？
+&lt;ul>
+&lt;li>遍历所有观察者，一个一个进行通知。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>mqtt&lt;/code>是否也是观察者模式的一种实现？&lt;/li>
+&lt;li>怎么理解&lt;code>开闭原则&lt;/code>，在本模式中，哪部分符合开闭原则？
+&lt;ul>
+&lt;li>开闭原则是针对&lt;code>类&lt;/code>来说的。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>观察者模式有：&lt;code>推&lt;/code>和&lt;code>拉&lt;/code>两种模式。
+&lt;ul>
+&lt;li>推：&lt;code>主题&lt;/code>将变更&lt;code>推送&lt;/code>给&lt;code>观察者&lt;/code>；&lt;/li>
+&lt;li>拉：&lt;code>主题&lt;/code>通知&lt;code>观察者&lt;/code>已变更，变更内容由&lt;code>观察者&lt;/code>主动获取。（&lt;code>主题&lt;/code>提供获取接口）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>开闭原则：对修改关闭，对拓展开放&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;li>&lt;a class="link" href="http://www.runoob.com/design-pattern/observer-pattern.html" target="_blank" rel="noopener"
+>http://www.runoob.com/design-pattern/observer-pattern.html&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://design-patterns.readthedocs.io/zh_CN/latest/behavioral_patterns/observer.html" target="_blank" rel="noopener"
+>https://design-patterns.readthedocs.io/zh_CN/latest/behavioral_patterns/observer.html&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 迭代器模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 迭代器模式" />&lt;h1 id="迭代器模式提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法">迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：提供一种方法&lt;code>顺序&lt;/code>访问一个&lt;code>聚合对象&lt;/code>中各个元素，而又不需暴露改对象的内部表示。&lt;/li>
+&lt;li>别名：游标（Cursor）&lt;/li>
+&lt;li>分类：对象行为型模式&lt;/li>
+&lt;li>类图：
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 110;
+flex-basis: 264px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png" data-size="494x449">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png"
+width="494"
+height="449"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_hu897b61bb969f01c171036b03c5d31606_29647_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_hu897b61bb969f01c171036b03c5d31606_29647_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Iterator: 迭代器
+&lt;ul>
+&lt;li>&lt;code>定义&lt;/code>访问和遍历元素的接口。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ConcreteIterator: 具体迭代器
+&lt;ul>
+&lt;li>&lt;code>实现&lt;/code>对具体聚合对象的迭代器接口。&lt;/li>
+&lt;li>对聚合对象遍历时，跟踪当前位置。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Aggregate：聚合
+&lt;ul>
+&lt;li>&lt;code>定义&lt;/code>创建相应迭代器对象的接口。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ConcreteAggregate：具体聚合
+&lt;ul>
+&lt;li>&lt;code>实现&lt;/code>创建相应迭代器的接口&lt;/li>
+&lt;li>返回ConcreteIterator的一个适当实例。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>通过 ConcreteAggregate 创建 ConcreteIterator；&lt;/li>
+&lt;li>通过 ConcreteIterator 访问/遍历 ConcreteAggregate。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-优缺点是什么">2. 优缺点是什么？&lt;/h2>
+&lt;h3 id="21-优点">2.1 优点&lt;/h3>
+&lt;ul>
+&lt;li>支持以不同的方式遍历一个聚合。
+&lt;ul>
+&lt;li>复杂的聚合可用多种方式进行遍历。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>迭代器简化了聚合的接口。
+&lt;ul>
+&lt;li>用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>同一个聚合上可以有多个聚合。
+&lt;ul>
+&lt;li>每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="22-缺点">2.2 缺点&lt;/h3>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-使用场景是什么">3. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>需要操作聚合对象的时候。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-注意">4. 注意&lt;/h2>
+&lt;ul>
+&lt;li>实现需要注意的问题：
+&lt;ul>
+&lt;li>谁控制该迭代？迭代器还是客户？
+&lt;ul>
+&lt;li>由客户控制迭代时，该迭代器称为外部迭代器。客户主动推动遍历的步伐，显式向迭代器请求下一个元素。&lt;/li>
+&lt;li>由迭代器控制迭代时，该迭代器称为内部迭代器。客户提交一个待执行操作，迭代器对聚合的内阁元素都实施该操作。&lt;/li>
+&lt;li>外部迭代器比内部迭代器更灵活。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>谁定义遍历算法？
+&lt;ul>
+&lt;li>迭代器不是唯一可定义遍历算法的地方。&lt;/li>
+&lt;li>聚合本身也可以定义遍历算法，并在遍历过程中用迭代器来存储当前迭代的状态。这种迭代器被称为&lt;code>游标(cursor)&lt;/code>, 因为它仅用来指示当前位置。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>迭代器健壮程度如何？
+&lt;ul>
+&lt;li>遍历一个聚合时更改这个聚合是危险的。&lt;/li>
+&lt;li>&lt;strong>一个健壮的迭代器保证插入和删除操作不会干扰遍历，且不需要拷贝该聚合&lt;/strong>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>附加的迭代器操作。
+&lt;ul>
+&lt;li>最小接口：First、Next、IsDone、CurrentItem&lt;/li>
+&lt;li>附加操作：SkipTo、Previous等&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>在C++中使用多态的迭代器。
+&lt;ul>
+&lt;li>代价：要求用一个&lt;code>工厂方法&lt;/code>动态地分配迭代器对象。&lt;/li>
+&lt;li>&lt;strong>仅当必须多态时，才使用！&lt;/strong>&lt;/li>
+&lt;li>另一个缺点：客户必须负责删除它们。（这里常常出现bug）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>迭代器的特权访问。
+&lt;ul>
+&lt;li>迭代器可被看为聚合的一个扩展，迭代器和聚合紧密耦合。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>用于复合对象的迭代器。【？？？】&lt;/li>
+&lt;li>空迭代器——退化的迭代器。
+&lt;ul>
+&lt;li>有助于处理边界条件。&lt;/li>
+&lt;li>常用于遍历树形结构的聚合。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>相关模式
+&lt;ul>
+&lt;li>Composite: 组成模式&lt;/li>
+&lt;li>Factory Method: 工厂方法模式&lt;/li>
+&lt;li>Memento：备忘录模式&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
+&lt;/ul></description></item><item><title>设计模式 —— 适配器模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 12 Dec 2021 07:15:30 -0400</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter.png" alt="Featured image of post 设计模式 —— 适配器模式" />&lt;h1 id="适配器模式将一个接口转换成另一个接口">适配器模式——将一个接口转换成另一个接口&lt;/h1>
+&lt;ul>
+&lt;li>目标：
+&lt;ul>
+&lt;li>初接触此模式时，熟悉最常用的使用方式。如，对象适配器。&lt;/li>
+&lt;li>有更深的理解后，再研究其他使用方法。如，类适配器和双向适配器&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
+&lt;ul>
+&lt;li>定义/意图：
+&lt;ul>
+&lt;li>将一个类的接口转换成另一个接口。适配器(Adapter)模式使得原来接口不兼容的类可以一起工作。&lt;/li>
+&lt;li>把一个东西，伪装成另一个东西！&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>别名：包装器（Wrapper）&lt;/li>
+&lt;li>类图1：类适配器类图（使用多重继承对一个接口与另一个接口进行匹配）
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 198;
+flex-basis: 476px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Class_Adapter.png" data-size="651x328">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Class_Adapter.png"
+width="651"
+height="328"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Class_Adapter_hu438732146c882695e65f7eefab3dcf1f_25917_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Class_Adapter_hu438732146c882695e65f7eefab3dcf1f_25917_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>类图2：对象适配器类图
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 171;
+flex-basis: 412px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter.png" data-size="598x348">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter.png"
+width="598"
+height="348"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter_hu529bcb407ef01bc0200901c2da9427ff_24123_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter_hu529bcb407ef01bc0200901c2da9427ff_24123_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="类图">
+&lt;/a>
+&lt;figcaption>类图&lt;/figcaption>
+&lt;/figure>&lt;/li>
+&lt;li>出场嘉宾
+&lt;ul>
+&lt;li>Target: 定义Client使用的与特定领域相关的接口。&lt;/li>
+&lt;li>Client：与符合Target接口的对象协同。&lt;/li>
+&lt;li>Adaptee：已存在的接口，被适配者。&lt;/li>
+&lt;li>Adapter：对Adaptee接口与Target接口进行适配，适配器。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>协作/工作流程
+&lt;ul>
+&lt;li>Client在Adapter实例上调用一些操作。&lt;/li>
+&lt;li>Adapter调用Adaptee的操作，以实现用户请求。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-解决什么问题如何解决">2. 解决什么问题？如何解决？&lt;/h2>
+&lt;ul>
+&lt;li>在不改变原有Target和Adaptee代码情况下，对Adaptee用Target的方式访问。&lt;/li>
+&lt;li>解决方法：在两者之间添加一个中间层——Adapter。&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-优缺点是什么">3. 优缺点是什么？&lt;/h2>
+&lt;h3 id="31-类适配器的优点">3.1 类适配器的优点&lt;/h3>
+&lt;ul>
+&lt;li>不需要重新实现整个&lt;code>被适配者&lt;/code>类只实现部分，因为Adapter是Adaptee的子类。&lt;/li>
+&lt;li>仅引入了一个对象，不需要额外的指针间接得到adaptee。&lt;/li>
+&lt;/ul>
+&lt;h3 id="32-类适配器的缺点">3.2 类适配器的缺点&lt;/h3>
+&lt;ul>
+&lt;li>只能适配某个特定的类，不能适配其子类。【疑惑？！】&lt;/li>
+&lt;/ul>
+&lt;h3 id="33-对象适配器的优点">3.3 对象适配器的优点&lt;/h3>
+&lt;ul>
+&lt;li>更有弹性，使用组合（引用另一个类或其子类），支持适配某个类及其子类。&lt;/li>
+&lt;/ul>
+&lt;h3 id="34-对象适配器的缺点">3.4 对象适配器的缺点&lt;/h3>
+&lt;ul>
+&lt;li>重定义(新增)Adaptee&lt;code>子类&lt;/code>的行为变得比较困难。解决方法：直接引用&lt;code>子类&lt;/code>对象。&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-使用场景是什么">4. 使用场景是什么？&lt;/h2>
+&lt;ul>
+&lt;li>希望使用一个&lt;code>已存在&lt;/code>的类，但是它的接口不符合要求。&lt;/li>
+&lt;li>想要创建一个可以复用的类，该类可以与其他不想管的类或不可预见的类（接口不一定兼容）协同工作。【？？？】&lt;/li>
+&lt;li>（仅适用于对象适配器）想要使用一些已经存在的&lt;code>子类&lt;/code>，但不可能对每个子类都进行类似的匹配。对象适配器可以适配它的父类接口。【？？？】&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-注意">5. 注意&lt;/h2>
+&lt;ul>
+&lt;li>使用适配器模式时需要考虑的其他一些因素：
+&lt;ul>
+&lt;li>Adapter的匹配程度。
+&lt;ul>
+&lt;li>&lt;code>适配器的工作量&lt;/code>取决于Target接口与Adaptee接口的相似程度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>可插入的Adapter。【不理解？？？】
+&lt;ul>
+&lt;li>将接口匹配【？？？】构建为一个类，就不需要嘉定对其他的类可见的是一个&lt;code>相同&lt;/code>的接口。&lt;/li>
+&lt;li>接口匹配使得我们可以将自己的类加入到一些现有的系统中去。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用双向适配器提供透明操作【？？？】
+&lt;ul>
+&lt;li>当&lt;code>两个不同的客户&lt;/code>需要用不同的方式查看&lt;code>同一个对象&lt;/code>时，双向适配器尤其有用。&lt;/li>
+&lt;li>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 146;
+flex-basis: 352px"
+>
+&lt;a href="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Multi_Adaptee.png" data-size="463x315">
+&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Multi_Adaptee.png"
+width="463"
+height="315"
+srcset="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Multi_Adaptee_huceb84dfea0e2d8d20328e44ecabed167_14280_480x0_resize_box_3.png 480w, https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Multi_Adaptee_huceb84dfea0e2d8d20328e44ecabed167_14280_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="双向适配器">
+&lt;/a>
+&lt;figcaption>双向适配器&lt;/figcaption>
+&lt;/figure>
+&lt;ul>
+&lt;li>Adapter是两个类的子类，使得两个两个类的相关接口可以相互匹配。【疑惑？？？】&lt;/li>
+&lt;li>有更深理解后，在图里各个类中加入相关操作，以更清楚表达意图。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用适配器的一个潜在问题是：他们不对所有的客户都透明。&lt;/li>
+&lt;li>实现时，需要注意以下的一些问题：
+&lt;ul>
+&lt;li>使用C++实现适配器类时，Adapter类应该用&lt;code>公共方式&lt;/code>继承Target类、用&lt;code>私有方法&lt;/code>继承Adaptee类。
+&lt;ul>
+&lt;li>因此，Adapter类应该是Target类的子类型，但不是Adaptee类的子类型。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>可插入的适配器。以书本中示例有三种实现方法：（具体见：《设计模式》95页）
+&lt;ul>
+&lt;li>使用抽象操作。【？？？】&lt;/li>
+&lt;li>使用代理对象。【？？？】&lt;/li>
+&lt;li>参数化的适配器。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-应用实例">6. 应用实例？&lt;/h2>
+&lt;ul>
+&lt;li>&lt;/li>
+&lt;/ul>
+&lt;h2 id="w-待办">w. 待办&lt;/h2>
+&lt;ul>
+&lt;li>(DONE!)对象适配器——C++示例&lt;/li>
+&lt;li>(DONE!)对象适配器-Java示例&lt;/li>
+&lt;li>类适配器——C++示例&lt;/li>
+&lt;li>类适配器——Java示例&lt;/li>
+&lt;/ul>
+&lt;h2 id="x-疑问">x. 疑问&lt;/h2>
+&lt;ul>
+&lt;li>程序透明性？&lt;/li>
+&lt;li>双向适配器？&lt;/li>
+&lt;li>可插入的适配器？&lt;/li>
+&lt;/ul>
+&lt;h2 id="y-拓展">y. 拓展&lt;/h2>
+&lt;ul>
+&lt;li>桥接模式(Bridge)和对象适配器(Adapter)的结构类似，但是出发点不同。
+&lt;ul>
+&lt;li>桥接模式(Bridge): 将接口部分和实现部分分离，从而对他们可以较为容易地相对独立的加以改变。&lt;/li>
+&lt;li>对象适配器(Adapter): 把一个对象行为变为另一个。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>相关模式：
+&lt;ul>
+&lt;li>桥接模式(Bridge)&lt;/li>
+&lt;li>装饰者模式(Decorator): 增强对象的功能但不改变原有对象的接口。（因此，程序透明性比适配器好）&lt;/li>
+&lt;li>代理模式(Proxy): 不改变接口情况下，为另一个对象定义一个代理。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="z-参考">z. 参考&lt;/h2>
+&lt;ul>
+&lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
+&lt;li>《Head First设计模式》&lt;/li>
 &lt;/ul></description></item></channel></rss>

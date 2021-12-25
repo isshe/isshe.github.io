@@ -1,0 +1,315 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5."><title>设计模式 —— 单件模式</title>
+<link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 单件模式">
+<meta property="og:description" content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5.">
+<meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta name=twitter:title content="设计模式 —— 单件模式">
+<meta name=twitter:description content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_800x0_resize_box_3.png srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_800x0_resize_box_3.png 800w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_1600x0_resize_box_3.png 1600w" width=800 height=354 loading=lazy alt="Featured image of post 设计模式 —— 单件模式">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/ style=background-color:#5471b0;color:#fff>
+设计模式
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>设计模式 —— 单件模式</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 12, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=单件模式独一无二的对象>单件模式——独一无二的对象</h1>
+<p>初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：</p>
+<ul>
+<li>创建对象的时候，如何知道现在只有一个？</li>
+<li>如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象）</li>
+<li>如何获取/访问这个唯一对象？</li>
+</ul>
+<h2 id=1-基础概念>1. 基础概念</h2>
+<ul>
+<li>定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。</li>
+<li>原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。</li>
+<li>类图：
+<figure class=gallery-image style=flex-grow:225;flex-basis:542px>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png data-size=472x209>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png width=472 height=209 srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_480x0_resize_box_3.png 480w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram_hu8ca9ff7362688b461397facff0e6ed9b_16668_1024x0_resize_box_3.png 1024w" loading=lazy alt=类图>
+</a>
+<figcaption>类图</figcaption>
+</figure></li>
+<li>出场嘉宾
+<ul>
+<li>Singleton：单件类。
+<ul>
+<li>定义一个接口，允许客户访问唯一实例。此接口是一个类操作。</li>
+<li>负责创建唯一实例。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=2-解决什么问题如何解决>2. 解决什么问题？如何解决？</h2>
+<ul>
+<li>系统中，有些东西只需要一份就够了，因此要保证只有一份。</li>
+<li>解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。</li>
+</ul>
+<h2 id=3-优缺点是什么>3. 优缺点是什么？</h2>
+<h3 id=31-优点>3.1 优点</h3>
+<ul>
+<li>对唯一实例的创建是受控的——不允许直接创建（new或变量）。</li>
+<li>对唯一实例的访问是受控的。</li>
+<li>缩小命名空间。
+<ul>
+<li>此模式是对全局变量的一种改进。</li>
+<li>避免了存储唯一实例的全局变量污染命名空间。</li>
+<li>（同一命名空间内，两个名字相同，就会冲突。）</li>
+</ul>
+</li>
+<li>允许对操作和表示的精化。【？！】
+<ul>
+<li><code>单件类</code>可以有子类。</li>
+<li>可以使用所<code>需的拓展类</code>在<code>运行时</code>配置应用。</li>
+</ul>
+</li>
+<li>允许可变的数目的实例。</li>
+<li>比类操作更灵活。
+<ul>
+<li>如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。</li>
+</ul>
+</li>
+<li>惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。</li>
+</ul>
+<h3 id=32-缺点>3.2 缺点</h3>
+<ul>
+<li></li>
+</ul>
+<h2 id=4-使用场景是什么>4. 使用场景是什么？</h2>
+<ul>
+<li>多个模块共用的全局数据库/配置。</li>
+</ul>
+<h2 id=5-注意>5. 注意</h2>
+<ul>
+<li>保证一个唯一的实例。</li>
+<li>C++实现注意：如果将单件定义为一个全局或静态的对象，然后依赖自动的初始化，是不够的，原因：
+<ul>
+<li>不能保证静态对象只有一个实例会被声明。</li>
+<li>可能没有足够的信息初始化实例。（可能需要在运行时获取信息）</li>
+<li>C++没有定义转换单元（Translation unit）上全局对象的构造器的调用顺序。【？！】</li>
+<li>无论是否使用，都会被创建。（一开始就创建了）</li>
+</ul>
+</li>
+</ul>
+<h2 id=6-应用实例>6. 应用实例？</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id=w-待办>w. 待办</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id=x-疑问>x. 疑问</h2>
+<ul>
+<li>如何拓展单件类？</li>
+<li><code>5. 注意</code>里面第2点第3个原因，不理解！</li>
+<li><code>单件注册表</code>？</li>
+<li>《设计模式：可复用面向对象软件的基础》里面好像没有考虑线程安全？</li>
+</ul>
+<h2 id=y-拓展>y. 拓展</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id=z-参考>z. 参考</h2>
+<ul>
+<li></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/>设计模式</a>
+<a href=/tags/design-pattern/>Design Pattern</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.5b785662e59e7154416497c95bcd1e9e_hu1f629ad2e90a079156899ab8241b7de5_156283_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-W3hWYuWecVRBZJfJW80eng==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 模板方法模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.eab7371ce4fb27578e68f5a30eab0e60_hu771149e49c462b26432a5b0e1acd417c_27093_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 策略模式" data-hash="md5-6rc3HOT7J1eOaPWjDqsOYA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 策略模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 迭代器模式</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1-基础概念>1. 基础概念</a></li>
+<li><a href=#2-解决什么问题如何解决>2. 解决什么问题？如何解决？</a></li>
+<li><a href=#3-优缺点是什么>3. 优缺点是什么？</a>
+<ol>
+<li><a href=#31-优点>3.1 优点</a></li>
+<li><a href=#32-缺点>3.2 缺点</a></li>
+</ol>
+</li>
+<li><a href=#4-使用场景是什么>4. 使用场景是什么？</a></li>
+<li><a href=#5-注意>5. 注意</a></li>
+<li><a href=#6-应用实例>6. 应用实例？</a></li>
+<li><a href=#w-待办>w. 待办</a></li>
+<li><a href=#x-疑问>x. 疑问</a></li>
+<li><a href=#y-拓展>y. 拓展</a></li>
+<li><a href=#z-参考>z. 参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
