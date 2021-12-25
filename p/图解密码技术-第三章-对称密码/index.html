@@ -1,0 +1,266 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="对称密码 用相同的秘钥进行加密和解密。
+比特序列  编码：将现实中的东西映射为比特序列。  ASCII UTF-8    XOR——异或 XOR: exclusive or, 异或。
+ 异或类似于加密解密过程：  消息A异或秘钥B = X X 异或 B = A    一次性密码本 原理：将明文与一串随机的比特序列进行XOR运算。 无法破解的原因：密文 XOR 破解秘钥得到的有意义明文，可能有多个，无法确定具体是哪个明文。
+DES DES: Data Encryption Standard。
+ 美国联邦信息处理标准中采用的一种对称密码。 一种将64bit明文加密成64bit密文的对称密码算法。 秘钥长度是56bit。（实际64bit，但由于每隔7bit设置一个错误检查bit，因此是56bit） 如果明文长于64bit，则需要迭代加密。  差分分析 思路：改变一部分明文并分析密文如何随之改变。
+线性分析 思路：将明文和密文的一些对应比特进行XOR并计算其结果为0的概率。
+三重DES 3DES(TDEA)：将DES重复3次。 分组长度为：64 * 3 = 192
+AES 分组长度为：128"><title>图解密码技术 —— 第三章-对称密码</title>
+<link rel=canonical href=https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="图解密码技术 —— 第三章-对称密码">
+<meta property="og:description" content="对称密码 用相同的秘钥进行加密和解密。
+比特序列  编码：将现实中的东西映射为比特序列。  ASCII UTF-8    XOR——异或 XOR: exclusive or, 异或。
+ 异或类似于加密解密过程：  消息A异或秘钥B = X X 异或 B = A    一次性密码本 原理：将明文与一串随机的比特序列进行XOR运算。 无法破解的原因：密文 XOR 破解秘钥得到的有意义明文，可能有多个，无法确定具体是哪个明文。
+DES DES: Data Encryption Standard。
+ 美国联邦信息处理标准中采用的一种对称密码。 一种将64bit明文加密成64bit密文的对称密码算法。 秘钥长度是56bit。（实际64bit，但由于每隔7bit设置一个错误检查bit，因此是56bit） 如果明文长于64bit，则需要迭代加密。  差分分析 思路：改变一部分明文并分析密文如何随之改变。
+线性分析 思路：将明文和密文的一些对应比特进行XOR并计算其结果为0的概率。
+三重DES 3DES(TDEA)：将DES重复3次。 分组长度为：64 * 3 = 192
+AES 分组长度为：128">
+<meta property="og:url" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2021-12-25T02:22:19-04:00"><meta property="article:modified_time" content="2021-12-25T02:22:19-04:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg">
+<meta name=twitter:title content="图解密码技术 —— 第三章-对称密码">
+<meta name=twitter:description content="对称密码 用相同的秘钥进行加密和解密。
+比特序列  编码：将现实中的东西映射为比特序列。  ASCII UTF-8    XOR——异或 XOR: exclusive or, 异或。
+ 异或类似于加密解密过程：  消息A异或秘钥B = X X 异或 B = A    一次性密码本 原理：将明文与一串随机的比特序列进行XOR运算。 无法破解的原因：密文 XOR 破解秘钥得到的有意义明文，可能有多个，无法确定具体是哪个明文。
+DES DES: Data Encryption Standard。
+ 美国联邦信息处理标准中采用的一种对称密码。 一种将64bit明文加密成64bit密文的对称密码算法。 秘钥长度是56bit。（实际64bit，但由于每隔7bit设置一个错误检查bit，因此是56bit） 如果明文长于64bit，则需要迭代加密。  差分分析 思路：改变一部分明文并分析密文如何随之改变。
+线性分析 思路：将明文和密文的一些对应比特进行XOR并计算其结果为0的概率。
+三重DES 3DES(TDEA)：将DES重复3次。 分组长度为：64 * 3 = 192
+AES 分组长度为：128"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg">
+<link rel="shortcut icon" href=favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image_hu099c4e73c5c211f1100c28348bb87258_46244_800x0_resize_q75_box.jpg srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image_hu099c4e73c5c211f1100c28348bb87258_46244_800x0_resize_q75_box.jpg 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image_hu099c4e73c5c211f1100c28348bb87258_46244_1600x0_resize_q75_box.jpg 1600w" width=800 height=1067 loading=lazy alt="Featured image of post 图解密码技术 —— 第三章-对称密码">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/ style=background-color:#6476dd;color:#fff>
+读书笔记
+</a>
+<a href=/categories/%E5%9B%BE%E8%A7%A3%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/ style=background-color:#845ac0;color:#fff>
+图解编码技术
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/>图解密码技术 —— 第三章-对称密码</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 25, 2021</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=对称密码>对称密码</h2>
+<p>用相同的秘钥进行加密和解密。</p>
+<h1 id=比特序列>比特序列</h1>
+<ul>
+<li>编码：将现实中的东西映射为比特序列。
+<ul>
+<li>ASCII</li>
+<li>UTF-8</li>
+</ul>
+</li>
+</ul>
+<h1 id=xor异或>XOR——异或</h1>
+<p>XOR: exclusive or, 异或。</p>
+<ul>
+<li>异或类似于加密解密过程：
+<ul>
+<li>消息A<code>异或</code>秘钥B = X</li>
+<li>X <code>异或</code> B = A</li>
+</ul>
+</li>
+</ul>
+<h1 id=一次性密码本>一次性密码本</h1>
+<p>原理：将明文与一串随机的比特序列进行XOR运算。
+无法破解的原因：密文 XOR 破解秘钥得到的有意义明文，可能有多个，无法确定具体是哪个明文。</p>
+<h1 id=des>DES</h1>
+<p>DES: Data Encryption Standard。</p>
+<ul>
+<li>美国联邦信息处理标准中采用的一种对称密码。</li>
+<li>一种将64bit明文加密成64bit密文的对称密码算法。</li>
+<li>秘钥长度是56bit。（实际64bit，但由于每隔7bit设置一个错误检查bit，因此是56bit）</li>
+<li>如果明文长于64bit，则需要迭代加密。</li>
+</ul>
+<h2 id=差分分析>差分分析</h2>
+<p>思路：改变一部分明文并分析密文如何随之改变。</p>
+<h2 id=线性分析>线性分析</h2>
+<p>思路：将明文和密文的一些对应比特进行XOR并计算其结果为0的概率。</p>
+<h2 id=三重des>三重DES</h2>
+<p>3DES(TDEA)：将DES重复3次。
+分组长度为：<code>64 * 3 = 192</code></p>
+<h1 id=aes>AES</h1>
+<p>分组长度为：<code>128</code></p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记</a>
+<a href=/tags/%E5%9B%BE%E8%A7%A3%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF/>图解编码技术</a>
+<a href=/tags/study-notes/>Study Notes</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.a57207af367f9b90f1dbd292d06baa9d_hu2daa6686f1e87dce7d28b27274f43c77_166145_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式" data-hash="md5-pXIHrzZ/m5Dx29KS0GuqnQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第四章-分组密码的模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第五章-公钥密码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.72f791a75ebc355ee0a81cf4681e05b6_hu276afff563da1172921906a0b027a02a_24849_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" data-hash="md5-cveRp168NV7gqBz0aB4Ftg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第八章-消息认证码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十三章-PGP" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第十三章-PGP</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.4996f2bab4f9ab8850dc86aa701f2be6_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" data-hash="md5-SZbyurT5q4hQ3IaqcB8r5g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第十一章-秘钥</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#对称密码>对称密码</a></li>
+</ol>
+<ol>
+<li><a href=#差分分析>差分分析</a></li>
+<li><a href=#线性分析>线性分析</a></li>
+<li><a href=#三重des>三重DES</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
