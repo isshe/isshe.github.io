@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Dec 2021 02:22:19 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Jan 2022 06:00:04 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>动态追踪 —— BPFTool</title><link>https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/</link><pubDate>Mon, 03 Jan 2022 06:00:04 -0400</pubDate><guid>https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/</guid><description>&lt;img src="https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/visual-graph.png" alt="Featured image of post 动态追踪 —— BPFTool" />&lt;h2 id="bpftool">BPFTool&lt;/h2>
+&lt;h1 id="安装">安装&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">git clone git@github.com:torvalds/linux.git
+git checkout v5.4
+&lt;span class="nb">cd&lt;/span> tools/bpf/bpftool
+make &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> make install
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="使用">使用&lt;/h1>
+&lt;h2 id="特征查看">特征查看&lt;/h2>
+&lt;p>查看当前系统所支持的所有特征。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool feature
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="启用-jit">启用 jit&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">cat /proc/sys/net/core/bpf_jit_enable
+&lt;span class="nb">echo&lt;/span> &lt;span class="m">1&lt;/span> &amp;gt; /proc/sys/net/core/bpf_jit_enable
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="获取系统中已运行的-bpf-程序">获取系统中已运行的 BPF 程序&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool prog show
+bpftool prog show id &amp;lt;ID&amp;gt;
+bpftool prog show id &amp;lt;ID&amp;gt; --json
+bpftool prog dump xlated id &amp;lt;ID&amp;gt;
+bpftool prog dump xlated id &amp;lt;ID&amp;gt; visual &lt;span class="p">&amp;amp;&lt;/span>&amp;gt; output.out
+&lt;span class="c1"># sudo apt install graphviz&lt;/span>
+dot -Tpng output.out -o visual-graph.png
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="启用-bpf-统计信息">启用 BPF 统计信息&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">sysctl -w kernel.bpf_stats_enabled&lt;span class="o">=&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="载入并持久化-bpf-程序到-bpf-文件系统">载入并持久化 BPF 程序到 BPF 文件系统&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool proc load bpf_proc.o /sys/fs/bpf/bpf_proc
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="检查-bpf-映射">检查 BPF 映射&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool map show
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="创建-bpf-映射">创建 BPF 映射&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool map create /sys/fs/bpf/counter &lt;span class="nb">type&lt;/span> array key &lt;span class="m">4&lt;/span> value &lt;span class="m">4&lt;/span> entries &lt;span class="m">5&lt;/span> name counter
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="更新-bpf-映射">更新 BPF 映射&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool map update id &lt;span class="m">1&lt;/span> key &lt;span class="m">1&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span> value &lt;span class="m">1&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="查看-bpf-映射">查看 BPF 映射&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool map dump id &lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="将映射附加到程序上">将映射附加到程序上&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="c1"># 使用名称&lt;/span>
+bpftool prog load bpf_prog.o /sys/fs/bpf/bpf_prog &lt;span class="se">\
+&lt;/span>&lt;span class="se">&lt;/span> map name counter /sys/fs/bpf/counter
+&lt;span class="c1"># 使用索引&lt;/span>
+bpftool prog load bpf_prog.o /sys/fs/bpf/bpf_prog &lt;span class="se">\
+&lt;/span>&lt;span class="se">&lt;/span> map idx &lt;span class="m">1&lt;/span> /sys/fs/bpf/counter
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="查看附加到特定接口的程序">查看附加到特定接口的程序&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">bpftool perf show
+bpftool net show
+bpftool cgroup tree
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>个人感悟 —— 国家公祭日有感</title><link>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/</guid><description>&lt;img src="https://isshe.site/p/%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F-%E5%9B%BD%E5%AE%B6%E5%85%AC%E7%A5%AD%E6%97%A5%E6%9C%89%E6%84%9F/iscream.jpg" alt="Featured image of post 个人感悟 —— 国家公祭日有感" />&lt;h2 id="2021-年国家公祭日有感">2021 年国家公祭日有感&lt;/h2>
 &lt;p>我是一个南方人，一直以来，都不太愿意去了解这些同胞受难的事情，不愿意面对；同时，也不知道该以什么样的心情去面对。&lt;/p>
 &lt;p>我不确定一个人、一个军队，在祖国强盛、自己满怀荣光的情况下，如何能够做出这样的事情。
 一个人为之，或许可以称之为堕落；一个军队，大概是集体兽化了吧。&lt;/p>
@@ -245,7 +289,7 @@ E x D mode L = 1
 &lt;/ul>
 &lt;/li>
 &lt;li>中间人攻击对所有公钥密码对是有效的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpeg" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
 &lt;p>消息认证码： Message Authentication Code，MAC。&lt;/p>
 &lt;ul>
 &lt;li>是一种确认完整性并进行认证的技术。&lt;/li>
@@ -350,7 +394,7 @@ loading="lazy"
 alt="混合密码解密过程">
 &lt;/a>
 &lt;figcaption>混合密码解密过程&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.jpg" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.png" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
 &lt;h1 id="什么是秘钥">什么是秘钥？&lt;/h1>
 &lt;p>秘钥：一个巨大的数字。&lt;/p>
 &lt;blockquote>
@@ -503,7 +547,7 @@ alt="混合密码解密过程">
 &lt;li>弱伪随机数：只有随机性。&lt;/li>
 &lt;li>强伪随机数：具有随机性+不可预测性。&lt;/li>
 &lt;li>真随机数：同时具备上面三个性质。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.png" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.jpg" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
 &lt;blockquote>
 &lt;p>这章不是太理解。&lt;/p>
 &lt;/blockquote>
@@ -957,7 +1001,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;/blockquote>
 &lt;ul>
 &lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.png" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
 &lt;p>gdb - GNU调试器。&lt;/p>
 &lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
 GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
@@ -1107,7 +1151,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
 >https://man.linuxde.net/gdb&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.png" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
 &lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
@@ -1168,7 +1212,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -1337,7 +1381,7 @@ ip neigh del 192.168.2.149 dev ens33&lt;/p>
 &lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
 >https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
 &lt;li>linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
 &lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
 &lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
 &lt;ul>
@@ -1466,7 +1510,7 @@ modprobe &lt;span class="o">[&lt;/span>--dump-modversions&lt;span class="o">]&lt
 &lt;li>lsmod&lt;/li>
 &lt;li>modinfo&lt;/li>
 &lt;/ul>
-&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
+&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
 &lt;p>显示当前的连接情况。（UDP、TCP、UNIX、ICMP等）
 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。&lt;/p>
 &lt;h1 id="1-介绍">1. 介绍&lt;/h1>
@@ -2024,7 +2068,7 @@ tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2
 &lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
 >https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
 linux man page&lt;/p>
-&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.png" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
 &lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
@@ -2477,7 +2521,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;/ul>
 &lt;/li>
 &lt;li>高优先级：&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 select</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 select" />&lt;h1 id="select">select&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 select</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.jpeg" alt="Featured image of post 操作系统 —— IO 多路复用之 select" />&lt;h1 id="select">select&lt;/h1>
 &lt;p>select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。&lt;/p>
 &lt;h2 id="1-select">1. select&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/select.h&amp;gt;&lt;/span>&lt;span class="cp">
@@ -4284,7 +4328,7 @@ loading="lazy"
 &lt;li>详见示例：&lt;a class="link" href="Examples/3_ex_read_and_write.c" >3_ex_read_and_write.c&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.png" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
 &lt;ul>
 &lt;li>互斥锁及条件变量是同步的基本组成部分。&lt;/li>
 &lt;li>互斥锁及条件变量出自&lt;code>Posix.1&lt;/code>线程标准；
@@ -4575,7 +4619,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpeg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
