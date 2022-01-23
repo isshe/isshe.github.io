@@ -1,0 +1,207 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="全局函数重载 在我个人的开源项目 xway 的中有一个需求是：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不想把 Lua 模块保存成文件。这时候我们要怎么做呢？怎么才能从内存中 require 一个模块呢？答案是重载 require 函数。 利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行探索验证。
+下面直接通过一个例子来说明。
+示例 local ctype_count = require &amp;#34;ctype.count&amp;#34; local ma = [[ local _M = {} function _M.hello() print(&amp;#34;a hello&amp;#34;) end return _M ]] local mb = [[ local ma = require(&amp;#34;ma&amp;#34;) local _M = {} function _M.hello() ma.hello() print(&amp;#34;b hello&amp;#34;) end return _M ]] local module_map = { [&amp;#34;ma&amp;#34;] = ma, [&amp;#34;mb&amp;#34;] = mb, } local function new_require(name) return loadstring(module_map[name])() end local new_env ={ require = new_require, } setmetatable(new_env, {__index = _G}) local m1 = loadstring(mb) setfenv(m1, new_env) print(ctype_count()) local ret, mod = pcall(m1) if not ret then print(ret) end print(ctype_count()) mod."><title>Lua —— 重载全局函数 require</title>
+<link rel=canonical href=https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Lua —— 重载全局函数 require">
+<meta property="og:description" content="全局函数重载 在我个人的开源项目 xway 的中有一个需求是：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不想把 Lua 模块保存成文件。这时候我们要怎么做呢？怎么才能从内存中 require 一个模块呢？答案是重载 require 函数。 利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行探索验证。
+下面直接通过一个例子来说明。
+示例 local ctype_count = require &amp;#34;ctype.count&amp;#34; local ma = [[ local _M = {} function _M.hello() print(&amp;#34;a hello&amp;#34;) end return _M ]] local mb = [[ local ma = require(&amp;#34;ma&amp;#34;) local _M = {} function _M.hello() ma.hello() print(&amp;#34;b hello&amp;#34;) end return _M ]] local module_map = { [&amp;#34;ma&amp;#34;] = ma, [&amp;#34;mb&amp;#34;] = mb, } local function new_require(name) return loadstring(module_map[name])() end local new_env ={ require = new_require, } setmetatable(new_env, {__index = _G}) local m1 = loadstring(mb) setfenv(m1, new_env) print(ctype_count()) local ret, mod = pcall(m1) if not ret then print(ret) end print(ctype_count()) mod.">
+<meta property="og:url" content="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="lua"><meta property="article:tag" content="Programming Language"><meta property="article:published_time" content="2022-01-23T12:45:13-04:00"><meta property="article:modified_time" content="2022-01-23T12:45:13-04:00"><meta property="og:image" content="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.jpg">
+<meta name=twitter:title content="Lua —— 重载全局函数 require">
+<meta name=twitter:description content="全局函数重载 在我个人的开源项目 xway 的中有一个需求是：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不想把 Lua 模块保存成文件。这时候我们要怎么做呢？怎么才能从内存中 require 一个模块呢？答案是重载 require 函数。 利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行探索验证。
+下面直接通过一个例子来说明。
+示例 local ctype_count = require &amp;#34;ctype.count&amp;#34; local ma = [[ local _M = {} function _M.hello() print(&amp;#34;a hello&amp;#34;) end return _M ]] local mb = [[ local ma = require(&amp;#34;ma&amp;#34;) local _M = {} function _M.hello() ma.hello() print(&amp;#34;b hello&amp;#34;) end return _M ]] local module_map = { [&amp;#34;ma&amp;#34;] = ma, [&amp;#34;mb&amp;#34;] = mb, } local function new_require(name) return loadstring(module_map[name])() end local new_env ={ require = new_require, } setmetatable(new_env, {__index = _G}) local m1 = loadstring(mb) setfenv(m1, new_env) print(ctype_count()) local ret, mod = pcall(m1) if not ret then print(ret) end print(ctype_count()) mod."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/>
+<img src=/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg srcset="/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg 800w, /p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image_hu3249f9048db3af9a952f19019966b961_41712_1600x0_resize_q75_box.jpg 1600w" width=800 height=489 loading=lazy alt="Featured image of post Lua —— 重载全局函数 require">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/lua/ style=background-color:#a2b6b1;color:#fff>
+Lua
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/>Lua —— 重载全局函数 require</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 23, 2022</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=全局函数重载>全局函数重载</h2>
+<p>在我个人的开源项目 <a class=link href=https://github.com/x-few/xway target=_blank rel=noopener>xway</a> 的中有一个需求是：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不想把 Lua 模块保存成文件。这时候我们要怎么做呢？怎么才能从内存中 require 一个模块呢？答案是重载 require 函数。
+利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行探索验证。</p>
+<p>下面直接通过一个例子来说明。</p>
+<h1 id=示例>示例</h1>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=n>ctype_count</span> <span class=o>=</span> <span class=n>require</span> <span class=s2>&#34;ctype.count&#34;</span>
+
+<span class=kd>local</span> <span class=n>ma</span> <span class=o>=</span> <span class=s>[[
+</span><span class=s>local _M = {}
+</span><span class=s>function _M.hello()
+</span><span class=s>    print(&#34;a hello&#34;)
+</span><span class=s>end
+</span><span class=s>
+</span><span class=s>return _M
+</span><span class=s>]]</span>
+
+<span class=kd>local</span> <span class=n>mb</span> <span class=o>=</span> <span class=s>[[
+</span><span class=s>local ma = require(&#34;ma&#34;)
+</span><span class=s>local _M = {}
+</span><span class=s>
+</span><span class=s>function _M.hello()
+</span><span class=s>    ma.hello()
+</span><span class=s>    print(&#34;b hello&#34;)
+</span><span class=s>end
+</span><span class=s>
+</span><span class=s>return _M
+</span><span class=s>]]</span>
+
+<span class=kd>local</span> <span class=n>module_map</span> <span class=o>=</span> <span class=p>{</span>
+    <span class=p>[</span><span class=s2>&#34;ma&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=n>ma</span><span class=p>,</span>
+    <span class=p>[</span><span class=s2>&#34;mb&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=n>mb</span><span class=p>,</span>
+<span class=p>}</span>
+
+<span class=kd>local</span> <span class=kr>function</span> <span class=nf>new_require</span><span class=p>(</span><span class=n>name</span><span class=p>)</span>
+    <span class=kr>return</span> <span class=n>loadstring</span><span class=p>(</span><span class=n>module_map</span><span class=p>[</span><span class=n>name</span><span class=p>])()</span>
+<span class=kr>end</span>
+
+<span class=kd>local</span> <span class=n>new_env</span> <span class=o>=</span><span class=p>{</span>
+    <span class=n>require</span> <span class=o>=</span> <span class=n>new_require</span><span class=p>,</span>
+<span class=p>}</span>
+<span class=n>setmetatable</span><span class=p>(</span><span class=n>new_env</span><span class=p>,</span> <span class=p>{</span><span class=n>__index</span> <span class=o>=</span> <span class=n>_G</span><span class=p>})</span>
+
+<span class=kd>local</span> <span class=n>m1</span> <span class=o>=</span> <span class=n>loadstring</span><span class=p>(</span><span class=n>mb</span><span class=p>)</span>
+
+<span class=n>setfenv</span><span class=p>(</span><span class=n>m1</span><span class=p>,</span> <span class=n>new_env</span><span class=p>)</span>
+<span class=n>print</span><span class=p>(</span><span class=n>ctype_count</span><span class=p>())</span>
+<span class=kd>local</span> <span class=n>ret</span><span class=p>,</span> <span class=n>mod</span> <span class=o>=</span> <span class=n>pcall</span><span class=p>(</span><span class=n>m1</span><span class=p>)</span>
+<span class=kr>if</span> <span class=ow>not</span> <span class=n>ret</span> <span class=kr>then</span>
+    <span class=n>print</span><span class=p>(</span><span class=n>ret</span><span class=p>)</span>
+<span class=kr>end</span>
+<span class=n>print</span><span class=p>(</span><span class=n>ctype_count</span><span class=p>())</span>
+
+<span class=n>mod.hello</span><span class=p>()</span>
+</code></pre></div><ul>
+<li><code>ma</code> 和 <code>mb</code> 是两个用户自定义模块，形式是存于内存中的字符串。</li>
+<li><code>new_require</code> 是我们重载的新的 require 函数，按我们的需要来编写。</li>
+<li><code>new_env</code> 是一个继承与全局环境(_G)的新环境，用于执行自定义代码。</li>
+<li><code>setfenv</code> 设置函数的环境（mb 模块被 loadstring 成函数了）</li>
+<li><code>ctype.count</code> 模块的作用是用于区分是否调用了 ffi 模块，当加载了 ffi 模块时，ctype.count 将增加，因此可以通过判断 pcall 前后 ctype.count 是否变化来判断使用调用了 ffi 模块。</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/lua/>lua</a>
+<a href=/tags/programming-language/>Programming Language</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2022 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#全局函数重载>全局函数重载</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
