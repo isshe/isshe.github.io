@@ -14,14 +14,14 @@
  卸载NIC去而被驱动程序：模块形式的设备驱动程序被卸载，相关联的NIC都需要被注销。  例如，卸载PCI设备驱动程序时，会导致pci_driver-&amp;gt;remove被调用。   删除可热拔插网络设备。 注销流程：  xxx_remove(_one)/module_exit | |---&amp;gt; unregister_netdev(dev) | | | +---&amp;gt; unregister_netdevice(dev) |---&amp;gt; .">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="driver"><meta property="article:tag" content="linux 内核"><meta property="article:tag" content="kernel"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="driver"><meta property="article:tag" content="linux 内核"><meta property="article:tag" content="kernel"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg">
 <meta name=twitter:title content="Linux 内核 —— 设备驱动">
 <meta name=twitter:description content="设备驱动 NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。 注册/注销/开启/关闭是四个不同的操作，不要混淆。 相关讨论，主要以网络设备为主。
 设备注册 触发网络设备注册的情况：
  加载NIC设备驱动程序：内建在内核，则引导期间初始化；模块形式，则在运行期间初始化。  例如，注册PCI设备驱动程序时，会导致pci_driver-&amp;gt;probe被调用。   插入可热插拔网络设备：内核通知其驱动程序，驱动程序注册该设备。 注册流程：以ethernet设备为例，流程都是一样，只是细节不同。   示例可见：drivers/net/ethernet/intel/e100.c
  xxx_probe/module_init | |---&amp;gt;dev = alloc_etherdev(sizeof(driver_private_structure)) | | | +---&amp;gt; alloc_etherdev(sizeof_priv, &amp;#34;eth%d&amp;#34;, ether_setup) | | | |---&amp;gt; dev = kmalloc(sizeof(net_device)) + sizeof_prive + padding) | |---&amp;gt; ether_setup(dev) | |---&amp;gt; strcpy(dev-&amp;gt;name, &amp;#34;eth%d&amp;#34;) | +---&amp;gt; return(dev) | ... ... ... |---&amp;gt; netdev_boot_setup_check(dev) | ... ... ... +---&amp;gt; register_netdev(dev) | +---&amp;gt; register_netdevice(dev) 注销 触发网络设备注销的情况：
  卸载NIC去而被驱动程序：模块形式的设备驱动程序被卸载，相关联的NIC都需要被注销。  例如，卸载PCI设备驱动程序时，会导致pci_driver-&amp;gt;remove被调用。   删除可热拔插网络设备。 注销流程：  xxx_remove(_one)/module_exit | |---&amp;gt; unregister_netdev(dev) | | | +---&amp;gt; unregister_netdevice(dev) |---&amp;gt; ."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -40,7 +40,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/>
-<img src=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png srcset="/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png 800w, /p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_1600x0_resize_box_3.png 1600w" width=800 height=563 loading=lazy alt="Featured image of post Linux 内核 —— 设备驱动">
+<img src=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 内核 —— 设备驱动">
 </a>
 </div>
 <div class=article-details>
@@ -164,7 +164,7 @@ Linux 内核
 <article class=has-image>
 <a href=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/>
 <div class=article-image>
-<img src=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.fd4d21163b2097db780a3c19226469da_hu55e9525b31cc013ff4b823f79d803bd9_80202_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 内核 —— 中断" data-hash="md5-/U0hFjsgl9t4CjwZImRp2g==">
+<img src=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.8ce23cec9d687eca139091a7be4ff154_hue6bacf8a28e00d96715d6f7da1dbeefd_38955_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 内核 —— 中断" data-hash="md5-jOI87J1ofsoTkJGnvk/xVA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 内核 —— 中断</h2>
