@@ -6,10 +6,10 @@
 <meta property="og:description" content="组合模式  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：将对象组合成树形结构以表示部分-整体的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。 别名：Composite 类图1：  类图  类图2：  类图  典型对象图：  对象图  出场嘉宾  Component: 组合  为组合中的对象声明接口。 在适当情况下，实现公共接口的缺省行为。 声明一个接口用于访问和管理Component组件。   Leaf: 叶节点，叶子部件  在组合中表示叶节点对象，叶节点没有子节点。 定义节点对象的具体的行为。   Composite: 组合部件，有孩子的部件。  定义有孩子节点的节点的行为。 存储孩子节点。 在Component接口中实现与子节点有关的操作。   Client：  通过Component接口操纵组合部件的对象。     协作/工作流程  Client使用Component接口与组合结构中的对象(Composite/Leaf)进行交互。 如果接收者是叶节点，则直接处理请求。 如果接收者是Composite，通常转发请求给它的子部件，在转发之前或之后，可能执行一些辅助操作。    2. 优缺点是什么？ 2.1 优点  定义包含基本对象和组合对象的类层次结构。  基本对象可以被组合成更复杂的组合对象 组合对象可以被再组合。   简化客户代码。  客户可以统一地使用基本对象和组合对象。   更容易增加新类型的组件。  2.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <meta name=twitter:title content="设计模式 —— 组合模式">
 <meta name=twitter:description content="组合模式  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：将对象组合成树形结构以表示部分-整体的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。 别名：Composite 类图1：  类图  类图2：  类图  典型对象图：  对象图  出场嘉宾  Component: 组合  为组合中的对象声明接口。 在适当情况下，实现公共接口的缺省行为。 声明一个接口用于访问和管理Component组件。   Leaf: 叶节点，叶子部件  在组合中表示叶节点对象，叶节点没有子节点。 定义节点对象的具体的行为。   Composite: 组合部件，有孩子的部件。  定义有孩子节点的节点的行为。 存储孩子节点。 在Component接口中实现与子节点有关的操作。   Client：  通过Component接口操纵组合部件的对象。     协作/工作流程  Client使用Component接口与组合结构中的对象(Composite/Leaf)进行交互。 如果接收者是叶节点，则直接处理请求。 如果接收者是Composite，通常转发请求给它的子部件，在转发之前或之后，可能执行一些辅助操作。    2. 优缺点是什么？ 2.1 优点  定义包含基本对象和组合对象的类层次结构。  基本对象可以被组合成更复杂的组合对象 组合对象可以被再组合。   简化客户代码。  客户可以统一地使用基本对象和组合对象。   更容易增加新类型的组件。  2."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2.png">
+<meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -28,7 +28,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2_hu2547485081b815049047097541279633_233559_800x0_resize_box_3.png srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2_hu2547485081b815049047097541279633_233559_800x0_resize_box_3.png 800w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram2_hu2547485081b815049047097541279633_233559_1600x0_resize_box_3.png 1600w" width=800 height=620 loading=lazy alt="Featured image of post 设计模式 —— 组合模式">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram_hu69318f5e689d278930c659afc06e18d5_32592_800x0_resize_box_3.png srcset="/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram_hu69318f5e689d278930c659afc06e18d5_32592_800x0_resize_box_3.png 800w, /p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram_hu69318f5e689d278930c659afc06e18d5_32592_1600x0_resize_box_3.png 1600w" width=800 height=632 loading=lazy alt="Featured image of post 设计模式 —— 组合模式">
 </a>
 </div>
 <div class=article-details>
@@ -267,42 +267,42 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/_huf5a20b34a6a2b71247bb728693802091_98002_590a6da0a246f8329ed7efd78937cb3d.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 工厂方法模式" data-hash="md5-N1JZaUD9Dvq95wegtFy3Dw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 工厂方法模式</h2>
+<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.4ce09f29da8c76e58f7cb5f426b2ff52_hua4fa13d1bdf22ddd96376562d855ae4a_134997_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 观察者模式" data-hash="md5-TOCfKdqMduWPfLX0JrL/Ug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+<h2 class=article-title>设计模式 —— 观察者模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Facede.fb1c7cce50e28f00ad690ffbfdb723bd_hud01d86ffbc3617d0fda5c11e9f27e03d_40171_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-+xx8zlDijwCtaQ/7/bcjvQ==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.f9429e6c6f20b367f1ef79a3a4cd148a_hu8ca9ff7362688b461397facff0e6ed9b_16668_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 单件模式" data-hash="md5-+UKebG8gs2fx73mjpM0Uig==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 外观模式</h2>
+<h2 class=article-title>设计模式 —— 单件模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.aae04168a97bebb63438e632acf36c6e_hu5f455159e5a15331f999b11eee4a3509_10198_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-quBBaKl767Y0OOYyrPNsbg==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 代理模式</h2>
+<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
 </div>
 </a>
 </article>
