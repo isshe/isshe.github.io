@@ -10,12 +10,12 @@ modprobe智能地从Linux内核添加或删除模块：
  注意，模块名称中-和_没有区别（自动执行下划线转换）。 modprobe在模块目录/lib/modules/'uname -r'(符号冲突了，用'代替)中查找所有模块和其他文件。  除了/etc/modprobe.d目录是的可选配置文件。详见modprobe.d   modprobe还将以&amp;lt;module&amp;gt;.&amp;lt;option&amp;gt;的形式使用内核命令行上指定的模块选项。  modprobe.blacklist=&amp;lt;module&amp;gt;的形式使用黑名单。   如果在modulename之后给出了任何参数，它们将被传递给内核。  除了配置文件中列出的选项。    用法 modprobe [-v] [-V] [-C config-file] [-n] [-i] [-q] [-b] [modulename] [module parameters...] modprobe [-r] [-v] [-n] [-i] [modulename...] modprobe [-c] modprobe [--dump-modversions] [filename] 选项 -a, --all 加载命令行中指定的所有模块。 -b, --use-blacklist 此选项使modprobe将配置文件（如果有）中的黑名单命令也应用于模块名称。 它通常由udev(7)使用。 -C, --config 此选项会覆盖缺省配置目录（/etc/modprobe.d） 此选项通过安装或删除命令传递给 MODPROBE_OPTIONS环境变量中 的其他modprobe命令。 -c, --showconfig 输出config目录中的有效配置并退出。 --dump-modversions 打印出模块所需的模块版本信息列表。 分发版通常使用此选项，以便使用模块版本控制deps(依赖？)打包Linux内核模块。 -d, --dirname 模块的根目录，默认是`/`。 --first-time 通常，如果告知插入已存在的模块或删除不存在的模块，modprobe将成功（并且不执行任何操作）。 这是简单脚本的理想选择; 然而，更复杂的脚本通常想知道modprobe是否真的做了一些事情： 这个选项使modprobe失败，因为它实际上没有做任何事情。 --force-vermagic 每个模块都包含一个包含重要信息的小字符串，例如内核和编译器版本。 如果模块无法加载并且内核抱怨`version magic`不匹配，则可以使用此选项将其删除(抱怨)。 当然，这个检查是为了保护你的，所以这个使用选项是危险的，除非你知道你在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 --force-modversion 当使用CONFIG_MODVERSIONS集编译模块时，会创建模块使用（或由模块提供）的每个接口的版本的详细说明。 如果模块无法加载并且内核抱怨模块不同意某个接口的版本，则可以使用“--force-modversion”来完全删除版本信息。 当然，这项检查是为了保护您的，所以使用此选项是危险的，除非您知道自己在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 -f, --force 尝试从模块中删除任何可能阻止加载的版本信息：这与使用--force-vermagic和--force-modversion相同。 当然，这些检查是为了您的保护，所以使用此选项是危险的，除非您知道自己在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 -i, --ignore-install, --ignore-remove 此选项使modprobe忽略命令行中，指定的模块的配置文件（如果有）中的安装和删除命令（任何相关模块仍然受配置文件中为它们设置的命令的限制）。 当使用此选项时，无论是否仅使用--ignore-install或--ignore-remove中的一个或其他（而不是两个）更具体地进行请求，将忽略安装和删除命令。 详见modprobe.">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="modprobe"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="modprobe"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— modprobe">
 <meta name=twitter:description content="modprobe modprobe - 向Linux内核添加或从内核移除模块。
 modprobe智能地从Linux内核添加或删除模块：
  注意，模块名称中-和_没有区别（自动执行下划线转换）。 modprobe在模块目录/lib/modules/'uname -r'(符号冲突了，用'代替)中查找所有模块和其他文件。  除了/etc/modprobe.d目录是的可选配置文件。详见modprobe.d   modprobe还将以&amp;lt;module&amp;gt;.&amp;lt;option&amp;gt;的形式使用内核命令行上指定的模块选项。  modprobe.blacklist=&amp;lt;module&amp;gt;的形式使用黑名单。   如果在modulename之后给出了任何参数，它们将被传递给内核。  除了配置文件中列出的选项。    用法 modprobe [-v] [-V] [-C config-file] [-n] [-i] [-q] [-b] [modulename] [module parameters...] modprobe [-r] [-v] [-n] [-i] [modulename...] modprobe [-c] modprobe [--dump-modversions] [filename] 选项 -a, --all 加载命令行中指定的所有模块。 -b, --use-blacklist 此选项使modprobe将配置文件（如果有）中的黑名单命令也应用于模块名称。 它通常由udev(7)使用。 -C, --config 此选项会覆盖缺省配置目录（/etc/modprobe.d） 此选项通过安装或删除命令传递给 MODPROBE_OPTIONS环境变量中 的其他modprobe命令。 -c, --showconfig 输出config目录中的有效配置并退出。 --dump-modversions 打印出模块所需的模块版本信息列表。 分发版通常使用此选项，以便使用模块版本控制deps(依赖？)打包Linux内核模块。 -d, --dirname 模块的根目录，默认是`/`。 --first-time 通常，如果告知插入已存在的模块或删除不存在的模块，modprobe将成功（并且不执行任何操作）。 这是简单脚本的理想选择; 然而，更复杂的脚本通常想知道modprobe是否真的做了一些事情： 这个选项使modprobe失败，因为它实际上没有做任何事情。 --force-vermagic 每个模块都包含一个包含重要信息的小字符串，例如内核和编译器版本。 如果模块无法加载并且内核抱怨`version magic`不匹配，则可以使用此选项将其删除(抱怨)。 当然，这个检查是为了保护你的，所以这个使用选项是危险的，除非你知道你在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 --force-modversion 当使用CONFIG_MODVERSIONS集编译模块时，会创建模块使用（或由模块提供）的每个接口的版本的详细说明。 如果模块无法加载并且内核抱怨模块不同意某个接口的版本，则可以使用“--force-modversion”来完全删除版本信息。 当然，这项检查是为了保护您的，所以使用此选项是危险的，除非您知道自己在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 -f, --force 尝试从模块中删除任何可能阻止加载的版本信息：这与使用--force-vermagic和--force-modversion相同。 当然，这些检查是为了您的保护，所以使用此选项是危险的，除非您知道自己在做什么。 这适用于插入的任何模块：命令行上的模块（或别名）以及它所依赖的任何模块。 -i, --ignore-install, --ignore-remove 此选项使modprobe忽略命令行中，指定的模块的配置文件（如果有）中的安装和删除命令（任何相关模块仍然受配置文件中为它们设置的命令的限制）。 当使用此选项时，无论是否仅使用--ignore-install或--ignore-remove中的一个或其他（而不是两个）更具体地进行请求，将忽略安装和删除命令。 详见modprobe."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -34,7 +34,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png srcset="/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_800x0_resize_box_3.png 800w, /p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_1600x0_resize_box_3.png 1600w" width=800 height=563 loading=lazy alt="Featured image of post Linux 命令 —— modprobe">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6c226959cebd96f85422def462695424_85269_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6c226959cebd96f85422def462695424_85269_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-modprobe/image_hu6c226959cebd96f85422def462695424_85269_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post Linux 命令 —— modprobe">
 </a>
 </div>
 <div class=article-details>
@@ -235,19 +235,29 @@ modprobe <span class=o>[</span>--dump-modversions<span class=o>]</span> <span cl
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.1ac0b2d4f163ff16004b7025bd30874b_hu2ea9c144c830b9199ae8bde76e3f2b78_78368_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-GsCy1PFj/xYAS3AlvTCHSw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— netstat</h2>
+<h2 class=article-title>Linux 命令 —— ssh</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— tcpdump</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.fd4d21163b2097db780a3c19226469da_hu55e9525b31cc013ff4b823f79d803bd9_80202_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-/U0hFjsgl9t4CjwZImRp2g==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.c0127903dac4110e1d5103ae27c763b4_hu6c226959cebd96f85422def462695424_85269_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-wBJ5A9rEEQ4dUQOuJ8djtA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— vmstat</h2>
@@ -255,32 +265,22 @@ modprobe <span class=o>[</span>--dump-modversions<span class=o>]</span> <span cl
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.f8922cdd1686b4b52463b379de9d6aa8_hu4ca550c63bda6c2cfe9b0286b9a7eea0_79586_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-+JIs3RaGtLUkY7N53p1qqA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.75f42b394b2ee79c8706f6f2c2495518_hu9cf09c1c436f94f04ea86d28afa0e688_52288_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-dfQrOUsu55yHBvbywklVGA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— strace</h2>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— git</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— ssh</h2>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>
