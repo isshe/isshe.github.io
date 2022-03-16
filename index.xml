@@ -151,7 +151,7 @@ bpftool cgroup tree
 &lt;li>使用低强度的密码比不进行任何加密更危险&lt;/li>
 &lt;li>任何密码总有一天都会被破解&lt;/li>
 &lt;li>密码只是信息安全的一部分&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第七章-单向散列函数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第七章-单向散列函数" />&lt;h2 id="第七章-单向散列函数">第七章 单向散列函数&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第七章-单向散列函数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/image.png" alt="Featured image of post 图解密码技术 —— 第七章-单向散列函数" />&lt;h2 id="第七章-单向散列函数">第七章 单向散列函数&lt;/h2>
 &lt;p>单向散列函数(one-way hash function): 可以根据消息的内容，计算出散列值。&lt;/p>
 &lt;ul>
 &lt;li>散列值可以被用于检查消息的完整性。&lt;/li>
@@ -256,7 +256,7 @@ bpftool cgroup tree
 &lt;/li>
 &lt;/ul>
 &lt;h1 id="总结">总结&lt;/h1>
-&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
+&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
 &lt;h1 id="历史上著名的密码">历史上著名的密码&lt;/h1>
 &lt;ul>
 &lt;li>凯撒密码&lt;/li>
@@ -279,7 +279,7 @@ bpftool cgroup tree
 &lt;li>破解方式：频率分析&lt;/li>
 &lt;/ul>
 &lt;h1 id="enigma">Enigma&lt;/h1>
-&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
+&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
 &lt;h1 id="秘钥配送问题">秘钥配送问题&lt;/h1>
 &lt;ul>
 &lt;li>解决方法
@@ -341,7 +341,7 @@ E x D mode L = 1
 &lt;/ul>
 &lt;/li>
 &lt;li>中间人攻击对所有公钥密码对是有效的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
 &lt;p>消息认证码： Message Authentication Code，MAC。&lt;/p>
 &lt;ul>
 &lt;li>是一种确认完整性并进行认证的技术。&lt;/li>
@@ -559,7 +559,7 @@ alt="混合密码解密过程">
 &lt;/ul>
 &lt;/li>
 &lt;li>使用口令生成器和管理工具。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.png" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
 &lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
 &lt;ul>
 &lt;li>PGP: Pretty Good Privacy.&lt;/li>
@@ -578,7 +578,7 @@ alt="混合密码解密过程">
 &lt;ul>
 &lt;li>PGP采用的确认&lt;code>公钥&lt;/code>合法性的方法。&lt;/li>
 &lt;li>注意：&lt;code>公钥是否合法&lt;/code>和&lt;code>所有者是否可信&lt;/code>是两个不同的问题，因为尽管公钥合法，其所有者也可以是不可信的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpeg" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
 &lt;h1 id="随机数的作用使用场景是什么">随机数的作用？使用场景是什么？&lt;/h1>
 &lt;ul>
 &lt;li>生成秘钥：用于对称密码和消息认证码。&lt;/li>
@@ -1203,7 +1203,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
 >https://man.linuxde.net/gdb&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.png" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
 &lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
@@ -1264,7 +1264,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -1620,7 +1620,7 @@ netstat -ie
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示listening监听状态的连接">显示LISTENING(监听)状态的连接&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -l
 &lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="3-疑问">3. 疑问&lt;/h1>
-&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.png" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
+&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
 &lt;h1 id="隧道">隧道&lt;/h1>
 &lt;p>场景：家里内网机器 A 想要访问公司的内网机器 B。
 条件：需要一个公网机器 C （假设IP是 1.1.1.1）。&lt;/p>
@@ -1662,7 +1662,7 @@ sudo systemctl restart sshd
 &lt;span class="c1"># 前面部分 0.0.0.0:10443：公网机器信息&lt;/span>
 &lt;span class="c1"># 后面部分 0.0.0.0:443：内网机器信息&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
-&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.png" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
+&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
 &lt;p>strace - 跟踪系统调用和信号。&lt;/p>
 &lt;p>在最简单的情况下，strace运行指定的命令直到它退出。
 它拦截并记录由进程调用的系统调用和进程接收的信号。
@@ -1833,7 +1833,7 @@ strace -ttt ls&lt;/p>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/strace" target="_blank" rel="noopener"
 >https://man.linuxde.net/strace&lt;/a>&lt;/li>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpg" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.png" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
 &lt;p>tcpdump - dump traffic on a network（转储网络上的流量）。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">tcpdump &lt;span class="o">[&lt;/span> -AbdDefhHIJKlLnNOpqStuUvxX# &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -B buffer_size &lt;span class="o">]&lt;/span>
@@ -2120,7 +2120,7 @@ tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2
 &lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
 >https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
 linux man page&lt;/p>
-&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.png" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
 &lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
@@ -2284,7 +2284,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;h1 id="参考">参考&lt;/h1>
 &lt;ul>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
 &lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
 &lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
@@ -4076,7 +4076,7 @@ alt="消息队列的系统限制">
 &lt;h2 id="b-参考">B. 参考&lt;/h2>
 &lt;ul>
 &lt;li>《UNIX环境高级编程 第三版》&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之FIFO</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.png" alt="Featured image of post 操作系统 —— 进程间通信之FIFO" />&lt;h1 id="fifo">FIFO&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之FIFO</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之FIFO" />&lt;h1 id="fifo">FIFO&lt;/h1>
 &lt;ul>
 &lt;li>FIFO有时被称为命名管道。&lt;/li>
 &lt;li>FIFO是一种文件类型。&lt;/li>
@@ -4466,7 +4466,7 @@ loading="lazy"
 &lt;li>当使用内存共享时，生产者/消费者必须执行某种&lt;code>显式的(explicit)&lt;/code>的同步。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.png" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -4671,7 +4671,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
