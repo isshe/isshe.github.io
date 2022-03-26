@@ -130,7 +130,7 @@ bpftool cgroup tree
 &lt;li>应用数据协议&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第一章-环游密码世界</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.jpeg" alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" />&lt;h2 id="第一章-环游密码世界">第一章 环游密码世界&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第一章-环游密码世界</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.jpg" alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" />&lt;h2 id="第一章-环游密码世界">第一章 环游密码世界&lt;/h2>
 &lt;h1 id="名词">名词&lt;/h1>
 &lt;p>&lt;code>明文&lt;/code>：加密前的消息。
 &lt;code>密文&lt;/code>：加密后的消息。
@@ -166,7 +166,7 @@ bpftool cgroup tree
 &lt;li>消息：原像。&lt;/li>
 &lt;li>散列值：消息摘要、指纹。&lt;/li>
 &lt;li>完整性：一致性。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
 &lt;p>用相同的秘钥进行加密和解密。&lt;/p>
 &lt;h1 id="比特序列">比特序列&lt;/h1>
 &lt;ul>
@@ -206,7 +206,7 @@ bpftool cgroup tree
 &lt;p>3DES(TDEA)：将DES重复3次。
 分组长度为：&lt;code>64 * 3 = 192&lt;/code>&lt;/p>
 &lt;h1 id="aes">AES&lt;/h1>
-&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
+&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.png" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
 &lt;p>公钥密码：存在加密秘钥(公钥)和解密秘钥（私钥）。用公钥加密。
 数字签名：签名秘钥（私钥）和验证秘钥（公钥）。用私钥加密。
 &lt;strong>数字签名并不是为了保证机密性。&lt;/strong>&lt;/p>
@@ -256,7 +256,7 @@ bpftool cgroup tree
 &lt;/li>
 &lt;/ul>
 &lt;h1 id="总结">总结&lt;/h1>
-&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
+&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
 &lt;h1 id="历史上著名的密码">历史上著名的密码&lt;/h1>
 &lt;ul>
 &lt;li>凯撒密码&lt;/li>
@@ -279,7 +279,7 @@ bpftool cgroup tree
 &lt;li>破解方式：频率分析&lt;/li>
 &lt;/ul>
 &lt;h1 id="enigma">Enigma&lt;/h1>
-&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
+&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
 &lt;h1 id="秘钥配送问题">秘钥配送问题&lt;/h1>
 &lt;ul>
 &lt;li>解决方法
@@ -446,7 +446,7 @@ loading="lazy"
 alt="混合密码解密过程">
 &lt;/a>
 &lt;figcaption>混合密码解密过程&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.jpg" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.png" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
 &lt;h1 id="什么是秘钥">什么是秘钥？&lt;/h1>
 &lt;p>秘钥：一个巨大的数字。&lt;/p>
 &lt;blockquote>
@@ -578,7 +578,7 @@ alt="混合密码解密过程">
 &lt;ul>
 &lt;li>PGP采用的确认&lt;code>公钥&lt;/code>合法性的方法。&lt;/li>
 &lt;li>注意：&lt;code>公钥是否合法&lt;/code>和&lt;code>所有者是否可信&lt;/code>是两个不同的问题，因为尽管公钥合法，其所有者也可以是不可信的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.png" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
 &lt;h1 id="随机数的作用使用场景是什么">随机数的作用？使用场景是什么？&lt;/h1>
 &lt;ul>
 &lt;li>生成秘钥：用于对称密码和消息认证码。&lt;/li>
@@ -799,7 +799,7 @@ loading="lazy"
 alt="模式对比">
 &lt;/a>
 &lt;figcaption>模式对比&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.png" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.jpg" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
 &lt;h1 id="1-记录">1. 记录&lt;/h1>
 &lt;blockquote>
 &lt;p>postgresql 以 12 版本为例&lt;/p>
@@ -908,7 +908,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;span class="c1">// 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_getpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_setpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.png" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
 &lt;h2 id="1-硬件中断注册">1. 硬件中断注册&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;linux/interrupt.h&amp;gt;&lt;/span>&lt;span class="cp">
 &lt;/span>&lt;span class="cp">&lt;/span>
@@ -1053,7 +1053,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;/blockquote>
 &lt;ul>
 &lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.png" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
 &lt;p>gdb - GNU调试器。&lt;/p>
 &lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
 GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
@@ -1264,7 +1264,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -2284,7 +2284,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;h1 id="参考">参考&lt;/h1>
 &lt;ul>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
 &lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
 &lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
@@ -3679,7 +3679,7 @@ loading="lazy"
 &lt;li>支持。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
 &lt;ul>
 &lt;li>消息队列可认为是一个消息链表。具有&lt;code>随内核的持续性&lt;/code>&lt;/li>
 &lt;li>有读权限的线程可以从队列中取走信息；&lt;/li>
@@ -4671,7 +4671,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
