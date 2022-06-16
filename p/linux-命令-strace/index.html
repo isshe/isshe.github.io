@@ -18,7 +18,7 @@ sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ kill
 read(0, 0x7ffff72cf5cf, 1) = ?">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="strace"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="strace"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— strace">
 <meta name=twitter:description content="strace strace - 跟踪系统调用和信号。
 在最简单的情况下，strace运行指定的命令直到它退出。 它拦截并记录由进程调用的系统调用和进程接收的信号。 每个系统调用的名称，其参数和返回值都打印在标准错误或使用-o选项指定的文件上。 strace是一种有用的诊断，指导和调试工具。 跟踪中的每一行都包含系统调用名称，后跟括号中的参数及其返回值。如：
@@ -27,7 +27,7 @@ open(&amp;#34;/foo/bar&amp;#34;, O_RDONLY) = -1 ENOENT (No such file or director
 sigsuspend([] &amp;lt;unfinished ...&amp;gt; --- SIGINT (Interrupt) --- +++ killed by SIGINT +++ 正在执行系统调用的同时，另一个线程/进程调用另一个系统调用，则strace将尝试保留这些事件的顺序并将正在进行的调用标记为未完成。 当调用返回时，它将被标记为已恢复：
 [pid 28772] select(4, [3], NULL, NULL, NULL &amp;lt;unfinished ...&amp;gt; [pid 28779] clock_gettime(CLOCK_REALTIME, {1130322148, 939977000}) = 0 [pid 28772] &amp;lt;... select resumed&amp;gt; ) = 1 (in [3]) 系统调用被中断后重启，如：
 read(0, 0x7ffff72cf5cf, 1) = ?"><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.png">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -46,7 +46,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_800x0_resize_box_3.png srcset="/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_800x0_resize_box_3.png 800w, /p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_1600x0_resize_box_3.png 1600w" width=800 height=606 loading=lazy alt="Featured image of post Linux 命令 —— strace">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-strace/image_hu75bfb8e699f04dc0c75c201fe548798b_46326_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post Linux 命令 —— strace">
 </a>
 </div>
 <div class=article-details>
@@ -310,29 +310,19 @@ strace -ttt ls</p>
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.6c0a297ec4203dc1e0bf8d17dee9b1fc_hueab6931f1bf6a7e35ac75d72182b8879_71547_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-bAopfsQgPcHgv40X3umx/A==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— ssh</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— vmstat</h2>
+<h2 class=article-title>Linux 命令 —— git</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.92e807e090a193d2f9e547aa439368c2_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-kugH4JChk9L55UeqQ5Nowg==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— modprobe</h2>
@@ -340,22 +330,32 @@ strace -ttt ls</p>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.6c0a297ec4203dc1e0bf8d17dee9b1fc_hueab6931f1bf6a7e35ac75d72182b8879_71547_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-bAopfsQgPcHgv40X3umx/A==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.f8922cdd1686b4b52463b379de9d6aa8_hu4ca550c63bda6c2cfe9b0286b9a7eea0_79586_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-+JIs3RaGtLUkY7N53p1qqA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— gdb</h2>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— git</h2>
+<h2 class=article-title>Linux 命令 —— tcpdump</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.0fc4013d2d2472d8a97996f49b5da20d_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-D8QBPS0kctipeZb0m12iDQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
 </div>
 </a>
 </article>
