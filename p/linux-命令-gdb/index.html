@@ -24,7 +24,7 @@ break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法�
 break [file:]function 在函数(文件)中设置断点。 缩写：b。 用法： b &amp;lt;行号&amp;gt;，如：b 8 b &amp;lt;函数名称&amp;gt;，如：b main b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”） b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。 d [breakpoint number] 删除断点 run [arglist] 开始你的程序（arglist是参数列表） 缩写：r bt 回溯(backtrace)：显示程序堆栈。 print expr 显示表达式expr的值。 缩写：p c 继续运行你的程序（在停止后，例如断电）。continue的缩写。 next 继续下一行(在停止后)；不进入函数的单步调试。 缩写：n edit [file:]function 查看程序当前停止的行。 list [file:]function 在当前停止的位置附近键入程序的文本。 step 继续下一行(在停止后)；进入函数的单步调试。 缩写：s i 显示各类信息。如：i r，显示寄存器的信息 help [name] 显示GDB命令name的信息，或有关使用GDB的一般信息。 quit 退出GDB。 缩写：q 有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="gdb"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="gdb"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-07-06T06:00:17-03:00"><meta property="article:modified_time" content="2022-07-06T06:00:17-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— gdb">
 <meta name=twitter:description content="gdb gdb - GNU调试器。
 调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。 GDB可以做4种主要的事情来帮助你捕捉bug：
@@ -55,7 +55,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu02818017db472601873aa929559d13bb_34206_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu02818017db472601873aa929559d13bb_34206_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu02818017db472601873aa929559d13bb_34206_1600x0_resize_q75_box.jpg 1600w" width=800 height=453 loading=lazy alt="Featured image of post Linux 命令 —— gdb">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-gdb/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 命令 —— gdb">
 </a>
 </div>
 <div class=article-details>
@@ -69,7 +69,7 @@ Linux 命令
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Dec 13, 2021</time>
+<time class=article-time--published>Jul 06, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -206,7 +206,7 @@ quit
     以批处理模式运行。
     在执行完用-x选项指定的所有命令文件<span class=o>(</span>如果不禁止，则为.gdbinit<span class=o>)</span>后，以0退出。
     如果在运行命令文件中的GDB命令时发生错误，则以非0退出。
-    批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序<span class=p>;</span> 
+    批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序<span class=p>;</span>
     为了使这个更有用，消息程序正常退出。【？？？】
 
 -cd<span class=o>=</span>directory
@@ -227,7 +227,7 @@ quit
 <h2 id=编译并跟踪>编译并跟踪</h2>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc test.c -o <span class=nb>test</span> -g
 gdb <span class=nb>test</span>
-    &lt;gdb命令&gt; 
+    &lt;gdb命令&gt;
     &lt;b main&gt;: 断点
     &lt;b 10&gt;: 第10行设置断点
     &lt;d 10&gt;: 删除第10行的断点
@@ -240,8 +240,38 @@ gdb <span class=nb>test</span>
     &lt;i r&gt;: 显示寄存器的信息
     &lt;bt&gt;: 显示堆栈
     &lt;list 10&gt;: 从第10行开始显示代码
-</code></pre></div><h1 id=疑问>疑问</h1>
-<h1 id=拓展>拓展</h1>
+</code></pre></div><h2 id=跟踪实例>跟踪实例</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gdb sbin/nginx
+
+<span class=c1># 设置程序的相关参数</span>
+&gt; <span class=nb>set</span> args -p /root/nginx/test
+
+<span class=c1># 主要想跟踪 nginx 的 worker 进程，因此设置跟踪 fork</span>
+&gt; <span class=nb>set</span> follow-fork-mode child
+
+<span class=c1># 必要的地方打上断点</span>
+&gt; b ngx_http_log_module.c:294
+&gt; b ngx_http_log_module.c:309
+
+<span class=c1># 执行</span>
+&gt; run
+
+<span class=c1># 另一个 shell，发送请求 curl localhost:xxx</span>
+
+<span class=c1># 此时 gdb 这边到达断点</span>
+<span class=c1>#  打印想看的变量</span>
+&gt; p values<span class=o>[</span>0<span class=o>]</span>
+&gt; p values<span class=o>[</span>1<span class=o>]</span>
+&gt; p n
+&gt; p log-&gt;script
+
+<span class=c1># 有分叉，单步调试看看</span>
+&gt; list
+&gt; n
+&gt; n
+
+<span class=c1># 重复上面的步骤，逐渐找到问题</span>
+</code></pre></div><h1 id=拓展>拓展</h1>
 <ul>
 <li>shell命令：info gdb</li>
 <li><a class=link href=https://sourceware.org/gdb/current/onlinedocs/gdb/ target=_blank rel=noopener>gdb在线文档</a>
@@ -272,39 +302,19 @@ gdb <span class=nb>test</span>
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— modprobe</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— tcpdump</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— strace</h2>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.fd4d21163b2097db780a3c19226469da_hu55e9525b31cc013ff4b823f79d803bd9_80202_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-/U0hFjsgl9t4CjwZImRp2g==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— vmstat</h2>
@@ -312,12 +322,32 @@ gdb <span class=nb>test</span>
 </a>
 </article>
 <article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ssh</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.8ce23cec9d687eca139091a7be4ff154_hue6bacf8a28e00d96715d6f7da1dbeefd_38955_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-jOI87J1ofsoTkJGnvk/xVA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— netstat</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.0fc4013d2d2472d8a97996f49b5da20d_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-D8QBPS0kctipeZb0m12iDQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— strace</h2>
 </div>
 </a>
 </article>
@@ -390,6 +420,7 @@ Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=
 </ol>
 <ol>
 <li><a href=#编译并跟踪>编译并跟踪</a></li>
+<li><a href=#跟踪实例>跟踪实例</a></li>
 </ol>
 </nav>
 </div>

@@ -1,4 +1,176 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 23 Jan 2022 12:54:29 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>Lua —— 重载全局函数 require</title><link>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</link><pubDate>Sun, 23 Jan 2022 12:54:29 -0400</pubDate><guid>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</guid><description>&lt;img src="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.png" alt="Featured image of post Lua —— 重载全局函数 require" />&lt;h2 id="全局函数重载">全局函数重载&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 06 Jul 2022 06:00:17 -0300</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Wed, 06 Jul 2022 06:00:17 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
+&lt;p>gdb - GNU调试器。&lt;/p>
+&lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
+GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
+&lt;ul>
+&lt;li>启动你的程序，指定任何可能影响程序行为的内容。&lt;/li>
+&lt;li>使程序在指定条件下停止。&lt;/li>
+&lt;li>检查你程序停止时，正在发生的事情。&lt;/li>
+&lt;li>更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。&lt;/li>
+&lt;/ul>
+&lt;p>你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。
+使用&lt;code>gdb&lt;/code>命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令&lt;code>help&lt;/code>来查看帮助（不用退出gdb）。
+你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program&lt;/p>
+&lt;/blockquote>
+&lt;p>您还可以从可执行程序和指定的core文件开始：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program core&lt;/p>
+&lt;/blockquote>
+&lt;p>如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：&lt;/p>
+&lt;blockquote>
+&lt;p>gdb program 1234
+gdb -p 1234&lt;/p>
+&lt;/blockquote>
+&lt;p>将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。
+以下是一些常用的GDB命令:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nb">break&lt;/span> &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+在函数&lt;span class="o">(&lt;/span>文件&lt;span class="o">)&lt;/span>中设置断点。
+缩写：b。
+用法：
+b &amp;lt;行号&amp;gt;，如：b &lt;span class="m">8&lt;/span>
+b &amp;lt;函数名称&amp;gt;，如：b main
+b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”）
+b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。
+d &lt;span class="o">[&lt;/span>breakpoint number&lt;span class="o">]&lt;/span>
+删除断点
+run &lt;span class="o">[&lt;/span>arglist&lt;span class="o">]&lt;/span>
+开始你的程序（arglist是参数列表）
+缩写：r
+bt
+回溯&lt;span class="o">(&lt;/span>backtrace&lt;span class="o">)&lt;/span>：显示程序堆栈。
+print expr
+显示表达式expr的值。
+缩写：p
+c
+继续运行你的程序（在停止后，例如断电）。continue的缩写。
+next
+继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；不进入函数的单步调试。
+缩写：n
+edit &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+查看程序当前停止的行。
+list &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
+在当前停止的位置附近键入程序的文本。
+step
+继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；进入函数的单步调试。
+缩写：s
+i
+显示各类信息。如：i r，显示寄存器的信息
+&lt;span class="nb">help&lt;/span> &lt;span class="o">[&lt;/span>name&lt;span class="o">]&lt;/span>
+显示GDB命令name的信息，或有关使用GDB的一般信息。
+quit
+退出GDB。
+缩写：q
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger&lt;/p>
+&lt;h1 id="用法">用法&lt;/h1>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gdb &lt;span class="o">[&lt;/span>-help&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nh&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nx&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-q&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-batch&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-cd&lt;span class="o">=&lt;/span>dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-f&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-b bps&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-tty&lt;span class="o">=&lt;/span>dev&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-s symfile&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-e prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-se prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-c core&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-p procID&lt;span class="o">]&lt;/span>
+&lt;span class="o">[&lt;/span>-x cmds&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-d dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>prog&lt;span class="p">|&lt;/span>prog procID&lt;span class="p">|&lt;/span>prog core&lt;span class="o">]&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
+&lt;p>选项之外的任何参数都需要指定可执行文件和核心文件（或进程ID）。
+所有选项和命令行参数都按顺序处理。使用' -x &amp;lsquo;选项时，顺序会有所不同。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-help
+-h 列出所有选项，并提供简要说明。
+-symbols&lt;span class="o">=&lt;/span>file
+-s file
+从file文件中读取符号表（symbol table）。
+-write
+允许写入可执行文件和core文件。
+-exec&lt;span class="o">=&lt;/span>file
+-e file
+使用file文件作为可执行文件在适当时执行，并与核心转储一起检查纯数据。
+-se&lt;span class="o">=&lt;/span>file
+从file文件中读取符号表并将file用作可执行文件。
+-core&lt;span class="o">=&lt;/span>file
+-c file
+指定core文件。
+-command&lt;span class="o">=&lt;/span>file
+-x file
+执行file文件中的GDB命令。（自动化？）
+-ex &lt;span class="nb">command&lt;/span>
+执行给定的GDB命令。
+-directory&lt;span class="o">=&lt;/span>directory
+-d directory
+将目录添加到路径&lt;span class="o">(&lt;/span>path&lt;span class="o">)&lt;/span>以搜索源文件。
+-nh 不要执行~/.gdbinit中的命令。
+-nx
+-n 不要执行任何&lt;span class="s1">&amp;#39;.gdbinit&amp;#39;&lt;/span>初始化文件中的命令。
+-quiet
+-q &lt;span class="s2">&amp;#34;Quiet&amp;#34;&lt;/span>. 不要打印介绍性和版权信息。这些消息也在批处理模式下被抑制。
+-batch
+以批处理模式运行。
+在执行完用-x选项指定的所有命令文件&lt;span class="o">(&lt;/span>如果不禁止，则为.gdbinit&lt;span class="o">)&lt;/span>后，以0退出。
+如果在运行命令文件中的GDB命令时发生错误，则以非0退出。
+批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序&lt;span class="p">;&lt;/span>
+为了使这个更有用，消息程序正常退出。【？？？】
+-cd&lt;span class="o">=&lt;/span>directory
+使用directory作用GDB的工作目录（而不是用当前目录）
+-fullname
+-f Emacs在将GDB作为子进程运行时设置此选项。
+它告诉GDB每次显示堆栈帧时都以标准的，可识别的方式输出完整的文件名和行号（包括每次程序停止时）。
+这种可识别的格式看起来像两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符，后跟文件名，行号和以冒号分隔的字符位置，以及换行符。
+Emacs-to-GDB接口程序使用两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符作为信号来显示帧的源代码。
+-b bps
+设置GDB用于远程调试的任何串行接口的线性速度（波特率或每秒位数）。
+-tty&lt;span class="o">=&lt;/span>device
+使用device运行程序的标准输入和输出。
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
+&lt;h2 id="编译并跟踪">编译并跟踪&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gcc test.c -o &lt;span class="nb">test&lt;/span> -g
+gdb &lt;span class="nb">test&lt;/span>
+&amp;lt;gdb命令&amp;gt;
+&amp;lt;b main&amp;gt;: 断点
+&amp;lt;b 10&amp;gt;: 第10行设置断点
+&amp;lt;d 10&amp;gt;: 删除第10行的断点
+&amp;lt;info b&amp;gt;: 查看断点信息
+&amp;lt;c&amp;gt;: 继续
+&amp;lt;n&amp;gt;: 下一行
+&amp;lt;s&amp;gt;: 下一行，进入函数。
+&amp;lt;r&amp;gt;: 执行
+&amp;lt;c&amp;gt;: 继续执行
+&amp;lt;i r&amp;gt;: 显示寄存器的信息
+&amp;lt;bt&amp;gt;: 显示堆栈
+&amp;lt;list 10&amp;gt;: 从第10行开始显示代码
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="跟踪实例">跟踪实例&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gdb sbin/nginx
+&lt;span class="c1"># 设置程序的相关参数&lt;/span>
+&amp;gt; &lt;span class="nb">set&lt;/span> args -p /root/nginx/test
+&lt;span class="c1"># 主要想跟踪 nginx 的 worker 进程，因此设置跟踪 fork&lt;/span>
+&amp;gt; &lt;span class="nb">set&lt;/span> follow-fork-mode child
+&lt;span class="c1"># 必要的地方打上断点&lt;/span>
+&amp;gt; b ngx_http_log_module.c:294
+&amp;gt; b ngx_http_log_module.c:309
+&lt;span class="c1"># 执行&lt;/span>
+&amp;gt; run
+&lt;span class="c1"># 另一个 shell，发送请求 curl localhost:xxx&lt;/span>
+&lt;span class="c1"># 此时 gdb 这边到达断点&lt;/span>
+&lt;span class="c1"># 打印想看的变量&lt;/span>
+&amp;gt; p values&lt;span class="o">[&lt;/span>0&lt;span class="o">]&lt;/span>
+&amp;gt; p values&lt;span class="o">[&lt;/span>1&lt;span class="o">]&lt;/span>
+&amp;gt; p n
+&amp;gt; p log-&amp;gt;script
+&lt;span class="c1"># 有分叉，单步调试看看&lt;/span>
+&amp;gt; list
+&amp;gt; n
+&amp;gt; n
+&lt;span class="c1"># 重复上面的步骤，逐渐找到问题&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="拓展">拓展&lt;/h1>
+&lt;ul>
+&lt;li>shell命令：info gdb&lt;/li>
+&lt;li>&lt;a class="link" href="https://sourceware.org/gdb/current/onlinedocs/gdb/" target="_blank" rel="noopener"
+>gdb在线文档&lt;/a>
+&lt;ul>
+&lt;li>&lt;a class="link" href="http://mermaja.act.uji.es/docencia/is37/data/gdb.pdf" target="_blank" rel="noopener"
+>A Guide to the GNU Source-Level Debugger&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
+>https://man.linuxde.net/gdb&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Lua —— 重载全局函数 require</title><link>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</link><pubDate>Sun, 23 Jan 2022 12:54:29 -0400</pubDate><guid>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</guid><description>&lt;img src="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.png" alt="Featured image of post Lua —— 重载全局函数 require" />&lt;h2 id="全局函数重载">全局函数重载&lt;/h2>
 &lt;p>在我个人的开源项目 &lt;a class="link" href="https://github.com/x-few/xway" target="_blank" rel="noopener"
 >xway&lt;/a> 的中有一个需求：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不把 Lua 模块保存成文件。要如何实现呢？怎么才能从内存中 require 一个模块？答案是重载 require 函数。
 利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行相关探索及验证。&lt;/p>
@@ -166,7 +338,7 @@ bpftool cgroup tree
 &lt;li>消息：原像。&lt;/li>
 &lt;li>散列值：消息摘要、指纹。&lt;/li>
 &lt;li>完整性：一致性。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
 &lt;p>用相同的秘钥进行加密和解密。&lt;/p>
 &lt;h1 id="比特序列">比特序列&lt;/h1>
 &lt;ul>
@@ -279,7 +451,7 @@ bpftool cgroup tree
 &lt;li>破解方式：频率分析&lt;/li>
 &lt;/ul>
 &lt;h1 id="enigma">Enigma&lt;/h1>
-&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
+&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
 &lt;h1 id="秘钥配送问题">秘钥配送问题&lt;/h1>
 &lt;ul>
 &lt;li>解决方法
@@ -341,7 +513,7 @@ E x D mode L = 1
 &lt;/ul>
 &lt;/li>
 &lt;li>中间人攻击对所有公钥密码对是有效的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
 &lt;p>消息认证码： Message Authentication Code，MAC。&lt;/p>
 &lt;ul>
 &lt;li>是一种确认完整性并进行认证的技术。&lt;/li>
@@ -599,7 +771,7 @@ alt="混合密码解密过程">
 &lt;li>弱伪随机数：只有随机性。&lt;/li>
 &lt;li>强伪随机数：具有随机性+不可预测性。&lt;/li>
 &lt;li>真随机数：同时具备上面三个性质。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.jpg" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.png" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
 &lt;blockquote>
 &lt;p>这章不是太理解。&lt;/p>
 &lt;/blockquote>
@@ -1053,156 +1225,6 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;/blockquote>
 &lt;ul>
 &lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— gdb</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.jpg" alt="Featured image of post Linux 命令 —— gdb" />&lt;h2 id="gdb">gdb&lt;/h2>
-&lt;p>gdb - GNU调试器。&lt;/p>
-&lt;p>调试器(如GDB)的目的是允许你查看其他程序在执行时的&amp;quot;内部&amp;quot;的内容，或者程序奔溃的时候正在做什么。
-GDB可以做4种主要的事情来帮助你捕捉bug：&lt;/p>
-&lt;ul>
-&lt;li>启动你的程序，指定任何可能影响程序行为的内容。&lt;/li>
-&lt;li>使程序在指定条件下停止。&lt;/li>
-&lt;li>检查你程序停止时，正在发生的事情。&lt;/li>
-&lt;li>更改程序中的内容，以便你可以尝试纠正一个错误的影响并继续了解另一个错误。&lt;/li>
-&lt;/ul>
-&lt;p>你可以用GDB来调试C、C++、Fortran、Modula-2编写的程序。
-使用&lt;code>gdb&lt;/code>命令来调用GDB。一旦启动，它会从中断读取命令，直到你用GDB命令&amp;quot;exit&amp;quot;告诉它退出。你可以用GDB命令&lt;code>help&lt;/code>来查看帮助（不用退出gdb）。
-你可以运行没有参数或选项的gdb ; 但是最常用的启动GDB的方法是使用一个或两个参数，将可执行程序指定为参数：&lt;/p>
-&lt;blockquote>
-&lt;p>gdb program&lt;/p>
-&lt;/blockquote>
-&lt;p>您还可以从可执行程序和指定的core文件开始：&lt;/p>
-&lt;blockquote>
-&lt;p>gdb program core&lt;/p>
-&lt;/blockquote>
-&lt;p>如果要调试正在运行的进程，则可以将进程ID指定为第二个参数：&lt;/p>
-&lt;blockquote>
-&lt;p>gdb program 1234
-gdb -p 1234&lt;/p>
-&lt;/blockquote>
-&lt;p>将GDB附加(attach)到1234进程（除非你由一个名字为1234的core文件，gdb会先查找core文件）。
-以下是一些常用的GDB命令:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="nb">break&lt;/span> &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
-在函数&lt;span class="o">(&lt;/span>文件&lt;span class="o">)&lt;/span>中设置断点。
-缩写：b。
-用法：
-b &amp;lt;行号&amp;gt;，如：b &lt;span class="m">8&lt;/span>
-b &amp;lt;函数名称&amp;gt;，如：b main
-b *&amp;lt;函数名称&amp;gt;，如：b *main（在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”）
-b *&amp;lt;代码地址&amp;gt;，如：b *0x804835c。
-d &lt;span class="o">[&lt;/span>breakpoint number&lt;span class="o">]&lt;/span>
-删除断点
-run &lt;span class="o">[&lt;/span>arglist&lt;span class="o">]&lt;/span>
-开始你的程序（arglist是参数列表）
-缩写：r
-bt
-回溯&lt;span class="o">(&lt;/span>backtrace&lt;span class="o">)&lt;/span>：显示程序堆栈。
-print expr
-显示表达式expr的值。
-缩写：p
-c
-继续运行你的程序（在停止后，例如断电）。continue的缩写。
-next
-继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；不进入函数的单步调试。
-缩写：n
-edit &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
-查看程序当前停止的行。
-list &lt;span class="o">[&lt;/span>file:&lt;span class="o">]&lt;/span>&lt;span class="k">function&lt;/span>
-在当前停止的位置附近键入程序的文本。
-step
-继续下一行&lt;span class="o">(&lt;/span>在停止后&lt;span class="o">)&lt;/span>；进入函数的单步调试。
-缩写：s
-i
-显示各类信息。如：i r，显示寄存器的信息
-&lt;span class="nb">help&lt;/span> &lt;span class="o">[&lt;/span>name&lt;span class="o">]&lt;/span>
-显示GDB命令name的信息，或有关使用GDB的一般信息。
-quit
-退出GDB。
-缩写：q
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>有关GDB的完整详细信息，请参阅：A Guide to the GNU Source-Level Debugger&lt;/p>
-&lt;h1 id="用法">用法&lt;/h1>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gdb &lt;span class="o">[&lt;/span>-help&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nh&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-nx&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-q&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-batch&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-cd&lt;span class="o">=&lt;/span>dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-f&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-b bps&lt;span class="o">]&lt;/span>
-&lt;span class="o">[&lt;/span>-tty&lt;span class="o">=&lt;/span>dev&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-s symfile&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-e prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-se prog&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-c core&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-p procID&lt;span class="o">]&lt;/span>
-&lt;span class="o">[&lt;/span>-x cmds&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>-d dir&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>prog&lt;span class="p">|&lt;/span>prog procID&lt;span class="p">|&lt;/span>prog core&lt;span class="o">]&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="选项">选项&lt;/h1>
-&lt;p>选项之外的任何参数都需要指定可执行文件和核心文件（或进程ID）。
-所有选项和命令行参数都按顺序处理。使用' -x &amp;lsquo;选项时，顺序会有所不同。&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">-help
--h 列出所有选项，并提供简要说明。
--symbols&lt;span class="o">=&lt;/span>file
--s file
-从file文件中读取符号表（symbol table）。
--write
-允许写入可执行文件和core文件。
--exec&lt;span class="o">=&lt;/span>file
--e file
-使用file文件作为可执行文件在适当时执行，并与核心转储一起检查纯数据。
--se&lt;span class="o">=&lt;/span>file
-从file文件中读取符号表并将file用作可执行文件。
--core&lt;span class="o">=&lt;/span>file
--c file
-指定core文件。
--command&lt;span class="o">=&lt;/span>file
--x file
-执行file文件中的GDB命令。（自动化？）
--ex &lt;span class="nb">command&lt;/span>
-执行给定的GDB命令。
--directory&lt;span class="o">=&lt;/span>directory
--d directory
-将目录添加到路径&lt;span class="o">(&lt;/span>path&lt;span class="o">)&lt;/span>以搜索源文件。
--nh 不要执行~/.gdbinit中的命令。
--nx
--n 不要执行任何&lt;span class="s1">&amp;#39;.gdbinit&amp;#39;&lt;/span>初始化文件中的命令。
--quiet
--q &lt;span class="s2">&amp;#34;Quiet&amp;#34;&lt;/span>. 不要打印介绍性和版权信息。这些消息也在批处理模式下被抑制。
--batch
-以批处理模式运行。
-在执行完用-x选项指定的所有命令文件&lt;span class="o">(&lt;/span>如果不禁止，则为.gdbinit&lt;span class="o">)&lt;/span>后，以0退出。
-如果在运行命令文件中的GDB命令时发生错误，则以非0退出。
-批处理模式可用于将GDB作为过滤器运行，例如在另一台计算机上下载并运行程序&lt;span class="p">;&lt;/span>
-为了使这个更有用，消息程序正常退出。【？？？】
--cd&lt;span class="o">=&lt;/span>directory
-使用directory作用GDB的工作目录（而不是用当前目录）
--fullname
--f Emacs在将GDB作为子进程运行时设置此选项。
-它告诉GDB每次显示堆栈帧时都以标准的，可识别的方式输出完整的文件名和行号（包括每次程序停止时）。
-这种可识别的格式看起来像两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符，后跟文件名，行号和以冒号分隔的字符位置，以及换行符。
-Emacs-to-GDB接口程序使用两个&lt;span class="s1">&amp;#39;\032&amp;#39;&lt;/span>字符作为信号来显示帧的源代码。
--b bps
-设置GDB用于远程调试的任何串行接口的线性速度（波特率或每秒位数）。
--tty&lt;span class="o">=&lt;/span>device
-使用device运行程序的标准输入和输出。
-&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="示例">示例&lt;/h1>
-&lt;h2 id="编译并跟踪">编译并跟踪&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gcc test.c -o &lt;span class="nb">test&lt;/span> -g
-gdb &lt;span class="nb">test&lt;/span>
-&amp;lt;gdb命令&amp;gt;
-&amp;lt;b main&amp;gt;: 断点
-&amp;lt;b 10&amp;gt;: 第10行设置断点
-&amp;lt;d 10&amp;gt;: 删除第10行的断点
-&amp;lt;info b&amp;gt;: 查看断点信息
-&amp;lt;c&amp;gt;: 继续
-&amp;lt;n&amp;gt;: 下一行
-&amp;lt;s&amp;gt;: 下一行，进入函数。
-&amp;lt;r&amp;gt;: 执行
-&amp;lt;c&amp;gt;: 继续执行
-&amp;lt;i r&amp;gt;: 显示寄存器的信息
-&amp;lt;bt&amp;gt;: 显示堆栈
-&amp;lt;list 10&amp;gt;: 从第10行开始显示代码
-&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="疑问">疑问&lt;/h1>
-&lt;h1 id="拓展">拓展&lt;/h1>
-&lt;ul>
-&lt;li>shell命令：info gdb&lt;/li>
-&lt;li>&lt;a class="link" href="https://sourceware.org/gdb/current/onlinedocs/gdb/" target="_blank" rel="noopener"
->gdb在线文档&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="http://mermaja.act.uji.es/docencia/is37/data/gdb.pdf" target="_blank" rel="noopener"
->A Guide to the GNU Source-Level Debugger&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h1 id="参考">参考&lt;/h1>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
->https://man.linuxde.net/gdb&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
@@ -1264,7 +1286,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -2120,7 +2142,7 @@ tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2
 &lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
 >https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
 linux man page&lt;/p>
-&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.png" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
 &lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
@@ -3824,7 +3846,7 @@ ushort *array; // GETALL/SETALL使用
 &lt;/li>
 &lt;li>删除信号量将导致等待此信号量的(睡眠中的)线程返回&lt;code>EIDRM(identifier removed)&lt;/code>错误。&lt;/li>
 &lt;li>指定SEM_UNDO时，进程结束后，信号量会被还原。&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
 &lt;h2 id="1-概述">1. 概述&lt;/h2>
 &lt;ul>
 &lt;li>System V 共享内存区在概念上类似于Posix共享内存区；
@@ -4523,7 +4545,7 @@ loading="lazy"
 &lt;li>交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.jpg" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
 &lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
 &lt;h1 id="工作过程">工作过程&lt;/h1>
 &lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
