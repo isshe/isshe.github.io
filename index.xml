@@ -170,7 +170,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/gdb" target="_blank" rel="noopener"
 >https://man.linuxde.net/gdb&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Lua —— 重载全局函数 require</title><link>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</link><pubDate>Sun, 23 Jan 2022 12:54:29 -0400</pubDate><guid>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</guid><description>&lt;img src="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.jpg" alt="Featured image of post Lua —— 重载全局函数 require" />&lt;h2 id="全局函数重载">全局函数重载&lt;/h2>
+&lt;/ul></description></item><item><title>Lua —— 重载全局函数 require</title><link>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</link><pubDate>Sun, 23 Jan 2022 12:54:29 -0400</pubDate><guid>https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/</guid><description>&lt;img src="https://isshe.site/p/lua-%E9%87%8D%E8%BD%BD%E5%85%A8%E5%B1%80%E5%87%BD%E6%95%B0-require/image.png" alt="Featured image of post Lua —— 重载全局函数 require" />&lt;h2 id="全局函数重载">全局函数重载&lt;/h2>
 &lt;p>在我个人的开源项目 &lt;a class="link" href="https://github.com/x-few/xway" target="_blank" rel="noopener"
 >xway&lt;/a> 的中有一个需求：允许用户写 Lua 来自定义一些模块，提供最大的灵活性，但是不把 Lua 模块保存成文件。要如何实现呢？怎么才能从内存中 require 一个模块？答案是重载 require 函数。
 利用 Lua 的环境（Environment）特性，在某个独立的环境中重载 require 函数。同时独立的环境也允许我们进行一些限制，例如每个用户只能访问自己的资源。不过，xway 项目计划是不支持多租户，所以限制相关的实现，还未进行相关探索及验证。&lt;/p>
@@ -338,7 +338,7 @@ bpftool cgroup tree
 &lt;li>消息：原像。&lt;/li>
 &lt;li>散列值：消息摘要、指纹。&lt;/li>
 &lt;li>完整性：一致性。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpeg" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
 &lt;p>用相同的秘钥进行加密和解密。&lt;/p>
 &lt;h1 id="比特序列">比特序列&lt;/h1>
 &lt;ul>
@@ -428,7 +428,7 @@ bpftool cgroup tree
 &lt;/li>
 &lt;/ul>
 &lt;h1 id="总结">总结&lt;/h1>
-&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
+&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
 &lt;h1 id="历史上著名的密码">历史上著名的密码&lt;/h1>
 &lt;ul>
 &lt;li>凯撒密码&lt;/li>
@@ -618,7 +618,7 @@ loading="lazy"
 alt="混合密码解密过程">
 &lt;/a>
 &lt;figcaption>混合密码解密过程&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.jpg" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.png" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
 &lt;h1 id="什么是秘钥">什么是秘钥？&lt;/h1>
 &lt;p>秘钥：一个巨大的数字。&lt;/p>
 &lt;blockquote>
@@ -731,7 +731,7 @@ alt="混合密码解密过程">
 &lt;/ul>
 &lt;/li>
 &lt;li>使用口令生成器和管理工具。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.png" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
 &lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
 &lt;ul>
 &lt;li>PGP: Pretty Good Privacy.&lt;/li>
@@ -771,7 +771,7 @@ alt="混合密码解密过程">
 &lt;li>弱伪随机数：只有随机性。&lt;/li>
 &lt;li>强伪随机数：具有随机性+不可预测性。&lt;/li>
 &lt;li>真随机数：同时具备上面三个性质。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.jpg" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十章-证书</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.png" alt="Featured image of post 图解密码技术 —— 第十章-证书" />&lt;h2 id="证书为公钥加上数字签名">证书——为公钥加上数字签名&lt;/h2>
 &lt;blockquote>
 &lt;p>这章不是太理解。&lt;/p>
 &lt;/blockquote>
@@ -971,7 +971,7 @@ loading="lazy"
 alt="模式对比">
 &lt;/a>
 &lt;figcaption>模式对比&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.png" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Sat, 25 Dec 2021 02:22:19 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.jpg" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
 &lt;h1 id="1-记录">1. 记录&lt;/h1>
 &lt;blockquote>
 &lt;p>postgresql 以 12 版本为例&lt;/p>
@@ -1039,7 +1039,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;p>另外可以看到结果中显示的是 &lt;code>Seq Scan&lt;/code>，顺序扫描，所以可以为它创建一个索引，变成 &lt;code>Index Scan&lt;/code>。&lt;/p>
 &lt;pre tabindex="0">&lt;code>create index test_index on test_table (created);
 &lt;/code>&lt;/pre>&lt;p>然后再次分析，如果时间没有明显减少，可以再去掉此索引。
-重复以上步骤，即可逐步减少系统中的慢查询。&lt;/p></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Tue, 14 Dec 2021 03:14:49 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
+重复以上步骤，即可逐步减少系统中的慢查询。&lt;/p></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Tue, 14 Dec 2021 03:14:49 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
 &lt;h2 id="1-什么是读写锁">1. 什么是读写锁&lt;/h2>
 &lt;ul>
 &lt;li>互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）
@@ -1080,7 +1080,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;span class="c1">// 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_getpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_setpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 中断</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.png" alt="Featured image of post Linux 内核 —— 中断" />&lt;h1 id="中断">中断&lt;/h1>
 &lt;h2 id="1-硬件中断注册">1. 硬件中断注册&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;linux/interrupt.h&amp;gt;&lt;/span>&lt;span class="cp">
 &lt;/span>&lt;span class="cp">&lt;/span>
@@ -1147,7 +1147,7 @@ DCL: GRANT/ROLLBACK/COMMIT&lt;/p>
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
 &lt;p>NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。
 注册/注销/开启/关闭是四个不同的操作，不要混淆。
 相关讨论，主要以网络设备为主。&lt;/p>
@@ -1455,7 +1455,7 @@ ip neigh del 192.168.2.149 dev ens33&lt;/p>
 &lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
 >https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
 &lt;li>linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
 &lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
 &lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
 &lt;ul>
@@ -1855,7 +1855,7 @@ strace -ttt ls&lt;/p>
 &lt;li>&lt;a class="link" href="https://man.linuxde.net/strace" target="_blank" rel="noopener"
 >https://man.linuxde.net/strace&lt;/a>&lt;/li>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpg" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— tcpdump</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.png" alt="Featured image of post Linux 命令 —— tcpdump" />&lt;h2 id="tcpdump">tcpdump&lt;/h2>
 &lt;p>tcpdump - dump traffic on a network（转储网络上的流量）。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">tcpdump &lt;span class="o">[&lt;/span> -AbdDefhHIJKlLnNOpqStuUvxX# &lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span> -B buffer_size &lt;span class="o">]&lt;/span>
@@ -2306,7 +2306,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;h1 id="参考">参考&lt;/h1>
 &lt;ul>
 &lt;li>Linux man page&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
 &lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
 &lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
@@ -3701,7 +3701,7 @@ loading="lazy"
 &lt;li>支持。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.jpeg" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
 &lt;ul>
 &lt;li>消息队列可认为是一个消息链表。具有&lt;code>随内核的持续性&lt;/code>&lt;/li>
 &lt;li>有读权限的线程可以从队列中取走信息；&lt;/li>
@@ -3846,7 +3846,7 @@ ushort *array; // GETALL/SETALL使用
 &lt;/li>
 &lt;li>删除信号量将导致等待此信号量的(睡眠中的)线程返回&lt;code>EIDRM(identifier removed)&lt;/code>错误。&lt;/li>
 &lt;li>指定SEM_UNDO时，进程结束后，信号量会被还原。&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
 &lt;h2 id="1-概述">1. 概述&lt;/h2>
 &lt;ul>
 &lt;li>System V 共享内存区在概念上类似于Posix共享内存区；
@@ -4343,7 +4343,7 @@ loading="lazy"
 &lt;li>详见&lt;a class="link" href="Examples/6_ex_shm_test2_map_inc_file.c" >示例&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之管道</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.png" alt="Featured image of post 操作系统 —— 进程间通信之管道" />&lt;h1 id="管道">管道&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之管道</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</link><pubDate>Mon, 13 Dec 2021 02:51:23 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之管道" />&lt;h1 id="管道">管道&lt;/h1>
 &lt;ul>
 &lt;li>管道的局限性
 &lt;ul>
@@ -4545,7 +4545,7 @@ loading="lazy"
 &lt;li>交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.jpg" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
 &lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
 &lt;h1 id="工作过程">工作过程&lt;/h1>
 &lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
@@ -4693,7 +4693,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 12 Dec 2021 11:35:47 -0400</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
