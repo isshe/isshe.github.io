@@ -6,7 +6,7 @@
 <meta property="og:description" content="Posix共享内存区  共享内存区是可用IPC形式中最快的。 一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。 非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互  非共享缓冲区读文件传给另一个进程写  共享缓冲区读文件传给另一个进程写：2次内核与进程的交互  共享缓冲区读文件传给另一个进程写   1. 相关函数 1.1 mmap  mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。 使用此函数有3个目的：  使用普通文件以提供内存映射I/O； 使用特殊文件以提供匿名内存映射； 使用shm_open以提供无亲缘关系进程间的Posix共享内存区。   映射文件示意图：  映射文件示意图   #include &amp;lt;sys/mman.h&amp;gt; // addr: 指定fd映射到的进程内空间的起始地址； // len: 映射的长度——字节数； // offset: 从被映射文件开头起offset字节开始映射； // prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE) // * PROT_NONE Pages may not be accessed. // * PROT_READ Pages may be read. // * PROT_WRITE Pages may be written. // * PROT_EXEC Pages may be executed.">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="posix"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2021-12-13T02:51:23-04:00"><meta property="article:modified_time" content="2021-12-13T02:51:23-04:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="posix"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png">
 <meta name=twitter:title content="操作系统 —— 进程间通信之共享内存">
 <meta name=twitter:description content="Posix共享内存区  共享内存区是可用IPC形式中最快的。 一旦内存区映射到共享它的进程的地址空间，这些进程间的数据传递就不需要经过内核了；但是读写内存区时，需要进行同步。 非共享缓冲区读文件传给另一个进程写：4次内核与内核的交互  非共享缓冲区读文件传给另一个进程写  共享缓冲区读文件传给另一个进程写：2次内核与进程的交互  共享缓冲区读文件传给另一个进程写   1. 相关函数 1.1 mmap  mmap: 把一个文件或一个Posix共享内存区对象映射到调用进程的地址空间。 使用此函数有3个目的：  使用普通文件以提供内存映射I/O； 使用特殊文件以提供匿名内存映射； 使用shm_open以提供无亲缘关系进程间的Posix共享内存区。   映射文件示意图：  映射文件示意图   #include &amp;lt;sys/mman.h&amp;gt; // addr: 指定fd映射到的进程内空间的起始地址； // len: 映射的长度——字节数； // offset: 从被映射文件开头起offset字节开始映射； // prot: 属性/模式(PROT_READ|PROT_WRITE|PROT_EXEC|PROT_NONE) // * PROT_NONE Pages may not be accessed. // * PROT_READ Pages may be read. // * PROT_WRITE Pages may be written. // * PROT_EXEC Pages may be executed."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_lt_mmapsize.png">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Dec 13, 2021</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -216,19 +216,9 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.fc5c66d13894ce5963a5112e24ba124a_hu0e90a58acef5f9348c08b73e09b51191_56903_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-/Fxm0TiUzlljpREuJLoSSg==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.4a90a5f7982cce2e46d9599fd9639bf3_hucc733ea9f80543ed155794d1cf5190f6_23081_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-SpCl95gszi5G2Vmf2WOb8w==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.27d391a14e68b5eb559333f92e869f66_hu145d34d1ec22bcb129ce02135b210b81_32414_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-J9ORoU5otetVkzP5LoafZg==">
 </div>
 <div class=article-details>
 <h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
@@ -242,6 +232,16 @@ extended">
 </div>
 <div class=article-details>
 <h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
 </div>
 </a>
 </article>

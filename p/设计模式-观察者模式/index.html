@@ -8,7 +8,7 @@
  2. 解决什么问题？如何解决？  （易用、低耦合、高度协作）解决一个对象状态改变通知其他多个对象的问题。  3. 优缺点是什么？ 3.1 优点  支持一对多通信。 符合开闭原则。【疑问？？？】 在主题和观察者之间建立一个抽象的耦合。【抽象的耦合？？？】  3.2 缺点  当一个主题的观察者过多时，通知会比较耗费时间。 当 主题 和 观察者有循环依赖时，会导致循环调用。 观察者无法知道变化过程，只能知道变化结果。  4. 使用场景是什么？  一个对象要通知其他[多个]对象自己改变时（可能并不知道这些对象是谁）； 一个对象要导致其他[多个]对象自己改变时； 需要创建触发链时；  5. 应用实例？  天气预报服务器数据更新，客户端实时展示更新后的数据。（《Head First设计模式》示例） 电子商务网站向多个用户推送商品信息。  x. 疑问  观察者如何对感兴趣的事情进行订阅、取消订阅？  主题提供注册接口，以供观察者对主题进行订阅； 主题提供取消订阅接口，以供观察者对主题进行取消订阅；   主题如何存储观察者？  可存储在数组或其他数据结构中。   主题如何通知观察者？  遍历所有观察者，一个一个进行通知。   mqtt是否也是观察者模式的一种实现？ 怎么理解开闭原则，在本模式中，哪部分符合开闭原则？  开闭原则是针对类来说的。    y.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2021-12-12T07:15:30-04:00"><meta property="article:modified_time" content="2021-12-12T07:15:30-04:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png">
 <meta name=twitter:title content="设计模式 —— 观察者模式">
 <meta name=twitter:description content="观察者模式 1. 基础概念  定义：定义了对象之间的一对多依赖，这样依赖，当一个对象改变状态时，它的所有依赖者都会收到通知并自动更新。 类图：  类图  出场嘉宾  主题(Subject)：出版者、被观察者、 观察者(Observer)：订阅者、 具体主题(Concrete Subject): 对主题的实现 具体观察者(Concrete Observer): 对观察者的实现     观察者模式就和报纸订阅/取消订阅、邮件订阅/取消订阅类似。 出版者（主题）+ 订阅者（观察者）=观察者模式
  2. 解决什么问题？如何解决？  （易用、低耦合、高度协作）解决一个对象状态改变通知其他多个对象的问题。  3. 优缺点是什么？ 3.1 优点  支持一对多通信。 符合开闭原则。【疑问？？？】 在主题和观察者之间建立一个抽象的耦合。【抽象的耦合？？？】  3.2 缺点  当一个主题的观察者过多时，通知会比较耗费时间。 当 主题 和 观察者有循环依赖时，会导致循环调用。 观察者无法知道变化过程，只能知道变化结果。  4. 使用场景是什么？  一个对象要通知其他[多个]对象自己改变时（可能并不知道这些对象是谁）； 一个对象要导致其他[多个]对象自己改变时； 需要创建触发链时；  5. 应用实例？  天气预报服务器数据更新，客户端实时展示更新后的数据。（《Head First设计模式》示例） 电子商务网站向多个用户推送商品信息。  x. 疑问  观察者如何对感兴趣的事情进行订阅、取消订阅？  主题提供注册接口，以供观察者对主题进行订阅； 主题提供取消订阅接口，以供观察者对主题进行取消订阅；   主题如何存储观察者？  可存储在数组或其他数据结构中。   主题如何通知观察者？  遍历所有观察者，一个一个进行通知。   mqtt是否也是观察者模式的一种实现？ 怎么理解开闭原则，在本模式中，哪部分符合开闭原则？  开闭原则是针对类来说的。    y."><meta name=twitter:card content="summary_large_image">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Dec 12, 2021</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -165,12 +165,32 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
+<h2 class=article-title>设计模式 —— 外观模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.eab7371ce4fb27578e68f5a30eab0e60_hu771149e49c462b26432a5b0e1acd417c_27093_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 策略模式" data-hash="md5-6rc3HOT7J1eOaPWjDqsOYA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 策略模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_hu529bcb407ef01bc0200901c2da9427ff_24123_3cd25cdf4f10dc74637ae6e254597b79.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-XlzLibmUXUQzTj+yojJ8vw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 适配器模式</h2>
 </div>
 </a>
 </article>
@@ -185,32 +205,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/_hub21b9d9ba8c98aea8f5b827a3dfb3432_245501_d5e8b22c5a2d5f2e661bac399fd96bf1.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-NQ4CpgQXqQPoBM0M0KTchw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.aae04168a97bebb63438e632acf36c6e_hu5f455159e5a15331f999b11eee4a3509_10198_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-quBBaKl767Y0OOYyrPNsbg==">
-</div>
-<div class=article-details>
-<h2 class=article-title>设计模式 —— 代理模式</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
-</div>
-<div class=article-details>
-<h2 class=article-title>设计模式 —— 外观模式</h2>
+<h2 class=article-title>设计模式 —— 装饰者模式</h2>
 </div>
 </a>
 </article>
