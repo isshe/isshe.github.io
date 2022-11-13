@@ -239,7 +239,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpeg" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
 &lt;p>NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。
 注册/注销/开启/关闭是四个不同的操作，不要混淆。
 相关讨论，主要以网络设备为主。&lt;/p>
@@ -317,7 +317,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;/blockquote>
 &lt;ul>
 &lt;li>就注册而言，虚拟设备和真实设备有何差别？&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— git</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.png" alt="Featured image of post Linux 命令 —— git" />&lt;h2 id="git">git&lt;/h2>
 &lt;h1 id="submodule">submodule&lt;/h1>
 &lt;h2 id="添加submodule">添加submodule：&lt;/h2>
 &lt;pre tabindex="0">&lt;code>git submodule add &amp;lt;subproject URL&amp;gt;
@@ -378,7 +378,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -1651,7 +1651,7 @@ bpftool cgroup tree
 &lt;p>3DES(TDEA)：将DES重复3次。
 分组长度为：&lt;code>64 * 3 = 192&lt;/code>&lt;/p>
 &lt;h1 id="aes">AES&lt;/h1>
-&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
+&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.png" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
 &lt;p>公钥密码：存在加密秘钥(公钥)和解密秘钥（私钥）。用公钥加密。
 数字签名：签名秘钥（私钥）和验证秘钥（公钥）。用私钥加密。
 &lt;strong>数字签名并不是为了保证机密性。&lt;/strong>&lt;/p>
@@ -2004,7 +2004,7 @@ alt="混合密码解密过程">
 &lt;/ul>
 &lt;/li>
 &lt;li>使用口令生成器和管理工具。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.png" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
 &lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
 &lt;ul>
 &lt;li>PGP: Pretty Good Privacy.&lt;/li>
@@ -4560,7 +4560,7 @@ loading="lazy"
 &lt;li>详见&lt;a class="link" href="Examples/6_ex_shm_test2_map_inc_file.c" >示例&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之管道</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.png" alt="Featured image of post 操作系统 —— 进程间通信之管道" />&lt;h1 id="管道">管道&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之管道</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之管道" />&lt;h1 id="管道">管道&lt;/h1>
 &lt;ul>
 &lt;li>管道的局限性
 &lt;ul>
@@ -4619,7 +4619,7 @@ loading="lazy"
 &lt;li>详见示例：&lt;a class="link" href="Examples/3_ex_read_and_write.c" >3_ex_read_and_write.c&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.png" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
 &lt;ul>
 &lt;li>互斥锁及条件变量是同步的基本组成部分。&lt;/li>
 &lt;li>互斥锁及条件变量出自&lt;code>Posix.1&lt;/code>线程标准；
@@ -4962,7 +4962,7 @@ alt="典型DHCP会话的模式">
 >DHCP wiki中文&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://tools.ietf.org/html/rfc2132" target="_blank" rel="noopener"
 >rfc2132&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— DNS</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.png" alt="Featured image of post 网络协议 —— DNS" />&lt;h2 id="dns">DNS&lt;/h2>
 &lt;p>DNS - 域名系统（Domain Name System）。&lt;/p>
 &lt;ul>
 &lt;li>是一个将&lt;code>域名&lt;/code>和&lt;code>IP地址&lt;/code>进行映射的&lt;code>分布式数据库&lt;/code>。&lt;/li>
@@ -5170,7 +5170,7 @@ Additional | &amp;lt;empty&amp;gt; |
 >wiki&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
 >wiki中文&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.png" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.jpg" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
 &lt;ul>
 &lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
 &lt;li>ICMP是互联网协议族的核心协议之一。&lt;/li>
