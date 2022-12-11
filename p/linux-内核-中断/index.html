@@ -8,11 +8,11 @@
  接收一帧：最常见、标准的情况。 传输失败； DMA传输已成功完成；  drivers/net/3c59x.c有相关范例。   设备有足够内存处理新传输；  4.">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="process"><meta property="article:tag" content="linux 内核"><meta property="article:tag" content="kernel"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="process"><meta property="article:tag" content="linux 内核"><meta property="article:tag" content="kernel"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg">
 <meta name=twitter:title content="Linux 内核 —— 中断">
 <meta name=twitter:description content="中断 1. 硬件中断注册 #include &amp;lt;linux/interrupt.h&amp;gt; static inline int __must_check request_irq(unsigned int irq, irq_handler_t handler, unsigned long flags, const char *name, void *dev)  作用：申请一个中断线。 参数：  irq: 中断线号 handler: 中断处理函数 flags: name: dev:    2. 硬件中断释放 #include &amp;lt;linux/interrupt.h&amp;gt; const void *free_irq(unsigned int irq, void *dev_id);  作用：释放一个中断线。如果没有其他设备注册该IRQ线，就关闭该IRQ。 参数：  irq: 中断线号。 dev_id: 设备标识。    3. 中断类型 网络设备常见的中断事件类型：
  接收一帧：最常见、标准的情况。 传输失败； DMA传输已成功完成；  drivers/net/3c59x.c有相关范例。   设备有足够内存处理新传输；  4."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.png">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -31,7 +31,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/>
-<img src=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu771cd80d939141067a79c024c62c95e0_18175_800x0_resize_box_3.png srcset="/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu771cd80d939141067a79c024c62c95e0_18175_800x0_resize_box_3.png 800w, /p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu771cd80d939141067a79c024c62c95e0_18175_1600x0_resize_box_3.png 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 内核 —— 中断">
+<img src=/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu55e9525b31cc013ff4b823f79d803bd9_80202_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu55e9525b31cc013ff4b823f79d803bd9_80202_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%86%85%E6%A0%B8-%E4%B8%AD%E6%96%AD/image_hu55e9525b31cc013ff4b823f79d803bd9_80202_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 内核 —— 中断">
 </a>
 </div>
 <div class=article-details>
@@ -144,7 +144,7 @@ Linux 内核
 <article class=has-image>
 <a href=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/>
 <div class=article-image>
-<img src=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 内核 —— 设备驱动" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
+<img src=/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 内核 —— 设备驱动" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 内核 —— 设备驱动</h2>
