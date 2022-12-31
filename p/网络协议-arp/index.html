@@ -10,12 +10,12 @@
  第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。 第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。  收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。   第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。 第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。 第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。  问题 什么是ARP欺骗？  地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到应答报文的主机，不会校验报文的真实性，就会加到ARP缓存中。 由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。  ">
 <meta property="og:url" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="ARP"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="ARP"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.jpg">
 <meta name=twitter:title content="网络协议 —— ARP">
 <meta name=twitter:description content="ARP协议 ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。
 工作过程 当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：
  第1步：主机A根据路由表内容，确定用于访问主机B的转发IP地址。主机A在本地ARP缓存中查找与主机B的IP匹配MAC地址。 第2步：如果主机A没有找到映射，则将ARP请求帧广播到本地网络上的所有主机。  收到请求的主机检查自己的IP是否匹配，不匹配就丢弃此ARP请求。   第3步：主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。 第4步：主机B将包含其MAC地址的ARP回复消息直接发送回主机A。 第5步：当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。  问题 什么是ARP欺骗？  地址解析协议是建立在网络中各个主机可互相信任的基础上的，收到应答报文的主机，不会校验报文的真实性，就会加到ARP缓存中。 由此，攻击者可以向某一主机发送伪ARP应答报文，使此主机发送的信息无法到达预期的主机或者到达错误的主机，这就是ARP欺骗。  "><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png">
+<meta name=twitter:image content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -34,7 +34,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu771cd80d939141067a79c024c62c95e0_18175_800x0_resize_box_3.png srcset="/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu771cd80d939141067a79c024c62c95e0_18175_800x0_resize_box_3.png 800w, /p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hu771cd80d939141067a79c024c62c95e0_18175_1600x0_resize_box_3.png 1600w" width=800 height=450 loading=lazy alt="Featured image of post 网络协议 —— ARP">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hucd6041f2c8064f45bbea052ae228c089_60588_800x0_resize_q75_box.jpg srcset="/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hucd6041f2c8064f45bbea052ae228c089_60588_800x0_resize_q75_box.jpg 800w, /p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image_hucd6041f2c8064f45bbea052ae228c089_60588_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post 网络协议 —— ARP">
 </a>
 </div>
 <div class=article-details>
@@ -102,6 +102,26 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.0fc4013d2d2472d8a97996f49b5da20d_hu3d03a01dcc18bc5be0e67db3d8d209a6_109779_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-D8QBPS0kctipeZb0m12iDQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— ICMP</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.d955855e0618621babc052b5dbe20fc5_hu75bfb8e699f04dc0c75c201fe548798b_46326_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-2VWFXgYYYhurwFK12+IPxQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
 <div class=article-image>
 <img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DHCP" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
@@ -112,32 +132,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
-<div class=article-image>
-<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.b841352646c368e3d11bbf4727910450_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_250x150_fill_q75_box_smart1.jpeg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-uEE1JkbDaOPRG79HJ5EEUA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>VLAN 介绍</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
 <div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— DNS</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/>
-<div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ICMP" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
-</div>
-<div class=article-details>
-<h2 class=article-title>网络协议 —— ICMP</h2>
 </div>
 </a>
 </article>
