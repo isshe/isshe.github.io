@@ -12,13 +12,13 @@
   A用单向散列函数计算消息的散列值。 A用私钥对散列值进行加密。 A将消息和签名发送给B。 B用A的g公钥对收到的签名进行解密。 B将签名解密后得到的散列值与A发送的消息的散列值进行对比。一致，验证成功，否则，验证失败。  应用场景  信息公告  确保是目标组织发布的目标公告，法制被篡改。   软件下载  软件下载完成后，验证签名，防止软件遭到篡改。（并不能检测软件是否是恶意的）   公钥证书。  验证数字签名时，需要合法的公钥。对公钥进行签名得到的就是公钥证书。【第三方？？？】   SSL/TLS。  使用服务器证书验证服务器身份。 服务器证书：加上数字签名的服务器公钥。    总结 对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。">
 <meta property="og:url" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.png">
 <meta name=twitter:title content="图解密码技术 —— 第九章-数字签名">
 <meta name=twitter:description content="数字签名 公钥密码：存在加密秘钥(公钥)和解密秘钥（私钥）。用公钥加密。 数字签名：签名秘钥（私钥）和验证秘钥（公钥）。用私钥加密。 数字签名并不是为了保证机密性。
 签名的生成和验证 签名秘钥：私钥。用于对消息进行签名——生成签名。只能一人持有。 验证秘钥：公钥。用于验证消息的签名——验证签名。可以多人持有。
 对消息签名的过程  A用自己的私钥进行加密。 A将签名和消息发送给B。 B用A的公钥进行解密（签名验证）。 B将解密后的消息与A发过来的消息进行对比。一致，则验证成功，否则，验证失败。  对消息散列值签名的过程  公钥密码算法较慢，如果直接对消息进行签名，会比较耗时。
   A用单向散列函数计算消息的散列值。 A用私钥对散列值进行加密。 A将消息和签名发送给B。 B用A的g公钥对收到的签名进行解密。 B将签名解密后得到的散列值与A发送的消息的散列值进行对比。一致，验证成功，否则，验证失败。  应用场景  信息公告  确保是目标组织发布的目标公告，法制被篡改。   软件下载  软件下载完成后，验证签名，防止软件遭到篡改。（并不能检测软件是否是恶意的）   公钥证书。  验证数字签名时，需要合法的公钥。对公钥进行签名得到的就是公钥证书。【第三方？？？】   SSL/TLS。  使用服务器证书验证服务器身份。 服务器证书：加上数字签名的服务器公钥。    总结 对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。"><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg">
+<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -37,7 +37,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu099c4e73c5c211f1100c28348bb87258_46244_800x0_resize_q75_box.jpg srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu099c4e73c5c211f1100c28348bb87258_46244_800x0_resize_q75_box.jpg 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu099c4e73c5c211f1100c28348bb87258_46244_1600x0_resize_q75_box.jpg 1600w" width=800 height=1067 loading=lazy alt="Featured image of post 图解密码技术 —— 第九章-数字签名">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu276afff563da1172921906a0b027a02a_24849_800x0_resize_box_3.png srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu276afff563da1172921906a0b027a02a_24849_800x0_resize_box_3.png 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image_hu276afff563da1172921906a0b027a02a_24849_1600x0_resize_box_3.png 1600w" width=800 height=400 loading=lazy alt="Featured image of post 图解密码技术 —— 第九章-数字签名">
 </a>
 </div>
 <div class=article-details>
@@ -133,42 +133,22 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.478a303276cc042ae1eb77eb137c61eb_hu0e77c244590ed72a6fadd860f5b16072_49812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十三章-PGP" data-hash="md5-R4owMnbMBCrh63frE3xh6w==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第十三章-PGP</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第一章-环游密码世界</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第十一章-秘钥</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/>
 <div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.2e2532e9d71535fc63dc6256efab3eb7_hu02818017db472601873aa929559d13bb_34206_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十章-证书" data-hash="md5-LiUy6dcVNfxj3GJW76s+tw==">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.8ce23cec9d687eca139091a7be4ff154_hue6bacf8a28e00d96715d6f7da1dbeefd_38955_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十章-证书" data-hash="md5-jOI87J1ofsoTkJGnvk/xVA==">
 </div>
 <div class=article-details>
 <h2 class=article-title>图解密码技术 —— 第十章-证书</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.4996f2bab4f9ab8850dc86aa701f2be6_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" data-hash="md5-SZbyurT5q4hQ3IaqcB8r5g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第八章-消息认证码</h2>
 </div>
 </a>
 </article>
@@ -179,6 +159,26 @@ extended">
 </div>
 <div class=article-details>
 <h2 class=article-title>图解密码技术 —— 第六章-混合密码系统</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.2fa2be21eaace4e918c97d2ad77ec60c_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" data-hash="md5-L6K+Ieqs5OkYyX0q137GDA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第二章-历史上的密码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/image.75f42b394b2ee79c8706f6f2c2495518_hu9cf09c1c436f94f04ea86d28afa0e688_52288_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第14章-SSL-TLS" data-hash="md5-dfQrOUsu55yHBvbywklVGA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第14章-SSL-TLS</h2>
 </div>
 </a>
 </article>
