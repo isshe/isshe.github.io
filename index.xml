@@ -547,7 +547,7 @@ ip neigh del 192.168.2.149 dev ens33&lt;/p>
 &lt;li>&lt;a class="link" href="https://ss64.com/bash/ip.html" target="_blank" rel="noopener"
 >https://ss64.com/bash/ip.html&lt;/a>&lt;/li>
 &lt;li>linux man page&lt;/li>
-&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.png" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
+&lt;/ul></description></item><item><title>Linux 命令 —— modprobe</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.jpg" alt="Featured image of post Linux 命令 —— modprobe" />&lt;h2 id="modprobe">modprobe&lt;/h2>
 &lt;p>modprobe - 向Linux内核添加或从内核移除模块。&lt;/p>
 &lt;p>modprobe智能地从Linux内核添加或删除模块：&lt;/p>
 &lt;ul>
@@ -676,7 +676,7 @@ modprobe &lt;span class="o">[&lt;/span>--dump-modversions&lt;span class="o">]&lt
 &lt;li>lsmod&lt;/li>
 &lt;li>modinfo&lt;/li>
 &lt;/ul>
-&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
+&lt;h1 id="参考">参考&lt;/h1></description></item><item><title>Linux 命令 —— netstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg" alt="Featured image of post Linux 命令 —— netstat" />&lt;h2 id="netstat">netstat&lt;/h2>
 &lt;p>显示当前的连接情况。（UDP、TCP、UNIX、ICMP等）
 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。&lt;/p>
 &lt;h1 id="1-介绍">1. 介绍&lt;/h1>
@@ -1234,7 +1234,7 @@ tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2
 &lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
 >https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
 linux man page&lt;/p>
-&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.png" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
 &lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
@@ -1450,7 +1450,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;li>&lt;code>new_env&lt;/code> 是一个继承于全局环境(_G)的新环境，用于执行自定义代码。&lt;/li>
 &lt;li>&lt;code>setfenv&lt;/code> 设置函数的环境（mb 模块被 loadstring 成函数了）&lt;/li>
 &lt;li>&lt;code>ctype.count&lt;/code> 模块的作用是用于区分是否调用了 ffi 模块，当加载了 ffi 模块时，ctype.count 将增加，因此可以通过判断 pcall 前后 ctype.count 是否变化来判断使用调用了 ffi 模块。&lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.png" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -1575,7 +1575,7 @@ bpftool cgroup tree
 &lt;li>应用数据协议&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第一章-环游密码世界</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.jpg" alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" />&lt;h2 id="第一章-环游密码世界">第一章 环游密码世界&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第一章-环游密码世界</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.png" alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" />&lt;h2 id="第一章-环游密码世界">第一章 环游密码世界&lt;/h2>
 &lt;h1 id="名词">名词&lt;/h1>
 &lt;p>&lt;code>明文&lt;/code>：加密前的消息。
 &lt;code>密文&lt;/code>：加密后的消息。
@@ -1611,7 +1611,7 @@ bpftool cgroup tree
 &lt;li>消息：原像。&lt;/li>
 &lt;li>散列值：消息摘要、指纹。&lt;/li>
 &lt;li>完整性：一致性。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第三章-对称密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第三章-对称密码" />&lt;h2 id="对称密码">对称密码&lt;/h2>
 &lt;p>用相同的秘钥进行加密和解密。&lt;/p>
 &lt;h1 id="比特序列">比特序列&lt;/h1>
 &lt;ul>
@@ -1701,7 +1701,7 @@ bpftool cgroup tree
 &lt;/li>
 &lt;/ul>
 &lt;h1 id="总结">总结&lt;/h1>
-&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
+&lt;p>&lt;strong>对称密码的秘钥是机密性的精华，单向散列函数的散列值是完整性的精华。&lt;/strong>&lt;/p></description></item><item><title>图解密码技术 —— 第二章-历史上的密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" />&lt;h2 id="第二章-历史上的密码">第二章 历史上的密码&lt;/h2>
 &lt;h1 id="历史上著名的密码">历史上著名的密码&lt;/h1>
 &lt;ul>
 &lt;li>凯撒密码&lt;/li>
@@ -1724,7 +1724,7 @@ bpftool cgroup tree
 &lt;li>破解方式：频率分析&lt;/li>
 &lt;/ul>
 &lt;h1 id="enigma">Enigma&lt;/h1>
-&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
+&lt;p>略&lt;/p></description></item><item><title>图解密码技术 —— 第五章-公钥密码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" />&lt;h2 id="第五章-公钥密码">第五章 公钥密码&lt;/h2>
 &lt;h1 id="秘钥配送问题">秘钥配送问题&lt;/h1>
 &lt;ul>
 &lt;li>解决方法
@@ -2004,7 +2004,7 @@ alt="混合密码解密过程">
 &lt;/ul>
 &lt;/li>
 &lt;li>使用口令生成器和管理工具。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.png" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
 &lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
 &lt;ul>
 &lt;li>PGP: Pretty Good Privacy.&lt;/li>
@@ -2023,7 +2023,7 @@ alt="混合密码解密过程">
 &lt;ul>
 &lt;li>PGP采用的确认&lt;code>公钥&lt;/code>合法性的方法。&lt;/li>
 &lt;li>注意：&lt;code>公钥是否合法&lt;/code>和&lt;code>所有者是否可信&lt;/code>是两个不同的问题，因为尽管公钥合法，其所有者也可以是不可信的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.png" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
 &lt;h1 id="随机数的作用使用场景是什么">随机数的作用？使用场景是什么？&lt;/h1>
 &lt;ul>
 &lt;li>生成秘钥：用于对称密码和消息认证码。&lt;/li>
@@ -4063,7 +4063,7 @@ ushort *array; // GETALL/SETALL使用
 &lt;/li>
 &lt;li>删除信号量将导致等待此信号量的(睡眠中的)线程返回&lt;code>EIDRM(identifier removed)&lt;/code>错误。&lt;/li>
 &lt;li>指定SEM_UNDO时，进程结束后，信号量会被还原。&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 共享内存</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" />&lt;h1 id="system-v-共享内存区">System V 共享内存区&lt;/h1>
 &lt;h2 id="1-概述">1. 概述&lt;/h2>
 &lt;ul>
 &lt;li>System V 共享内存区在概念上类似于Posix共享内存区；
@@ -4619,7 +4619,7 @@ loading="lazy"
 &lt;li>详见示例：&lt;a class="link" href="Examples/3_ex_read_and_write.c" >3_ex_read_and_write.c&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.png" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之互斥锁、条件变量</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%BA%92%E6%96%A5%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之互斥锁、条件变量" />&lt;h1 id="互斥锁与条件变量">互斥锁与条件变量&lt;/h1>
 &lt;ul>
 &lt;li>互斥锁及条件变量是同步的基本组成部分。&lt;/li>
 &lt;li>互斥锁及条件变量出自&lt;code>Posix.1&lt;/code>线程标准；
@@ -5170,7 +5170,7 @@ Additional | &amp;lt;empty&amp;gt; |
 >wiki&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8" target="_blank" rel="noopener"
 >wiki中文&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.jpg" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
+&lt;/ul></description></item><item><title>网络协议 —— ICMP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-icmp/image.png" alt="Featured image of post 网络协议 —— ICMP" />&lt;h2 id="icmp">ICMP&lt;/h2>
 &lt;ul>
 &lt;li>ICMP - 互联网控制消息协议（Internet Control Message Protocol）&lt;/li>
 &lt;li>ICMP是互联网协议族的核心协议之一。&lt;/li>
