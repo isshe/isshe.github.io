@@ -8,11 +8,11 @@
 1. 介绍 1.1 用法 netstat [-vWeenNcCF] [&amp;lt;Af&amp;gt;] -r netstat {-V|--version|-h|--help} netstat [-vWnNcaeol] [&amp;lt;Socket&amp;gt; ...] netstat { [-vWeenNac] -i | [-cWnNe] -M | -s } 1.2 选项 -r, --route 显示路由表 -i, --interfaces 显示接口列表 -g, --groups 显示多播组成员 -s, --statistics 显示网络统计信息 -M, --masquerade display masqueraded connections【？？？】 -v, --verbose 详细 -W, --wide 不要截断IP地址 -n, --numeric 不要解析IP成域名（直接使用IP，不经过域名服务器） --numeric-hosts 不要解析主机名 --numeric-ports 不要解析端口名 --numeric-users 不要解析用户名 -N, --symbolic 解析硬件名 【？？？】 -e, --extend 显示更多信息 -p, --programs 显示进程ID和进程名 -c, --continuous 持续列出网络状态 -l, --listening 显示LISTENING状态的连接 -a, --all, --listening 显示所有连接(默认: 显示CONNECTED的连接) -o, --timers 显示计时器 【netstat -to】 -F, --fib 显示转发信息库（Forwarding Information Base），默认显示 -C, --cache 显示路由缓存(routing cache)而不是FIB -t, --tcp 显示TCP信息 -u, --udp 显示UDP信息 -w, --raw 实现raw信息 -x, --unix 显示unix信息 --ax25 显示AMPR AX.">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="netstat"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="netstat"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— netstat">
 <meta name=twitter:description content="netstat 显示当前的连接情况。（UDP、TCP、UNIX、ICMP等） 显示路由表、网络接口列表、网络统计信息、多播信息、伪装连接等。
 1. 介绍 1.1 用法 netstat [-vWeenNcCF] [&amp;lt;Af&amp;gt;] -r netstat {-V|--version|-h|--help} netstat [-vWnNcaeol] [&amp;lt;Socket&amp;gt; ...] netstat { [-vWeenNac] -i | [-cWnNe] -M | -s } 1.2 选项 -r, --route 显示路由表 -i, --interfaces 显示接口列表 -g, --groups 显示多播组成员 -s, --statistics 显示网络统计信息 -M, --masquerade display masqueraded connections【？？？】 -v, --verbose 详细 -W, --wide 不要截断IP地址 -n, --numeric 不要解析IP成域名（直接使用IP，不经过域名服务器） --numeric-hosts 不要解析主机名 --numeric-ports 不要解析端口名 --numeric-users 不要解析用户名 -N, --symbolic 解析硬件名 【？？？】 -e, --extend 显示更多信息 -p, --programs 显示进程ID和进程名 -c, --continuous 持续列出网络状态 -l, --listening 显示LISTENING状态的连接 -a, --all, --listening 显示所有连接(默认: 显示CONNECTED的连接) -o, --timers 显示计时器 【netstat -to】 -F, --fib 显示转发信息库（Forwarding Information Base），默认显示 -C, --cache 显示路由缓存(routing cache)而不是FIB -t, --tcp 显示TCP信息 -u, --udp 显示UDP信息 -w, --raw 实现raw信息 -x, --unix 显示unix信息 --ax25 显示AMPR AX."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.png">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -31,7 +31,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu890b4a84832ec272513434c344ebda9b_82374_800x0_resize_box_3.png srcset="/p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu890b4a84832ec272513434c344ebda9b_82374_800x0_resize_box_3.png 800w, /p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu890b4a84832ec272513434c344ebda9b_82374_1600x0_resize_box_3.png 1600w" width=800 height=809 loading=lazy alt="Featured image of post Linux 命令 —— netstat">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-netstat/image_hu9cf09c1c436f94f04ea86d28afa0e688_52288_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Linux 命令 —— netstat">
 </a>
 </div>
 <div class=article-details>
@@ -139,7 +139,7 @@ netstat -ie
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— gdb</h2>
@@ -147,19 +147,19 @@ netstat -ie
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— tcpdump</h2>
+<h2 class=article-title>Linux 命令 —— modprobe</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.27d391a14e68b5eb559333f92e869f66_hu145d34d1ec22bcb129ce02135b210b81_32414_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-J9ORoU5otetVkzP5LoafZg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.d955855e0618621babc052b5dbe20fc5_hu75bfb8e699f04dc0c75c201fe548798b_46326_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-2VWFXgYYYhurwFK12+IPxQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— git</h2>
@@ -167,22 +167,22 @@ netstat -ie
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— ssh</h2>
+<h2 class=article-title>Linux 命令 —— vmstat</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.d07b135a6e76b4e4a6f8bc0d9c5ed7c9_hu890b4a84832ec272513434c344ebda9b_82374_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-0HsTWm52tOSm+LwNnF7XyQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— strace</h2>
+<h2 class=article-title>Linux 命令 —— ip</h2>
 </div>
 </a>
 </article>
