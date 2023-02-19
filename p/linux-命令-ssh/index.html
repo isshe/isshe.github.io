@@ -20,7 +20,7 @@
  修改公网设备的 ssh 配置  sudo vi /etc/ssh/sshd_config # 设置 GatewayPorts yes # 重启 ssh 服务 sudo systemctl restart sshd  进行端口映射  在内网机器上：">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="ssh"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="ssh"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.png">
 <meta name=twitter:title content="Linux 命令 —— ssh">
 <meta name=twitter:description content="ssh 隧道 场景：家里内网机器 A 想要访问公司的内网机器 B。 条件：需要一个公网机器 C （假设IP是 1.1.1.1）。
   打开公网机器的转发
@@ -30,7 +30,7 @@
 此时，在 A 上通过 localhost:10443 即可访问 B 的 443。
 端口映射 此方法相比上面的更为简化，直接把内网端口映射到外网设备上，直接访问外网设备映射的端口即可。
  修改公网设备的 ssh 配置  sudo vi /etc/ssh/sshd_config # 设置 GatewayPorts yes # 重启 ssh 服务 sudo systemctl restart sshd  进行端口映射  在内网机器上："><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg">
+<meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -49,7 +49,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu02818017db472601873aa929559d13bb_34206_800x0_resize_q75_box.jpg srcset="/p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu02818017db472601873aa929559d13bb_34206_800x0_resize_q75_box.jpg 800w, /p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu02818017db472601873aa929559d13bb_34206_1600x0_resize_q75_box.jpg 1600w" width=800 height=453 loading=lazy alt="Featured image of post Linux 命令 —— ssh">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu890b4a84832ec272513434c344ebda9b_82374_800x0_resize_box_3.png srcset="/p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu890b4a84832ec272513434c344ebda9b_82374_800x0_resize_box_3.png 800w, /p/linux-%E5%91%BD%E4%BB%A4-ssh/image_hu890b4a84832ec272513434c344ebda9b_82374_1600x0_resize_box_3.png 1600w" width=800 height=809 loading=lazy alt="Featured image of post Linux 命令 —— ssh">
 </a>
 </div>
 <div class=article-details>
@@ -139,7 +139,7 @@ sudo systemctl restart sshd
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.e92c6efcb47951f01be3c3bdef2c5615_hue1f82669ca730723685f7d5c1bcf2446_46573_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-6Sxu/LR5UfAb48O97yxWFQ==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— gdb</h2>
@@ -147,42 +147,42 @@ sudo systemctl restart sshd
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.75f42b394b2ee79c8706f6f2c2495518_hu9cf09c1c436f94f04ea86d28afa0e688_52288_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-dfQrOUsu55yHBvbywklVGA==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.2fa2be21eaace4e918c97d2ad77ec60c_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-L6K+Ieqs5OkYyX0q137GDA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— netstat</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— tcpdump</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-modprobe/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— modprobe" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— modprobe</h2>
+<h2 class=article-title>Linux 命令 —— strace</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
 </div>
 <div class=article-details>
 <h2 class=article-title>Linux 命令 —— vmstat</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.5f52aef6157a0e660f811beba9e0fd0a_hu2e7e2dc6b5698adf438a5a1e13a72e96_65561_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-X1Ku9hV6DmYPgRvrqeD9Cg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— git</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.3b6c00f1d3f456548e462a7289760971_hu099c4e73c5c211f1100c28348bb87258_46244_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-O2wA8dP0VlSORipyiXYJcQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— tcpdump</h2>
 </div>
 </a>
 </article>
