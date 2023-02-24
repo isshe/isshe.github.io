@@ -966,7 +966,7 @@ netstat -ie
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="显示listening监听状态的连接">显示LISTENING(监听)状态的连接&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">netstat -l
 &lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="3-疑问">3. 疑问&lt;/h1>
-&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpeg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
+&lt;h2 id="masqueraded-connections是什么">masqueraded connections是什么？&lt;/h2></description></item><item><title>Linux 命令 —— ssh</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.jpg" alt="Featured image of post Linux 命令 —— ssh" />&lt;h2 id="ssh">ssh&lt;/h2>
 &lt;h1 id="隧道">隧道&lt;/h1>
 &lt;p>场景：家里内网机器 A 想要访问公司的内网机器 B。
 条件：需要一个公网机器 C （假设IP是 1.1.1.1）。&lt;/p>
@@ -1008,7 +1008,7 @@ sudo systemctl restart sshd
 &lt;span class="c1"># 前面部分 0.0.0.0:10443：公网机器信息&lt;/span>
 &lt;span class="c1"># 后面部分 0.0.0.0:443：内网机器信息&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
-&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
+&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.png" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
 &lt;p>strace - 跟踪系统调用和信号。&lt;/p>
 &lt;p>在最简单的情况下，strace运行指定的命令直到它退出。
 它拦截并记录由进程调用的系统调用和进程接收的信号。
@@ -1466,7 +1466,7 @@ tcpdump &amp;lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&amp;amp;0xf)&amp;laquo;2
 &lt;p>&lt;a class="link" href="https://www.tcpdump.org/manpages/tcpdump.1.html" target="_blank" rel="noopener"
 >https://www.tcpdump.org/manpages/tcpdump.1.html&lt;/a>
 linux man page&lt;/p>
-&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.png" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
+&lt;/blockquote></description></item><item><title>Linux 命令 —— vmstat</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.jpg" alt="Featured image of post Linux 命令 —— vmstat" />&lt;h2 id="vmstat">vmstat&lt;/h2>
 &lt;p>报告虚拟内存统计信息：进程，内存，分页，块IO，陷阱(traps)、磁盘和cpu活动。&lt;/p>
 &lt;h1 id="用法">用法&lt;/h1>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">vmstat &lt;span class="o">[&lt;/span>options&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>delay &lt;span class="o">[&lt;/span>count&lt;span class="o">]]&lt;/span>
@@ -1682,7 +1682,7 @@ vmstat -a 1 100 // 每1s更新一次，更新100次&lt;/p>
 &lt;li>&lt;code>new_env&lt;/code> 是一个继承于全局环境(_G)的新环境，用于执行自定义代码。&lt;/li>
 &lt;li>&lt;code>setfenv&lt;/code> 设置函数的环境（mb 模块被 loadstring 成函数了）&lt;/li>
 &lt;li>&lt;code>ctype.count&lt;/code> 模块的作用是用于区分是否调用了 ffi 模块，当加载了 ffi 模块时，ctype.count 将增加，因此可以通过判断 pcall 前后 ctype.count 是否变化来判断使用调用了 ffi 模块。&lt;/li>
-&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
+&lt;/ul></description></item><item><title>VLAN 介绍</title><link>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/</guid><description>&lt;img src="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.png" alt="Featured image of post VLAN 介绍" />&lt;h2 id="vlan">VLAN&lt;/h2>
 &lt;p>VLAN - 虚拟局域网（Virtual Local Area Network）。
 在IEEE 802.1Q中，给定以太网上的最大VLAN数为4094。（12位VID。减去头尾的0和4095）&lt;/p>
 &lt;h1 id="作用">作用&lt;/h1>
@@ -1883,7 +1883,7 @@ bpftool cgroup tree
 &lt;p>3DES(TDEA)：将DES重复3次。
 分组长度为：&lt;code>64 * 3 = 192&lt;/code>&lt;/p>
 &lt;h1 id="aes">AES&lt;/h1>
-&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.png" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
+&lt;p>分组长度为：&lt;code>128&lt;/code>&lt;/p></description></item><item><title>图解密码技术 —— 第九章-数字签名</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/image.jpg" alt="Featured image of post 图解密码技术 —— 第九章-数字签名" />&lt;h2 id="数字签名">数字签名&lt;/h2>
 &lt;p>公钥密码：存在加密秘钥(公钥)和解密秘钥（私钥）。用公钥加密。
 数字签名：签名秘钥（私钥）和验证秘钥（公钥）。用私钥加密。
 &lt;strong>数字签名并不是为了保证机密性。&lt;/strong>&lt;/p>
@@ -2236,7 +2236,7 @@ alt="混合密码解密过程">
 &lt;/ul>
 &lt;/li>
 &lt;li>使用口令生成器和管理工具。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.jpg" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十三章-PGP</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.png" alt="Featured image of post 图解密码技术 —— 第十三章-PGP" />&lt;h2 id="pgp密码技术的完美组合">PGP——密码技术的完美组合&lt;/h2>
 &lt;h1 id="什么是pgp">什么是PGP？&lt;/h1>
 &lt;ul>
 &lt;li>PGP: Pretty Good Privacy.&lt;/li>
@@ -2885,7 +2885,7 @@ loading="lazy"
 &lt;/ul>
 &lt;/li>
 &lt;li>高优先级：&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 select</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 select" />&lt;h1 id="select">select&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 select</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 select" />&lt;h1 id="select">select&lt;/h1>
 &lt;p>select函数允许进程指示内核等待多个事件，并在有一个或多个时间或经历指定时间后唤醒进程。&lt;/p>
 &lt;h2 id="1-select">1. select&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/select.h&amp;gt;&lt;/span>&lt;span class="cp">
@@ -4778,7 +4778,7 @@ loading="lazy"
 &lt;li>当使用内存共享时，生产者/消费者必须执行某种&lt;code>显式的(explicit)&lt;/code>的同步。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
 &lt;h2 id="1-什么是读写锁">1. 什么是读写锁&lt;/h2>
 &lt;ul>
 &lt;li>互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）
