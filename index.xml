@@ -1,163 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 15 Feb 2023 06:00:05 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Wed, 15 Feb 2023 06:00:05 -0400</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.png" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
-&lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
-&lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
-&lt;/span>&lt;span class="cp">&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>作用：打开一个epoll文件描述符。&lt;/li>
-&lt;li>参数：
-&lt;ul>
-&lt;li>size： Linux 2.6.8后不再使用，但是必须大于0。&lt;/li>
-&lt;li>flags：
-&lt;ul>
-&lt;li>0：和epoll_create行为一样。&lt;/li>
-&lt;li>O_CLOEXEC: 进程退出时关闭文件描述符。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>返回：
-&lt;ul>
-&lt;li>失败：-1，设置errno；否则：&lt;/li>
-&lt;li>返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。&lt;/li>
-&lt;li>当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="2-epoll_ctl">2. epoll_ctl&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">typedef&lt;/span> &lt;span class="k">union&lt;/span> &lt;span class="n">epoll_data&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ptr&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">u32&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="kt">uint64_t&lt;/span> &lt;span class="n">u64&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="p">}&lt;/span> &lt;span class="n">epoll_data_t&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">events&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* Epoll events */&lt;/span>
-&lt;span class="n">epoll_data_t&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* User data variable */&lt;/span>
-&lt;span class="p">};&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_ctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">op&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>作用：epoll文件描述符的控制接口。&lt;/li>
-&lt;li>参数：
-&lt;ul>
-&lt;li>epfd: epoll fd，epoll文件描述符；&lt;/li>
-&lt;li>op:
-&lt;ul>
-&lt;li>EPOLL_CTL_ADD：注册fd到epfd；&lt;/li>
-&lt;li>EPOLL_CTL_MOD：修改与fd的关联evnet事件。&lt;/li>
-&lt;li>EPOLL_CTL_DEL：从epfd中删除fd；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>fd: 要操作(op)的fd；&lt;/li>
-&lt;li>event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>返回：
-&lt;ul>
-&lt;li>正常：0；&lt;/li>
-&lt;li>异常：-1，设置errno；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>数据结构说明；
-&lt;ul>
-&lt;li>&lt;code>struct epoll_event&lt;/code>的&lt;code>events&lt;/code>的是位掩码的形式，取值是：
-&lt;ul>
-&lt;li>EPOLLIN: 相关文件可读。(read)&lt;/li>
-&lt;li>EPOLLOUT: 相关文件可写。(write)&lt;/li>
-&lt;li>EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。)&lt;/li>
-&lt;li>EPOLLPRI: 有紧急数据可读。&lt;/li>
-&lt;li>EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置）&lt;/li>
-&lt;li>EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置）&lt;/li>
-&lt;li>EPOLLET: 相关文件描述符设置为&lt;code>边缘触发&lt;/code>。（默认是水平触发）&lt;/li>
-&lt;li>EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。&lt;/li>
-&lt;li>EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。
-&lt;ul>
-&lt;li>当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="3-epoll_wait">3. epoll_wait&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_pwait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;span class="k">const&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sigmask&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
-&lt;li>作用：等待epoll文件描述符上的I/O事件。&lt;/li>
-&lt;li>参数：
-&lt;ul>
-&lt;li>epfd：epoll文件描述符；&lt;/li>
-&lt;li>events：等待的目标事件；&lt;/li>
-&lt;li>maxevents：返回的最大事件数量；&lt;/li>
-&lt;li>timeout：epoll_wait阻塞超时，单位微秒。发生以下事件解除阻塞：
-&lt;ul>
-&lt;li>监听的文件描述符有事件发出/传递；&lt;/li>
-&lt;li>被信号处理函数中断；&lt;/li>
-&lt;li>超时；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>sigmask：屏蔽信号集？！【疑问】&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>返回：
-&lt;ul>
-&lt;li>正常：就绪的文件描述符数量&lt;/li>
-&lt;li>异常：-1，并设置errno&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="4-触发形式">4. 触发形式&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>水平触发：（默认是水平触发）&lt;/p>
-&lt;ul>
-&lt;li>触发条件：只要有&lt;code>数据&lt;/code>可读/可写，即可触发。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>边缘触发：（使用EPOLLET设置为边缘触发）&lt;/p>
-&lt;ul>
-&lt;li>触发条件：有&lt;code>新数据&lt;/code>可读/可写，即可触发。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>两种触发的不同在于：一次新数据，水平触发可能触发多次，边缘触发只会触发一次。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h1 id="epoll的优点">epoll的优点&lt;/h1>
-&lt;p>select/poll的两个主要性能问题，就是epoll的优点：&lt;/p>
-&lt;ul>
-&lt;li>select/poll需要轮询查找就绪的描述符，epoll直接返回就绪的信息。&lt;/li>
-&lt;li>描述符集合需要从用户空间拷贝到内核空间。
-&lt;ul>
-&lt;li>epoll的add/remove也是需要拷贝；&lt;/li>
-&lt;li>对于就绪描述符，使用mmap进行内存共享，避免拷贝；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h1 id="a-问题拓展">A. 问题/拓展&lt;/h1>
-&lt;ul>
-&lt;li>可读：缓冲区非空，并且数据量超过读阈值。&lt;/li>
-&lt;li>可写：缓冲区未满。&lt;/li>
-&lt;li>什么时候使用poll/select, 什么时候使用epoll?
-&lt;ul>
-&lt;li>满足以下几个条件，用epoll，否则用poll：
-&lt;ul>
-&lt;li>使用的是Linux系统，并且有epoll系统调用；&lt;/li>
-&lt;li>需要处理得是大的&lt;code>活动描述符集&lt;/code>（至少1000）；&lt;/li>
-&lt;li>描述符集是相对稳定的。（因为epoll添加/删除描述符花销和poll一样很大，需要进入/离开内核空间）；&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul></description></item><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Wed, 01 Feb 2023 06:00:04 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.jpg" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 01 Feb 2023 06:00:04 -0400</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>数据库 —— Postgresql 慢查询分析</title><link>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</link><pubDate>Wed, 01 Feb 2023 06:00:04 -0400</pubDate><guid>https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/</guid><description>&lt;img src="https://isshe.site/p/%E6%95%B0%E6%8D%AE%E5%BA%93-postgresql-%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90/image.jpg" alt="Featured image of post 数据库 —— Postgresql 慢查询分析" />&lt;h2 id="postgresql-慢查询语句记录与分析">Postgresql 慢查询语句记录与分析&lt;/h2>
 &lt;h1 id="1-记录">1. 记录&lt;/h1>
 &lt;blockquote>
 &lt;p>postgresql 以 12 版本为例&lt;/p>
@@ -471,7 +312,7 @@ gdb &lt;span class="nb">test&lt;/span>
 &lt;span class="o">+---------+&lt;/span> &lt;span class="o">--&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irqaction&lt;/span>
 &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">irq_desc&lt;/span>
 &lt;span class="o">-----+---------+&lt;/span> &lt;span class="o">--&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.png" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Linux 内核 —— 设备驱动</title><link>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%86%85%E6%A0%B8-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/image.jpg" alt="Featured image of post Linux 内核 —— 设备驱动" />&lt;h1 id="设备驱动">设备驱动&lt;/h1>
 &lt;p>NIC可用之前，相关联的net_device数据结构必须先初始化，添加至内核网络设备数据库、配置并开启。
 注册/注销/开启/关闭是四个不同的操作，不要混淆。
 相关讨论，主要以网络设备为主。&lt;/p>
@@ -610,7 +451,7 @@ git push origin master
 &lt;li>推送 tag 到远端&lt;/li>
 &lt;/ul>
 &lt;pre tabindex="0">&lt;code>git push origin {tag name}
-&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.jpg" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
+&lt;/code>&lt;/pre></description></item><item><title>Linux 命令 —— ip</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-ip/image.png" alt="Featured image of post Linux 命令 —— ip" />&lt;h2 id="ip">ip&lt;/h2>
 &lt;p>显示/操纵路由、设备、策略路由、隧道。&lt;/p>
 &lt;h2 id="概要">概要&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">ip &lt;span class="o">[&lt;/span> OPTIONS &lt;span class="o">]&lt;/span> OBJECT &lt;span class="o">{&lt;/span> COMMAND &lt;span class="p">|&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="o">}&lt;/span>
@@ -1008,7 +849,7 @@ sudo systemctl restart sshd
 &lt;span class="c1"># 前面部分 0.0.0.0:10443：公网机器信息&lt;/span>
 &lt;span class="c1"># 后面部分 0.0.0.0:443：内网机器信息&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意：此时链接会一直保持，终端不会返回。&lt;/strong>&lt;/p>
-&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.png" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
+&lt;p>至此，端口映射完成，可以从任意可访问外网的机器上，访问 1.1.1.1:10443 即可访问到 内网机器的 443 端口。&lt;/p></description></item><item><title>Linux 命令 —— strace</title><link>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/</guid><description>&lt;img src="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-strace/image.jpg" alt="Featured image of post Linux 命令 —— strace" />&lt;h1 id="strace">strace&lt;/h1>
 &lt;p>strace - 跟踪系统调用和信号。&lt;/p>
 &lt;p>在最简单的情况下，strace运行指定的命令直到它退出。
 它拦截并记录由进程调用的系统调用和进程接收的信号。
@@ -2018,7 +1859,7 @@ E x D mode L = 1
 &lt;/ul>
 &lt;/li>
 &lt;li>中间人攻击对所有公钥密码对是有效的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.png" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第八章-消息认证码</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.jpg" alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" />&lt;h2 id="消息认证码-消息被正确传送了吗">消息认证码-消息被正确传送了吗&lt;/h2>
 &lt;p>消息认证码： Message Authentication Code，MAC。&lt;/p>
 &lt;ul>
 &lt;li>是一种确认完整性并进行认证的技术。&lt;/li>
@@ -2123,7 +1964,7 @@ loading="lazy"
 alt="混合密码解密过程">
 &lt;/a>
 &lt;figcaption>混合密码解密过程&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.png" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
+&lt;/figure>&lt;/p></description></item><item><title>图解密码技术 —— 第十一章-秘钥</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%A7%98%E9%92%A5/image.jpg" alt="Featured image of post 图解密码技术 —— 第十一章-秘钥" />&lt;h2 id="第11章-秘钥秘密的精华">第11章 秘钥——秘密的精华&lt;/h2>
 &lt;h1 id="什么是秘钥">什么是秘钥？&lt;/h1>
 &lt;p>秘钥：一个巨大的数字。&lt;/p>
 &lt;blockquote>
@@ -2255,7 +2096,7 @@ alt="混合密码解密过程">
 &lt;ul>
 &lt;li>PGP采用的确认&lt;code>公钥&lt;/code>合法性的方法。&lt;/li>
 &lt;li>注意：&lt;code>公钥是否合法&lt;/code>和&lt;code>所有者是否可信&lt;/code>是两个不同的问题，因为尽管公钥合法，其所有者也可以是不可信的。&lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.jpg" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第十二章-随机数</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.png" alt="Featured image of post 图解密码技术 —— 第十二章-随机数" />&lt;h2 id="第12章-随机数不可预测性的源泉">第12章 随机数——不可预测性的源泉&lt;/h2>
 &lt;h1 id="随机数的作用使用场景是什么">随机数的作用？使用场景是什么？&lt;/h1>
 &lt;ul>
 &lt;li>生成秘钥：用于对称密码和消息认证码。&lt;/li>
@@ -2754,6 +2595,165 @@ loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 epoll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" />&lt;h1 id="epoll">epoll&lt;/h1>
+&lt;p>I/O事件通知设施(I/O event notification facility)。&lt;/p>
+&lt;h2 id="1-epoll_create">1. epoll_create&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;sys/epoll.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_create1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">flags&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：打开一个epoll文件描述符。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>size： Linux 2.6.8后不再使用，但是必须大于0。&lt;/li>
+&lt;li>flags：
+&lt;ul>
+&lt;li>0：和epoll_create行为一样。&lt;/li>
+&lt;li>O_CLOEXEC: 进程退出时关闭文件描述符。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>失败：-1，设置errno；否则：&lt;/li>
+&lt;li>返回一个指向一个新epoll实例的文件描述符；当不再使用此描述符时，应使用close关闭。&lt;/li>
+&lt;li>当所有指向此epoll实例的描述符都被关闭时，内核会释放相关资源。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-epoll_ctl">2. epoll_ctl&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">typedef&lt;/span> &lt;span class="k">union&lt;/span> &lt;span class="n">epoll_data&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ptr&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">u32&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kt">uint64_t&lt;/span> &lt;span class="n">u64&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span> &lt;span class="n">epoll_data_t&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kt">uint32_t&lt;/span> &lt;span class="n">events&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* Epoll events */&lt;/span>
+&lt;span class="n">epoll_data_t&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="cm">/* User data variable */&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_ctl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">op&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：epoll文件描述符的控制接口。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>epfd: epoll fd，epoll文件描述符；&lt;/li>
+&lt;li>op:
+&lt;ul>
+&lt;li>EPOLL_CTL_ADD：注册fd到epfd；&lt;/li>
+&lt;li>EPOLL_CTL_MOD：修改与fd的关联evnet事件。&lt;/li>
+&lt;li>EPOLL_CTL_DEL：从epfd中删除fd；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>fd: 要操作(op)的fd；&lt;/li>
+&lt;li>event: 与fd关联的事件。EPOLL_CTL_DEL时这个参数被忽略，也可以直接为NULL；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>正常：0；&lt;/li>
+&lt;li>异常：-1，设置errno；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>数据结构说明；
+&lt;ul>
+&lt;li>&lt;code>struct epoll_event&lt;/code>的&lt;code>events&lt;/code>的是位掩码的形式，取值是：
+&lt;ul>
+&lt;li>EPOLLIN: 相关文件可读。(read)&lt;/li>
+&lt;li>EPOLLOUT: 相关文件可写。(write)&lt;/li>
+&lt;li>EPOLLRDHUP: 流套接字对端关闭连接，或关闭写入一半的连接。(在使用边沿触发时，此标志对于编写简单代码以检测对端关闭特别有用。)&lt;/li>
+&lt;li>EPOLLPRI: 有紧急数据可读。&lt;/li>
+&lt;li>EPOLLERR: 相关文件描述符发生错误。（默认设置，不用手动设置）&lt;/li>
+&lt;li>EPOLLHUP: 相关文件描述符被挂起。（默认设置，不用手动设置）&lt;/li>
+&lt;li>EPOLLET: 相关文件描述符设置为&lt;code>边缘触发&lt;/code>。（默认是水平触发）&lt;/li>
+&lt;li>EPOLLONESHOT: 对相关描述符设置一次性行为。 epoll_wait一次后，不会再wait，除非使用EPOLL_CTL_MOD重新设置。&lt;/li>
+&lt;li>EPOLLWAKEUP: 设置此标记，使事件排队时系统保持唤醒。
+&lt;ul>
+&lt;li>当系统设置了自动休眠模式(/sys/power/autosleep)时，为了保持设备唤醒直到事件处理完成，必须使用此标记。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>EPOLLEXCLUSIVE：为附加到目标文件描述符fd的epoll文件描述符设置独占唤醒模式。【？？？】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-epoll_wait">3. epoll_wait&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_wait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">epoll_pwait&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">epfd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">struct&lt;/span> &lt;span class="n">epoll_event&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">events&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="n">maxevents&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="k">const&lt;/span> &lt;span class="n">sigset_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">sigmask&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>作用：等待epoll文件描述符上的I/O事件。&lt;/li>
+&lt;li>参数：
+&lt;ul>
+&lt;li>epfd：epoll文件描述符；&lt;/li>
+&lt;li>events：等待的目标事件；&lt;/li>
+&lt;li>maxevents：返回的最大事件数量；&lt;/li>
+&lt;li>timeout：epoll_wait阻塞超时，单位微秒。发生以下事件解除阻塞：
+&lt;ul>
+&lt;li>监听的文件描述符有事件发出/传递；&lt;/li>
+&lt;li>被信号处理函数中断；&lt;/li>
+&lt;li>超时；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>sigmask：屏蔽信号集？！【疑问】&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>返回：
+&lt;ul>
+&lt;li>正常：就绪的文件描述符数量&lt;/li>
+&lt;li>异常：-1，并设置errno&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-触发形式">4. 触发形式&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>水平触发：（默认是水平触发）&lt;/p>
+&lt;ul>
+&lt;li>触发条件：只要有&lt;code>数据&lt;/code>可读/可写，即可触发。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>边缘触发：（使用EPOLLET设置为边缘触发）&lt;/p>
+&lt;ul>
+&lt;li>触发条件：有&lt;code>新数据&lt;/code>可读/可写，即可触发。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>两种触发的不同在于：一次新数据，水平触发可能触发多次，边缘触发只会触发一次。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="epoll的优点">epoll的优点&lt;/h1>
+&lt;p>select/poll的两个主要性能问题，就是epoll的优点：&lt;/p>
+&lt;ul>
+&lt;li>select/poll需要轮询查找就绪的描述符，epoll直接返回就绪的信息。&lt;/li>
+&lt;li>描述符集合需要从用户空间拷贝到内核空间。
+&lt;ul>
+&lt;li>epoll的add/remove也是需要拷贝；&lt;/li>
+&lt;li>对于就绪描述符，使用mmap进行内存共享，避免拷贝；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="a-问题拓展">A. 问题/拓展&lt;/h1>
+&lt;ul>
+&lt;li>可读：缓冲区非空，并且数据量超过读阈值。&lt;/li>
+&lt;li>可写：缓冲区未满。&lt;/li>
+&lt;li>什么时候使用poll/select, 什么时候使用epoll?
+&lt;ul>
+&lt;li>满足以下几个条件，用epoll，否则用poll：
+&lt;ul>
+&lt;li>使用的是Linux系统，并且有epoll系统调用；&lt;/li>
+&lt;li>需要处理得是大的&lt;code>活动描述符集&lt;/code>（至少1000）；&lt;/li>
+&lt;li>描述符集是相对稳定的。（因为epoll添加/删除描述符花销和poll一样很大，需要进入/离开内核空间）；&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
 &lt;/li>
 &lt;/ul></description></item><item><title>操作系统 —— IO 多路复用之 poll</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.jpg" alt="Featured image of post 操作系统 —— IO 多路复用之 poll" />&lt;h1 id="poll">poll&lt;/h1>
 &lt;h1 id="相关函数">相关函数&lt;/h1>
@@ -3991,7 +3991,7 @@ loading="lazy"
 &lt;li>支持。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 Posix 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.jpeg" alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" />&lt;h1 id="posix-信息队列">Posix 信息队列&lt;/h1>
 &lt;ul>
 &lt;li>消息队列可认为是一个消息链表。具有&lt;code>随内核的持续性&lt;/code>&lt;/li>
 &lt;li>有读权限的线程可以从队列中取走信息；&lt;/li>
@@ -4388,7 +4388,7 @@ alt="消息队列的系统限制">
 &lt;h2 id="b-参考">B. 参考&lt;/h2>
 &lt;ul>
 &lt;li>《UNIX环境高级编程 第三版》&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之FIFO</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.jpeg" alt="Featured image of post 操作系统 —— 进程间通信之FIFO" />&lt;h1 id="fifo">FIFO&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之FIFO</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.jpg" alt="Featured image of post 操作系统 —— 进程间通信之FIFO" />&lt;h1 id="fifo">FIFO&lt;/h1>
 &lt;ul>
 &lt;li>FIFO有时被称为命名管道。&lt;/li>
 &lt;li>FIFO是一种文件类型。&lt;/li>
@@ -4778,7 +4778,7 @@ loading="lazy"
 &lt;li>当使用内存共享时，生产者/消费者必须执行某种&lt;code>显式的(explicit)&lt;/code>的同步。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.png" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进线程同步之读写锁</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg" alt="Featured image of post 操作系统 —— 进线程同步之读写锁" />&lt;h1 id="读写锁">读写锁&lt;/h1>
 &lt;h2 id="1-什么是读写锁">1. 什么是读写锁&lt;/h2>
 &lt;ul>
 &lt;li>互斥锁把试图进入临界区的(多余)线程都阻塞住，无论是读还是写。（不区分读写）
@@ -4819,7 +4819,7 @@ loading="lazy"
 &lt;span class="c1">// 属性设置：设置进程间共享: PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE
 &lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_getpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
 &lt;span class="kt">int&lt;/span> &lt;span class="nf">pthread_rwlockattr_setpshared&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pthread_rwlockattr_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">attr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">pshared&lt;/span>&lt;span class="p">);&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.png" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>网络协议 —— ARP</title><link>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</link><pubDate>Sun, 16 Oct 2022 12:23:30 -0300</pubDate><guid>https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/</guid><description>&lt;img src="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.jpg" alt="Featured image of post 网络协议 —— ARP" />&lt;h2 id="arp协议">ARP协议&lt;/h2>
 &lt;p>ARP（Address Resolution Protocol）：地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。&lt;/p>
 &lt;h1 id="工作过程">工作过程&lt;/h1>
 &lt;p>当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址解析成主机B的MAC地址(如果A/B不同网段，则A解析的应该是下一跳的MAC地址)，以下为工作流程：&lt;/p>
