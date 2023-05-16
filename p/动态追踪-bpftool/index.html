@@ -8,7 +8,7 @@ bpftool feature 启用 jit cat /proc/sys/net/core/bpf_jit_enable echo 1 &amp;gt;
 bpftool feature 启用 jit cat /proc/sys/net/core/bpf_jit_enable echo 1 &amp;gt; /proc/sys/net/core/bpf_jit_enable 获取系统中已运行的 BPF 程序 bpftool prog show bpftool prog show id &amp;lt;ID&amp;gt; bpftool prog show id &amp;lt;ID&amp;gt; --json bpftool prog dump xlated id &amp;lt;ID&amp;gt; bpftool prog dump xlated id &amp;lt;ID&amp;gt; visual &amp;amp;&amp;gt; output.out # sudo apt install graphviz dot -Tpng output.out -o visual-graph.png 启用 BPF 统计信息 sysctl -w kernel.">
 <meta property="og:url" content="https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="动态追踪"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/visual-graph.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="动态追踪"><meta property="article:published_time" content="2023-05-15T06:00:05-03:00"><meta property="article:modified_time" content="2023-05-15T06:00:05-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%8A%A8%E6%80%81%E8%BF%BD%E8%B8%AA-bpftool/visual-graph.png">
 <meta name=twitter:title content="动态追踪 —— BPFTool">
 <meta name=twitter:description content="BPFTool 安装 git clone git@github.com:torvalds/linux.git git checkout v5.4 cd tools/bpf/bpftool make &amp;amp;&amp;amp; make install 使用 特征查看 查看当前系统所支持的所有特征。
 bpftool feature 启用 jit cat /proc/sys/net/core/bpf_jit_enable echo 1 &amp;gt; /proc/sys/net/core/bpf_jit_enable 获取系统中已运行的 BPF 程序 bpftool prog show bpftool prog show id &amp;lt;ID&amp;gt; bpftool prog show id &amp;lt;ID&amp;gt; --json bpftool prog dump xlated id &amp;lt;ID&amp;gt; bpftool prog dump xlated id &amp;lt;ID&amp;gt; visual &amp;amp;&amp;gt; output.out # sudo apt install graphviz dot -Tpng output.out -o visual-graph.png 启用 BPF 统计信息 sysctl -w kernel."><meta name=twitter:card content="summary_large_image">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>May 15, 2023</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>

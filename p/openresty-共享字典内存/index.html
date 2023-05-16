@@ -1,0 +1,547 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="OpenResty shared dict 目的：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用："><title>OpenResty 共享字典（内存）</title>
+<link rel=canonical href=https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty 共享字典（内存）">
+<meta property="og:description" content="OpenResty shared dict 目的：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用：">
+<meta property="og:url" content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.jpg">
+<meta name=twitter:title content="OpenResty 共享字典（内存）">
+<meta name=twitter:description content="OpenResty shared dict 目的：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用："><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image_hu717038469c11dd077f7b408e7b5d39bb_49064_800x0_resize_q75_box.jpg srcset="/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image_hu717038469c11dd077f7b408e7b5d39bb_49064_800x0_resize_q75_box.jpg 800w, /p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image_hu717038469c11dd077f7b408e7b5d39bb_49064_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>OpenResty 共享字典（内存）</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 7 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=openresty-shared-dict>OpenResty shared dict</h1>
+<p>目的：</p>
+<ul>
+<li>相关 Lua API 如 <code>ngx.shared.DICT.get</code> 是如何使用的？</li>
+<li>如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？</li>
+<li>详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。</li>
+<li>这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？</li>
+<li>ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？</li>
+</ul>
+<h2 id=使用>使用</h2>
+<p>使用示例：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>http</span> <span class=p>{</span>
+    <span class=n>lua_shared_dict</span> <span class=n>dogs</span> <span class=mi>10</span><span class=n>m</span><span class=p>;</span>
+    <span class=n>server</span> <span class=p>{</span>
+        <span class=n>location</span> <span class=o>/</span> <span class=p>{</span>
+            <span class=n>content_by_lua_block</span> <span class=p>{</span>
+                <span class=c1>-- 设置</span>
+                <span class=kd>local</span> <span class=n>dogs</span> <span class=o>=</span> <span class=n>ngx.shared</span><span class=p>.</span><span class=n>dogs</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>set</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>
+
+                <span class=c1>-- 获取</span>
+                <span class=kd>local</span> <span class=n>jim_age</span> <span class=o>=</span> <span class=n>dogs</span><span class=p>:</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>)</span>
+                <span class=n>ngx.say</span><span class=p>(</span><span class=n>jim_age</span><span class=p>)</span>
+
+                <span class=c1>-- 替换</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>replace</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>,</span> <span class=mi>9</span><span class=p>)</span>
+
+                <span class=c1>-- 递增, value = 10</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>incr</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>)</span>
+
+                <span class=c1>-- 更新/设置超时</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>expire</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+
+                <span class=c1>-- 获取 TTL</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>ttl</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>)</span>
+
+                <span class=c1>-- 删除</span>
+                <span class=n>dogs</span><span class=p>:</span><span class=n>delete</span><span class=p>(</span><span class=s2>&#34;Jim&#34;</span><span class=p>)</span>
+            <span class=p>}</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>以下是所有 Lua Api 的作用：</p>
+<blockquote>
+<p>详细用法见 <a class=link href=https://github.com/openresty/lua-nginx-module#ngxshareddict target=_blank rel=noopener>lua-nginx-module</a>。</p>
+</blockquote>
+<ul>
+<li>get: 获取指定 key 的 value。如果不存在，则返回 nil。</li>
+<li>get_stale: 获取指定 key 的 value，即使已经过期，也正常返回。第三个返回值标识是否过期。</li>
+<li>set: 增加或更新 shared dict 中的键值对。</li>
+<li>safe_set: 如果 shared dict 满了，则返回 nil 和 &ldquo;no memory&rdquo;，不使用 LRU 算法自动淘汰项目。</li>
+<li>add: 增加键值对到 shared dict 中。如果已经存在，则返回 nil 和 &ldquo;exists&rdquo;</li>
+<li>safe_add: 如果 shared dict 满了，则返回 nil 和 &ldquo;no memory&rdquo;，不使用 LRU 算法自动淘汰项目。</li>
+<li>replace: 替换 shared dict 中指定键的值，如果键不存在，返回 &ldquo;not found&rdquo;。</li>
+<li>delete: 删除 shared dict 中指定的键值对。</li>
+<li>incr: 递增指定的数字型键值对的值，可以指定初始值，如果 shared dict 中没有对应的的键时，使用初识值进行初始化。</li>
+<li>lpush: 把数字型或字符型的值插入到指定键的列表的左边（头部）。</li>
+<li>rpush: 把数字型或字符型的值插入到指定键的列表的右边（尾部）</li>
+<li>lpop: 从指定键的列表的左边（头部）弹出一个值。</li>
+<li>rpop: 从指定键的列表的右边（尾部）弹出一个值。</li>
+<li>llen: 获取指定列表的长度。</li>
+<li>ttl: 获取指定键值的 TTL。</li>
+<li>expire: 设置指定键值的过期时间。</li>
+<li>flush_all: 清空 shared dict 中所有键值对（设置为过期，不是立即释放内存）</li>
+<li>flush_expired: 释放过期的键值对的内存。</li>
+<li>get_keys: 获取 shared dict 中所有的键。</li>
+<li>capacity: 返回 shared dict 的容量（通过 lua_shared_dict 指令指定），单位为字节。</li>
+<li>free_space: 返回 shared dict 的剩余空间，单位字节。</li>
+</ul>
+<h2 id=实现>实现</h2>
+<p>怎么入手呢？先看看shared dict是怎么定义的吧。</p>
+<h3 id=定义shared-dictlua_shared_dict>定义shared dict（lua_shared_dict）</h3>
+<p>指令定义：</p>
+<pre tabindex=0><code>    { ngx_string(&quot;lua_shared_dict&quot;),
+      NGX_HTTP_MAIN_CONF|NGX_CONF_TAKE2,
+      ngx_http_lua_shared_dict,
+      0,
+      0,
+      NULL },
+</code></pre><p>可以看到 ngx_http_lua_shared_dict 是这个处理函数。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_shared_dict</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shdict_zones</span> <span class=o>==</span> <span class=n>NULL</span><span class=p>):</span> <span class=err>检查</span> <span class=n>main</span> <span class=err>配置，是否已经有这个存储所有</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>的数组了，如果没有，就分配并初始化</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>name</span> <span class=o>=</span> <span class=n>value</span><span class=p>[</span><span class=mi>1</span><span class=p>]:</span> <span class=err>获取并检查</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>名称</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>size</span> <span class=o>=</span> <span class=n>ngx_parse_size</span><span class=p>(</span><span class=o>&amp;</span><span class=n>value</span><span class=p>[</span><span class=mi>2</span><span class=p>]):</span> <span class=err>获取并检查</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>大小，单位字节</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>ngx_pcalloc</span><span class=p>(</span><span class=n>cf</span><span class=o>-&gt;</span><span class=n>pool</span><span class=p>,</span> <span class=n>sizeof</span><span class=p>(</span><span class=n>ngx_http_lua_shdict_ctx_t</span><span class=p>)):</span> <span class=err>分配</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>上下文结构，并设置好</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>的名称、</span><span class=n>main</span> <span class=err>配置、</span><span class=n>log</span> <span class=err>配置等</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>zone</span> <span class=o>=</span> <span class=n>ngx_http_lua_shared_memory_add</span><span class=p>(</span><span class=n>cf</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>name</span><span class=p>,</span> <span class=p>(</span><span class=n>size_t</span><span class=p>)</span> <span class=n>size</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>ngx_http_lua_module</span><span class=p>):</span> <span class=err>注册</span><span class=n>shared</span> <span class=n>dict</span>
+        <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shm_zones</span> <span class=o>==</span> <span class=n>NULL</span><span class=p>):</span> <span class=err>在</span> <span class=n>main</span> <span class=err>配置中维护的</span> <span class=n>ngx_shm_zone_t</span><span class=o>*</span> <span class=err>数组</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>zone</span> <span class=o>=</span> <span class=n>ngx_shared_memory_add</span><span class=p>(</span><span class=n>cf</span><span class=p>,</span> <span class=n>name</span><span class=p>,</span> <span class=p>(</span><span class=n>size_t</span><span class=p>)</span> <span class=n>size</span><span class=p>,</span> <span class=n>tag</span><span class=p>):</span> <span class=err>调用</span> <span class=n>nginx</span> <span class=err>核心的接口来注册</span><span class=n>shared</span> <span class=n>dict</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_memcpy</span><span class=p>(</span><span class=o>&amp;</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>zone</span><span class=p>,</span> <span class=n>zone</span><span class=p>,</span> <span class=n>sizeof</span><span class=p>(</span><span class=n>ngx_shm_zone_t</span><span class=p>)):</span> <span class=err>复制</span> <span class=n>zone</span><span class=err>，两份</span> <span class=n>zone</span> <span class=err>分别设置不同的</span> <span class=n>data</span> <span class=err>和</span> <span class=n>init</span> <span class=err>字段。两个</span> <span class=n>zone</span> <span class=err>的关系是：</span><span class=n>zone2</span> <span class=o>=</span> <span class=n>zone1</span><span class=o>-&gt;</span><span class=n>data</span><span class=o>-&gt;</span><span class=n>zone</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>zp</span> <span class=o>=</span> <span class=n>ngx_array_push</span><span class=p>(</span><span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shm_zones</span><span class=p>):</span> <span class=err>加入到</span> <span class=n>shm_zones</span> <span class=err>数组中</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>zone</span><span class=o>-&gt;</span><span class=n>init</span> <span class=o>=</span> <span class=n>ngx_http_lua_shared_memory_init</span><span class=p>:</span> <span class=err>设置初始化函数</span>
+            <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>zone</span><span class=o>-&gt;</span><span class=n>init</span><span class=p>(</span><span class=n>zone</span><span class=p>,</span> <span class=n>odata</span><span class=p>)</span> <span class=err>!</span><span class=o>=</span> <span class=n>NGX_OK</span><span class=p>):</span> <span class=err>实际调用的是</span> <span class=n>ngx_http_lua_shdict_init_zone</span>
+            <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shm_zones_inited</span> <span class=o>==</span> <span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shm_zones</span><span class=o>-&gt;</span><span class=n>nelts</span> <span class=o>&amp;&amp;</span> <span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>init_handler</span> <span class=o>&amp;&amp;</span> <span class=err>!</span><span class=n>ngx_test_config</span><span class=p>):</span> <span class=err>初始化完成，并且不是测试，就执行后续的</span> <span class=n>init_handler</span> <span class=err>操作</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>rc</span> <span class=o>=</span> <span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>init_handler</span><span class=p>(</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>,</span> <span class=n>lmcf</span><span class=p>,</span> <span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>lua</span><span class=p>)</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>zone</span><span class=o>-&gt;</span><span class=n>data</span> <span class=o>=</span> <span class=n>ctx</span><span class=p>:</span> <span class=err>设置数据字段</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>zp</span> <span class=o>=</span> <span class=n>ngx_array_push</span><span class=p>(</span><span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>shdict_zones</span><span class=p>):</span> <span class=err>加入到</span> <span class=n>shdict_zones</span> <span class=err>数组中</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>zone</span><span class=o>-&gt;</span><span class=n>init</span> <span class=o>=</span> <span class=n>ngx_http_lua_shdict_init_zone</span><span class=p>:</span> <span class=err>设置初始化函数</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>sh</span> <span class=o>=</span> <span class=n>ngx_slab_alloc</span><span class=p>(</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>shpool</span><span class=p>,</span> <span class=n>sizeof</span><span class=p>(</span><span class=n>ngx_http_lua_shdict_shctx_t</span><span class=p>))</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_rbtree_init</span><span class=p>(</span><span class=o>&amp;</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>sh</span><span class=o>-&gt;</span><span class=n>rbtree</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>sh</span><span class=o>-&gt;</span><span class=n>sentinel</span><span class=p>,</span>
+<span class=n>ngx_http_lua_shdict_rbtree_insert_value</span><span class=p>):</span> <span class=err>初始化红黑树，也就是</span> <span class=n>shared</span> <span class=n>dict</span> <span class=err>中的键值对是通过红黑树来组织的，查找插入都会比较快。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_queue_init</span><span class=p>(</span><span class=o>&amp;</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>sh</span><span class=o>-&gt;</span><span class=n>lru_queue</span><span class=p>):</span> <span class=err>初始化</span> <span class=n>lru</span> <span class=err>队列，同样是用来管理键值对的，空间不足时，就淘汰旧的键值对。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>shpool</span><span class=o>-&gt;</span><span class=n>log_ctx</span> <span class=o>=</span> <span class=n>ngx_slab_alloc</span><span class=p>(</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>shpool</span><span class=p>,</span> <span class=n>len</span><span class=p>):</span> <span class=err>初始化日志消息</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>zone</span><span class=o>-&gt;</span><span class=n>data</span> <span class=o>=</span> <span class=n>ctx</span><span class=p>:</span> <span class=err>设置数据字段</span>
+</code></pre></div><p>这个函数主要做了以下事情：</p>
+<ul>
+<li>获取并检查名称、大小参数</li>
+<li>分配 shared dict 上下文结构</li>
+<li>分配shared dict、设置相关初始化函数</li>
+<li>加入到 main 配置的 shdict_zones 数组中</li>
+</ul>
+<p>ngx_http_lua_shared_memory_add 只是注册一个新的 shared dict，不会立即分配对应大小的内存。</p>
+<h3 id=ngxshareddictget>ngx.shared.DICT.get</h3>
+<p>get 接口的实现，在 2019.8.1（commit ID: 947fa0088b7a0387f43eb016436a2e4462eb5746）中，把接口注入的方式改成了 FFI 的方式。这些 FFI C 接口在 lau-nginx-module 项目中，Lua 接口在 lua-resty-core 项目中。</p>
+<pre tabindex=0><code>- shdict_get
+    \- check_zone: 检查 zone（shared dict）是否有效
+    \- if key_len &gt; 65535 then: 检查 key 的类型和长度。长度不能大于 65535
+    \- local size = get_string_buf_size(): 获取一块空间来存储值，默认空间大小是 4096 字节
+    \- ngx_http_lua_ffi_shdict_get: 获取值
+        \- hash = ngx_crc32_short(key, key_len): 使用 CRC 算法生成一个 HASH 值
+        \- ngx_shmtx_lock(&amp;ctx-&gt;shpool-&gt;mutex): 加锁
+        \- ngx_http_lua_shdict_expire(ctx, 1): 删除 1~2 个过期的数据条目，如果传值是 1，则不管过没过期，一定会删除 1 个数据条目。
+            \- while (n &lt; 3): 最多删除 3 个数据，n 是传进来的
+                \- if (ngx_queue_empty(&amp;ctx-&gt;sh-&gt;lru_queue)): 队列空了，直接返回
+                \- q = ngx_queue_last(&amp;ctx-&gt;sh-&gt;lru_queue): 获取队列中最旧的一个数据
+                \- sd = ngx_queue_data(q, ngx_http_lua_shdict_node_t, queue): 获取数据
+                \- if (n++ != 0): n 不等于 0，就需要检查过期时间，过期了才删除
+                \- if (sd-&gt;value_type == SHDICT_TLIST): 如果是列表，则遍历列表，然后一个一个删除。
+                \- ngx_queue_remove(q): 从 LRU 队列中删除
+                \- ngx_rbtree_delete(&amp;ctx-&gt;sh-&gt;rbtree, node): 从红黑树中删除
+                \- ngx_slab_free_locked(ctx-&gt;shpool, node): 以加锁的方式从 slab 内存池中删除
+        \- rc = ngx_http_lua_shdict_lookup(zone, hash, key, key_len, &amp;sd): 进行检索
+            \- while (node != sentinel): 在红黑树中进行查找，没到哨兵节点时，就一直找
+                \- if (hash &lt; node-&gt;key): 先检查 hash (前面 ngx_crc32_short 生成的)，hash 相等，才有可能是要找的 key。
+                \- if (hash &gt; node-&gt;key): 不是这个节点，往右找
+                \- rc = ngx_memn2cmp(kdata, sd-&gt;data, klen, (size_t) sd-&gt;key_len): hash 值相等了，就比较 key 是否相同，相同证明就是要找的
+                \- if (rc == 0): 找到了
+                    \- ngx_queue_remove(&amp;sd-&gt;queue)
+                    \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 刚访问过，放到队首去
+                    \- return NGX_DONE/NGX_OK: 过期返回 NGX_DONE，没过期返回 NGX_OK
+        \- *str_value_len = value.len: 根据不同的类型（字符串、数字、布尔），进行长度赋值
+        \-  ngx_memcpy(*str_value_buf, value.data, value.len): 根据不同的类型（字符串、数字、布尔），进行数据复制
+        \- *user_flags = sd-&gt;user_flags: 是否强制覆盖其他有效条目的标记
+        \- ngx_shmtx_unlock(&amp;ctx-&gt;shpool-&gt;mutex): 解锁
+        \- *is_stale = (rc == NGX_DONE): 如果是获取 stale 的接口，则判断是否过期
+    \- if typ == 4 then: 值的类型只能是字符串(4)、数字(3)、布尔值(1)，如果是字符串时，会检查返回的值的指针是否和传进去的一致，如果不一致，表示是值太大，动态分配的内存，复制成 Lua 字符串后，会调用 C.free() 进行释放。
+</code></pre><p>这个接口主要进行了以下操作：</p>
+<ul>
+<li>主要的参数检查，在 Lua 接口中进行</li>
+<li>对内存池进行加锁（内存池级别）</li>
+<li>尝试释放 1~2 个过期数据</li>
+<li>然后在红黑树中进行搜索。如果找到，就把数据放到 LRU 队列首部，表示刚刚被访问过</li>
+<li>最后把数据复制到传进来的内存中或者是另外申请一块内存（如果值太大），返回给 Lua 接口</li>
+</ul>
+<h3 id=ngxshareddictset>ngx.shared.DICT.set</h3>
+<pre tabindex=0><code>- shdict_set
+    \- shdict_store
+    \- check_zone(zone): 检查shared dict是否有效
+    \- if not exptime then: 检查 exptime、key 等参数是否合法
+    \- if valtyp == &quot;string&quot; then: 检查值的类型，可以是 &quot;string&quot;, &quot;number&quot;, nil, &quot;boolean&quot;；如果不是这 4 种类型，就报错返回。
+    \- ngx_lua_ffi_shdict_store
+        \- hash = ngx_crc32_short(key, key_len): 生成 hash 值
+        \- switch (value_type): 统一把值转换到 1 对变量中（str_value_buf 和 str_value_len），&quot;number&quot;, nil, &quot;boolean&quot; 这三种类型才需要转换
+        \- ngx_shmtx_lock(&amp;ctx-&gt;shpool-&gt;mutex): 加锁
+        \- ngx_http_lua_shdict_expire(ctx, 1): 释放 1~2 个过期数据条目
+        \- rc = ngx_http_lua_shdict_lookup(zone, hash, key, key_len, &amp;sd): 查找一下，看是否能找到
+        \- if (op &amp; NGX_HTTP_LUA_SHDICT_REPLACE): 如果是替换，并且没找到，就报错返回；否则就跳到替换的逻辑去执行
+        \- if (op &amp; NGX_HTTP_LUA_SHDICT_ADD): 如果是增加，但是找到并且没过期，就报错返回；找到但过期，就执行替换操作；没找到，就执行增加操作。
+        \- else: 接下来是普通的 SET 操作
+        \- if (rc == NGX_OK || rc == NGX_DONE): 找到并且没过期，或者是找到但过期
+            \- if (value_type == LUA_TNIL): 如果是 nil，则表示是删除数据，跳到删除的逻辑去
+            \- replace(goto 标记): 替换逻辑开始
+                \- if (str_value_buf &amp;&amp; str_value_len == (size_t) sd-&gt;value_len &amp;&amp; sd-&gt;value_type != SHDICT_TLIST): 找到并且值的大小没变，就复用
+                    \- ngx_queue_remove(&amp;sd-&gt;queue)
+                    \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 插入到队首，表示刚访问过
+                    \- ngx_memcpy(sd-&gt;data + key_len, str_value_buf, str_value_len): 把新值复制过去，然后解锁返回
+                    \- ngx_shmtx_unlock(&amp;ctx-&gt;shpool-&gt;mutex)
+                \- else: 先删除，再插入
+            \- remove(goto 标记): 删除逻辑开始
+                    \- if (sd-&gt;value_type == SHDICT_TLIST): 如果是 list，则遍历删除列表内元素
+                    \- ngx_queue_remove(&amp;sd-&gt;queue): 从 LRU 队列中删除自身（不管是不是 list 类型）
+                    \- ngx_rbtree_delete(&amp;ctx-&gt;sh-&gt;rbtree, node): 从红黑树中删除自身
+                    \- ngx_slab_free_locked(ctx-&gt;shpool, node): 从内存池中释放内存
+        \- else: 数据没找到，直接新分配一个
+        \- insert(goto 标记): 插入逻辑开始，数据不存在或者是新旧值的大小不匹配
+            \- if (str_value_buf == NULL): 如果是 set(key, nil)，也就是删除操作，则直接解锁返回，因为前面已经删除了
+            \- node = ngx_slab_alloc_locked(ctx-&gt;shpool, n): 分配内存
+            \- if (node == NULL): 没内存了
+                \- if (op &amp; NGX_HTTP_LUA_SHDICT_SAFE_STORE): 如果是 safe_set，直接报错返回
+                \- for (i = 0; i &lt; 30; i++): 否则尝试 30 次强制释放数据，如果还是没能释放掉并申请到想要的大小的内存，就也报错返回
+                    \- ngx_http_lua_shdict_expire
+                    \- ngx_slab_alloc_locked
+        \- allocated(goto 标记): 分配逻辑开始 —— 其实内存已经分配好，现在是进行数据赋值等操作
+            \- sd-&gt;user_flags = user_flags: 设置超时时间，用户标记等
+            \- p = ngx_copy(sd-&gt;data, key, key_len): 复制 key
+            \- ngx_memcpy(p, str_value_buf, str_value_len): 复制 value
+            \- ngx_rbtree_insert(&amp;ctx-&gt;sh-&gt;rbtree, node): 加入到红黑树中
+            \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 加入到 LRU 队列的队首
+            \- ngx_shmtx_unlock(&amp;ctx-&gt;shpool-&gt;mutex): 解锁返回
+</code></pre><p>这个接口主要进行了以下操作：</p>
+<ul>
+<li>在 Lua 接口中进行参数检查，key、flag、超时时间等</li>
+<li>在 C 接口中进行参数检查，值的类型只能是 &ldquo;string&rdquo;, &ldquo;number&rdquo;, nil, &ldquo;boolean&rdquo; 这 4 种</li>
+<li>对内存池进行加锁（内存池级别），开始执行变更操作</li>
+<li>尝试释放 1~2 个过期数据</li>
+<li>然后在红黑树中进行搜索
+<ul>
+<li>如果找到，并且
+<ul>
+<li>传进来的值是 nil，表示删除，跳到删除的逻辑</li>
+<li>传进来的值不是 nil，旧的值也不是 list 类型，并且值的长度相等，说明可用复用，直接把新值复制过去即可</li>
+<li>是 list 类型，则进行遍历删除</li>
+<li>不是 list 类型，并且值的长度不相等，则删除旧的值，再分配新的空间存新的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果没找到，直接插入新的数据</li>
+</ul>
+<h3 id=ngxshareddictlpush>ngx.shared.DICT.lpush</h3>
+<p>列表系列的接口则还是通过 C 接口注入的方式。</p>
+<pre tabindex=0><code>- ngx_http_lua_inject_ngx_api
+    \- ngx_http_lua_inject_shdict_api
+        \- lua_pushcfunction(L, ngx_http_lua_shdict_lpush)
+        \- lua_setfield(L, -2, &quot;lpush&quot;)
+</code></pre><p>接下来直接跟踪一下 ngx_http_lua_shdict_lpush：</p>
+<pre tabindex=0><code>- ngx_http_lua_shdict_lpush
+    \- ngx_http_lua_shdict_push_helper
+        \- n = lua_gettop(L): 获取参数数量，进行参数检查。
+        \- zone = ngx_http_lua_shdict_get_zone(L, 1): 获取shared dict，同时也是算是参数检查的一部分。
+        \- if (lua_isnil(L, 2)): 检查第二个参数 key，key 不能为 nil，不能是空字符串，不能太长（多于 65535 字节）
+        \- hash = ngx_crc32_short(key.data, key.len): 计算 key 的 hash 值
+        \- value_type = lua_type(L, 3): 获取要 push 的值的类型，只能是 string 和 number 类型
+        \- ngx_shmtx_lock(&amp;ctx-&gt;shpool-&gt;mutex):
+        \- ngx_http_lua_shdict_expire(ctx, 1):
+        \- rc = ngx_http_lua_shdict_lookup(zone, hash, key.data, key.len, &amp;sd)
+        \- if (rc == NGX_DONE): key 存在但过期了
+            \- if (sd-&gt;value_type != SHDICT_TLIST): 如果旧的 key 对应的值不是 list 类型，则先删除旧的值，再插入新值
+                \- ngx_queue_remove(&amp;sd-&gt;queue)
+                \- ngx_rbtree_delete(&amp;ctx-&gt;sh-&gt;rbtree, node)
+                \- ngx_slab_free_locked(ctx-&gt;shpool, node)
+                \- goto init_list: 跳到初始化 list 的部分
+            \- else: 是 list 类型，但是过期了
+                \- queue = ngx_http_lua_shdict_get_list_head(sd, key.len): 逐个释放所有的数据
+                    \- lnode = ngx_queue_data(q, ngx_http_lua_shdict_list_node_t, queue)
+                    \- ngx_slab_free_locked(ctx-&gt;shpool, lnode)
+                \- ngx_queue_init(queue): 重新初始化值队列（注意不是 LRU 队列）
+                \- ngx_queue_remove(&amp;sd-&gt;queue)
+                \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 重新插入到 LRU 队列首部
+                \- goto push_node: 跳到 push 数据的部分
+        \- if (rc == NGX_OK): key 存在并且没过期
+            \- if (sd-&gt;value_type != SHDICT_TLIST): 如果久的值不是 list 类型，就报错退出
+            \- queue = ngx_http_lua_shdict_get_list_head(sd, key.len): 获取值队列
+            \- ngx_queue_remove(&amp;sd-&gt;queue):
+            \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 老样子，刚访问过，放到 LRU 队首
+            \- goto push_node: 跳到 push 数据的部分
+        \- else: rc == NGX_DECLINED, key 没找到，或者从其他地方跳过来
+        \- init_list(goto 标记)
+            \- n = offsetof(ngx_rbtree_node_t, color)
+                + offsetof(ngx_http_lua_shdict_node_t, data)
+                + key.len
+                + sizeof(ngx_queue_t): 计算需要分配的空间大小，ngx_queue_t 这块即是值队列。
+            \- n = (int) (uintptr_t) ngx_align_ptr(n, NGX_ALIGNMENT): 计算对齐后的大小
+            \- node = ngx_slab_alloc_locked(ctx-&gt;shpool, n): 加锁的方式分配内存
+            \- ngx_memcpy(sd-&gt;data, key.data, key.len): 然后就是把信息填充到分配的空间中，复制 key
+            \- ngx_queue_init(queue): 初始化值的队列
+            \- ngx_rbtree_insert(&amp;ctx-&gt;sh-&gt;rbtree, node): 把新的 key 插入到红黑树中
+            \- ngx_queue_insert_head(&amp;ctx-&gt;sh-&gt;lru_queue, &amp;sd-&gt;queue): 把新的 key 插入到 LRU 首部
+        \- push_node(goto 标记)
+            \- n = offsetof(ngx_http_lua_shdict_list_node_t, data) + value.len: 计算要 push 的值的大小
+            \- lnode = ngx_slab_alloc_locked(ctx-&gt;shpool, n): 分配空间
+            \- if (lnode == NULL): 分配出错了——没空间了
+                \- if (sd-&gt;value_len == 0): 如果列表中没有元素，就删除这个 key (LRU 队列和红黑树)
+                \- lua_pushliteral(L, &quot;no memory&quot;): 直接报错。
+            \- else: 分配成功了
+                \- ngx_memcpy(lnode-&gt;data, value.data, value.len): 复制 value 到目标内存中
+                \- if (flags == NGX_HTTP_LUA_SHDICT_LEFT): 如果是 lpush，就插入到列表头部
+                    \- ngx_queue_insert_head(queue, &amp;lnode-&gt;queue)
+                \- else: 否则，插入到列表尾部
+                    \- ngx_queue_insert_tail(queue, &amp;lnode-&gt;queue)
+</code></pre><p>这个函数的主要逻辑是：</p>
+<ul>
+<li>先找 key 是否存在于shared dict中</li>
+<li>如果 key 存在，就检查过期了没有</li>
+<li>过期了，如果是 list 类型，就直接复用，只是删除列表里面的所有值；如果不是 list 类型，直接删除这个 key。</li>
+<li>没过期，如果是 list 类型，就表示是要找的那个 list，直接 push，如果不是 list 类型，就报错返回，说明不是要找的，用户操作错了。</li>
+<li>如果 key 不存在，就直接初始化一个 list，然后把值 push 进去。</li>
+</ul>
+<h2 id=总结>总结</h2>
+<ol>
+<li>如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？</li>
+</ol>
+<p>答：主要是注册 shared dict、初始化 LRU 队列、初始化红黑树。</p>
+<ol>
+<li>这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？</li>
+</ol>
+<p>答：是原子的。首先每个进程只有是一个线程；另外通过锁来保证进程之间的数据同步。</p>
+<ol>
+<li>ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？</li>
+</ol>
+<p>答：主要涉及一下数据结构：</p>
+<ul>
+<li>ngx_http_lua_shm_zone_ctx_t: 用于维护共享内存本身，其中元素会只向实际的 ngx_shm_zone_t。</li>
+<li>ngx_http_lua_shdict_ctx_t: 描述整个 shared dict。包括名称、slab 内存池、main 配置指针，同时也有一个元素指向 ngx_http_lua_shdict_shctx_t。</li>
+<li>ngx_http_lua_shdict_shctx_t: 和 ngx_http_lua_shdict_ctx_t 一起表示整个 shared dict。这里主要是存储 lru 队列、红黑树相关内容。</li>
+<li>ngx_http_lua_shdict_node_t: 用于表示一个 shared dict 键值对。</li>
+</ul>
+<p>详细结构定义见 <a class=link href=../OpenResty%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_shared_dict.md>ngx_shared_dict.md</a></p>
+<p>内存分布：</p>
+<ul>
+<li>list 类型, <code>-</code> 表示减去</li>
+</ul>
+<pre tabindex=0><code>[ngx_rbtree_node_t-color-data|color|ngx_http_lua_shdict_node_t-data|key|ngx_queue_t]
+</code></pre><p><code>ngx_rbtree_node_t</code> 和 <code>ngx_http_lua_shdict_node_t</code> 交接在一起了，公用了一些元素。
+<code>ngx_http_lua_shdict_node_t</code> 的 data 就是 key 的开始，包含了 key 的首个字符。
+<code>ngx_queue_t</code> 是双端队列，用于存储所有值。</p>
+<ul>
+<li>list 中每个值, <code>-</code> 表示减去</li>
+</ul>
+<pre tabindex=0><code>[ngx_http_lua_shdict_list_node_t-data|value]
+</code></pre><p><code>ngx_http_lua_shdict_list_node_t</code> 的 data 是 value 的开始，存储了 value 的一个字符。</p>
+<ul>
+<li>非 list 类型，<code>-</code> 表示减去</li>
+</ul>
+<pre tabindex=0><code>[ngx_rbtree_node_t-color-data|color|ngx_http_lua_shdict_node_t-data|key|value]
+</code></pre><p>和 <code>list</code> 类型类似，只是最后在 key 后面存的是 value，而不再是队列。</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
+<div class=article-image>
+<img src=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.c0127903dac4110e1d5103ae27c763b4_hu6c226959cebd96f85422def462695424_85269_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty *_by_lua* 及阶段" data-hash="md5-wBJ5A9rEEQ4dUQOuJ8djtA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty *_by_lua* 及阶段</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image.886a0ced2982664021dba680bed7a699_hu717038469c11dd077f7b408e7b5d39bb_49064_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 协程" data-hash="md5-iGoM7SmCZkAh26aAvtemmQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 协程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/>
+<div class=article-image>
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码加载" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua 代码加载</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 模块初始化</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#使用>使用</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#定义shared-dictlua_shared_dict>定义shared dict（lua_shared_dict）</a></li>
+<li><a href=#ngxshareddictget>ngx.shared.DICT.get</a></li>
+<li><a href=#ngxshareddictset>ngx.shared.DICT.set</a></li>
+<li><a href=#ngxshareddictlpush>ngx.shared.DICT.lpush</a></li>
+</ol>
+</li>
+<li><a href=#总结>总结</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

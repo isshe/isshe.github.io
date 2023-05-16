@@ -1,0 +1,485 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="管道 目的：
+ 有哪些使用场景？ 如何使用？在 OR 里面是如何使用的？ 由操作系统 shell 执行的字符串形式的命令行，会阻塞吗？ 如何实现的？ 在 proc_write 中 yield 出去后，是如何 resume 的？  使用 spawn —— 创建对象   语法：proc, err = pipe_module.spawn(args, opts?)
+  作用：创建并返回一个新的子流程实例。
+  参数：
+ args：数组形式的命令或者是字符串形式的命令。  数组形式示例：{&amp;ldquo;ls&amp;rdquo;, &amp;ldquo;-l&amp;rdquo;} 字符串形式示例：&amp;ldquo;ls -l&amp;rdquo;。当使用此模式时，命令将由操作系统 shell 执行，就像 os.execute 一样。   opts：  merge_stderr：如果是 true，将合并 stderr 和 stdout 的输出，相当于 2&amp;gt;&amp;amp;1。 buffer_size：读取操作的缓冲区大小，默认是 4096 字节。 environ：环境变量。如果当前系统不支持环境变量，则返回 nil 和 &amp;ldquo;environ option not supported&amp;rdquo;。示例：{&amp;quot;PATH=/tmp/bin&amp;quot;, &amp;quot;CWD=/tmp/work&amp;quot;} write_timeout：写超时时间，单位是毫秒。默认是 10000，设置为 0 则永不超时。 stdout_read_timeout：标准输出读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 stderr_read_timeout：标准错误读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 wait_timeout：等待超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。      返回值："><title>OpenResty 管道（pipe）</title>
+<link rel=canonical href=https://isshe.site/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty 管道（pipe）">
+<meta property="og:description" content="管道 目的：
+ 有哪些使用场景？ 如何使用？在 OR 里面是如何使用的？ 由操作系统 shell 执行的字符串形式的命令行，会阻塞吗？ 如何实现的？ 在 proc_write 中 yield 出去后，是如何 resume 的？  使用 spawn —— 创建对象   语法：proc, err = pipe_module.spawn(args, opts?)
+  作用：创建并返回一个新的子流程实例。
+  参数：
+ args：数组形式的命令或者是字符串形式的命令。  数组形式示例：{&amp;ldquo;ls&amp;rdquo;, &amp;ldquo;-l&amp;rdquo;} 字符串形式示例：&amp;ldquo;ls -l&amp;rdquo;。当使用此模式时，命令将由操作系统 shell 执行，就像 os.execute 一样。   opts：  merge_stderr：如果是 true，将合并 stderr 和 stdout 的输出，相当于 2&amp;gt;&amp;amp;1。 buffer_size：读取操作的缓冲区大小，默认是 4096 字节。 environ：环境变量。如果当前系统不支持环境变量，则返回 nil 和 &amp;ldquo;environ option not supported&amp;rdquo;。示例：{&amp;quot;PATH=/tmp/bin&amp;quot;, &amp;quot;CWD=/tmp/work&amp;quot;} write_timeout：写超时时间，单位是毫秒。默认是 10000，设置为 0 则永不超时。 stdout_read_timeout：标准输出读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 stderr_read_timeout：标准错误读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 wait_timeout：等待超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。      返回值：">
+<meta property="og:url" content="https://isshe.site/p/openresty-%E7%AE%A1%E9%81%93pipe/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E7%AE%A1%E9%81%93pipe/image.jpg">
+<meta name=twitter:title content="OpenResty 管道（pipe）">
+<meta name=twitter:description content="管道 目的：
+ 有哪些使用场景？ 如何使用？在 OR 里面是如何使用的？ 由操作系统 shell 执行的字符串形式的命令行，会阻塞吗？ 如何实现的？ 在 proc_write 中 yield 出去后，是如何 resume 的？  使用 spawn —— 创建对象   语法：proc, err = pipe_module.spawn(args, opts?)
+  作用：创建并返回一个新的子流程实例。
+  参数：
+ args：数组形式的命令或者是字符串形式的命令。  数组形式示例：{&amp;ldquo;ls&amp;rdquo;, &amp;ldquo;-l&amp;rdquo;} 字符串形式示例：&amp;ldquo;ls -l&amp;rdquo;。当使用此模式时，命令将由操作系统 shell 执行，就像 os.execute 一样。   opts：  merge_stderr：如果是 true，将合并 stderr 和 stdout 的输出，相当于 2&amp;gt;&amp;amp;1。 buffer_size：读取操作的缓冲区大小，默认是 4096 字节。 environ：环境变量。如果当前系统不支持环境变量，则返回 nil 和 &amp;ldquo;environ option not supported&amp;rdquo;。示例：{&amp;quot;PATH=/tmp/bin&amp;quot;, &amp;quot;CWD=/tmp/work&amp;quot;} write_timeout：写超时时间，单位是毫秒。默认是 10000，设置为 0 则永不超时。 stdout_read_timeout：标准输出读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 stderr_read_timeout：标准错误读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。 wait_timeout：等待超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。      返回值："><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-%E7%AE%A1%E9%81%93pipe/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg srcset="/p/openresty-%E7%AE%A1%E9%81%93pipe/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_800x0_resize_q75_box.jpg 800w, /p/openresty-%E7%AE%A1%E9%81%93pipe/image_huf81ae40bd4462c9a52fbc7063d25c656_36524_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty 管道（pipe）">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>OpenResty 管道（pipe）</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 3 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=管道>管道</h2>
+<p>目的：</p>
+<ul>
+<li>有哪些使用场景？</li>
+<li>如何使用？在 OR 里面是如何使用的？</li>
+<li>由操作系统 shell 执行的字符串形式的命令行，会阻塞吗？</li>
+<li>如何实现的？</li>
+<li>在 proc_write 中 yield 出去后，是如何 resume 的？</li>
+</ul>
+<h2 id=使用>使用</h2>
+<h3 id=spawn--创建对象>spawn —— 创建对象</h3>
+<ul>
+<li>
+<p>语法：<code>proc, err = pipe_module.spawn(args, opts?)</code></p>
+</li>
+<li>
+<p>作用：创建并返回一个新的子流程实例。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>args：数组形式的命令或者是字符串形式的命令。
+<ul>
+<li>数组形式示例：{&ldquo;ls&rdquo;, &ldquo;-l&rdquo;}</li>
+<li>字符串形式示例：&ldquo;ls -l&rdquo;。当使用此模式时，命令将由操作系统 shell 执行，就像 os.execute 一样。</li>
+</ul>
+</li>
+<li>opts：
+<ul>
+<li>merge_stderr：如果是 <code>true</code>，将合并 stderr 和 stdout 的输出，相当于 <code>2>&1</code>。</li>
+<li>buffer_size：读取操作的缓冲区大小，默认是 4096 字节。</li>
+<li>environ：环境变量。如果当前系统不支持环境变量，则返回 nil 和 &ldquo;environ option not supported&rdquo;。示例：<code>{"PATH=/tmp/bin", "CWD=/tmp/work"}</code></li>
+<li>write_timeout：写超时时间，单位是毫秒。默认是 10000，设置为 0 则永不超时。</li>
+<li>stdout_read_timeout：标准输出读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。</li>
+<li>stderr_read_timeout：标准错误读超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。</li>
+<li>wait_timeout：等待超时，单位是毫秒，默认是 10000，设置为 0 则永不超时。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>返回值：</p>
+<ul>
+<li>失败：返回 nil 和错误信息</li>
+<li>成功：返回 pipe 对象</li>
+</ul>
+</li>
+</ul>
+<h3 id=wait--等待当前子流程退出>wait —— 等待当前子流程退出</h3>
+<ul>
+<li>
+<p>语法：<code> ok, reason, status = proc:wait()</code></p>
+</li>
+<li>
+<p>作用：等待当前子流程退出，包括超时退出。</p>
+</li>
+<li>
+<p>返回值：</p>
+<ul>
+<li>成功：ok 值为 true</li>
+<li>失败：ok 值为 false，reason 为一个字符串，如 &ldquo;exit&rdquo; 或 &ldquo;signal&rdquo;。
+<ul>
+<li>exit 时：status 将为 exit 的状态码。</li>
+<li>signal 时，status 将为信号码。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id=kill--向子流程发送一个信号>kill —— 向子流程发送一个信号。</h3>
+<ul>
+<li>
+<p>语法：<code>ok, err = proc:kill(signum)</code></p>
+</li>
+<li>
+<p>作用： 向子流程发送一个信号。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>signum：信号量数字。可以使用 lua-resty-signal 的 signum() 来获取信号量名称对应的信号量值。</li>
+</ul>
+</li>
+<li>
+<p>返回值：</p>
+<ul>
+<li>成功：true</li>
+<li>失败：nil 和 错误字符串。如果是已经退出的子流程，则错误字符串为 &ldquo;exited&rdquo;。</li>
+</ul>
+</li>
+</ul>
+<h3 id=shutdown--关闭当前子流程的-stderrstderr-或-stdin>shutdown —— 关闭当前子流程的 stderr、stderr 或 stdin</h3>
+<ul>
+<li>
+<p>语法：<code>ok, err = proc:shutdown(direction)</code></p>
+</li>
+<li>
+<p>作用：关闭子流程的 stderr、 stderr 或 stdin。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>direction：stderr、stdout、stdin。</li>
+</ul>
+</li>
+<li>
+<p>返回值：</p>
+<ul>
+<li>成功：true
+<ul>
+<li>如果关闭一个轻线程正在等待的方向(stderr/stdout/stdin)，则返回 true。</li>
+</ul>
+</li>
+<li>失败：nil 和错误字符串。
+<ul>
+<li>如果指定了 merge_stderr，并且对 stderr 调用 shutdown，则返回 nil 和 &ldquo;merged to stdout&rdquo;。</li>
+<li>如果子流程已经退出，则返回 nil 和 &ldquo;closed&rdquo;。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id=write--向子流程的-stdin-写入数据>write —— 向子流程的 stdin 写入数据</h3>
+<ul>
+<li>
+<p>语法：<code>nbytes, err = proc:write(data)</code></p>
+</li>
+<li>
+<p>作用：向子流程的 stdin 写入数据。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>data：需要写入的数据。</li>
+</ul>
+</li>
+<li>
+<p>返回值：</p>
+<ul>
+<li>成功：nbytes 表示成功写入的数据长度。</li>
+<li>失败：nil 和错误字符串。
+<ul>
+<li>如果多个协程同时向当前子流程进行写入，则只有第一个成功，后续的调用都会返回 &ldquo;pipe busy writing&rdquo; 错误。</li>
+<li>如果写操作被 shutdown 了，将返回 nil 和 &ldquo;aborted&rdquo;。</li>
+<li>如果写已经退出的子流程，将返回 nil 和 &ldquo;closed&rdquo;。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id=stdout_read_stderr_read_--从-stderr-或-stdout-读取数据>stdout_read_<em>、stderr_read_</em> —— 从 stderr 或 stdout 读取数据。</h3>
+<ul>
+<li>语法：</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stderr_read_all</span><span class=p>()</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stdout_read_all</span><span class=p>()</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stderr_read_line</span><span class=p>()</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stdout_read_line</span><span class=p>()</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stderr_read_bytes</span><span class=p>(</span><span class=n>len</span><span class=p>)</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span><span class=p>,</span> <span class=n>partial</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stdout_read_bytes</span><span class=p>(</span><span class=n>len</span><span class=p>)</span>
+<span class=n>data</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>proc</span><span class=p>:</span><span class=n>stderr_read_any</span><span class=p>(</span><span class=n>max</span><span class=p>)</span>
+<span class=n>proc</span><span class=p>:</span><span class=n>stdout_read_any</span><span class=p>(</span><span class=n>max</span><span class=p>)</span>
+</code></pre></div><p>比较简单，不再详细说明，可参考此文档：https://github.com/openresty/lua-resty-core/blob/master/lib/ngx/pipe.md#stderr_read_all</p>
+<h2 id=实现>实现</h2>
+<p>相关 API 并不是通过 lua-nginx-module 注入的方式来实现。详见：</p>
+<ul>
+<li><a class=link href=https://github.com/openresty/lua-resty-core/blob/master/lib/ngx/pipe.lua target=_blank rel=noopener>pipe.lua</a></li>
+</ul>
+<h3 id=创建-pipe-对象>创建 pipe 对象</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>pipe_spawn</span><span class=p>:</span> <span class=err>这部分是</span> <span class=n>Lua</span> <span class=err>代码，进行各种参数检查。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_ffi_pipe_spawn</span><span class=p>:</span> <span class=err>创建</span> <span class=n>pipe</span> <span class=err>对象</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_create_pool</span><span class=p>:</span> <span class=err>创建内存池</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>pipe</span><span class=p>:</span> <span class=err>创建</span> <span class=mi>3</span> <span class=err>个</span> <span class=n>pipe</span><span class=err>：对应</span> <span class=n>stdin</span><span class=err>、</span><span class=n>stdout</span><span class=err>、</span><span class=n>stderr</span><span class=err>；</span><span class=n>stderr</span> <span class=err>根据参数按需创建。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>fork</span><span class=p>:</span> <span class=n>fork</span> <span class=err>进程</span>
+            <span class=err>\</span><span class=o>-</span> <span class=err>如果是子进程</span><span class=p>(</span><span class=n>fork</span> <span class=err>返回值是</span> <span class=mi>0</span><span class=p>)</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>CPU_SET</span><span class=p>:</span> <span class=err>重新设置进程的</span> <span class=n>CPU</span> <span class=err>亲缘性</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>sigaction</span><span class=p>:</span> <span class=err>重置已忽略信号的处理程序成</span> <span class=n>default</span><span class=p>(</span><span class=n>SIG_DFL</span><span class=p>)</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>sigprocmask</span><span class=p>(</span><span class=n>SIG_SETMASK</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>set</span><span class=p>,</span> <span class=n>NULL</span><span class=p>):</span> <span class=err>重置信号掩码</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>ngx_close_socket</span><span class=p>(</span><span class=n>ls</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>fd</span><span class=p>):</span> <span class=err>关闭监听的套接字</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>close</span><span class=p>(</span><span class=n>out</span><span class=p>[</span><span class=mi>0</span><span class=p>]):</span> <span class=err>关闭不需要的管道套接字，如</span> <span class=n>stdin</span> <span class=err>的写（对子进程来说）；</span><span class=n>stdout</span> <span class=err>的读。</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>dup2</span><span class=p>(</span><span class=kr>in</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=n>STDIN_FILENO</span><span class=p>):</span> <span class=err>重定向标准输入、标准输入。</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>close</span><span class=p>(</span><span class=kr>in</span><span class=p>[</span><span class=mi>0</span><span class=p>]):</span> <span class=err>关闭多余的套接字，如</span> <span class=n>stdin</span> <span class=err>的读。在</span> <span class=n>dup2</span> <span class=err>后，</span><span class=kr>in</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=err>会有</span> <span class=mi>2</span> <span class=err>份，一份描述符是原来的</span> <span class=kr>in</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=err>，另一份描述符是</span> <span class=n>STDIN_FILENO</span><span class=err>，因此关闭多余的</span> <span class=kr>in</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=err>。</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>execvpe</span><span class=o>/</span><span class=n>ngx_http_lua_execvpe</span><span class=o>/</span><span class=n>execvp</span><span class=err>：执行想要执行的命令</span><span class=p>(</span><span class=err>程序</span><span class=p>)</span>
+
+            <span class=err>\</span><span class=o>-</span> <span class=err>如果是父进程（</span><span class=n>fork</span> <span class=err>返回值是子进程的</span> <span class=n>ID</span><span class=err>）</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>close</span><span class=p>:</span> <span class=err>关闭不需要的文件描述符，如标准输入的读，标准输出的写</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>ngx_nonblocking</span><span class=p>:</span> <span class=err>把没关闭的文件描述符设置为非阻塞</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>ngx_rbtree_insert</span><span class=p>:</span> <span class=err>设置好</span> <span class=n>pipe</span> <span class=err>对象，然后加入到红黑树中。</span>
+</code></pre></div><p>这个函数主要做了以下事情：</p>
+<ul>
+<li>创建 2 或 3 个管道(pipe)，如果使用了 merge_stderr 则 2 个，否则 3 个。</li>
+<li>然后 fork 进程</li>
+<li>在子进程中关闭不要的 fd，并把标准输入和标准输出重定向到对应管道中</li>
+<li>准备工作完成后，子进程执行执行命令</li>
+<li>父进程也关闭不要的 fd，设置没关闭的 fd 成非阻塞，然后加入到红黑树中，进行管理。</li>
+</ul>
+<h3 id=向子流程的-stdin-写入数据>向子流程的 stdin 写入数据</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>proc_write</span><span class=p>:</span> <span class=n>Lua</span> <span class=err>接口</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kd>local</span> <span class=n>rc</span> <span class=o>=</span> <span class=n>C.ngx_http_lua_ffi_pipe_proc_write</span><span class=p>:</span> <span class=err>进行写操作</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_init_ctx</span><span class=p>:</span> <span class=err>初始化</span> <span class=n>ctx</span><span class=err>。设置读写函数、初始化读写事件的处理函数。</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_chain_get_free_buf</span><span class=p>:</span> <span class=err>获取空间存放要写入的数据</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_write</span><span class=p>:</span> <span class=err>进行写操作</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>c</span><span class=o>-&gt;</span><span class=n>send</span><span class=p>:</span> <span class=err>实际的写入函数是</span> <span class=n>ngx_http_lua_pipe_fd_write</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>NGX_AGAIN</span><span class=p>:</span> <span class=err>返回值是</span> <span class=n>NGX_AGAIN</span> <span class=err>表示阻塞了</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>pipe_ctx</span><span class=o>-&gt;</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>data</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>cur_co_ctx</span><span class=p>:</span> <span class=err>设置好</span> <span class=n>cur_co_ctx</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>ngx_handle_write_event</span><span class=p>:</span> <span class=err>添加写事件，事件处理函数是</span> <span class=n>ngx_http_lua_pipe_resume_write_handler</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_resume_write_handler</span>
+          <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_resume_helper</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_clear_event</span><span class=p>:</span> <span class=err>把事件清理掉</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>cur_co_ctx</span> <span class=o>=</span> <span class=n>wait_co_ctx</span><span class=p>:</span> <span class=err>设置好</span> <span class=n>ctx</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_pipe_resume</span><span class=p>:</span> <span class=err>已经进入</span> <span class=n>content</span> <span class=err>阶段，调用这个来环境</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_core_run_phases</span><span class=p>:</span> <span class=err>否则，调用这个来唤醒</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_run_posted_requests</span><span class=p>:</span> <span class=err>调用后续请求的处理</span>
+      <span class=err>\</span><span class=o>-</span> <span class=n>ngx_add_timer</span><span class=p>(</span><span class=n>wev</span><span class=p>,</span> <span class=n>timeout</span><span class=p>):</span> <span class=err>如果设置了超时时间，就添加到定时器中</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>co_yield</span><span class=p>():</span> <span class=err>如果前面调用的返回值是</span> <span class=n>FFI_AGAIN</span><span class=err>，则</span> <span class=n>yield</span> <span class=err>让出执行权</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>rc</span> <span class=o>=</span> <span class=n>C.ngx_http_lua_ffi_pipe_get_write_result</span><span class=p>:</span> <span class=err>获取写结果</span>
+</code></pre></div><p>这个函数的主要实现思路是：</p>
+<ul>
+<li>进行一次写入</li>
+<li>如果没完成，就放到事件循环中</li>
+<li>然后 yield 让出执行权</li>
+<li>后续事件发生（可写或超时）在 resume 恢复后续执行</li>
+</ul>
+<p>这个函数主要做了以下事情：</p>
+<ul>
+<li>参数检查</li>
+<li>把要写入的数据复制到 buffer 中</li>
+<li>进行一次写入，根据写入结果进行后续操作</li>
+<li>如果没写完，就监听写事件和设置定时器</li>
+<li>然后让出执行权</li>
+<li>后续 resume 回来后，调用 ngx_http_lua_ffi_pipe_get_write_result 来获取结果</li>
+<li>如果还是没完成，就继续 yield 出去</li>
+</ul>
+<h3 id=从子流程的-stdout-读取数据>从子流程的 stdout 读取数据</h3>
+<p>和写入数据是一样是思路，只是多了不同是读取模式，不再赘述。</p>
+<h2 id=总结>总结</h2>
+<ul>
+<li>有哪些使用场景？</li>
+</ul>
+<p>答：用于执行系统命令。</p>
+<ul>
+<li>由操作系统 shell 执行的字符串形式的命令行，会阻塞吗？</li>
+</ul>
+<p>答：不会，当参数不是数组形式，会默认使用 <code>/bin/sh</code> 来执行命令。</p>
+<ul>
+<li>在 proc_write 中 yield 出去后，是如何 resume 的？（如何实现的？）</li>
+</ul>
+<p>答：进行读写操作时，如果一次完成不了，就设置好事件，然后 yiled 让出执行权；后续通过事件模块来进行 resume。</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/>
+<div class=article-image>
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码加载" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua 代码加载</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-ngx.log/>
+<div class=article-image>
+<img src=/p/openresty-ngx.log/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.log" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty ngx.log</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 线程</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#管道>管道</a></li>
+<li><a href=#使用>使用</a>
+<ol>
+<li><a href=#spawn--创建对象>spawn —— 创建对象</a></li>
+<li><a href=#wait--等待当前子流程退出>wait —— 等待当前子流程退出</a></li>
+<li><a href=#kill--向子流程发送一个信号>kill —— 向子流程发送一个信号。</a></li>
+<li><a href=#shutdown--关闭当前子流程的-stderrstderr-或-stdin>shutdown —— 关闭当前子流程的 stderr、stderr 或 stdin</a></li>
+<li><a href=#write--向子流程的-stdin-写入数据>write —— 向子流程的 stdin 写入数据</a></li>
+<li><a href=#stdout_read_stderr_read_--从-stderr-或-stdout-读取数据>stdout_read_<em>、stderr_read_</em> —— 从 stderr 或 stdout 读取数据。</a></li>
+</ol>
+</li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#创建-pipe-对象>创建 pipe 对象</a></li>
+<li><a href=#向子流程的-stdin-写入数据>向子流程的 stdin 写入数据</a></li>
+<li><a href=#从子流程的-stdout-读取数据>从子流程的 stdout 读取数据</a></li>
+</ol>
+</li>
+<li><a href=#总结>总结</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

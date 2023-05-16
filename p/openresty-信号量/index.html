@@ -1,0 +1,344 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="轻线程信号量 和 Linux 系统或者 Nginx 中的信号量类似，都是用于进程/协程同步。当值小于 0 时，表示需要等待资源。 不过 Nginx 中的信号量是会导致进程在等待资源时休眠的，OpenResty 的信号量（后续简称信号量）是不是也是一样呢？我们来探究一番。
+目的：
+ 如何使用信号量？ 信号量是如何实现的？ 信号量是否会导致如进程休眠之类的问题？ 不同进程的协程是否能使用信号量？  使用 Lua 接口的使用都比较简单，我们直接通过一个示例来说明。
+-- 引入 ngx.semaphore 模块 local semaphore = require &amp;#34;ngx.semaphore&amp;#34; -- 新建一个 semaphore 对象 -- 此时默认资源是 0 个 -- 也可以传递参数指定信号量初始有多少资源 local sema = semaphore.new() -- 获取资源数量 ngx.say(&amp;#34;main thread: count: &amp;#34;, sema:count()) -- count: 0 -- 新协程的处理函数 local function handler() ngx.say(&amp;#34;sub thread: waiting on sema...&amp;#34;) -- 等待 1 个资源；超时时间是 1 秒，如果资源数量 &amp;gt;= 0，立即返回，如果拿不到（数量 &amp;lt; 0），会 yield。 -- 相当于锁操作中的 加锁（lock）操作。 -- 参数中的 1 表示 1 秒；最小可以为 0."><title>OpenResty 信号量</title>
+<link rel=canonical href=https://isshe.site/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty 信号量">
+<meta property="og:description" content="轻线程信号量 和 Linux 系统或者 Nginx 中的信号量类似，都是用于进程/协程同步。当值小于 0 时，表示需要等待资源。 不过 Nginx 中的信号量是会导致进程在等待资源时休眠的，OpenResty 的信号量（后续简称信号量）是不是也是一样呢？我们来探究一番。
+目的：
+ 如何使用信号量？ 信号量是如何实现的？ 信号量是否会导致如进程休眠之类的问题？ 不同进程的协程是否能使用信号量？  使用 Lua 接口的使用都比较简单，我们直接通过一个示例来说明。
+-- 引入 ngx.semaphore 模块 local semaphore = require &amp;#34;ngx.semaphore&amp;#34; -- 新建一个 semaphore 对象 -- 此时默认资源是 0 个 -- 也可以传递参数指定信号量初始有多少资源 local sema = semaphore.new() -- 获取资源数量 ngx.say(&amp;#34;main thread: count: &amp;#34;, sema:count()) -- count: 0 -- 新协程的处理函数 local function handler() ngx.say(&amp;#34;sub thread: waiting on sema...&amp;#34;) -- 等待 1 个资源；超时时间是 1 秒，如果资源数量 &amp;gt;= 0，立即返回，如果拿不到（数量 &amp;lt; 0），会 yield。 -- 相当于锁操作中的 加锁（lock）操作。 -- 参数中的 1 表示 1 秒；最小可以为 0.">
+<meta property="og:url" content="https://isshe.site/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.jpeg">
+<meta name=twitter:title content="OpenResty 信号量">
+<meta name=twitter:description content="轻线程信号量 和 Linux 系统或者 Nginx 中的信号量类似，都是用于进程/协程同步。当值小于 0 时，表示需要等待资源。 不过 Nginx 中的信号量是会导致进程在等待资源时休眠的，OpenResty 的信号量（后续简称信号量）是不是也是一样呢？我们来探究一番。
+目的：
+ 如何使用信号量？ 信号量是如何实现的？ 信号量是否会导致如进程休眠之类的问题？ 不同进程的协程是否能使用信号量？  使用 Lua 接口的使用都比较简单，我们直接通过一个示例来说明。
+-- 引入 ngx.semaphore 模块 local semaphore = require &amp;#34;ngx.semaphore&amp;#34; -- 新建一个 semaphore 对象 -- 此时默认资源是 0 个 -- 也可以传递参数指定信号量初始有多少资源 local sema = semaphore.new() -- 获取资源数量 ngx.say(&amp;#34;main thread: count: &amp;#34;, sema:count()) -- count: 0 -- 新协程的处理函数 local function handler() ngx.say(&amp;#34;sub thread: waiting on sema...&amp;#34;) -- 等待 1 个资源；超时时间是 1 秒，如果资源数量 &amp;gt;= 0，立即返回，如果拿不到（数量 &amp;lt; 0），会 yield。 -- 相当于锁操作中的 加锁（lock）操作。 -- 参数中的 1 表示 1 秒；最小可以为 0."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.jpeg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_800x0_resize_q75_box.jpeg srcset="/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_800x0_resize_q75_box.jpeg 800w, /p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_1600x0_resize_q75_box.jpeg 1600w" width=800 height=800 loading=lazy alt="Featured image of post OpenResty 信号量">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>OpenResty 信号量</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=轻线程信号量>轻线程信号量</h1>
+<p>和 Linux 系统或者 Nginx 中的信号量类似，都是用于进程/协程同步。当值小于 0 时，表示需要等待资源。
+不过 Nginx 中的信号量是会导致进程在等待资源时休眠的，OpenResty 的信号量（后续简称信号量）是不是也是一样呢？我们来探究一番。</p>
+<p>目的：</p>
+<ul>
+<li>如何使用信号量？</li>
+<li>信号量是如何实现的？</li>
+<li>信号量是否会导致如进程休眠之类的问题？</li>
+<li>不同进程的协程是否能使用信号量？</li>
+</ul>
+<h1 id=使用>使用</h1>
+<p>Lua 接口的使用都比较简单，我们直接通过一个示例来说明。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=c1>-- 引入 ngx.semaphore 模块</span>
+<span class=kd>local</span> <span class=n>semaphore</span> <span class=o>=</span> <span class=n>require</span> <span class=s2>&#34;ngx.semaphore&#34;</span>
+
+<span class=c1>-- 新建一个 semaphore 对象</span>
+<span class=c1>-- 此时默认资源是 0 个</span>
+<span class=c1>-- 也可以传递参数指定信号量初始有多少资源</span>
+<span class=kd>local</span> <span class=n>sema</span> <span class=o>=</span> <span class=n>semaphore.new</span><span class=p>()</span>
+
+<span class=c1>-- 获取资源数量</span>
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: count: &#34;</span><span class=p>,</span> <span class=n>sema</span><span class=p>:</span><span class=n>count</span><span class=p>())</span>  <span class=c1>-- count: 0</span>
+
+<span class=c1>-- 新协程的处理函数</span>
+<span class=kd>local</span> <span class=kr>function</span> <span class=nf>handler</span><span class=p>()</span>
+    <span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;sub thread: waiting on sema...&#34;</span><span class=p>)</span>
+
+    <span class=c1>-- 等待 1 个资源；超时时间是 1 秒，如果资源数量 &gt;= 0，立即返回，如果拿不到（数量 &lt; 0），会 yield。</span>
+    <span class=c1>-- 相当于锁操作中的 加锁（lock）操作。</span>
+    <span class=c1>-- 参数中的 1 表示 1 秒；最小可以为 0.001 秒</span>
+    <span class=kd>local</span> <span class=n>ok</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>sema</span><span class=p>:</span><span class=n>wait</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>  <span class=c1>-- wait for a second at most</span>
+    <span class=kr>if</span> <span class=ow>not</span> <span class=n>ok</span> <span class=kr>then</span>
+        <span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;sub thread: failed to wait on sema: &#34;</span><span class=p>,</span> <span class=n>err</span><span class=p>)</span>
+    <span class=kr>else</span>
+        <span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;sub thread: waited successfully.&#34;</span><span class=p>)</span>
+    <span class=kr>end</span>
+<span class=kr>end</span>
+
+<span class=c1>-- 新建协程并立即跑 handler</span>
+<span class=kd>local</span> <span class=n>co</span> <span class=o>=</span> <span class=n>ngx.thread</span><span class=p>.</span><span class=n>spawn</span><span class=p>(</span><span class=n>handler</span><span class=p>)</span>
+
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: sleeping for a little while...&#34;</span><span class=p>)</span>
+
+<span class=n>ngx.sleep</span><span class=p>(</span><span class=mf>0.1</span><span class=p>)</span>  <span class=c1>-- wait a bit</span>
+
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: posting to sema...&#34;</span><span class=p>)</span>
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: count: &#34;</span><span class=p>,</span> <span class=n>sema</span><span class=p>:</span><span class=n>count</span><span class=p>())</span>  <span class=c1>-- count: -1</span>
+
+<span class=c1>-- 释放一个资源，这里的参数 1 表示释放的资源数量。</span>
+<span class=n>sema</span><span class=p>:</span><span class=n>post</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: count: &#34;</span><span class=p>,</span> <span class=n>sema</span><span class=p>:</span><span class=n>count</span><span class=p>())</span>  <span class=c1>-- count: 0</span>
+<span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;main thread: end.&#34;</span><span class=p>)</span>
+</code></pre></div><p>示例输出如下：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=n>count</span><span class=p>:</span> <span class=mi>0</span>
+<span class=n>sub</span> <span class=n>thread</span><span class=p>:</span> <span class=n>waiting</span> <span class=n>on</span> <span class=n>sema</span><span class=p>...</span>
+<span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=n>sleeping</span> <span class=kr>for</span> <span class=n>a</span> <span class=n>little</span> <span class=kr>while</span><span class=p>...</span>
+<span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=n>posting</span> <span class=n>to</span> <span class=n>sema</span><span class=p>...</span>
+<span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=n>count</span><span class=p>:</span> <span class=o>-</span><span class=mi>1</span>
+<span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=n>count</span><span class=p>:</span> <span class=mi>0</span>
+<span class=n>main</span> <span class=n>thread</span><span class=p>:</span> <span class=kr>end</span><span class=p>.</span>
+<span class=n>sub</span> <span class=n>thread</span><span class=p>:</span> <span class=n>waited</span> <span class=n>successfully</span><span class=p>.</span>
+</code></pre></div><h2 id=实现>实现</h2>
+<p>不像前面文章中的做法，这里用到的 Lua 接口不是通过接口注入的方式进行的，而是用的 Lua 模块，名称为 semaphore.lua。</p>
+<h3 id=创建对象>创建对象</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>new</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=n>n</span> <span class=o>&lt;</span> <span class=mi>0</span> <span class=kr>then</span><span class=err>：检查参数，如果小于</span> <span class=mi>0</span><span class=err>，就报错退出。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_lua_ffi_sema_new</span><span class=p>(</span><span class=n>psem</span><span class=p>,</span> <span class=n>n</span><span class=p>,</span> <span class=n>errmsg</span><span class=p>)</span><span class=err>：调用</span> <span class=n>C</span> <span class=err>函数创建对象。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_alloc_sema</span><span class=err>：分配内存，会一次分配一批，然后从中取</span> <span class=mi>1</span> <span class=err>个，其他的放着后续能快速取，不用每次都分配。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ffi_gc</span><span class=p>(</span><span class=n>sem</span><span class=p>,</span> <span class=n>ngx_lua_ffi_sema_gc</span><span class=p>)</span><span class=err>：绑定</span> <span class=n>gc</span> <span class=err>函数，在</span> <span class=n>sem</span> <span class=err>被释放时，调用</span> <span class=n>gc</span> <span class=err>函数。</span>
+</code></pre></div><p>这个函数主要进行以下工作：</p>
+<ul>
+<li>检查参数合法性</li>
+<li>分配内存存储 sema 对象
+<ul>
+<li>ngx_lua_ffi_sema_new 在 http 子系统中对应 ngx_http_lua_ffi_sema_new，在 stream 子系统中对应 ngx_stream_lua_ffi_sema_new。</li>
+</ul>
+</li>
+<li>绑定清理函数</li>
+</ul>
+<h2 id=获取资源>获取资源</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>wait</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=n>milliseconds</span> <span class=o>&lt;</span> <span class=mi>0</span> <span class=kr>then</span><span class=err>：检查参数，第二个参数是等待超时时间，单位是秒，最小支持</span> <span class=mf>0.001</span> <span class=err>秒，也就是</span> <span class=mi>1</span> <span class=err>毫秒。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_lua_ffi_sema_wait</span><span class=err>：</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_ffi_check_context</span><span class=err>：检查上下文是否能</span> <span class=n>yield</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_queue_empty</span><span class=err>：如果等待队列为空并且还有资源直接返回成功</span>
+        <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>wait_ms</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span><span class=err>：如果要求不等待，也直接返回</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_add_timer</span><span class=err>；接下来就是需要等待了，增加</span> <span class=n>timer</span><span class=err>，超时时间为调用接口时指定的时间。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_queue_insert_tail</span><span class=err>：把当前协程插入到信号量等待队列末尾。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ok</span><span class=p>,</span> <span class=n>err</span> <span class=o>=</span> <span class=n>co_yield</span><span class=p>()</span><span class=err>：不能在这里使用尾调用形式，因为可能需要当前函数调用的激活记录来保存对信号量对象的引用，以防止它过早地被</span> <span class=n>GC</span> <span class=err>处理。</span>
+</code></pre></div><p>这个调用主要进行以下工作：</p>
+<ul>
+<li>检查参数合法性</li>
+<li>获取资源，能获取到就直接返回，获取不到就看要不要等待，不等就直接返回超时；等就加入到等待队列中，然后 yield 出去，等待 post 操作唤醒。</li>
+</ul>
+<h2 id=释放资源>释放资源</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>post</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=n>type</span><span class=p>(</span><span class=n>self</span><span class=p>)</span> <span class=o>~=</span> <span class=s2>&#34;table&#34;</span> <span class=ow>or</span> <span class=n>type</span><span class=p>(</span><span class=n>self.sem</span><span class=p>)</span> <span class=o>~=</span> <span class=s2>&#34;cdata&#34;</span> <span class=kr>then</span><span class=err>：检查</span> <span class=n>self</span> <span class=err>对象</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=n>num</span> <span class=o>&lt;</span> <span class=mi>1</span> <span class=kr>then</span><span class=err>：检查参数是否是</span> <span class=o>&gt;=</span> <span class=mi>1</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_lua_ffi_sema_post</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>sem</span><span class=o>-&gt;</span><span class=n>resource_count</span> <span class=o>+=</span> <span class=n>n</span><span class=err>：把资源加</span> <span class=n>n</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_post_event</span><span class=p>((</span><span class=o>&amp;</span><span class=n>sem</span><span class=o>-&gt;</span><span class=n>sem_event</span><span class=p>),</span> <span class=o>&amp;</span><span class=n>ngx_posted_events</span><span class=p>)</span><span class=err>：如果信号量中的等待队列不为空，就把事件加到全局的</span> <span class=n>ngx_posted_events</span> <span class=err>队列中，在后续的事件循环中进行唤醒新的协程。</span>
+</code></pre></div><p>这个函数也是非常简单，主要进行以下工作：</p>
+<ul>
+<li>检查参数合法性</li>
+<li>把资源数量增加 n</li>
+<li>如果有等待队列，就把事件增加到 ngx_posted_events 中，后续处理。</li>
+</ul>
+<h2 id=总结>总结</h2>
+<ul>
+<li>信号量是如何实现的？</li>
+</ul>
+<p>答：还是依赖 Lua 的协程和 Nginx 定时器等。新建一个信号量对象，其中记录信号量的信息；然后使用 wait 和 post 来增减资源。</p>
+<ul>
+<li>信号量是否会导致如进程休眠之类的问题？</li>
+</ul>
+<p>答：不会。使用的 Lua 协程，在没有资源时，会 yiled 出去，给其他协程执行。</p>
+<ul>
+<li>不同进程的协程是否能使用信号量？</li>
+</ul>
+<p>答：不能。可以在不同上下文、请求中进行使用，但是要求是同一个 worker 进程。如需在不同进程间同步，可以使用：lua-resty-lock。</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-access_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-access_by_lua/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty access_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-ngx.log/>
+<div class=article-image>
+<img src=/p/openresty-ngx.log/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.log" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty ngx.log</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%8E%B0%E6%88%90/>
+<div class=article-image>
+<img src=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%8E%B0%E6%88%90/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 轻量级现成" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 轻量级现成</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/>
+<div class=article-image>
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码加载" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua 代码加载</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.4996f2bab4f9ab8850dc86aa701f2be6_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-SZbyurT5q4hQ3IaqcB8r5g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 核心技术点</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#创建对象>创建对象</a></li>
+</ol>
+</li>
+<li><a href=#获取资源>获取资源</a></li>
+<li><a href=#释放资源>释放资源</a></li>
+<li><a href=#总结>总结</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

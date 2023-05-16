@@ -1,0 +1,350 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="init_worker_by_lua* 如果没有启用 master 进程则此指令的 Lua 代码将在 init_by_lua* 指令的 Lua 代码之后运行。
+ 启用 master 进程：表示非 master-worker 的模式  用法   使用场景
+ 通常用于启动定时器执行每 worker 相关的内容，或者后端健康检查等。    执行阶段：starting-worker，工作进程启动阶段
+  上下文：http
+  语法：
+  与 init_by_lua* 类似，不再赘述。
+实现  以 init_worker_by_lua_file 为例
+ 通过前面的探索，我们已经知道指令的解析会在配置解析阶段，而对应的 Lua 代码会在后续才执行。 因此，我们接下来目的很明确：
+ 解析 init_worker_by_lua_file 指令时，做了什么？ 在什么时候实际执行了 Lua 代码？如何执行的？  我们以 init_worker_by_lua_file 指令为例。
+指令定义 { ngx_string(&amp;#34;init_worker_by_lua_file&amp;#34;), NGX_HTTP_MAIN_CONF|NGX_CONF_TAKE1, ngx_http_lua_init_worker_by_lua, NGX_HTTP_MAIN_CONF_OFFSET, 0, (void *) ngx_http_lua_init_worker_by_file },  ngx_http_lua_init_worker_by_lua：指令解析时调用的函数。 ngx_http_lua_init_worker_by_file：指令结构的 post 字段的值。  解析指令时，会调用 ngx_http_lua_init_worker_by_lua，我们来跟踪一下。"><title>OpenResty init_worker_by_lua*</title>
+<link rel=canonical href=https://isshe.site/p/openresty-init_worker_by_lua/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty init_worker_by_lua*">
+<meta property="og:description" content="init_worker_by_lua* 如果没有启用 master 进程则此指令的 Lua 代码将在 init_by_lua* 指令的 Lua 代码之后运行。
+ 启用 master 进程：表示非 master-worker 的模式  用法   使用场景
+ 通常用于启动定时器执行每 worker 相关的内容，或者后端健康检查等。    执行阶段：starting-worker，工作进程启动阶段
+  上下文：http
+  语法：
+  与 init_by_lua* 类似，不再赘述。
+实现  以 init_worker_by_lua_file 为例
+ 通过前面的探索，我们已经知道指令的解析会在配置解析阶段，而对应的 Lua 代码会在后续才执行。 因此，我们接下来目的很明确：
+ 解析 init_worker_by_lua_file 指令时，做了什么？ 在什么时候实际执行了 Lua 代码？如何执行的？  我们以 init_worker_by_lua_file 指令为例。
+指令定义 { ngx_string(&amp;#34;init_worker_by_lua_file&amp;#34;), NGX_HTTP_MAIN_CONF|NGX_CONF_TAKE1, ngx_http_lua_init_worker_by_lua, NGX_HTTP_MAIN_CONF_OFFSET, 0, (void *) ngx_http_lua_init_worker_by_file },  ngx_http_lua_init_worker_by_lua：指令解析时调用的函数。 ngx_http_lua_init_worker_by_file：指令结构的 post 字段的值。  解析指令时，会调用 ngx_http_lua_init_worker_by_lua，我们来跟踪一下。">
+<meta property="og:url" content="https://isshe.site/p/openresty-init_worker_by_lua/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-init_worker_by_lua/image.jpg">
+<meta name=twitter:title content="OpenResty init_worker_by_lua*">
+<meta name=twitter:description content="init_worker_by_lua* 如果没有启用 master 进程则此指令的 Lua 代码将在 init_by_lua* 指令的 Lua 代码之后运行。
+ 启用 master 进程：表示非 master-worker 的模式  用法   使用场景
+ 通常用于启动定时器执行每 worker 相关的内容，或者后端健康检查等。    执行阶段：starting-worker，工作进程启动阶段
+  上下文：http
+  语法：
+  与 init_by_lua* 类似，不再赘述。
+实现  以 init_worker_by_lua_file 为例
+ 通过前面的探索，我们已经知道指令的解析会在配置解析阶段，而对应的 Lua 代码会在后续才执行。 因此，我们接下来目的很明确：
+ 解析 init_worker_by_lua_file 指令时，做了什么？ 在什么时候实际执行了 Lua 代码？如何执行的？  我们以 init_worker_by_lua_file 指令为例。
+指令定义 { ngx_string(&amp;#34;init_worker_by_lua_file&amp;#34;), NGX_HTTP_MAIN_CONF|NGX_CONF_TAKE1, ngx_http_lua_init_worker_by_lua, NGX_HTTP_MAIN_CONF_OFFSET, 0, (void *) ngx_http_lua_init_worker_by_file },  ngx_http_lua_init_worker_by_lua：指令解析时调用的函数。 ngx_http_lua_init_worker_by_file：指令结构的 post 字段的值。  解析指令时，会调用 ngx_http_lua_init_worker_by_lua，我们来跟踪一下。"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-init_worker_by_lua/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-init_worker_by_lua/>
+<img src=/p/openresty-init_worker_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg srcset="/p/openresty-init_worker_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg 800w, /p/openresty-init_worker_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_1600x0_resize_q75_box.jpg 1600w" width=800 height=489 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-init_worker_by_lua/>OpenResty init_worker_by_lua*</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=init_worker_by_lua>init_worker_by_lua*</h1>
+<p>如果没有启用 master 进程则此指令的 Lua 代码将在 init_by_lua* 指令的 Lua 代码之后运行。</p>
+<ul>
+<li>启用 master 进程：表示非 master-worker 的模式</li>
+</ul>
+<h2 id=用法>用法</h2>
+<ul>
+<li>
+<p>使用场景</p>
+<ul>
+<li>通常用于启动定时器执行每 worker 相关的内容，或者后端健康检查等。</li>
+</ul>
+</li>
+<li>
+<p>执行阶段：starting-worker，工作进程启动阶段</p>
+</li>
+<li>
+<p>上下文：http</p>
+</li>
+<li>
+<p>语法：</p>
+</li>
+</ul>
+<p>与 <code>init_by_lua*</code> 类似，不再赘述。</p>
+<h2 id=实现>实现</h2>
+<blockquote>
+<p>以 init_worker_by_lua_file 为例</p>
+</blockquote>
+<p>通过前面的探索，我们已经知道指令的解析会在配置解析阶段，而对应的 Lua 代码会在后续才执行。
+因此，我们接下来目的很明确：</p>
+<ul>
+<li>解析 init_worker_by_lua_file 指令时，做了什么？</li>
+<li>在什么时候实际执行了 Lua 代码？如何执行的？</li>
+</ul>
+<p>我们以 init_worker_by_lua_file 指令为例。</p>
+<h3 id=指令定义>指令定义</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;init_worker_by_lua_file&#34;</span><span class=p>),</span>
+      <span class=n>NGX_HTTP_MAIN_CONF</span><span class=o>|</span><span class=n>NGX_CONF_TAKE1</span><span class=p>,</span>
+      <span class=n>ngx_http_lua_init_worker_by_lua</span><span class=p>,</span>
+      <span class=n>NGX_HTTP_MAIN_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=p>)</span> <span class=n>ngx_http_lua_init_worker_by_file</span> <span class=p>},</span>
+</code></pre></div><ul>
+<li>ngx_http_lua_init_worker_by_lua：指令解析时调用的函数。</li>
+<li>ngx_http_lua_init_worker_by_file：指令结构的 post 字段的值。</li>
+</ul>
+<p>解析指令时，会调用 ngx_http_lua_init_worker_by_lua，我们来跟踪一下。</p>
+<h3 id=ngx_http_lua_init_worker_by_lua-执行流程>ngx_http_lua_init_worker_by_lua 执行流程</h3>
+<pre tabindex=0><code>- ngx_http_lua_init_worker_by_lua
+    \- if (cmd-&gt;post == NULL)：如果缺少回调函数，就直接报错返回。
+    \- if (lmcf-&gt;init_worker_handler)：如果已经设置过回调了，就直接返回。
+    \- lmcf-&gt;init_worker_handler = (ngx_http_lua_main_conf_handler_pt) cmd-&gt;post;：把回调设置到 init_worker_handler 上。
+    \- if (cmd-&gt;post == ngx_http_lua_init_worker_by_file)：如果是文件，init_worker_src 中则填入绝对路径。否则填入配置里面的代码。
+        \- ngx_http_lua_rebase_path：获取文件绝对路径
+</code></pre><p>这个函数做的事情很简单，就 2 件：</p>
+<ul>
+<li>设置好回调函数。</li>
+<li>设置好 Lua 代码或代码路径。</li>
+</ul>
+<h3 id=ngx_http_lua_init_worker_by_file-的调用位置>ngx_http_lua_init_worker_by_file 的调用位置</h3>
+<p>根据上面我们知道会调用 init_worker_handler，因此可以反向跟踪代码来得到调用栈。
+不过这里我直接使用 bpftrace 来获取：（bpftrace 相关内容见：<a class=link href=../../../M.%e6%96%b9%e6%b3%95%e8%ae%ba/%e9%98%85%e8%af%bb%e6%ba%90%e7%a0%81%e7%9a%84%e6%96%b9%e6%b3%95.md>M.方法论/阅读源码的方法.md</a>）</p>
+<ul>
+<li>命令</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>sudo bpftrace -e <span class=s1>&#39;uprobe:/opt/openresty/nginx/sbin/nginx:ngx_http_lua_init_worker_by_file {printf(&#34;%s\n&#34;, ustack());}&#39;</span>
+</code></pre></div><p>然后配置好 nginx.conf 并启动 openresty，即可得到调用栈。</p>
+<ul>
+<li>调用栈</li>
+</ul>
+<pre tabindex=0><code>ngx_http_lua_init_worker_by_file+0
+ngx_worker_process_init+2009
+ngx_worker_process_cycle+69
+ngx_spawn_process+1860
+ngx_start_worker_processes+126
+ngx_master_process_cycle+756
+main+1538
+__libc_start_main+243
+</code></pre><p>有点奇怪，这里为什么会显示 ngx_worker_process_init 直接调用了 ngx_http_lua_init_worker_by_file 呢？
+ngx_worker_process_init 是 nginx 框架里面的函数，而 ngx_http_lua_init_worker_by_file 是 lua-nginx-module 模块里面的函数。</p>
+<p>前面是把 ngx_http_lua_init_worker_by_file 赋值给了 ngx_http_lua_main_conf_t 结构（变量 lmcf）的 init_worker_handler 字段，
+而 ngx_http_lua_main_conf_t 看起来是 lua-nginx-module 的结构，nginx 框架怎么会知道呢？</p>
+<p>跟踪代码发现</p>
+<pre tabindex=0><code>- ngx_worker_process_init
+    \- init_process(ngx_http_lua_init_worker)：这是我们在定义模块时候，给 init_process 字段赋值了 ngx_http_lua_init_worker。
+        \- init_worker_handler(ngx_http_lua_init_worker_by_file)
+</code></pre><p>实际是这样。</p>
+<p>但是为什么少了呢？我们后续有机会再来探究。</p>
+<p>到这里我们了解到 Lua 代码是在产生 worker 进程后，对 worker 进程进行初始化时被调用了。</p>
+<h3 id=ngx_http_lua_init_worker_by_file-执行流程>ngx_http_lua_init_worker_by_file 执行流程</h3>
+<pre tabindex=0><code>- ngx_http_lua_init_worker_by_file
+    \- luaL_loadfile
+    \- ngx_http_lua_do_call
+    \- ngx_http_lua_report
+</code></pre><p>和 init_by_lua 指令的区别在于 luaL_loadbuffer 换成了 luaL_loadfile。
+luaL_loadfile 也就是读文件，然后加载代码。</p>
+<h2 id=todo>TODO</h2>
+<ul>
+<li>探究 “为什么调用栈少了一帧”。</li>
+</ul>
+<h2 id=参考>参考</h2>
+<ul>
+<li><a class=link href=https://github.com/openresty/lua-nginx-module#init_worker_by_lua target=_blank rel=noopener>https://github.com/openresty/lua-nginx-module#init_worker_by_lua</a></li>
+<li><a class=link href=https://github.com/openresty/lua-nginx-module#init_worker_by_lua_block target=_blank rel=noopener>https://github.com/openresty/lua-nginx-module#init_worker_by_lua_block</a></li>
+<li><a class=link href=https://github.com/openresty/lua-nginx-module#init_worker_by_lua target=_blank rel=noopener>https://github.com/openresty/lua-nginx-module#init_worker_by_lua</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-init_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-init_by_lua/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_by_lua*" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty init_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-log_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-log_by_lua/image.7f197b1076ad585781fe5ce7085399f5_hu0a9f4819533ee3379e836c1fff8e004c_23870_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-fxl7EHatWFeB/lznCFOZ9Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua VM 初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.b841352646c368e3d11bbf4727910450_huf2df7fdaff1ee74ccd324b9f2b8664b1_37393_250x150_fill_q75_box_smart1.jpeg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-uEE1JkbDaOPRG79HJ5EEUA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 信号量</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#用法>用法</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#指令定义>指令定义</a></li>
+<li><a href=#ngx_http_lua_init_worker_by_lua-执行流程>ngx_http_lua_init_worker_by_lua 执行流程</a></li>
+<li><a href=#ngx_http_lua_init_worker_by_file-的调用位置>ngx_http_lua_init_worker_by_file 的调用位置</a></li>
+<li><a href=#ngx_http_lua_init_worker_by_file-执行流程>ngx_http_lua_init_worker_by_file 执行流程</a></li>
+</ol>
+</li>
+<li><a href=#todo>TODO</a></li>
+<li><a href=#参考>参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

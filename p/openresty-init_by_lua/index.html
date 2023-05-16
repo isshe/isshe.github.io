@@ -1,0 +1,342 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="init_by_lua*  相关代码逻辑出自 lua-nginx-module v0.10.21 版本
+ 当 Nginx 收到 HUP 信号并开始重新加载配置文件时，Lua VM 会被重新创建，并且 init_by_lua* 会在新的 Lua VM 上再次运行。 如果关闭 lua_code_cache 指令（默认打开），init_by_lua* 处理程序（Lua 代码）将在每个请求上运行，因为在这种特殊模式下，需要为每个请求创建一个独立的 Lua VM。
+用法  init_by_lua 已不建议使用，使用 init_by_lua_block 和 init_by_lua_file 代替。
+   使用场景：
+ 在 init_by_lua* 中，加载 Lua 模块，如 require &amp;quot;cjson&amp;quot;，再在其他阶段（如 content_by_lua*）使用：再次 require，这次 require 会很快，直接从 package.loaded 中获取返回。    执行阶段：loading-config，配置加载阶段
+  上下文：http
+  语法：
+  init_by_lua &amp;#39;lua-script-str&amp;#39; init_by_lua_block { lua-script } init_by_lua_file &amp;lt;path-to-lua-script-file&amp;gt;  示例：  init_by_lua 'print(&amp;quot;Hello World&amp;quot;)' init_by_lua_block { print(&amp;quot;Hello World&amp;quot;) } init_by_lua_file /usr/local/openresty/lua/init."><title>OpenResty init_by_lua*</title>
+<link rel=canonical href=https://isshe.site/p/openresty-init_by_lua/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty init_by_lua*">
+<meta property="og:description" content="init_by_lua*  相关代码逻辑出自 lua-nginx-module v0.10.21 版本
+ 当 Nginx 收到 HUP 信号并开始重新加载配置文件时，Lua VM 会被重新创建，并且 init_by_lua* 会在新的 Lua VM 上再次运行。 如果关闭 lua_code_cache 指令（默认打开），init_by_lua* 处理程序（Lua 代码）将在每个请求上运行，因为在这种特殊模式下，需要为每个请求创建一个独立的 Lua VM。
+用法  init_by_lua 已不建议使用，使用 init_by_lua_block 和 init_by_lua_file 代替。
+   使用场景：
+ 在 init_by_lua* 中，加载 Lua 模块，如 require &amp;quot;cjson&amp;quot;，再在其他阶段（如 content_by_lua*）使用：再次 require，这次 require 会很快，直接从 package.loaded 中获取返回。    执行阶段：loading-config，配置加载阶段
+  上下文：http
+  语法：
+  init_by_lua &amp;#39;lua-script-str&amp;#39; init_by_lua_block { lua-script } init_by_lua_file &amp;lt;path-to-lua-script-file&amp;gt;  示例：  init_by_lua 'print(&amp;quot;Hello World&amp;quot;)' init_by_lua_block { print(&amp;quot;Hello World&amp;quot;) } init_by_lua_file /usr/local/openresty/lua/init.">
+<meta property="og:url" content="https://isshe.site/p/openresty-init_by_lua/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-init_by_lua/image.jpg">
+<meta name=twitter:title content="OpenResty init_by_lua*">
+<meta name=twitter:description content="init_by_lua*  相关代码逻辑出自 lua-nginx-module v0.10.21 版本
+ 当 Nginx 收到 HUP 信号并开始重新加载配置文件时，Lua VM 会被重新创建，并且 init_by_lua* 会在新的 Lua VM 上再次运行。 如果关闭 lua_code_cache 指令（默认打开），init_by_lua* 处理程序（Lua 代码）将在每个请求上运行，因为在这种特殊模式下，需要为每个请求创建一个独立的 Lua VM。
+用法  init_by_lua 已不建议使用，使用 init_by_lua_block 和 init_by_lua_file 代替。
+   使用场景：
+ 在 init_by_lua* 中，加载 Lua 模块，如 require &amp;quot;cjson&amp;quot;，再在其他阶段（如 content_by_lua*）使用：再次 require，这次 require 会很快，直接从 package.loaded 中获取返回。    执行阶段：loading-config，配置加载阶段
+  上下文：http
+  语法：
+  init_by_lua &amp;#39;lua-script-str&amp;#39; init_by_lua_block { lua-script } init_by_lua_file &amp;lt;path-to-lua-script-file&amp;gt;  示例：  init_by_lua 'print(&amp;quot;Hello World&amp;quot;)' init_by_lua_block { print(&amp;quot;Hello World&amp;quot;) } init_by_lua_file /usr/local/openresty/lua/init."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-init_by_lua/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-init_by_lua/>
+<img src=/p/openresty-init_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg srcset="/p/openresty-init_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_800x0_resize_q75_box.jpg 800w, /p/openresty-init_by_lua/image_hu3249f9048db3af9a952f19019966b961_41712_1600x0_resize_q75_box.jpg 1600w" width=800 height=489 loading=lazy alt="Featured image of post OpenResty init_by_lua*">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-init_by_lua/>OpenResty init_by_lua*</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=init_by_lua>init_by_lua*</h1>
+<blockquote>
+<p>相关代码逻辑出自 lua-nginx-module v0.10.21 版本</p>
+</blockquote>
+<p>当 Nginx 收到 HUP 信号并开始重新加载配置文件时，Lua VM 会被重新创建，并且 <code>init_by_lua*</code> 会在新的 Lua VM 上再次运行。
+如果关闭 lua_code_cache 指令（默认打开），<code>init_by_lua*</code> 处理程序（Lua 代码）将在每个请求上运行，因为在这种特殊模式下，需要为每个请求创建一个独立的 Lua VM。</p>
+<h2 id=用法>用法</h2>
+<blockquote>
+<p>init_by_lua 已不建议使用，使用 init_by_lua_block 和 init_by_lua_file 代替。</p>
+</blockquote>
+<ul>
+<li>
+<p>使用场景：</p>
+<ul>
+<li>在 <code>init_by_lua*</code> 中，加载 Lua 模块，如 <code>require "cjson"</code>，再在其他阶段（如 content_by_lua*）使用：再次 require，这次 require 会很快，直接从 package.loaded 中获取返回。</li>
+</ul>
+</li>
+<li>
+<p>执行阶段：loading-config，配置加载阶段</p>
+</li>
+<li>
+<p>上下文：http</p>
+</li>
+<li>
+<p>语法：</p>
+</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>init_by_lua <span class=s1>&#39;lua-script-str&#39;</span>
+init_by_lua_block <span class=o>{</span> lua-script <span class=o>}</span>
+init_by_lua_file &lt;path-to-lua-script-file&gt;
+</code></pre></div><ul>
+<li>示例：</li>
+</ul>
+<pre tabindex=0><code>init_by_lua 'print(&quot;Hello World&quot;)'
+
+init_by_lua_block {
+    print(&quot;Hello World&quot;)
+}
+
+init_by_lua_file /usr/local/openresty/lua/init.lua
+</code></pre><h2 id=实现>实现</h2>
+<blockquote>
+<p>以 init_by_lua 为例</p>
+</blockquote>
+<h3 id=指令定义>指令定义</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;init_by_lua&#34;</span><span class=p>),</span>
+      <span class=n>NGX_HTTP_MAIN_CONF</span><span class=o>|</span><span class=n>NGX_CONF_TAKE1</span><span class=p>,</span>
+      <span class=n>ngx_http_lua_init_by_lua</span><span class=p>,</span>
+      <span class=n>NGX_HTTP_MAIN_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=p>)</span> <span class=n>ngx_http_lua_init_by_inline</span> <span class=p>},</span>
+</code></pre></div><p>可以看到，在解析到 init_by_lua 指令时，会调用 ngx_http_lua_init_by_lua 函数进行处理，那么</p>
+<ul>
+<li>ngx_http_lua_init_by_lua 这个函数中会执行 Lua 代码吗？</li>
+<li>ngx_http_lua_init_by_inline 函数又是做什么用？</li>
+</ul>
+<h3 id=ngx_http_lua_init_by_lua-执行流程>ngx_http_lua_init_by_lua 执行流程</h3>
+<pre tabindex=0><code>- ngx_http_lua_init_by_lua
+    \- if (cmd-&gt;post == NULL)：检查是否有 handler，没有直接报错。
+    \- if (lmcf-&gt;init_handler)：检查是否已经配置过 init_handler 了，配置过直接返回。
+    \- lmcf-&gt;init_handler = (ngx_http_lua_main_conf_handler_pt) cmd-&gt;post：设置 init_handler，也就是把 init_handler 设置为 ngx_http_lua_init_by_inline。
+    \- ngx_http_lua_rebase_path：Lua 代码在文件中，则调用此函数获取 Lua 文件的绝对路径。
+    \- ngx_http_lua_gen_chunk_name：是 Lua 代码块，则调用此函数生成 chunk name。
+    \- lmcf-&gt;init_src：设置 Lua 文件路径或 Lua 代码到此变量中
+</code></pre><p>可以看到，此函数中只是设置了 init_handler，并没有执行对应的 Lua 代码，那么 Lua 代码应该是在 ngx_http_lua_init_by_inline 中执行了。</p>
+<h3 id=ngx_http_lua_init_by_inline-执行流程>ngx_http_lua_init_by_inline 执行流程</h3>
+<ul>
+<li>ngx_http_lua_init_by_inline 如何被调用？</li>
+</ul>
+<p>详见上篇文章《<a class=link href=001-module-init.md>模块初始化</a>》 的 “ngx_http_lua_init 执行流程”</p>
+<ul>
+<li>ngx_http_lua_init_by_inline 的执行流程</li>
+</ul>
+<pre tabindex=0><code>- ngx_http_lua_init_by_inline
+    \- luaL_loadbuffer：加载 Lua 代码，这是 luajit 的接口
+        \- luaL_loadbufferx：这部分后续放到 Luajit 目录下
+        \- lua_loadx
+            \- lj_buf_init
+            \- lj_vm_cpcall
+            \- lj_lex_cleanup
+            \- lj_gc_check
+    \- ngx_http_lua_do_call：执行代码
+        \- lua_gettop：获取函数在堆栈的索引/位置[?]
+        \- lua_insert：索引压栈
+        \- lua_pushcfunction： traceback 压栈函数/异常处理函数（值：ngx_http_lua_traceback），出错时调用。
+        \- ngx_http_lua_pcre_malloc_init：PCRE 内存分配函数及内存池修改，改为使用 cycle 的内存池（ngx_cycle-&gt;pool）
+        \- lua_pcall：执行 Lua 代码
+        \- ngx_http_lua_pcre_malloc_done：代码执行完了，还原回去
+        \- lua_remove：索引出栈
+    \- ngx_http_lua_report：
+        \- if (status &amp;&amp; !lua_isnil(L, -1))：状态不为 0（出错了）并且 Lua 类型不是 nil
+            \- lua_tostring：把错误消息取出来
+            \- ngx_log_error：打印到 nginx log 中
+        \- lua_gc：强制执行一次完整的垃圾收集
+</code></pre><p>这个函数主要做了以下事情：</p>
+<ul>
+<li>调用 luaL_loadbuffer 函数从缓冲区加载 Lua 代码</li>
+<li>调用 ngx_http_lua_do_call 设置处理函数，并执行 Lua 代码</li>
+<li>调用 ngx_http_lua_report 检查执行状态，出错则打印错误日志，并进行垃圾回收</li>
+</ul>
+<p>到目前为止，我们得到了一个比较上层的 Lua 代码执行流程。
+更详细的 Lua 代码执行细节（如 lua_loadx、lua_pcall 等函数的行为），后续再来探索。</p>
+<h2 id=todo>TODO</h2>
+<ul>
+<li>学习执行 Lua 代码相关的内容。</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua VM 初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<div class=article-image>
+<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 管道（pipe）</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-init_worker_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-init_worker_by_lua/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty init_worker_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.886a0ced2982664021dba680bed7a699_hu717038469c11dd077f7b408e7b5d39bb_49064_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-iGoM7SmCZkAh26aAvtemmQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 共享字典（内存）</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#用法>用法</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#指令定义>指令定义</a></li>
+<li><a href=#ngx_http_lua_init_by_lua-执行流程>ngx_http_lua_init_by_lua 执行流程</a></li>
+<li><a href=#ngx_http_lua_init_by_inline-执行流程>ngx_http_lua_init_by_inline 执行流程</a></li>
+</ol>
+</li>
+<li><a href=#todo>TODO</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

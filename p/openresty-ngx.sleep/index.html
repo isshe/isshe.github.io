@@ -1,0 +1,270 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="ngx.sleep 在 OpenResty 中，我们可以通过 ngx.sleep() 让出执行权进行“睡眠/挂起”，让当前请求暂停一段时间（单位为秒）后醒来。
+目的：
+ 了解 ngx.sleep 的使用。 了解 ngx.sleep 的实现。 ngx.sleep()及其他 cosocket 相关的函数不能用在 init_by_lua/init_worker_by_lua/set_by_lua/header_filter_by_lua/body_filter_by_lua/log_by_lua 的原因是什么?  使用 ngx.sleep 的使用非常简单：
+ngx.sleep(0.001) 睡眠时间的精度是毫秒（0.001 秒）。
+上下文：rewrite_by_lua*, access_by_lua*, content_by_lua*, ngx.timer., ssl_certificate_by_lua, ssl_session_fetch_by_lua*, ssl_client_hello_by_lua*
+实现 ngx.sleep 也是通过 C 代码注入的方式，对应的处理函数是：ngx_http_lua_ngx_sleep，我们直接来跟踪这个函数的实现。
+- ngx_http_lua_ngx_sleep \- delay = (ngx_int_t) (luaL_checknumber(L, 1) * 1000)：将参数转换成毫秒 \- coctx-&amp;gt;sleep.handler = ngx_http_lua_sleep_handler：填充 coctx-&amp;gt;sleep 事件 \- ngx_add_timer(&amp;amp;coctx-&amp;gt;sleep, (ngx_msec_t) delay)：添加定时器 \- return lua_yield(L, 0)：让出执行权 可以看到，时间到了以后，会调用 ngx_http_lua_sleep_handler：
+- ngx_http_lua_sleep_handler \- ctx-&amp;gt;cur_co_ctx = coctx：设置当前协程 \- if (ctx-&amp;gt;entered_content_phase)：如果不是 access、rewrite 阶段 \- ngx_http_lua_sleep_resume：直接 resume \- vm = ngx_http_lua_get_lua_vm(r, ctx)：获取 Lua 虚拟机 \- rc = ngx_http_lua_run_thread(vm, r, ctx, 0)：继续跑协程 \- else：否则如果是 access、rewrite 阶段，就设置回调，直接进入核心处理流程 \- ctx-&amp;gt;resume_handler = ngx_http_lua_sleep_resume：设置 resume 回调 \- ngx_http_core_run_phases(r)：然后继续回到核心处理逻辑 \- ngx_http_run_posted_requests：执行后续的请求 在这个函数中，会恢复被暂停的 Lua 协程。"><title>OpenResty ngx.sleep</title>
+<link rel=canonical href=https://isshe.site/p/openresty-ngx.sleep/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty ngx.sleep">
+<meta property="og:description" content="ngx.sleep 在 OpenResty 中，我们可以通过 ngx.sleep() 让出执行权进行“睡眠/挂起”，让当前请求暂停一段时间（单位为秒）后醒来。
+目的：
+ 了解 ngx.sleep 的使用。 了解 ngx.sleep 的实现。 ngx.sleep()及其他 cosocket 相关的函数不能用在 init_by_lua/init_worker_by_lua/set_by_lua/header_filter_by_lua/body_filter_by_lua/log_by_lua 的原因是什么?  使用 ngx.sleep 的使用非常简单：
+ngx.sleep(0.001) 睡眠时间的精度是毫秒（0.001 秒）。
+上下文：rewrite_by_lua*, access_by_lua*, content_by_lua*, ngx.timer., ssl_certificate_by_lua, ssl_session_fetch_by_lua*, ssl_client_hello_by_lua*
+实现 ngx.sleep 也是通过 C 代码注入的方式，对应的处理函数是：ngx_http_lua_ngx_sleep，我们直接来跟踪这个函数的实现。
+- ngx_http_lua_ngx_sleep \- delay = (ngx_int_t) (luaL_checknumber(L, 1) * 1000)：将参数转换成毫秒 \- coctx-&amp;gt;sleep.handler = ngx_http_lua_sleep_handler：填充 coctx-&amp;gt;sleep 事件 \- ngx_add_timer(&amp;amp;coctx-&amp;gt;sleep, (ngx_msec_t) delay)：添加定时器 \- return lua_yield(L, 0)：让出执行权 可以看到，时间到了以后，会调用 ngx_http_lua_sleep_handler：
+- ngx_http_lua_sleep_handler \- ctx-&amp;gt;cur_co_ctx = coctx：设置当前协程 \- if (ctx-&amp;gt;entered_content_phase)：如果不是 access、rewrite 阶段 \- ngx_http_lua_sleep_resume：直接 resume \- vm = ngx_http_lua_get_lua_vm(r, ctx)：获取 Lua 虚拟机 \- rc = ngx_http_lua_run_thread(vm, r, ctx, 0)：继续跑协程 \- else：否则如果是 access、rewrite 阶段，就设置回调，直接进入核心处理流程 \- ctx-&amp;gt;resume_handler = ngx_http_lua_sleep_resume：设置 resume 回调 \- ngx_http_core_run_phases(r)：然后继续回到核心处理逻辑 \- ngx_http_run_posted_requests：执行后续的请求 在这个函数中，会恢复被暂停的 Lua 协程。">
+<meta property="og:url" content="https://isshe.site/p/openresty-ngx.sleep/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-ngx.sleep/image.png">
+<meta name=twitter:title content="OpenResty ngx.sleep">
+<meta name=twitter:description content="ngx.sleep 在 OpenResty 中，我们可以通过 ngx.sleep() 让出执行权进行“睡眠/挂起”，让当前请求暂停一段时间（单位为秒）后醒来。
+目的：
+ 了解 ngx.sleep 的使用。 了解 ngx.sleep 的实现。 ngx.sleep()及其他 cosocket 相关的函数不能用在 init_by_lua/init_worker_by_lua/set_by_lua/header_filter_by_lua/body_filter_by_lua/log_by_lua 的原因是什么?  使用 ngx.sleep 的使用非常简单：
+ngx.sleep(0.001) 睡眠时间的精度是毫秒（0.001 秒）。
+上下文：rewrite_by_lua*, access_by_lua*, content_by_lua*, ngx.timer., ssl_certificate_by_lua, ssl_session_fetch_by_lua*, ssl_client_hello_by_lua*
+实现 ngx.sleep 也是通过 C 代码注入的方式，对应的处理函数是：ngx_http_lua_ngx_sleep，我们直接来跟踪这个函数的实现。
+- ngx_http_lua_ngx_sleep \- delay = (ngx_int_t) (luaL_checknumber(L, 1) * 1000)：将参数转换成毫秒 \- coctx-&amp;gt;sleep.handler = ngx_http_lua_sleep_handler：填充 coctx-&amp;gt;sleep 事件 \- ngx_add_timer(&amp;amp;coctx-&amp;gt;sleep, (ngx_msec_t) delay)：添加定时器 \- return lua_yield(L, 0)：让出执行权 可以看到，时间到了以后，会调用 ngx_http_lua_sleep_handler：
+- ngx_http_lua_sleep_handler \- ctx-&amp;gt;cur_co_ctx = coctx：设置当前协程 \- if (ctx-&amp;gt;entered_content_phase)：如果不是 access、rewrite 阶段 \- ngx_http_lua_sleep_resume：直接 resume \- vm = ngx_http_lua_get_lua_vm(r, ctx)：获取 Lua 虚拟机 \- rc = ngx_http_lua_run_thread(vm, r, ctx, 0)：继续跑协程 \- else：否则如果是 access、rewrite 阶段，就设置回调，直接进入核心处理流程 \- ctx-&amp;gt;resume_handler = ngx_http_lua_sleep_resume：设置 resume 回调 \- ngx_http_core_run_phases(r)：然后继续回到核心处理逻辑 \- ngx_http_run_posted_requests：执行后续的请求 在这个函数中，会恢复被暂停的 Lua 协程。"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-ngx.sleep/image.png">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-ngx.sleep/>
+<img src=/p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png srcset="/p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png 800w, /p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_1600x0_resize_box_3.png 1600w" width=800 height=669 loading=lazy alt="Featured image of post OpenResty ngx.sleep">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-ngx.sleep/>OpenResty ngx.sleep</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 1 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=ngxsleep>ngx.sleep</h1>
+<p>在 OpenResty 中，我们可以通过 ngx.sleep() 让出执行权进行“睡眠/挂起”，让当前请求暂停一段时间（单位为秒）后醒来。</p>
+<p>目的：</p>
+<ul>
+<li>了解 ngx.sleep 的使用。</li>
+<li>了解 ngx.sleep 的实现。</li>
+<li>ngx.sleep()及其他 cosocket 相关的函数不能用在 init_by_lua/init_worker_by_lua/set_by_lua/header_filter_by_lua/body_filter_by_lua/log_by_lua 的原因是什么?</li>
+</ul>
+<h2 id=使用>使用</h2>
+<p>ngx.sleep 的使用非常简单：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>ngx.sleep</span><span class=p>(</span><span class=mf>0.001</span><span class=p>)</span>
+</code></pre></div><p>睡眠时间的精度是毫秒（0.001 秒）。</p>
+<p>上下文：rewrite_by_lua*, access_by_lua*, content_by_lua*, ngx.timer.<em>, ssl_certificate_by_lua</em>, ssl_session_fetch_by_lua*, ssl_client_hello_by_lua*</p>
+<h2 id=实现>实现</h2>
+<p>ngx.sleep 也是通过 C 代码注入的方式，对应的处理函数是：ngx_http_lua_ngx_sleep，我们直接来跟踪这个函数的实现。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_ngx_sleep</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>delay</span> <span class=o>=</span> <span class=p>(</span><span class=n>ngx_int_t</span><span class=p>)</span> <span class=p>(</span><span class=n>luaL_checknumber</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mi>1000</span><span class=p>)</span><span class=err>：将参数转换成毫秒</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>coctx</span><span class=o>-&gt;</span><span class=n>sleep.handler</span> <span class=o>=</span> <span class=n>ngx_http_lua_sleep_handler</span><span class=err>：填充</span> <span class=n>coctx</span><span class=o>-&gt;</span><span class=n>sleep</span> <span class=err>事件</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_add_timer</span><span class=p>(</span><span class=o>&amp;</span><span class=n>coctx</span><span class=o>-&gt;</span><span class=n>sleep</span><span class=p>,</span> <span class=p>(</span><span class=n>ngx_msec_t</span><span class=p>)</span> <span class=n>delay</span><span class=p>)</span><span class=err>：添加定时器</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>return</span> <span class=n>lua_yield</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span><span class=err>：让出执行权</span>
+</code></pre></div><p>可以看到，时间到了以后，会调用 ngx_http_lua_sleep_handler：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_sleep_handler</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>cur_co_ctx</span> <span class=o>=</span> <span class=n>coctx</span><span class=err>：设置当前协程</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>ctx</span><span class=o>-&gt;</span><span class=n>entered_content_phase</span><span class=p>)</span><span class=err>：如果不是</span> <span class=n>access</span><span class=err>、</span><span class=n>rewrite</span> <span class=err>阶段</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_sleep_resume</span><span class=err>：直接</span> <span class=n>resume</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>vm</span> <span class=o>=</span> <span class=n>ngx_http_lua_get_lua_vm</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>ctx</span><span class=p>)</span><span class=err>：获取</span> <span class=n>Lua</span> <span class=err>虚拟机</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>rc</span> <span class=o>=</span> <span class=n>ngx_http_lua_run_thread</span><span class=p>(</span><span class=n>vm</span><span class=p>,</span> <span class=n>r</span><span class=p>,</span> <span class=n>ctx</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span><span class=err>：继续跑协程</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>else</span><span class=err>：否则如果是</span> <span class=n>access</span><span class=err>、</span><span class=n>rewrite</span> <span class=err>阶段，就设置回调，直接进入核心处理流程</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>resume_handler</span> <span class=o>=</span> <span class=n>ngx_http_lua_sleep_resume</span><span class=err>：设置</span> <span class=n>resume</span> <span class=err>回调</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_core_run_phases</span><span class=p>(</span><span class=n>r</span><span class=p>)</span><span class=err>：然后继续回到核心处理逻辑</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_run_posted_requests</span><span class=err>：执行后续的请求</span>
+</code></pre></div><p>在这个函数中，会恢复被暂停的 Lua 协程。</p>
+<h2 id=总结>总结</h2>
+<p>ngx.sleep 的实现比较简单，一句话总结：
+设置好处理函数和定时器，然后让出执行权，时间到了触发事件调用设置好的处理函数来恢复执行。</p>
+<p>问题：</p>
+<p>1.ngx.sleep()及其他 cosocket 相关的函数不能用在 init_by_lua/init_worker_by_lua/set_by_lua/header_filter_by_lua/body_filter_by_lua/log_by_lua 的原因是什么?</p>
+<ul>
+<li>答：这些阶段都不能 yield，需要是可以 yield 的阶段（NGX_HTTP_LUA_CONTEXT_YIELDABLE）。详见 <a class=link href=001-2-x_by_luax-and-phase.md>OpenResty 中的 <code>*_by_lua*</code> 及阶段</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image.886a0ced2982664021dba680bed7a699_hu717038469c11dd077f7b408e7b5d39bb_49064_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 协程" data-hash="md5-iGoM7SmCZkAh26aAvtemmQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 协程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-content_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-content_by_lua/image.92e807e090a193d2f9e547aa439368c2_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-kugH4JChk9L55UeqQ5Nowg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty content_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-ngx.log/>
+<div class=article-image>
+<img src=/p/openresty-ngx.log/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.log" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty ngx.log</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/>
+<div class=article-image>
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.70d0e3e1d70149067c41fae4014cf2c4_hu6485f23e60e2e8e9568294bae27898e8_22406_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码加载" data-hash="md5-cNDj4dcBSQZ8QfrkAUzyxA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua 代码加载</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#使用>使用</a></li>
+<li><a href=#实现>实现</a></li>
+<li><a href=#总结>总结</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Lua VM 初始化 上一篇关于 ngx.log 文章中，跟踪相关代码时思路几近断裂，因此赶紧来补补 Lua VM 初始化相关内容。
+目的：
+ Lua VM 初始化的时机？（什么时候初始化） 了解 Lua VM 初始化做了哪些工作？为什么这么做（选）？ Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？ 注入的接口和 _G 是什么关系？这些接口也在 _G 中吗？  Lua VM 初始化时机 从上一篇文章中，我们已经拿过一个 Lua VM 初始化相关的堆栈，这里截取一部分：
+#4 0x000055555570b955 in ngx_http_lua_init_vm (new_vm=0x555555891080, parent_vm=0x0, cycle=0x555555885740, pool=0x5555558856f0, lmcf=0x555555891080, log=0x55555583d280 &amp;lt;ngx_log&amp;gt;, pcln=0x0) at ../ngx_lua-0.10.21/src/ngx_http_lua_util.c:3896 #5 0x00005555556fb450 in ngx_http_lua_init (cf=0x7fffffffd7e0) at ../ngx_lua-0.10.21/src/ngx_http_lua_module.c:865 #6 0x00005555555f4ddc in ngx_http_block (cf=0x7fffffffd7e0, cmd=0x55555581a200 &amp;lt;ngx_http_commands&amp;gt;, conf=0x555555886a20) at src/http/ngx_http.c:310 #7 0x00005555555b9ec7 in ngx_conf_handler (cf=0x7fffffffd7e0, last=1) at src/core/ngx_conf_file."><title>OpenResty Lua VM 初始化</title>
+<link rel=canonical href=https://isshe.site/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty Lua VM 初始化">
+<meta property="og:description" content="Lua VM 初始化 上一篇关于 ngx.log 文章中，跟踪相关代码时思路几近断裂，因此赶紧来补补 Lua VM 初始化相关内容。
+目的：
+ Lua VM 初始化的时机？（什么时候初始化） 了解 Lua VM 初始化做了哪些工作？为什么这么做（选）？ Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？ 注入的接口和 _G 是什么关系？这些接口也在 _G 中吗？  Lua VM 初始化时机 从上一篇文章中，我们已经拿过一个 Lua VM 初始化相关的堆栈，这里截取一部分：
+#4 0x000055555570b955 in ngx_http_lua_init_vm (new_vm=0x555555891080, parent_vm=0x0, cycle=0x555555885740, pool=0x5555558856f0, lmcf=0x555555891080, log=0x55555583d280 &amp;lt;ngx_log&amp;gt;, pcln=0x0) at ../ngx_lua-0.10.21/src/ngx_http_lua_util.c:3896 #5 0x00005555556fb450 in ngx_http_lua_init (cf=0x7fffffffd7e0) at ../ngx_lua-0.10.21/src/ngx_http_lua_module.c:865 #6 0x00005555555f4ddc in ngx_http_block (cf=0x7fffffffd7e0, cmd=0x55555581a200 &amp;lt;ngx_http_commands&amp;gt;, conf=0x555555886a20) at src/http/ngx_http.c:310 #7 0x00005555555b9ec7 in ngx_conf_handler (cf=0x7fffffffd7e0, last=1) at src/core/ngx_conf_file.">
+<meta property="og:url" content="https://isshe.site/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg">
+<meta name=twitter:title content="OpenResty Lua VM 初始化">
+<meta name=twitter:description content="Lua VM 初始化 上一篇关于 ngx.log 文章中，跟踪相关代码时思路几近断裂，因此赶紧来补补 Lua VM 初始化相关内容。
+目的：
+ Lua VM 初始化的时机？（什么时候初始化） 了解 Lua VM 初始化做了哪些工作？为什么这么做（选）？ Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？ 注入的接口和 _G 是什么关系？这些接口也在 _G 中吗？  Lua VM 初始化时机 从上一篇文章中，我们已经拿过一个 Lua VM 初始化相关的堆栈，这里截取一部分：
+#4 0x000055555570b955 in ngx_http_lua_init_vm (new_vm=0x555555891080, parent_vm=0x0, cycle=0x555555885740, pool=0x5555558856f0, lmcf=0x555555891080, log=0x55555583d280 &amp;lt;ngx_log&amp;gt;, pcln=0x0) at ../ngx_lua-0.10.21/src/ngx_http_lua_util.c:3896 #5 0x00005555556fb450 in ngx_http_lua_init (cf=0x7fffffffd7e0) at ../ngx_lua-0.10.21/src/ngx_http_lua_module.c:865 #6 0x00005555555f4ddc in ngx_http_block (cf=0x7fffffffd7e0, cmd=0x55555581a200 &amp;lt;ngx_http_commands&amp;gt;, conf=0x555555886a20) at src/http/ngx_http.c:310 #7 0x00005555555b9ec7 in ngx_conf_handler (cf=0x7fffffffd7e0, last=1) at src/core/ngx_conf_file."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image_hucd6041f2c8064f45bbea052ae228c089_60588_800x0_resize_q75_box.jpg srcset="/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image_hucd6041f2c8064f45bbea052ae228c089_60588_800x0_resize_q75_box.jpg 800w, /p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image_hucd6041f2c8064f45bbea052ae228c089_60588_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>OpenResty Lua VM 初始化</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=lua-vm-初始化>Lua VM 初始化</h1>
+<p>上一篇关于 ngx.log 文章中，跟踪相关代码时思路几近断裂，因此赶紧来补补 Lua VM 初始化相关内容。</p>
+<p>目的：</p>
+<ul>
+<li>Lua VM 初始化的时机？（什么时候初始化）</li>
+<li>了解 Lua VM 初始化做了哪些工作？为什么这么做（选）？</li>
+<li>Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？</li>
+<li>注入的接口和 _G 是什么关系？这些接口也在 _G 中吗？</li>
+</ul>
+<h2 id=lua-vm-初始化时机>Lua VM 初始化时机</h2>
+<p>从上一篇文章中，我们已经拿过一个 Lua VM 初始化相关的堆栈，这里截取一部分：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>#</span><span class=mi>4</span>  <span class=mh>0x000055555570b955</span> <span class=kr>in</span> <span class=n>ngx_http_lua_init_vm</span> <span class=p>(</span><span class=n>new_vm</span><span class=o>=</span><span class=mh>0x555555891080</span><span class=p>,</span>
+    <span class=n>parent_vm</span><span class=o>=</span><span class=mh>0x0</span><span class=p>,</span> <span class=n>cycle</span><span class=o>=</span><span class=mh>0x555555885740</span><span class=p>,</span> <span class=n>pool</span><span class=o>=</span><span class=mh>0x5555558856f0</span><span class=p>,</span>
+    <span class=n>lmcf</span><span class=o>=</span><span class=mh>0x555555891080</span><span class=p>,</span> <span class=n>log</span><span class=o>=</span><span class=mh>0x55555583d280</span> <span class=o>&lt;</span><span class=n>ngx_log</span><span class=o>&gt;</span><span class=p>,</span> <span class=n>pcln</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_util.c</span><span class=p>:</span><span class=mi>3896</span>
+<span class=o>#</span><span class=mi>5</span>  <span class=mh>0x00005555556fb450</span> <span class=kr>in</span> <span class=n>ngx_http_lua_init</span> <span class=p>(</span><span class=n>cf</span><span class=o>=</span><span class=mh>0x7fffffffd7e0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_module.c</span><span class=p>:</span><span class=mi>865</span>
+<span class=o>#</span><span class=mi>6</span>  <span class=mh>0x00005555555f4ddc</span> <span class=kr>in</span> <span class=n>ngx_http_block</span> <span class=p>(</span><span class=n>cf</span><span class=o>=</span><span class=mh>0x7fffffffd7e0</span><span class=p>,</span>
+    <span class=n>cmd</span><span class=o>=</span><span class=mh>0x55555581a200</span> <span class=o>&lt;</span><span class=n>ngx_http_commands</span><span class=o>&gt;</span><span class=p>,</span> <span class=n>conf</span><span class=o>=</span><span class=mh>0x555555886a20</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http.c</span><span class=p>:</span><span class=mi>310</span>
+<span class=o>#</span><span class=mi>7</span>  <span class=mh>0x00005555555b9ec7</span> <span class=kr>in</span> <span class=n>ngx_conf_handler</span> <span class=p>(</span><span class=n>cf</span><span class=o>=</span><span class=mh>0x7fffffffd7e0</span><span class=p>,</span> <span class=n>last</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>core</span><span class=o>/</span><span class=n>ngx_conf_file.c</span><span class=p>:</span><span class=mi>463</span>
+<span class=o>#</span><span class=mi>8</span>  <span class=mh>0x00005555555b99cc</span> <span class=kr>in</span> <span class=n>ngx_conf_parse</span> <span class=p>(</span><span class=n>cf</span><span class=o>=</span><span class=mh>0x7fffffffd7e0</span><span class=p>,</span>
+    <span class=n>filename</span><span class=o>=</span><span class=mh>0x555555885958</span><span class=p>)</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>core</span><span class=o>/</span><span class=n>ngx_conf_file.c</span><span class=p>:</span><span class=mi>319</span>
+<span class=o>#</span><span class=mi>9</span>  <span class=mh>0x00005555555b4f87</span> <span class=kr>in</span> <span class=n>ngx_init_cycle</span> <span class=p>(</span><span class=n>old_cycle</span><span class=o>=</span><span class=mh>0x7fffffffd9b0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>core</span><span class=o>/</span><span class=n>ngx_cycle.c</span><span class=p>:</span><span class=mi>284</span>
+<span class=o>#</span><span class=mi>10</span> <span class=mh>0x0000555555592fe8</span> <span class=kr>in</span> <span class=n>main</span> <span class=p>(</span><span class=n>argc</span><span class=o>=</span><span class=mi>3</span><span class=p>,</span> <span class=n>argv</span><span class=o>=</span><span class=mh>0x7fffffffdd58</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>core</span><span class=o>/</span><span class=n>nginx.c</span><span class=p>:</span><span class=mi>295</span>
+</code></pre></div><p>从这个调用栈可以看到，是在解析 lua-nginx-module 配置阶段（准确来说是 postconfiguration 阶段）初始化的 Lua VM。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>#</span><span class=mi>0</span>  <span class=n>ngx_http_lua_init_vm</span> <span class=p>(</span><span class=n>new_vm</span><span class=o>=</span><span class=mh>0x1</span><span class=p>,</span> <span class=n>parent_vm</span><span class=o>=</span><span class=mh>0x0</span><span class=p>,</span> <span class=n>cycle</span><span class=o>=</span><span class=mh>0x0</span><span class=p>,</span> <span class=n>pool</span><span class=o>=</span><span class=mh>0x0</span><span class=p>,</span>
+    <span class=n>lmcf</span><span class=o>=</span><span class=mh>0xffffffffffffffff</span><span class=p>,</span> <span class=n>log</span><span class=o>=</span><span class=mh>0x400002001</span><span class=p>,</span> <span class=n>pcln</span><span class=o>=</span><span class=mh>0x7ffe9ee23400</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_util.c</span><span class=p>:</span><span class=mi>3882</span>
+<span class=o>#</span><span class=mi>1</span>  <span class=mh>0x0000558146dea07f</span> <span class=kr>in</span> <span class=n>ngx_http_lua_create_ctx</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x5581471b6120</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_util.h</span><span class=p>:</span><span class=mi>305</span>
+<span class=o>#</span><span class=mi>2</span>  <span class=mh>0x0000558146dea50d</span> <span class=kr>in</span> <span class=n>ngx_http_lua_rewrite_handler</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x5581471b6120</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_rewriteby.c</span><span class=p>:</span><span class=mi>92</span>
+<span class=o>#</span><span class=mi>3</span>  <span class=mh>0x0000558146cd558e</span> <span class=kr>in</span> <span class=n>ngx_http_core_rewrite_phase</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x5581471b6120</span><span class=p>,</span>
+    <span class=n>ph</span><span class=o>=</span><span class=mh>0x5581471bcf08</span><span class=p>)</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span><span class=p>:</span><span class=mi>939</span>
+<span class=o>#</span><span class=mi>4</span>  <span class=mh>0x0000558146cd53de</span> <span class=kr>in</span> <span class=n>ngx_http_core_run_phases</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x5581471b6120</span><span class=p>)</span>
+<span class=p>...</span>
+</code></pre></div><p>设置 <code>lua_code_cache off</code> 指令关闭缓存后，每次请求都会重新初始化 Lua VM。</p>
+<h2 id=lua-vm-初始化流程>Lua VM 初始化流程</h2>
+<pre tabindex=0><code>- ngx_http_lua_init_vm
+    \- ngx_pool_cleanup_add：添加内存池清理函数——用于清理 Lua VM（ngx_http_lua_cleanup_vm）
+    \- ngx_http_lua_new_state：创建 Lua VM 实例
+        \- luaL_newstate：新分配一个 lua_State 结构
+        \- luaL_openlibs：打开所有标准 Lua 库到给定 state
+        \- lua_getglobal(L, &quot;package&quot;)：将全局 package 的值压入堆栈。返回该值的类型
+            \- 返回值是代表类型，那为什么不直接用，而是下面进行 istable 判断？[1]
+        \- if (!lua_istable(L, -1))：检查栈顶值是否是 table（package 是一个 table），不是直接报错返回。
+        \- if (parent_vm)：如果有父级 VM，则使用它的 path 和 cpath，
+        \- else：否则自行解析设置 path、cpath，从编译指定的默认路径和从 nginx 配置中得到相关路径
+        \- ngx_http_lua_init_registry：初始化 Lua 注册表 [2]
+            \- 注册一个表以可靠地锚定 lua 协程，初始大小为 32 个 KV。
+            \- 为 Lua 套接字连接池表注册一个表
+            \- 注册一个表以缓存用户代码
+        \- ngx_http_lua_init_globals：初始化 lua 全局变量
+            \- ngx_http_lua_inject_ndk_api：注入 ngx devel kit 的 API（如果有定义 NDK 宏的话）
+            \- ngx_http_lua_inject_ngx_api：注入 ngx API，实际上就是创建 ngx 表和填充这个表。
+                \- 例如：把 ngx.log 等于 ngx_http_lua_ngx_log
+                \- 例如：ngx.HTTP_GET = NGX_HTTP_GET
+    \- luaopen_ffi：加载 FFI 库，因为 cdata 需要
+    \- if (lmcf-&gt;preload_hooks)：检查是否有需要预加载的 hook
+        \- ngx_http_lua_probe_register_preload_package：注册第 3 方模块的预加载 hook
+            \- 示例：package=ngx.upstream，loader=ngx_http_lua_upstream_create_module
+    \- lua_pcall：调用 require(&quot;resty.core&quot;)，不知何意
+    \- ngx_http_lua_inject_global_write_guard：注入全局写保护，使用全局变量时会得到告警提示
+        \- 执行了一段 Lua 代码，设置了 _G 的元表，重载了 __newindex
+</code></pre><p>可以看到，Lua VM 初始化主要做了以下事情：</p>
+<ul>
+<li>新建 state 实例</li>
+<li>打开标准库</li>
+<li>设置搜索路径（path、cpath）</li>
+<li>注册一些表</li>
+<li>注入 Lua 接口、变量：重点关注，很多 Lua 接口都是在这里注入。</li>
+<li>预加载第三方 hook</li>
+<li>对 _G 进行写保护</li>
+</ul>
+<p>那么，Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？</p>
+<ul>
+<li>lua_code_cache 开启时，共用一个</li>
+<li>lua_code_cache 关闭时，每个请求一个</li>
+</ul>
+<h2 id=总结>总结</h2>
+<ol>
+<li>Lua VM 初始化的时机？（什么时候初始化）</li>
+</ol>
+<p>答：lua_code_cache 开启时，在配置解析阶段（准确来说是 postconfiguration 阶段）；lua_code_cache 关闭时，每次请求都会重新初始化 Lua VM，在 rewrite 等实际设置了处理程序（handler）的阶段。</p>
+<ol>
+<li>Lua 虚拟机是共用一个？还是每次调用 Lua 代码起一个？</li>
+</ol>
+<p>答：lua_code_cache 开启时，共用一个；lua_code_cache 关闭时，每个请求一个。</p>
+<ol>
+<li>注入的接口和 _G 是什么关系？这些接口也在 _G 中吗？</li>
+</ol>
+<p>答：是的，注入的接口就在 _G 或者 _G 的元表中。</p>
+<h2 id=疑问>疑问</h2>
+<ul>
+<li>[1]：lua_getglobal 能直接返回类型，为什么不直接用而是用 istable 来判断？</li>
+<li>[2]：注册的几个表的用途是什么？在哪里用了？（ngx_http_lua_init_registry）</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-rewrite_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-rewrite_by_lua/image.2fa2be21eaace4e918c97d2ad77ec60c_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-L6K+Ieqs5OkYyX0q137GDA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 线程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.5b277a8f4d8dee7dbaa65aae3ca55ae3_hu6bf7c46e81b9d4ff4b6c3e95893bf6ce_23854_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-Wyd6j02N7n26plquPKVa4w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-init_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-init_by_lua/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_by_lua*" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty init_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-init_worker_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-init_worker_by_lua/image.de4a6372b63d2beba39e7917b395588a_hu3249f9048db3af9a952f19019966b961_41712_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*" data-hash="md5-3kpjcrY9K+ujnnkXs5VYig==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty init_worker_by_lua*</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#lua-vm-初始化时机>Lua VM 初始化时机</a></li>
+<li><a href=#lua-vm-初始化流程>Lua VM 初始化流程</a></li>
+<li><a href=#总结>总结</a></li>
+<li><a href=#疑问>疑问</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

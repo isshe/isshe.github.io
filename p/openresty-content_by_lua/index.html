@@ -1,0 +1,362 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="content_by_lua* content_by_lua* 充当一个 content 阶段的处理程序，对每个请求执行指定的 Lua 代码，代码会在独立的全局环境（沙箱）中执行。
+用法  上下文: location, location if  注意，不能定义在 http、server 块内了。   阶段: content 语法：  与 init_by_lua* 类似，不再赘述。   注意：这个指令不要和其他 content handler 指令（如 proxy_pass）在同一个 location 同时使用。  实现 在《模块初始化》 的 “ngx_http_lua_init 执行流程” 中， 我们了解到 content handler 并没有像 rewrite handler 一样在函数 ngx_http_lua_init 中被放到 cmcf-&amp;gt;phases 数组中，所以接下来我们来探究一下为什么。 因此，我们此行的目的：
+ 了解指令是如何被解析的。（猜测与前面的阶段没有什么差异） 了解 content handler 是被如何设置的，为何于其他阶段的 handler 不同。 了解是何时执行了 Lua 代码，如何执行的。（猜测与前面的阶段没有什么差异）  指令定义 /* content_by_lua &amp;#34;&amp;lt;inline script&amp;gt;&amp;#34; */ { ngx_string(&amp;#34;content_by_lua&amp;#34;), NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE1, ngx_http_lua_content_by_lua, NGX_HTTP_LOC_CONF_OFFSET, 0, (void *) ngx_http_lua_content_handler_inline }, ngx_http_lua_content_by_lua 执行过程 - ngx_http_lua_content_by_lua \- if (cmd-&amp;gt;post == NULL)：检查是否有指定处理程序，没有直接报错返回。 \- if (llcf-&amp;gt;content_handler)：检查是否已经设置了处理程序，设置了报错返回。 \- if (value[1]."><title>OpenResty content_by_lua*</title>
+<link rel=canonical href=https://isshe.site/p/openresty-content_by_lua/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty content_by_lua*">
+<meta property="og:description" content="content_by_lua* content_by_lua* 充当一个 content 阶段的处理程序，对每个请求执行指定的 Lua 代码，代码会在独立的全局环境（沙箱）中执行。
+用法  上下文: location, location if  注意，不能定义在 http、server 块内了。   阶段: content 语法：  与 init_by_lua* 类似，不再赘述。   注意：这个指令不要和其他 content handler 指令（如 proxy_pass）在同一个 location 同时使用。  实现 在《模块初始化》 的 “ngx_http_lua_init 执行流程” 中， 我们了解到 content handler 并没有像 rewrite handler 一样在函数 ngx_http_lua_init 中被放到 cmcf-&amp;gt;phases 数组中，所以接下来我们来探究一下为什么。 因此，我们此行的目的：
+ 了解指令是如何被解析的。（猜测与前面的阶段没有什么差异） 了解 content handler 是被如何设置的，为何于其他阶段的 handler 不同。 了解是何时执行了 Lua 代码，如何执行的。（猜测与前面的阶段没有什么差异）  指令定义 /* content_by_lua &amp;#34;&amp;lt;inline script&amp;gt;&amp;#34; */ { ngx_string(&amp;#34;content_by_lua&amp;#34;), NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE1, ngx_http_lua_content_by_lua, NGX_HTTP_LOC_CONF_OFFSET, 0, (void *) ngx_http_lua_content_handler_inline }, ngx_http_lua_content_by_lua 执行过程 - ngx_http_lua_content_by_lua \- if (cmd-&amp;gt;post == NULL)：检查是否有指定处理程序，没有直接报错返回。 \- if (llcf-&amp;gt;content_handler)：检查是否已经设置了处理程序，设置了报错返回。 \- if (value[1].">
+<meta property="og:url" content="https://isshe.site/p/openresty-content_by_lua/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-content_by_lua/image.jpg">
+<meta name=twitter:title content="OpenResty content_by_lua*">
+<meta name=twitter:description content="content_by_lua* content_by_lua* 充当一个 content 阶段的处理程序，对每个请求执行指定的 Lua 代码，代码会在独立的全局环境（沙箱）中执行。
+用法  上下文: location, location if  注意，不能定义在 http、server 块内了。   阶段: content 语法：  与 init_by_lua* 类似，不再赘述。   注意：这个指令不要和其他 content handler 指令（如 proxy_pass）在同一个 location 同时使用。  实现 在《模块初始化》 的 “ngx_http_lua_init 执行流程” 中， 我们了解到 content handler 并没有像 rewrite handler 一样在函数 ngx_http_lua_init 中被放到 cmcf-&amp;gt;phases 数组中，所以接下来我们来探究一下为什么。 因此，我们此行的目的：
+ 了解指令是如何被解析的。（猜测与前面的阶段没有什么差异） 了解 content handler 是被如何设置的，为何于其他阶段的 handler 不同。 了解是何时执行了 Lua 代码，如何执行的。（猜测与前面的阶段没有什么差异）  指令定义 /* content_by_lua &amp;#34;&amp;lt;inline script&amp;gt;&amp;#34; */ { ngx_string(&amp;#34;content_by_lua&amp;#34;), NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE1, ngx_http_lua_content_by_lua, NGX_HTTP_LOC_CONF_OFFSET, 0, (void *) ngx_http_lua_content_handler_inline }, ngx_http_lua_content_by_lua 执行过程 - ngx_http_lua_content_by_lua \- if (cmd-&amp;gt;post == NULL)：检查是否有指定处理程序，没有直接报错返回。 \- if (llcf-&amp;gt;content_handler)：检查是否已经设置了处理程序，设置了报错返回。 \- if (value[1]."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-content_by_lua/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-content_by_lua/>
+<img src=/p/openresty-content_by_lua/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_800x0_resize_q75_box.jpg srcset="/p/openresty-content_by_lua/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_800x0_resize_q75_box.jpg 800w, /p/openresty-content_by_lua/image_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_1600x0_resize_q75_box.jpg 1600w" width=800 height=534 loading=lazy alt="Featured image of post OpenResty content_by_lua*">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-content_by_lua/>OpenResty content_by_lua*</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=content_by_lua>content_by_lua*</h1>
+<p><code>content_by_lua*</code> 充当一个 content 阶段的处理程序，对<strong>每个请求</strong>执行指定的 Lua 代码，代码会在独立的全局环境（沙箱）中执行。</p>
+<h2 id=用法>用法</h2>
+<ul>
+<li>上下文: location, location if
+<ul>
+<li><strong>注意，不能定义在 http、server 块内了。</strong></li>
+</ul>
+</li>
+<li>阶段: content</li>
+<li>语法：
+<ul>
+<li>与 <code>init_by_lua*</code> 类似，不再赘述。</li>
+</ul>
+</li>
+<li><strong>注意：这个指令不要和其他 content handler 指令（如 proxy_pass）在同一个 location 同时使用。</strong></li>
+</ul>
+<h2 id=实现>实现</h2>
+<p>在《<a class=link href=001-module-init.md>模块初始化</a>》 的 “ngx_http_lua_init 执行流程” 中，
+我们了解到 content handler 并没有像 rewrite handler 一样在函数 ngx_http_lua_init 中被放到 <code>cmcf->phases</code> 数组中，所以接下来我们来探究一下为什么。
+因此，我们此行的目的：</p>
+<ul>
+<li>了解指令是如何被解析的。（猜测与前面的阶段没有什么差异）</li>
+<li>了解 content handler 是被如何设置的，<strong>为何</strong>于其他阶段的 handler 不同。</li>
+<li>了解是何时执行了 Lua 代码，如何执行的。（猜测与前面的阶段没有什么差异）</li>
+</ul>
+<h3 id=指令定义>指令定义</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=cm>/* content_by_lua &#34;&lt;inline script&gt;&#34; */</span>
+    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;content_by_lua&#34;</span><span class=p>),</span>
+      <span class=n>NGX_HTTP_LOC_CONF</span><span class=o>|</span><span class=n>NGX_HTTP_LIF_CONF</span><span class=o>|</span><span class=n>NGX_CONF_TAKE1</span><span class=p>,</span>
+      <span class=n>ngx_http_lua_content_by_lua</span><span class=p>,</span>
+      <span class=n>NGX_HTTP_LOC_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=p>)</span> <span class=n>ngx_http_lua_content_handler_inline</span> <span class=p>},</span>
+</code></pre></div><h3 id=ngx_http_lua_content_by_lua-执行过程>ngx_http_lua_content_by_lua 执行过程</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=o>-</span> <span class=n>ngx_http_lua_content_by_lua</span>
+    <span class=err>\</span><span class=o>-</span> <span class=k>if</span> <span class=p>(</span><span class=n>cmd</span><span class=o>-&gt;</span><span class=n>post</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span><span class=err>：检查是否有指定处理程序，没有直接报错返回。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=k>if</span> <span class=p>(</span><span class=n>llcf</span><span class=o>-&gt;</span><span class=n>content_handler</span><span class=p>)</span><span class=err>：检查是否已经设置了处理程序，设置了报错返回。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=k>if</span> <span class=p>(</span><span class=n>value</span><span class=p>[</span><span class=mi>1</span><span class=p>].</span><span class=n>len</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span><span class=err>：检查配置块的大小，为</span> <span class=mi>0</span> <span class=err>表示无效的</span> <span class=n>Lua</span> <span class=err>代码块，直接报错返回。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=k>if</span> <span class=p>(</span><span class=n>cmd</span><span class=o>-&gt;</span><span class=n>post</span> <span class=o>==</span> <span class=n>ngx_http_lua_content_handler_inline</span><span class=p>)</span><span class=err>：检查</span> <span class=n>Lua</span> <span class=err>代码是文件还是其他</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_gen_chunk_name</span><span class=err>：不是文件，生成</span> <span class=n>chunkname</span> <span class=err>和</span> <span class=n>cache</span> <span class=n>key</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_gen_chunk_cache_key</span>
+    <span class=err>\</span><span class=o>-</span> <span class=k>else</span><span class=err>：是文件</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_compile_complex_value</span><span class=err>：解析文件路径，是否包含变量之类的（不建议使用变量，容易有安全问题）</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_gen_file_cache_key</span><span class=err>：生成</span> <span class=n>cache</span> <span class=n>key</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>llcf</span><span class=o>-&gt;</span><span class=n>content_handler</span> <span class=o>=</span> <span class=p>(</span><span class=n>ngx_http_handler_pt</span><span class=p>)</span> <span class=n>cmd</span><span class=o>-&gt;</span><span class=n>post</span><span class=err>：设置处理函数——执行</span> <span class=n>Lua</span> <span class=err>代码的函数</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lmcf</span><span class=o>-&gt;</span><span class=n>requires_capture_filter</span> <span class=o>=</span> <span class=mi>1</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>clcf</span><span class=o>-&gt;</span><span class=n>handler</span> <span class=o>=</span> <span class=n>ngx_http_lua_content_handler</span>
+</code></pre></div><p>可以看到，流程与其他阶段的指令没有太多区别，只是：</p>
+<ul>
+<li>clcf->handler：这个是什么呢？有什么作用呢？什么时候执行的呢？</li>
+</ul>
+<p>根据之前的经验，看 ngx_http_lua_content_handler 名字就能猜到，此函数中毫无疑问会调用 ngx_http_lua_content_handler_inline，也就是 cmd->post。
+也就是，content handler 的设置，不是像 access handler 那样直接放到一个数组（cmcf->phases）中。
+解释了 clcf->handler 是什么，那么它是什么时候执行的呢？</p>
+<h3 id=ngx_http_lua_content_handler_inline-被调用位置>ngx_http_lua_content_handler_inline 被调用位置</h3>
+<p>我们再来用 gdb 看下 ngx_http_lua_content_handler_inline（ngx_http_lua_content_handler）是如何被调用的。</p>
+<p>命令：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>$ gdb -p PID
+&gt; b ngx_http_lua_content_handler_inline
+$ curl localhost    <span class=c1># 其他 shell</span>
+&gt; c
+&gt; bt
+</code></pre></div><p>得到：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>#</span><span class=mi>0</span>  <span class=n>ngx_http_lua_content_handler_inline</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span> <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_contentby.c</span><span class=p>:</span><span class=mi>291</span>
+<span class=o>#</span><span class=mi>1</span>  <span class=mh>0x000056030bb45ae0</span> <span class=kr>in</span> <span class=n>ngx_http_lua_content_handler</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x56030bd7b7e0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=o>../</span><span class=n>ngx_lua</span><span class=o>-</span><span class=mf>0.10.21</span><span class=o>/</span><span class=n>src</span><span class=o>/</span><span class=n>ngx_http_lua_contentby.c</span><span class=p>:</span><span class=mi>222</span>
+<span class=o>#</span><span class=mi>2</span>  <span class=mh>0x000056030ba324f5</span> <span class=kr>in</span> <span class=n>ngx_http_core_content_phase</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x56030bd7b7e0</span><span class=p>,</span> <span class=n>ph</span><span class=o>=</span><span class=mh>0x56030bdbc100</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span><span class=p>:</span><span class=mi>1269</span>
+<span class=o>#</span><span class=mi>3</span>  <span class=mh>0x000056030ba313de</span> <span class=kr>in</span> <span class=n>ngx_http_core_run_phases</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x56030bd7b7e0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span><span class=p>:</span><span class=mi>885</span>
+<span class=o>#</span><span class=mi>4</span>  <span class=mh>0x000056030ba31347</span> <span class=kr>in</span> <span class=n>ngx_http_handler</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x56030bd7b7e0</span><span class=p>)</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span><span class=p>:</span><span class=mi>868</span>
+<span class=o>#</span><span class=mi>5</span>  <span class=mh>0x000056030ba42044</span> <span class=kr>in</span> <span class=n>ngx_http_process_request</span> <span class=p>(</span><span class=n>r</span><span class=o>=</span><span class=mh>0x56030bd7b7e0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span><span class=p>:</span><span class=mi>2120</span>
+<span class=o>#</span><span class=mi>6</span>  <span class=mh>0x000056030ba40710</span> <span class=kr>in</span> <span class=n>ngx_http_process_request_headers</span> <span class=p>(</span><span class=n>rev</span><span class=o>=</span><span class=mh>0x56030bdc54c0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span><span class=p>:</span><span class=mi>1498</span>
+<span class=o>#</span><span class=mi>7</span>  <span class=mh>0x000056030ba3fa6a</span> <span class=kr>in</span> <span class=n>ngx_http_process_request_line</span> <span class=p>(</span><span class=n>rev</span><span class=o>=</span><span class=mh>0x56030bdc54c0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span><span class=p>:</span><span class=mi>1165</span>
+<span class=o>#</span><span class=mi>8</span>  <span class=mh>0x000056030ba3e061</span> <span class=kr>in</span> <span class=n>ngx_http_wait_request_handler</span> <span class=p>(</span><span class=n>rev</span><span class=o>=</span><span class=mh>0x56030bdc54c0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span><span class=p>:</span><span class=mi>503</span>
+<span class=o>#</span><span class=mi>9</span>  <span class=mh>0x000056030ba1a223</span> <span class=kr>in</span> <span class=n>ngx_epoll_process_events</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>,</span> <span class=n>timer</span><span class=o>=</span><span class=mi>60000</span><span class=p>,</span> <span class=n>flags</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_epoll_module.c</span><span class=p>:</span><span class=mi>901</span>
+<span class=o>#</span><span class=mi>10</span> <span class=mh>0x000056030ba05ee2</span> <span class=kr>in</span> <span class=n>ngx_process_events_and_timers</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>ngx_event.c</span><span class=p>:</span><span class=mi>257</span>
+<span class=o>#</span><span class=mi>11</span> <span class=mh>0x000056030ba17402</span> <span class=kr>in</span> <span class=n>ngx_worker_process_cycle</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>,</span> <span class=n>data</span><span class=o>=</span><span class=mh>0x0</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>os</span><span class=o>/</span><span class=n>unix</span><span class=o>/</span><span class=n>ngx_process_cycle.c</span><span class=p>:</span><span class=mi>793</span>
+<span class=o>#</span><span class=mi>12</span> <span class=mh>0x000056030ba1361a</span> <span class=kr>in</span> <span class=n>ngx_spawn_process</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>,</span>
+    <span class=n>proc</span><span class=o>=</span><span class=mh>0x56030ba17311</span> <span class=o>&lt;</span><span class=n>ngx_worker_process_cycle</span><span class=o>&gt;</span><span class=p>,</span> <span class=n>data</span><span class=o>=</span><span class=mh>0x0</span><span class=p>,</span> <span class=n>name</span><span class=o>=</span><span class=mh>0x56030bbeaf7c</span> <span class=s2>&#34;worker process&#34;</span><span class=p>,</span>
+    <span class=n>respawn</span><span class=o>=-</span><span class=mi>3</span><span class=p>)</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>os</span><span class=o>/</span><span class=n>unix</span><span class=o>/</span><span class=n>ngx_process.c</span><span class=p>:</span><span class=mi>199</span>
+<span class=o>#</span><span class=mi>13</span> <span class=mh>0x000056030ba1606a</span> <span class=kr>in</span> <span class=n>ngx_start_worker_processes</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>,</span> <span class=n>n</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>type</span><span class=o>=-</span><span class=mi>3</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>os</span><span class=o>/</span><span class=n>unix</span><span class=o>/</span><span class=n>ngx_process_cycle.c</span><span class=p>:</span><span class=mi>382</span>
+<span class=o>#</span><span class=mi>14</span> <span class=mh>0x000056030ba15511</span> <span class=kr>in</span> <span class=n>ngx_master_process_cycle</span> <span class=p>(</span><span class=n>cycle</span><span class=o>=</span><span class=mh>0x56030bd77740</span><span class=p>)</span>
+    <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>os</span><span class=o>/</span><span class=n>unix</span><span class=o>/</span><span class=n>ngx_process_cycle.c</span><span class=p>:</span><span class=mi>135</span>
+<span class=o>#</span><span class=mi>15</span> <span class=mh>0x000056030b9cb3b9</span> <span class=kr>in</span> <span class=n>main</span> <span class=p>(</span><span class=n>argc</span><span class=o>=</span><span class=mi>3</span><span class=p>,</span> <span class=n>argv</span><span class=o>=</span><span class=mh>0x7ffce805c458</span><span class=p>)</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>core</span><span class=o>/</span><span class=n>nginx.c</span><span class=p>:</span><span class=mi>386</span>
+</code></pre></div><p>与 <a class=link href=005-rewrite_by_lua.md>005-rewrite_by_lua.md</a> 中获取到的调用栈对比，发现并没有什么差别。</p>
+<blockquote>
+<p>什么时候执行的问题也解答了：和 rewrite/access 阶段的处理程序一样，都是在相同的地方执行。（都是通过 phase 索引进行控制）</p>
+</blockquote>
+<p>都是在以下代码中进行调用：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>void</span>
+<span class=nf>ngx_http_core_run_phases</span><span class=p>(</span><span class=n>ngx_http_request_t</span> <span class=o>*</span><span class=n>r</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=n>ngx_int_t</span>                   <span class=n>rc</span><span class=p>;</span>
+    <span class=n>ngx_http_phase_handler_t</span>   <span class=o>*</span><span class=n>ph</span><span class=p>;</span>
+    <span class=n>ngx_http_core_main_conf_t</span>  <span class=o>*</span><span class=n>cmcf</span><span class=p>;</span>
+
+    <span class=n>cmcf</span> <span class=o>=</span> <span class=n>ngx_http_get_module_main_conf</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>ngx_http_core_module</span><span class=p>);</span>
+
+    <span class=n>ph</span> <span class=o>=</span> <span class=n>cmcf</span><span class=o>-&gt;</span><span class=n>phase_engine</span><span class=p>.</span><span class=n>handlers</span><span class=p>;</span>
+
+    <span class=k>while</span> <span class=p>(</span><span class=n>ph</span><span class=p>[</span><span class=n>r</span><span class=o>-&gt;</span><span class=n>phase_handler</span><span class=p>].</span><span class=n>checker</span><span class=p>)</span> <span class=p>{</span>
+
+        <span class=n>rc</span> <span class=o>=</span> <span class=n>ph</span><span class=p>[</span><span class=n>r</span><span class=o>-&gt;</span><span class=n>phase_handler</span><span class=p>].</span><span class=n>checker</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>ph</span><span class=p>[</span><span class=n>r</span><span class=o>-&gt;</span><span class=n>phase_handler</span><span class=p>]);</span>
+
+        <span class=k>if</span> <span class=p>(</span><span class=n>rc</span> <span class=o>==</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+            <span class=k>return</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>也就是</p>
+<blockquote>
+<p>rc = ph[r->phase_handler].checker(r, &ph[r->phase_handler]);</p>
+</blockquote>
+<p>这一句。可以看出调用方式和其他阶段的 handler 都是一样的。
+那么就有疑问了，clcf->handler 是怎么被设置到这里（ph[r->phase_handler].checker）来的呢？
+通过搜索跟踪 clcf->handler，我们得到：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_core_find_config_phase</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_update_location_config</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>r</span><span class=o>-&gt;</span><span class=n>content_handler</span> <span class=o>=</span> <span class=n>clcf</span><span class=o>-&gt;</span><span class=n>handler</span><span class=p>;</span>
+</code></pre></div><p>再结合前面的“ngx_http_lua_content_by_lua 执行过程”，得到调用流程 —— 和 GDB 获取的一致：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_core_content_phase</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>r</span><span class=o>-&gt;</span><span class=n>content_handler</span><span class=err>：</span><span class=n>ngx_http_lua_content_handler</span><span class=err>（</span><span class=n>clcf</span><span class=o>-&gt;</span><span class=n>handler</span><span class=err>）</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>llcf</span><span class=o>-&gt;</span><span class=n>content_handler</span><span class=err>：</span><span class=n>ngx_http_lua_content_handler_inline</span>
+</code></pre></div><p>更多关于 Nginx 阶段的内容，我们在 Nginx 系列文章《6-nginx-phase.md》中进行探索。</p>
+<h3 id=ngx_http_lua_content_handler_inline-执行过程>ngx_http_lua_content_handler_inline 执行过程</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_content_handler_inline</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_get_module_loc_conf</span><span class=err>：获取</span> <span class=n>location</span> <span class=err>配置</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_lua_vm</span><span class=err>：获取</span> <span class=n>Lua</span> <span class=n>VM</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_cache_loadbuffer</span><span class=err>：加载</span> <span class=n>Lua</span> <span class=err>代码</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_content_by_chunk</span><span class=err>：执行</span> <span class=n>Lua</span> <span class=err>代码</span>
+</code></pre></div><p>与 ngx_http_lua_access_handler_inline、ngx_http_lua_rewrite_handler_inline 没差别。</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-rewrite_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-rewrite_by_lua/image.2fa2be21eaace4e918c97d2ad77ec60c_hu216bf2b5e4ce3808618bae28e8e9cf35_60465_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-L6K+Ieqs5OkYyX0q137GDA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-access_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-access_by_lua/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty access_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-log_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-log_by_lua/image.7f197b1076ad585781fe5ce7085399f5_hu0a9f4819533ee3379e836c1fff8e004c_23870_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-fxl7EHatWFeB/lznCFOZ9Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.4996f2bab4f9ab8850dc86aa701f2be6_huda6b31de7cba7b266fa518d9dbf3ce9d_30023_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-SZbyurT5q4hQ3IaqcB8r5g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 核心技术点</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#用法>用法</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#指令定义>指令定义</a></li>
+<li><a href=#ngx_http_lua_content_by_lua-执行过程>ngx_http_lua_content_by_lua 执行过程</a></li>
+<li><a href=#ngx_http_lua_content_handler_inline-被调用位置>ngx_http_lua_content_handler_inline 被调用位置</a></li>
+<li><a href=#ngx_http_lua_content_handler_inline-执行过程>ngx_http_lua_content_handler_inline 执行过程</a></li>
+</ol>
+</li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

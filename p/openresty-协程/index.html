@@ -1,0 +1,472 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="协程 lua-nginx-module 提供了 coroutine 系列 Lua 接口，用于操作协程。
+这个与 ngx_http_lua_new_thread 相关的 lua-nginx-module 内部使用的协程不同，切勿搞混了。
+这系列函数较为少用，需要并行操作时通常使用轻量级线程（light thread）。
+目的：
+ coroutine Lua 接口的使用？主要使用场景？  如前面提到，这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。   coroutine 是如何实现的？ 与 Luajit 的协程是什么关系？  使用  coroutine.create(f)：创建一个协程并返回此协程，类型为“thread”，f 必须是一个函数。 coroutine.resume (co [, val1, ···])：开始或继续执行协程 co。如果协程执行出错，则返回 false 和错误信息，如果协程执行正常，返回 true。  首次调用会开始调用 f 函数，val1 等作为参数传递给 f。 后续调用会用 yield 的地方继续，val1 等作为 yield 的结果传递给 f。   coroutine.yield (···)：暂停正在执行的协程的执行。传递给 yield 的参数，将作为 resume 额外的结果返回。 coroutine.running ()：返回正在运行的协程，主协程正在运行，则返回 nil。 coroutine.status (co)：返回协程 co 的状态。  running：协程正在执行 suspended：调用了 yield，或者还没开始运行。 normal：激活但没有在运行，意味着它正在 resume 其他协程。 dead：执行完 f 函数，或者出错了。   coroutine."><title>OpenResty 协程</title>
+<link rel=canonical href=https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty 协程">
+<meta property="og:description" content="协程 lua-nginx-module 提供了 coroutine 系列 Lua 接口，用于操作协程。
+这个与 ngx_http_lua_new_thread 相关的 lua-nginx-module 内部使用的协程不同，切勿搞混了。
+这系列函数较为少用，需要并行操作时通常使用轻量级线程（light thread）。
+目的：
+ coroutine Lua 接口的使用？主要使用场景？  如前面提到，这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。   coroutine 是如何实现的？ 与 Luajit 的协程是什么关系？  使用  coroutine.create(f)：创建一个协程并返回此协程，类型为“thread”，f 必须是一个函数。 coroutine.resume (co [, val1, ···])：开始或继续执行协程 co。如果协程执行出错，则返回 false 和错误信息，如果协程执行正常，返回 true。  首次调用会开始调用 f 函数，val1 等作为参数传递给 f。 后续调用会用 yield 的地方继续，val1 等作为 yield 的结果传递给 f。   coroutine.yield (···)：暂停正在执行的协程的执行。传递给 yield 的参数，将作为 resume 额外的结果返回。 coroutine.running ()：返回正在运行的协程，主协程正在运行，则返回 nil。 coroutine.status (co)：返回协程 co 的状态。  running：协程正在执行 suspended：调用了 yield，或者还没开始运行。 normal：激活但没有在运行，意味着它正在 resume 其他协程。 dead：执行完 f 函数，或者出错了。   coroutine.">
+<meta property="og:url" content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/image.jpg">
+<meta name=twitter:title content="OpenResty 协程">
+<meta name=twitter:description content="协程 lua-nginx-module 提供了 coroutine 系列 Lua 接口，用于操作协程。
+这个与 ngx_http_lua_new_thread 相关的 lua-nginx-module 内部使用的协程不同，切勿搞混了。
+这系列函数较为少用，需要并行操作时通常使用轻量级线程（light thread）。
+目的：
+ coroutine Lua 接口的使用？主要使用场景？  如前面提到，这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。   coroutine 是如何实现的？ 与 Luajit 的协程是什么关系？  使用  coroutine.create(f)：创建一个协程并返回此协程，类型为“thread”，f 必须是一个函数。 coroutine.resume (co [, val1, ···])：开始或继续执行协程 co。如果协程执行出错，则返回 false 和错误信息，如果协程执行正常，返回 true。  首次调用会开始调用 f 函数，val1 等作为参数传递给 f。 后续调用会用 yield 的地方继续，val1 等作为 yield 的结果传递给 f。   coroutine.yield (···)：暂停正在执行的协程的执行。传递给 yield 的参数，将作为 resume 额外的结果返回。 coroutine.running ()：返回正在运行的协程，主协程正在运行，则返回 nil。 coroutine.status (co)：返回协程 co 的状态。  running：协程正在执行 suspended：调用了 yield，或者还没开始运行。 normal：激活但没有在运行，意味着它正在 resume 其他协程。 dead：执行完 f 函数，或者出错了。   coroutine."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image_hu717038469c11dd077f7b408e7b5d39bb_49064_800x0_resize_q75_box.jpg srcset="/p/openresty-%E5%8D%8F%E7%A8%8B/image_hu717038469c11dd077f7b408e7b5d39bb_49064_800x0_resize_q75_box.jpg 800w, /p/openresty-%E5%8D%8F%E7%A8%8B/image_hu717038469c11dd077f7b408e7b5d39bb_49064_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty 协程">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/openresty/ style=background-color:#a1b557;color:#fff>
+OpenResty
+</a>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>OpenResty 协程</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 5 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=协程>协程</h1>
+<p>lua-nginx-module 提供了 coroutine 系列 Lua 接口，用于操作协程。</p>
+<p>这个与 ngx_http_lua_new_thread 相关的 lua-nginx-module 内部使用的协程不同，切勿搞混了。</p>
+<p><strong>这系列函数较为少用，需要并行操作时通常使用<a class=link href=012-ngx-lightthread.md>轻量级线程（light thread）</a>。</strong></p>
+<p>目的：</p>
+<ul>
+<li>coroutine Lua 接口的使用？主要使用场景？
+<ul>
+<li>如前面提到，这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。</li>
+</ul>
+</li>
+<li>coroutine 是如何实现的？</li>
+<li>与 Luajit 的协程是什么关系？</li>
+</ul>
+<h2 id=使用>使用</h2>
+<ul>
+<li>coroutine.create(f)：创建一个协程并返回此协程，类型为“thread”，f 必须是一个函数。</li>
+<li>coroutine.resume (co [, val1, ···])：开始或继续执行协程 <code>co</code>。如果协程执行出错，则返回 false 和错误信息，如果协程执行正常，返回 true。
+<ul>
+<li>首次调用会开始调用 f 函数，val1 等作为参数传递给 f。</li>
+<li>后续调用会用 yield 的地方继续，val1 等作为 yield 的结果传递给 f。</li>
+</ul>
+</li>
+<li>coroutine.yield (···)：暂停正在执行的协程的执行。传递给 yield 的参数，将作为 resume 额外的结果返回。</li>
+<li>coroutine.running ()：返回正在运行的协程，主协程正在运行，则返回 nil。</li>
+<li>coroutine.status (co)：返回协程 <code>co</code> 的状态。
+<ul>
+<li>running：协程正在执行</li>
+<li>suspended：调用了 yield，或者还没开始运行。</li>
+<li>normal：激活但没有在运行，意味着它正在 resume 其他协程。</li>
+<li>dead：执行完 f 函数，或者出错了。</li>
+</ul>
+</li>
+<li>coroutine.wrap (f)：create 和 resume 的包裹函数。创建一个协程，参数 f 必须是一个 Lua 函数，结果也是一个 Lua 函数（假设为 g）。g 的后续每次调用都会 resume 协程，传递给 g 的参数，会作为 resume 的参数（val1 等），resume 返回的结果即是 g 的返回结果。</li>
+</ul>
+<p>示例：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=kr>function</span> <span class=nf>f</span><span class=p>()</span>
+    <span class=kd>local</span> <span class=n>cnt</span> <span class=o>=</span> <span class=mi>0</span>
+    <span class=kr>for</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>20</span> <span class=kr>do</span>
+        <span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;Hello, &#34;</span><span class=p>,</span> <span class=n>cnt</span><span class=p>)</span>
+        <span class=n>coroutine.yield</span><span class=p>()</span>
+        <span class=n>cnt</span> <span class=o>=</span> <span class=n>cnt</span> <span class=o>+</span> <span class=mi>1</span>
+    <span class=kr>end</span>
+<span class=kr>end</span>
+
+<span class=kd>local</span> <span class=n>c</span> <span class=o>=</span> <span class=n>coroutine.create</span><span class=p>(</span><span class=n>f</span><span class=p>)</span>
+<span class=kr>for</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>3</span> <span class=kr>do</span>
+    <span class=n>coroutine.resume</span><span class=p>(</span><span class=n>c</span><span class=p>)</span>
+    <span class=n>ngx.say</span><span class=p>(</span><span class=s2>&#34;***&#34;</span><span class=p>)</span>
+<span class=kr>end</span>
+</code></pre></div><h2 id=实现>实现</h2>
+<p>在前一篇文章中，我们了解到 lua-nginx-module 主要是通过注入的方式把 Lua 接口注册到 Lua VM 中，coroutine 当然也不例外，我们来看下。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_init_vm</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_pool_cleanup_add</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_new_state</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_init_globals</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_inject_ngx_api</span><span class=err>：注入</span> <span class=n>ngx</span> <span class=n>API</span><span class=err>，实际上就是创建</span> <span class=n>ngx</span> <span class=err>表和填充这个表。</span>
+                <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_inject_coroutine_api</span>
+</code></pre></div><h3 id=ngx_http_lua_inject_coroutine_api-的执行流程>ngx_http_lua_inject_coroutine_api 的执行流程</h3>
+<p>ngx_http_lua_inject_coroutine_api 又做了什么哪些呢？我们继续来看下</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_inject_coroutine_api</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_createtable</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>0</span> <span class=o>/*</span> <span class=n>narr</span> <span class=o>*/</span><span class=p>,</span> <span class=mi>16</span> <span class=o>/*</span> <span class=n>nrec</span> <span class=o>*/</span><span class=p>)</span><span class=err>：新建一个</span> <span class=n>coroutine</span> <span class=err>表</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_getglobal</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=s2>&#34;coroutine&#34;</span><span class=p>)</span><span class=err>：把旧的</span> <span class=n>coroutine</span> <span class=err>表放到栈顶</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_getfield</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=s2>&#34;running&#34;</span><span class=p>)</span><span class=err>：把旧</span> <span class=n>coroutine</span><span class=p>[</span><span class=s2>&#34;running&#34;</span><span class=p>]</span> <span class=err>放到栈顶</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_setfield</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=o>-</span><span class=mi>3</span><span class=p>,</span> <span class=s2>&#34;running&#34;</span><span class=p>)</span><span class=err>：把旧</span> <span class=n>coroutine</span><span class=p>[</span><span class=s2>&#34;running&#34;</span><span class=p>]</span> <span class=err>赋值给</span> <span class=err>新</span> <span class=n>coroutine</span><span class=p>[</span><span class=s2>&#34;running&#34;</span><span class=p>]</span><span class=err>，并出栈</span> <span class=err>旧</span> <span class=n>coroutine</span><span class=p>[</span><span class=s2>&#34;running&#34;</span><span class=p>]</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=err>其他函数类似：</span><span class=n>create</span> <span class=o>-&gt;</span> <span class=n>_create</span><span class=err>，</span><span class=n>wrap</span> <span class=o>-&gt;</span> <span class=n>_wrap</span><span class=err>，</span><span class=n>resume</span> <span class=o>-&gt;</span> <span class=n>_resume</span><span class=err>，</span><span class=n>yield</span> <span class=o>-&gt;</span> <span class=n>_yield</span><span class=err>，</span><span class=n>status</span> <span class=o>-&gt;</span> <span class=n>_status</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_pop</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span><span class=err>：不在需要操作旧的</span> <span class=n>coroutine</span> <span class=err>表了，弹出栈。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_pushcfunction</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=n>ngx_http_lua_coroutine_create</span><span class=p>)</span><span class=err>：把函数压入栈中</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_setfield</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=o>-</span><span class=mi>2</span><span class=p>,</span> <span class=s2>&#34;__create&#34;</span><span class=p>)</span><span class=err>：设置新</span> <span class=n>coroutine</span><span class=p>[</span><span class=s2>&#34;__create&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=n>ngx_http_lua_coroutine_create</span>
+        <span class=err>\</span><span class=o>-</span> <span class=err>其他函数类似：</span><span class=p>[</span><span class=s2>&#34;wrap&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=n>ngx_http_lua_coroutine_wrap</span><span class=err>，</span><span class=p>[</span><span class=s2>&#34;resume&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=n>ngx_http_lua_coroutine_resume</span><span class=p>,</span> <span class=p>...</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_setglobal</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=s2>&#34;coroutine&#34;</span><span class=p>)</span><span class=err>：把新</span> <span class=n>coroutine</span> <span class=err>设置到全局表中替换旧的</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>luaL_loadbuffer</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_pcall</span><span class=err>：加载并执行一段</span> <span class=n>Lua</span> <span class=err>代码（下面贴出），设置新</span> <span class=n>coroutine</span> <span class=err>表的</span> <span class=s2>&#34;create&#34;</span><span class=err>，</span><span class=s2>&#34;resume&#34;</span> <span class=err>等（不用设置</span> <span class=n>running</span><span class=err>，</span><span class=n>running</span> <span class=err>没变化）</span>
+</code></pre></div><p>Lua 注入 coroutine create 等接口的 Lua 代码：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=kd>local</span> <span class=n>keys</span> <span class=o>=</span> <span class=p>{</span><span class=s1>&#39;create&#39;</span><span class=p>,</span> <span class=s1>&#39;yield&#39;</span><span class=p>,</span> <span class=s1>&#39;resume&#39;</span><span class=p>,</span> <span class=s1>&#39;status&#39;</span><span class=p>,</span> <span class=s1>&#39;wrap&#39;</span><span class=p>}</span>
+<span class=c1>-- ifdef OPENRESTY_LUAJIT</span>
+<span class=kd>local</span> <span class=n>get_req</span> <span class=o>=</span> <span class=n>require</span> <span class=s1>&#39;thread.exdata&#39;</span>
+<span class=c1>-- #else</span>
+<span class=kd>local</span> <span class=n>getfenv</span> <span class=o>=</span> <span class=n>getfenv</span>
+<span class=c1>-- #endif</span>
+<span class=kr>for</span> <span class=n>_</span><span class=p>,</span> <span class=n>key</span> <span class=kr>in</span> <span class=n>ipairs</span><span class=p>(</span><span class=n>keys</span><span class=p>)</span> <span class=kr>do</span>
+    <span class=kd>local</span> <span class=n>std</span> <span class=o>=</span> <span class=n>coroutine</span><span class=p>[</span><span class=s1>&#39;_&#39;</span> <span class=o>..</span> <span class=n>key</span><span class=p>]</span>
+    <span class=kd>local</span> <span class=n>ours</span> <span class=o>=</span> <span class=n>coroutine</span><span class=p>[</span><span class=s1>&#39;__&#39;</span> <span class=o>..</span> <span class=n>key</span><span class=p>]</span>
+    <span class=kd>local</span> <span class=n>raw_ctx</span> <span class=o>=</span> <span class=n>ngx._phase_ctx</span>
+    <span class=n>coroutine</span><span class=p>[</span><span class=n>key</span><span class=p>]</span> <span class=o>=</span> <span class=kr>function</span> <span class=p>(...)</span>
+<span class=c1>-- #ifdef OPENRESTY_LUAJIT</span>
+        <span class=kd>local</span> <span class=n>r</span> <span class=o>=</span> <span class=n>get_req</span><span class=p>()</span>
+<span class=c1>-- #else</span>
+        <span class=kd>local</span> <span class=n>r</span> <span class=o>=</span> <span class=n>getfenv</span><span class=p>(</span><span class=mi>0</span><span class=p>).</span><span class=n>__ngx_req</span>
+<span class=c1>-- #endif</span>
+        <span class=kr>if</span> <span class=n>r</span> <span class=o>~=</span> <span class=kc>nil</span> <span class=kr>then</span>
+<span class=c1>-- #ifdef OPENRESTY_LUAJIT</span>
+            <span class=kd>local</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>raw_ctx</span><span class=p>()</span>
+<span class=c1>-- #else</span>
+            <span class=kd>local</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>raw_ctx</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
+<span class=c1>-- #endif</span>
+            <span class=c1>-- /* ignore header and body filters */</span>
+            <span class=kr>if</span> <span class=n>ctx</span> <span class=o>~=</span> <span class=mh>0x020</span> <span class=ow>and</span> <span class=n>ctx</span> <span class=o>~=</span> <span class=mh>0x040</span> <span class=kr>then</span>
+                <span class=kr>return</span> <span class=n>ours</span><span class=p>(...)</span>
+            <span class=kr>end</span>
+        <span class=kr>end</span>
+        <span class=kr>return</span> <span class=n>std</span><span class=p>(...)</span>
+    <span class=kr>end</span>
+<span class=kr>end</span>
+<span class=n>package.loaded</span><span class=p>.</span><span class=n>coroutine</span> <span class=o>=</span> <span class=n>coroutine</span>
+</code></pre></div><p>可以看到，在 ngx_http_lua_inject_coroutine_api 中，主要是替换了旧的 coroutine 表成新的 routine 表；新旧的 coroutine 函数（新：__xxx，旧：_xxx），按需调用。
+同时，新的 coroutine 函数依赖 request 和 ctx。
+也就是说，<code>ngx.*</code> 相关函数可以在使用新 coroutine 函数创建的 coroutine 中使用。而 header filter 和 body filter 以及其他没有 request 的调用，则使用的是标准库的 coroutine 函数，没法使用这些函数。</p>
+<p>新的 coroutine 函数是怎样的呢？有什么特殊的吗？我们继续看。</p>
+<h3 id=ngx_http_lua_coroutine_create-vs-lj_cf_coroutine_create>ngx_http_lua_coroutine_create VS lj_cf_coroutine_create</h3>
+<ul>
+<li>
+<p>ngx_http_lua_coroutine_create</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_coroutine_create</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_req</span><span class=p>(</span><span class=n>L</span><span class=p>)</span><span class=err>：获取请求。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_get_module_ctx</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>ngx_http_lua_module</span><span class=p>)</span><span class=err>：获取</span> <span class=n>ctx</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_coroutine_create_helper</span><span class=err>：在</span> <span class=n>wrap</span> <span class=err>中也用了，因此封装了个</span> <span class=n>helper</span> <span class=err>函数。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>luaL_argcheck</span><span class=err>：参数检查。首先检查</span> <span class=n>coroutine.create</span> <span class=err>的传参是否是函数。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_check_context</span><span class=err>：检查这个接口是否能在当前上下文中被调用。这是一个宏，实际上就是对相关标记位进行</span><span class=s2>&#34;按位与&#34;</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_lua_vm</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>ctx</span><span class=p>)</span><span class=err>：获取</span> <span class=n>Lua</span> <span class=n>VM</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>lua_newthread</span><span class=err>：如果不需要</span> <span class=n>co_ref</span> <span class=err>就直接创建线程。在根</span> <span class=n>Lua</span> <span class=n>State</span> <span class=err>创建新线程，使之总是</span> <span class=n>yield</span> <span class=err>到主线程。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_new_cached_thread</span><span class=err>：如果需要</span> <span class=n>co_ref</span><span class=err>（一个整数，用于查找线程，速度快），则调用此函数来创建。在根</span> <span class=n>Lua</span> <span class=n>State</span> <span class=err>创建新线程，使之总是</span> <span class=n>yield</span> <span class=err>到主线程。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_probe_user_coroutine_create</span><span class=err>：一个</span> <span class=n>dtrace</span> <span class=err>挂载点，没有定义</span> <span class=n>NGX_DTRACE</span> <span class=err>时，此宏为空。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_co_ctx</span><span class=err>：从模块</span> <span class=n>ctx</span> <span class=err>中获取协程</span> <span class=n>ctx</span><span class=err>，如果没获取到，就创建；获取到就初始化一下。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_create_co_ctx</span><span class=err>：创建协程</span> <span class=n>ctx</span><span class=err>。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_set_req</span><span class=err>：把协程和请求关联起来。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_attach_co_ctx_to_L</span><span class=err>：把协程</span> <span class=n>ctx</span> <span class=err>关联到协程。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>lua_xmove</span><span class=p>(</span><span class=n>vm</span><span class=p>,</span> <span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span><span class=err>：把协程从主线程移到</span> <span class=n>L</span><span class=err>。</span><span class=n>lua_xmove</span><span class=err>：从</span> <span class=n>vm</span> <span class=err>栈中弹出</span> <span class=mi>1</span> <span class=err>个元素压到</span> <span class=n>L</span> <span class=err>栈中。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>lua_pushvalue</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span><span class=err>：把入口函数复制到</span> <span class=n>L</span> <span class=err>的栈顶。</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>lua_xmove</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=n>co</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span><span class=err>：把入口函数从</span> <span class=n>L</span> <span class=err>移动到协程</span> <span class=n>co</span><span class=err>。</span>
+</code></pre></div></li>
+</ul>
+<p>可以看到，与前面一致，新的 coroutine 函数需要 request 和 ngx_http_lua_module 的 ctx。
+为了更清晰整个原理，我们完整地跟踪一下栈变化：（无关代码已经省去）</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=nf>ngx_http_lua_coroutine_create_helper</span><span class=p>(</span><span class=n>lua_State</span> <span class=o>*</span><span class=n>L</span><span class=p>,</span> <span class=n>ngx_http_request_t</span> <span class=o>*</span><span class=n>r</span><span class=p>,</span>
+    <span class=n>ngx_http_lua_ctx_t</span> <span class=o>*</span><span class=n>ctx</span><span class=p>,</span> <span class=n>ngx_http_lua_co_ctx_t</span> <span class=o>**</span><span class=n>pcoctx</span><span class=p>,</span> <span class=kt>int</span> <span class=o>*</span><span class=n>co_ref</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=c1>// L: entry_func
+</span><span class=c1></span>    <span class=n>luaL_argcheck</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=n>lua_isfunction</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=o>!</span><span class=n>lua_iscfunction</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>),</span> <span class=mi>1</span><span class=p>,</span>
+                  <span class=s>&#34;Lua function expected&#34;</span><span class=p>);</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>co_ref</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
+        <span class=c1>// vm: co
+</span><span class=c1></span>        <span class=n>co</span> <span class=o>=</span> <span class=n>lua_newthread</span><span class=p>(</span><span class=n>vm</span><span class=p>);</span>
+
+    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+        <span class=c1>// vm: coroutines_key registry co co
+</span><span class=c1></span>        <span class=n>lmcf</span> <span class=o>=</span> <span class=n>ngx_http_get_module_main_conf</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>ngx_http_lua_module</span><span class=p>);</span>
+        <span class=o>*</span><span class=n>co_ref</span> <span class=o>=</span> <span class=n>ngx_http_lua_new_cached_thread</span><span class=p>(</span><span class=n>vm</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>co</span><span class=p>,</span> <span class=n>lmcf</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+    <span class=p>}</span>
+
+    <span class=c1>// co(extdata) = r
+</span><span class=c1></span>    <span class=c1>// co(extdata2) = coctx
+</span><span class=c1></span>    <span class=n>ngx_http_lua_set_req</span><span class=p>(</span><span class=n>co</span><span class=p>,</span> <span class=n>r</span><span class=p>);</span>
+    <span class=n>ngx_http_lua_attach_co_ctx_to_L</span><span class=p>(</span><span class=n>co</span><span class=p>,</span> <span class=n>coctx</span><span class=p>);</span>
+
+    <span class=c1>// vm: coroutines_key registry co
+</span><span class=c1></span>    <span class=c1>// L: entry_func arg1 ... argn co
+</span><span class=c1></span>    <span class=n>lua_xmove</span><span class=p>(</span><span class=n>vm</span><span class=p>,</span> <span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>    <span class=cm>/* move coroutine from main thread to L */</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>co_ref</span><span class=p>)</span> <span class=p>{</span>
+        <span class=c1>// vm: coroutines_key registry
+</span><span class=c1></span>        <span class=n>lua_pop</span><span class=p>(</span><span class=n>vm</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>  <span class=cm>/* pop coroutines */</span>
+    <span class=p>}</span>
+
+    <span class=c1>// L: entry_func arg1 ... argn co entry_func
+</span><span class=c1></span>    <span class=n>lua_pushvalue</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>    <span class=cm>/* copy entry function to top of L*/</span>
+    <span class=c1>// L: entry_func arg1 ... argn co
+</span><span class=c1></span>    <span class=c1>// co: entry_func
+</span><span class=c1></span>    <span class=n>lua_xmove</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=n>co</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>    <span class=cm>/* move entry function from L to co */</span>
+<span class=p>}</span>
+</code></pre></div><p>可以看到，co 栈中只有一个 entry_func（此时 coroutine.create 接口也没有传髯口函数的参数）。</p>
+<ul>
+<li>
+<p>lj_cf_coroutine_create:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=c1>// static int lj_cf_coroutine_create(lua_State *L)
+</span><span class=c1></span><span class=n>LJLIB_CF</span><span class=p>(</span><span class=n>coroutine_create</span><span class=p>)</span>
+<span class=p>{</span>
+<span class=n>lua_State</span> <span class=o>*</span><span class=n>L1</span><span class=p>;</span>
+<span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=p>(</span><span class=n>L</span><span class=o>-&gt;</span><span class=n>base</span> <span class=o>&lt;</span> <span class=n>L</span><span class=o>-&gt;</span><span class=n>top</span> <span class=o>&amp;&amp;</span> <span class=n>tvisfunc</span><span class=p>(</span><span class=n>L</span><span class=o>-&gt;</span><span class=n>base</span><span class=p>)))</span>
+    <span class=n>lj_err_argt</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>LUA_TFUNCTION</span><span class=p>);</span>
+<span class=n>L1</span> <span class=o>=</span> <span class=n>lua_newthread</span><span class=p>(</span><span class=n>L</span><span class=p>);</span>
+<span class=n>setfuncV</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=n>L1</span><span class=o>-&gt;</span><span class=n>top</span><span class=o>++</span><span class=p>,</span> <span class=n>funcV</span><span class=p>(</span><span class=n>L</span><span class=o>-&gt;</span><span class=n>base</span><span class=p>));</span>
+<span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div></li>
+</ul>
+<p>主要差别是 ngx_http_lua_coroutine_create 依赖 ctx 和 r，并且可能从 cache 中取协程；lj_cf_coroutine_create 直接 lua_newthread 了一个协程。</p>
+<h3 id=ngx_http_lua_coroutine_resume-vs-lj_ffh_coroutine_resume>ngx_http_lua_coroutine_resume VS lj_ffh_coroutine_resume</h3>
+<ul>
+<li>
+<p>ngx_http_lua_coroutine_resume</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_lua_coroutine_resume</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>co</span> <span class=o>=</span> <span class=n>lua_tothread</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span><span class=err>：从栈中</span> <span class=n>index</span> <span class=o>=</span> <span class=mi>1</span> <span class=err>的地方取出值，转换成</span> <span class=n>Lua</span> <span class=err>线程。不是线程会返回</span> <span class=n>NULL</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>luaL_argcheck</span><span class=err>：检查</span> <span class=n>co</span> <span class=err>是否有效。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_req</span><span class=err>：获取请求。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_get_module_ctx</span><span class=err>：获取模块</span> <span class=n>ctx</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_check_context</span><span class=err>：检查这个接口是否能在当前上下文中被调用。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>p_coctx</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>cur_co_ctx</span><span class=err>：获取当前</span> <span class=n>ctx</span> <span class=err>作为父</span> <span class=n>ctx</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_get_co_ctx</span><span class=err>：从</span> <span class=n>co</span> <span class=err>中获取协程</span> <span class=n>ctx</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_lua_probe_user_coroutine_resume</span><span class=err>：</span><span class=n>dtrace</span> <span class=err>钩子。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=kr>if</span> <span class=p>(</span><span class=n>coctx</span><span class=o>-&gt;</span><span class=n>co_status</span> <span class=err>!</span><span class=o>=</span> <span class=n>NGX_HTTP_LUA_CO_SUSPENDED</span><span class=p>)</span><span class=err>：检查进程状态，如果不是</span> <span class=n>NGX_HTTP_LUA_CO_SUSPENDED</span> <span class=err>则不能进行</span> <span class=n>resume</span><span class=err>，直接返回错误。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>p_coctx</span><span class=o>-&gt;</span><span class=n>co_status</span> <span class=o>=</span> <span class=n>NGX_HTTP_LUA_CO_NORMAL</span><span class=err>：设置父协程</span> <span class=n>ctx</span> <span class=err>的状态。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>coctx</span><span class=o>-&gt;</span><span class=n>parent_co_ctx</span> <span class=o>=</span> <span class=n>p_coctx</span><span class=err>：设置协程的父协程</span> <span class=n>ctx</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>coctx</span><span class=o>-&gt;</span><span class=n>co_status</span> <span class=o>=</span> <span class=n>NGX_HTTP_LUA_CO_RUNNING</span><span class=err>：设置协程的状态。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>co_op</span> <span class=o>=</span> <span class=n>NGX_HTTP_LUA_USER_CORO_RESUME</span><span class=err>：设置协程操作是用户进行</span> <span class=n>RESUME</span><span class=err>。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>cur_co_ctx</span> <span class=o>=</span> <span class=n>coctx</span><span class=err>：设置</span> <span class=n>ctx</span> <span class=err>的</span> <span class=n>cur_co_ctx</span> <span class=err>为即将</span> <span class=n>resume</span> <span class=err>的</span> <span class=n>coctx</span><span class=err>，当前协程</span> <span class=n>yield</span> <span class=err>后，将执行此协程。</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>lua_yield</span><span class=err>：</span><span class=n>yeild</span> <span class=err>回主线程，然后让主线程来</span> <span class=n>resume</span><span class=err>。</span>
+</code></pre></div></li>
+</ul>
+<p>不是应该 resume 吗？这里为什么调用的 lua_yield 呢？看到这里或许会有这样的疑惑。
+其实 review、access 等阶段的 Lua 代码，都是通过 ngx_http_lua_run_thread 来执行的，ngx_http_lua_coroutine_resume 这里执行完 lua_yield 后，会回到 ngx_http_lua_run_thread 中，由于状态是 LUA_YIELD 和操作是 NGX_HTTP_LUA_USER_CORO_RESUME，会继续(continue) ngx_http_lua_run_thread 的死循环，进而执行到刚刚要 resume 的协程。</p>
+<ul>
+<li>lj_ffh_coroutine_resume</li>
+</ul>
+<p>在 header filter 或 body filter 阶段，都是调用的 Luajit 的 coroutine 接口，都是在 ngx_http_lua_header_filter_by_chunk 中调用 lua_pcall 来执行的，与 lua-nginx-module 的接口不同。
+不过 Luajit 的 coroutine.resume 是如何实现的，还没搞清楚，跟踪 lj_ffh_coroutine_resume 并没有发现有被调用，最终调用的 lj_vm_resume 这个汇编接口。后续学习 Luajit 时，再继续探究。
+Luajit 的 coroutine.resume 及 coroutine.yield 底层接口看起来都是汇编的（使用 LJLIB_ASM 修饰）。</p>
+<h2 id=总结>总结</h2>
+<p>回到我们前面提出的问题，</p>
+<ul>
+<li>
+<p>coroutine Lua 接口的使用？主要使用场景？
+答：这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。</p>
+</li>
+<li>
+<p>coroutine 是如何实现的？
+答：不同阶段使用不同的底层函数，access 等阶段时候的是 lua-nginx-module 实现的函数，相关调度也是 lua-nginx-module 接管。header filter 等阶段则是使用 Luajit 实现的函数，相关调度由 Luajit 接管。</p>
+</li>
+<li>
+<p>与 Luajit 的协程是什么关系？
+答：最终都是用了 Luajit 的 lua_resume、lua_yield 等函数。</p>
+</li>
+</ul>
+<h2 id=疑问>疑问</h2>
+<ul>
+<li>如何判断一个 Lua State 是 root Lua State？</li>
+<li>Luajit 中栈是如何分布的呢？1,-1 等索引的值代表什么？
+<ul>
+<li>后续见此文档：<a class=link href=../../Luajit/%e8%ae%be%e8%ae%a1%e4%b8%8e%e5%ae%9e%e7%8e%b0/1-luajit-stack.md>1-luajit-stack.md</a></li>
+</ul>
+</li>
+<li>Luajit 的 coroutine.resume 是如何实现的？</li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>nginx</a>
+<a href=/tags/openresty/>OpenResty</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/openresty-log_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-log_by_lua/image.7f197b1076ad585781fe5ce7085399f5_hu0a9f4819533ee3379e836c1fff8e004c_23870_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-fxl7EHatWFeB/lznCFOZ9Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.7e85f7de4b54b7152f77067341230972_hu8c5d9ec490e882f08b9b2f012a3f6921_123677_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-foX33ktUtxUvdwZzQSMJcg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-content_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-content_by_lua/image.92e807e090a193d2f9e547aa439368c2_hu1ddfb084b38ca84c30bb52cb3ae9d2f0_60039_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-kugH4JChk9L55UeqQ5Nowg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty content_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-ngx.sleep/>
+<div class=article-image>
+<img src=/p/openresty-ngx.sleep/image.a2bbddb6e86955c19ed8bbf3e937c6fa_hu57f1aff2c78ae8f02c095630a8917fb2_78683_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.sleep" data-hash="md5-orvdtuhpVcGe2Lvz6TfG+g==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty ngx.sleep</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua VM 初始化</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#使用>使用</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#ngx_http_lua_inject_coroutine_api-的执行流程>ngx_http_lua_inject_coroutine_api 的执行流程</a></li>
+<li><a href=#ngx_http_lua_coroutine_create-vs-lj_cf_coroutine_create>ngx_http_lua_coroutine_create VS lj_cf_coroutine_create</a></li>
+<li><a href=#ngx_http_lua_coroutine_resume-vs-lj_ffh_coroutine_resume>ngx_http_lua_coroutine_resume VS lj_ffh_coroutine_resume</a></li>
+</ol>
+</li>
+<li><a href=#总结>总结</a></li>
+<li><a href=#疑问>疑问</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
