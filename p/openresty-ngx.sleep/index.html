@@ -20,7 +20,7 @@ ngx.sleep(0.001) 睡眠时间的精度是毫秒（0.001 秒）。
 - ngx_http_lua_sleep_handler \- ctx-&amp;gt;cur_co_ctx = coctx：设置当前协程 \- if (ctx-&amp;gt;entered_content_phase)：如果不是 access、rewrite 阶段 \- ngx_http_lua_sleep_resume：直接 resume \- vm = ngx_http_lua_get_lua_vm(r, ctx)：获取 Lua 虚拟机 \- rc = ngx_http_lua_run_thread(vm, r, ctx, 0)：继续跑协程 \- else：否则如果是 access、rewrite 阶段，就设置回调，直接进入核心处理流程 \- ctx-&amp;gt;resume_handler = ngx_http_lua_sleep_resume：设置 resume 回调 \- ngx_http_core_run_phases(r)：然后继续回到核心处理逻辑 \- ngx_http_run_posted_requests：执行后续的请求 在这个函数中，会恢复被暂停的 Lua 协程。">
 <meta property="og:url" content="https://isshe.site/p/openresty-ngx.sleep/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-ngx.sleep/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-04-02T06:00:02-03:00"><meta property="article:modified_time" content="2023-04-02T06:00:02-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-ngx.sleep/image.jpg">
 <meta name=twitter:title content="OpenResty ngx.sleep">
 <meta name=twitter:description content="ngx.sleep 在 OpenResty 中，我们可以通过 ngx.sleep() 让出执行权进行“睡眠/挂起”，让当前请求暂停一段时间（单位为秒）后醒来。
 目的：
@@ -30,7 +30,7 @@ ngx.sleep(0.001) 睡眠时间的精度是毫秒（0.001 秒）。
 实现 ngx.sleep 也是通过 C 代码注入的方式，对应的处理函数是：ngx_http_lua_ngx_sleep，我们直接来跟踪这个函数的实现。
 - ngx_http_lua_ngx_sleep \- delay = (ngx_int_t) (luaL_checknumber(L, 1) * 1000)：将参数转换成毫秒 \- coctx-&amp;gt;sleep.handler = ngx_http_lua_sleep_handler：填充 coctx-&amp;gt;sleep 事件 \- ngx_add_timer(&amp;amp;coctx-&amp;gt;sleep, (ngx_msec_t) delay)：添加定时器 \- return lua_yield(L, 0)：让出执行权 可以看到，时间到了以后，会调用 ngx_http_lua_sleep_handler：
 - ngx_http_lua_sleep_handler \- ctx-&amp;gt;cur_co_ctx = coctx：设置当前协程 \- if (ctx-&amp;gt;entered_content_phase)：如果不是 access、rewrite 阶段 \- ngx_http_lua_sleep_resume：直接 resume \- vm = ngx_http_lua_get_lua_vm(r, ctx)：获取 Lua 虚拟机 \- rc = ngx_http_lua_run_thread(vm, r, ctx, 0)：继续跑协程 \- else：否则如果是 access、rewrite 阶段，就设置回调，直接进入核心处理流程 \- ctx-&amp;gt;resume_handler = ngx_http_lua_sleep_resume：设置 resume 回调 \- ngx_http_core_run_phases(r)：然后继续回到核心处理逻辑 \- ngx_http_run_posted_requests：执行后续的请求 在这个函数中，会恢复被暂停的 Lua 协程。"><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/openresty-ngx.sleep/image.png">
+<meta name=twitter:image content="https://isshe.site/p/openresty-ngx.sleep/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -49,7 +49,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/openresty-ngx.sleep/>
-<img src=/p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png srcset="/p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png 800w, /p/openresty-ngx.sleep/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_1600x0_resize_box_3.png 1600w" width=800 height=669 loading=lazy alt="Featured image of post OpenResty ngx.sleep">
+<img src=/p/openresty-ngx.sleep/image_hufcdb8a4692f8ada50966e20cd23479ea_226817_800x0_resize_q75_box.jpg srcset="/p/openresty-ngx.sleep/image_hufcdb8a4692f8ada50966e20cd23479ea_226817_800x0_resize_q75_box.jpg 800w, /p/openresty-ngx.sleep/image_hufcdb8a4692f8ada50966e20cd23479ea_226817_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty ngx.sleep">
 </a>
 </div>
 <div class=article-details>
@@ -72,7 +72,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>May 16, 2023</time>
+<time class=article-time--published>Apr 02, 2023</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -141,9 +141,29 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 核心技术点</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 线程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
 <div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
 </div>
 <div class=article-details>
 <h2 class=article-title>OpenResty Lua VM 初始化</h2>
@@ -151,42 +171,22 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
 <div class=article-image>
-<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.886a0ced2982664021dba680bed7a699_hu717038469c11dd077f7b408e7b5d39bb_49064_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-iGoM7SmCZkAh26aAvtemmQ==">
+<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 共享字典（内存）</h2>
+<h2 class=article-title>OpenResty 信号量</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<a href=/p/openresty-cosocket/>
 <div class=article-image>
-<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
+<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 管道（pipe）</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-ngx.log/>
-<div class=article-image>
-<img src=/p/openresty-ngx.log/image.955eb16e87ae942c2c4e6b7c5c9f5eef_hu8ffd37a68b393434e7fe807d4a75feb4_97518_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.log" data-hash="md5-lV6xboeulCwsTmt8XJ9e7w==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty ngx.log</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-access_by_lua/>
-<div class=article-image>
-<img src=/p/openresty-access_by_lua/image.3c2a0e07d927942300cca85719466ccc_hubf88fa8b3344c5c9857d9c08aa2b854e_85353_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-PCoOB9knlCMAzKhXGUZszA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty access_by_lua*</h2>
+<h2 class=article-title>OpenResty cosocket</h2>
 </div>
 </a>
 </article>

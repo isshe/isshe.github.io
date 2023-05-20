@@ -10,12 +10,12 @@
  大致了解 openresty 是个什么、实现了哪些功能。  ngx_lua-0.10.21 ├── README.markdown ├── src │ ├── api │ │ └── ngx_http_lua_api.h │ ├── ddebug.h：用于调试的头文件 - 各个阶段是处理程序，用于支持 `*_by_lua*` 系列指令 │ ├── ngx_http_lua_initby.c │ ├── ngx_http_lua_initby.h │ ├── ngx_http_lua_initworkerby.c │ ├── ngx_http_lua_initworkerby.h │ ├── ngx_http_lua_ssl_certby.c │ ├── ngx_http_lua_ssl_certby.h │ ├── ngx_http_lua_ssl_client_helloby.c │ ├── ngx_http_lua_ssl_client_helloby.h │ ├── ngx_http_lua_setby.c │ ├── ngx_http_lua_setby.h │ ├── ngx_http_lua_ssl_session_fetchby.c │ ├── ngx_http_lua_ssl_session_fetchby.">
 <meta property="og:url" content="https://isshe.site/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-16T13:38:34-03:00"><meta property="article:modified_time" content="2023-05-16T13:38:34-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2022-12-06T06:00:05-04:00"><meta property="article:modified_time" content="2022-12-06T06:00:05-04:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image.jpg">
 <meta name=twitter:title content="OpenResty 代码结构">
 <meta name=twitter:description content="Lua Nginx Module 的源码结构  常常提醒自己使用总分思想，这不，发现缺少了一些更为全局的内容，现补充如下。 以 0.10.21 版本为例
  目的
  大致了解 openresty 是个什么、实现了哪些功能。  ngx_lua-0.10.21 ├── README.markdown ├── src │ ├── api │ │ └── ngx_http_lua_api.h │ ├── ddebug.h：用于调试的头文件 - 各个阶段是处理程序，用于支持 `*_by_lua*` 系列指令 │ ├── ngx_http_lua_initby.c │ ├── ngx_http_lua_initby.h │ ├── ngx_http_lua_initworkerby.c │ ├── ngx_http_lua_initworkerby.h │ ├── ngx_http_lua_ssl_certby.c │ ├── ngx_http_lua_ssl_certby.h │ ├── ngx_http_lua_ssl_client_helloby.c │ ├── ngx_http_lua_ssl_client_helloby.h │ ├── ngx_http_lua_setby.c │ ├── ngx_http_lua_setby.h │ ├── ngx_http_lua_ssl_session_fetchby.c │ ├── ngx_http_lua_ssl_session_fetchby."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image.png">
+<meta name=twitter:image content="https://isshe.site/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -76,7 +76,7 @@ on-phone--column extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/>
-<img src=/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png srcset="/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_800x0_resize_box_3.png 800w, /p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hu57f1aff2c78ae8f02c095630a8917fb2_78683_1600x0_resize_box_3.png 1600w" width=800 height=669 loading=lazy alt="Featured image of post OpenResty 代码结构">
+<img src=/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hud37660a567da8df0403875e6c802b8b7_242254_800x0_resize_q75_box.jpg srcset="/p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hud37660a567da8df0403875e6c802b8b7_242254_800x0_resize_q75_box.jpg 800w, /p/openresty-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/image_hud37660a567da8df0403875e6c802b8b7_242254_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty 代码结构">
 </a>
 </div>
 <div class=article-details>
@@ -99,7 +99,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>May 16, 2023</time>
+<time class=article-time--published>Dec 06, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -268,39 +268,19 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-log_by_lua/>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
 <div class=article-image>
-<img src=/p/openresty-log_by_lua/image.7f197b1076ad585781fe5ce7085399f5_hu0a9f4819533ee3379e836c1fff8e004c_23870_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-fxl7EHatWFeB/lznCFOZ9Q==">
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty log_by_lua*</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
-<div class=article-image>
-<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty 管道（pipe）</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/>
-<div class=article-image>
-<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/image.62046d92350df2fe88954ae86875a727_huf81ae40bd4462c9a52fbc7063d25c656_36524_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码执行实例跟踪" data-hash="md5-YgRtkjUN8v6IlUroaHWnJw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty Lua 代码执行实例跟踪</h2>
+<h2 class=article-title>OpenResty 核心技术点</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
 <a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fc399d007db2b5a4897f4608964497aa_hu771cd80d939141067a79c024c62c95e0_18175_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-/DmdAH2ytaSJf0YIlkSXqg==">
+<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
 </div>
 <div class=article-details>
 <h2 class=article-title>OpenResty 线程</h2>
@@ -310,10 +290,30 @@ Nginx
 <article class=has-image>
 <a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
 <div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.dca80cbbef4a9a15f99be79b30c1f70a_hucd6041f2c8064f45bbea052ae228c089_60588_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-3KgMu+9KmhX5m+ebMMH3Cg==">
+<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
 </div>
 <div class=article-details>
 <h2 class=article-title>OpenResty Lua VM 初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
 </div>
 </a>
 </article>
