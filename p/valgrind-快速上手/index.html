@@ -1,0 +1,252 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Valgrind 快速上手 1、介绍 Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。 其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。
+2、准备程序 使用 -g 选项编译程序，使程序包含调试信息（debug info），这样可以让 Memcheck 的错误信息包含详细的行号。 如果可以允许程序变慢，使用 -O0 来编译最好；如果是 -O1 则行号可能有错，不过一般能正常工作，速度相对 -O0 也提升明显；-O2 或以上的优化级别则不建议使用，可能导致 Memcheck 报告未初始化值的错误。
+使用 Valgrind 执行程序 如果程序正常是使用以下方式执行：
+myprog arg1 arg 则，改为下面的方式：
+valgrind --leak-check=yes myprog arg1 arg2 这个命令中没有指定 Memcheck，是因为 Memcheck 是默认的工具；--leak-check 选项打开详细的内存泄露检测器。 此时程序可能比平时慢很多（例如 20、30 倍），并且会使用多很多内存。Memcheck 将显示检测到的内存错误或内存泄露信息。
+解释 Memcheck 的输出 // example.c #include &amp;lt;stdlib.h&amp;gt;void f(void) { int* x = malloc(10 * sizeof(int)); x[10] = 0; // problem 1: heap block overrun  // problem 2: memory leak -- x not freed } int main(void) { f(); return 0; } 这是一个有内存泄露和内存错误的程序。"><title>Valgrind 快速上手</title>
+<link rel=canonical href=https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Valgrind 快速上手">
+<meta property="og:description" content="Valgrind 快速上手 1、介绍 Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。 其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。
+2、准备程序 使用 -g 选项编译程序，使程序包含调试信息（debug info），这样可以让 Memcheck 的错误信息包含详细的行号。 如果可以允许程序变慢，使用 -O0 来编译最好；如果是 -O1 则行号可能有错，不过一般能正常工作，速度相对 -O0 也提升明显；-O2 或以上的优化级别则不建议使用，可能导致 Memcheck 报告未初始化值的错误。
+使用 Valgrind 执行程序 如果程序正常是使用以下方式执行：
+myprog arg1 arg 则，改为下面的方式：
+valgrind --leak-check=yes myprog arg1 arg2 这个命令中没有指定 Memcheck，是因为 Memcheck 是默认的工具；--leak-check 选项打开详细的内存泄露检测器。 此时程序可能比平时慢很多（例如 20、30 倍），并且会使用多很多内存。Memcheck 将显示检测到的内存错误或内存泄露信息。
+解释 Memcheck 的输出 // example.c #include &amp;lt;stdlib.h&amp;gt;void f(void) { int* x = malloc(10 * sizeof(int)); x[10] = 0; // problem 1: heap block overrun  // problem 2: memory leak -- x not freed } int main(void) { f(); return 0; } 这是一个有内存泄露和内存错误的程序。">
+<meta property="og:url" content="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="valgrind"><meta property="article:tag" content="静态追踪"><meta property="article:tag" content="Valgrind"><meta property="article:tag" content="Memcheck"><meta property="article:published_time" content="2023-05-21T04:45:14-03:00"><meta property="article:modified_time" content="2023-05-21T04:45:14-03:00"><meta property="og:image" content="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image.jpg">
+<meta name=twitter:title content="Valgrind 快速上手">
+<meta name=twitter:description content="Valgrind 快速上手 1、介绍 Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。 其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。
+2、准备程序 使用 -g 选项编译程序，使程序包含调试信息（debug info），这样可以让 Memcheck 的错误信息包含详细的行号。 如果可以允许程序变慢，使用 -O0 来编译最好；如果是 -O1 则行号可能有错，不过一般能正常工作，速度相对 -O0 也提升明显；-O2 或以上的优化级别则不建议使用，可能导致 Memcheck 报告未初始化值的错误。
+使用 Valgrind 执行程序 如果程序正常是使用以下方式执行：
+myprog arg1 arg 则，改为下面的方式：
+valgrind --leak-check=yes myprog arg1 arg2 这个命令中没有指定 Memcheck，是因为 Memcheck 是默认的工具；--leak-check 选项打开详细的内存泄露检测器。 此时程序可能比平时慢很多（例如 20、30 倍），并且会使用多很多内存。Memcheck 将显示检测到的内存错误或内存泄露信息。
+解释 Memcheck 的输出 // example.c #include &amp;lt;stdlib.h&amp;gt;void f(void) { int* x = malloc(10 * sizeof(int)); x[10] = 0; // problem 1: heap block overrun  // problem 2: memory leak -- x not freed } int main(void) { f(); return 0; } 这是一个有内存泄露和内存错误的程序。"><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/>
+<img src=/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image_huf847cb5c306e77516f0a4bc72ff03aec_308630_800x0_resize_q75_box.jpg srcset="/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image_huf847cb5c306e77516f0a4bc72ff03aec_308630_800x0_resize_q75_box.jpg 800w, /p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image_huf847cb5c306e77516f0a4bc72ff03aec_308630_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Valgrind 快速上手">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/valgrind/ style=background-color:#759262;color:#fff>
+Valgrind
+</a>
+<a href=/categories/%E9%9D%99%E6%80%81%E8%BF%BD%E8%B8%AA/ style=background-color:#beb6be;color:#fff>
+静态追踪
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/>Valgrind 快速上手</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 21, 2023</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=valgrind-快速上手>Valgrind 快速上手</h1>
+<h2 id=1介绍>1、介绍</h2>
+<p>Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。
+其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。</p>
+<h2 id=2准备程序>2、准备程序</h2>
+<p>使用 <code>-g</code> 选项编译程序，使程序包含调试信息（debug info），这样可以让 Memcheck 的错误信息包含详细的行号。
+如果可以允许程序变慢，使用 <code>-O0</code> 来编译最好；如果是 <code>-O1</code> 则行号可能有错，不过一般能正常工作，速度相对 <code>-O0</code> 也提升明显；<code>-O2</code> 或以上的优化级别则不建议使用，可能导致 Memcheck 报告<code>未初始化值</code>的错误。</p>
+<h2 id=使用-valgrind-执行程序>使用 Valgrind 执行程序</h2>
+<p>如果程序正常是使用以下方式执行：</p>
+<pre tabindex=0><code>myprog arg1 arg
+</code></pre><p>则，改为下面的方式：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>valgrind --leak-check<span class=o>=</span>yes myprog arg1 arg2
+</code></pre></div><p>这个命令中没有指定 Memcheck，是因为 Memcheck 是默认的工具；<code>--leak-check</code> 选项打开详细的内存泄露检测器。
+此时程序可能比平时慢很多（例如 20、30 倍），并且会使用多很多内存。Memcheck 将显示检测到的内存错误或内存泄露信息。</p>
+<h2 id=解释-memcheck-的输出>解释 Memcheck 的输出</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=c1>// example.c
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span><span class=cp></span><span class=kt>void</span> <span class=nf>f</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=kt>int</span><span class=o>*</span> <span class=n>x</span> <span class=o>=</span> <span class=n>malloc</span><span class=p>(</span><span class=mi>10</span> <span class=o>*</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+    <span class=n>x</span><span class=p>[</span><span class=mi>10</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>  <span class=c1>// problem 1: heap block overrun
+</span><span class=c1></span>                <span class=c1>// problem 2: memory leak -- x not freed
+</span><span class=c1></span><span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span>
+<span class=p>{</span>
+   <span class=n>f</span><span class=p>();</span>
+   <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>这是一个有内存泄露和内存错误的程序。</p>
+<p>编译：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>gcc ./example.c -g
+</code></pre></div><p>执行：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>valgrind --leak-check<span class=o>=</span>yes ./a.out
+</code></pre></div><h3 id=内存访问越界>内存访问越界</h3>
+<p>部分输入如下：</p>
+<pre tabindex=0><code class=language-valgrind data-lang=valgrind>==1765727== Invalid write of size 4
+==1765727==    at 0x10916B: f (example.c:5)
+==1765727==    by 0x109180: main (example.c:11)
+==1765727==  Address 0x4a4e068 is 0 bytes after a block of size 40 alloc'd
+==1765727==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1765727==    by 0x10915E: f (example.c:4)
+==1765727==    by 0x109180: main (example.c:11)
+</code></pre><p>这部分输出描述了第一个问题：访问越界。索引应该是 0 - 9，实际访问了 10。
+输出中：</p>
+<ul>
+<li><code>1765727</code>：进程 ID。</li>
+<li><code>Invalid write of size 4</code>：第一行说明错误类型。</li>
+<li><code>at/by 0xxxxxx</code>：调用栈。如果调用栈很深，显示不完全，可以通过 <code>--num-caller</code> 选项来指定。</li>
+<li><code>0x10916B</code>：这些地址通常来说不重要，但是有时候对于追踪一些奇怪的错误特别有用。</li>
+<li><code> Address 0x4a4e068 is 0 bytes after a block of size 40 alloc'd</code>：一些错误消息有第二个组成部分，它描述了涉及的内存地址。这表明写入的内存刚好超过 example.c 第 5 行用 malloc() 分配的块的末尾。</li>
+</ul>
+<p>通常应该按照报告的顺序来修复错误，因为后面的错误可能是前面的错误引起的。</p>
+<h3 id=内存泄露>内存泄露</h3>
+<pre tabindex=0><code>==1765727== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==1765727==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1765727==    by 0x10915E: f (a.c:4)
+==1765727==    by 0x109180: main (a.c:11)
+</code></pre><p>调用栈说明了泄漏内存的分配位置。
+内存泄露有几种不同的类型，其中最重要的两个是：</p>
+<ul>
+<li><code>definitely lost</code>：绝对发生了内存泄露，需要进行修复。</li>
+<li><code>probably lost</code>：可能发生了内存泄漏。除非：正在做一些不常见的事情，例如把指向内存的指针指向已分配内存的中间部分。如果不想看到这些报告，可以使用 <code>--show-possibly-lost=no</code> 来关闭。</li>
+</ul>
+<p>其他的一些类型：</p>
+<ul>
+<li><code>indirectly lost</code>：间接泄露，意味着正在泄露给予指针结构中的内存。例如：如果二叉树的根节点 <code>definitely lost</code>，则所有子节点都将 <code>indirectly lost</code>。</li>
+<li><code>still reachable</code>：仍然可访问，意味着程序可能没有问题，只是没有释放一些它可能拥有的内存。这种情况很常见，通常也是合理的。可以使用 <code>--show-reachable=yes/no</code> 选项控制是否展示。</li>
+<li><code>suppressed</code>：表示内存泄露消息已经被抑制，可以在 valgrind.suppress 文件中进行配置。可以忽略这些错误。</li>
+</ul>
+<p>Memcheck 也会报告使用未初始化的值（uninitialised values）的错误，最常见的是 <code>Conditional jump or move depends on uninitialised value(s)</code> 。要确定这些错误的根本原因可能很困难，但可以尝试使用 <code>--track-origins=yes</code> 来获得额外的信息。这会导致 Memcheck 运行更慢，但得到额外信息往往可以节省大量的时间来弄清楚未初始化的值来自哪里。</p>
+<p>如果不清楚 Memcheck 展示的信息的含义，可以查看 Valgrind 用户手册中的 <a class=link href=https://valgrind.org/docs/manual/mc-manual.html#mc-manual.errormsgs target=_blank rel=noopener>Explanation of error messages from Memcheck</a>。</p>
+<h2 id=附加说明>附加说明</h2>
+<p>Memcheck 不是完美的，它可能产生误报，可以通过 valgrind.supress 来控制。详见 Valgrind 用户手册中的 <a class=link href=https://valgrind.org/docs/manual/manual-core.html#manual-core.suppress target=_blank rel=noopener>Suppressing error</a>。
+不过，通常 99% 都是正确的，所以应该谨慎忽略它的错误消息。
+Memcheck 不能检测出程序中所有的内存错误，例如，它无法检测到<code>静态分配</code>或<code>栈上分配</code>的数组的越界读/写。
+尽量让程序达到 Memcheck 不会报告任何错误的状态，这可以更容易知道程序的修改何时会导致 Memcheck 报告新的错误。</p>
+<h2 id=参考>参考</h2>
+<ul>
+<li><a class=link href=https://valgrind.org/docs/manual/faq.html#faq.deflost target=_blank rel=noopener>Valgrind FAQ</a></li>
+<li><a class=link href=https://valgrind.org/docs/manual/manual-core.html target=_blank rel=noopener>Valgrind User Manual</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E9%9D%99%E6%80%81%E8%BF%BD%E8%B8%AA/>静态追踪</a>
+<a href=/tags/valgrind/>Valgrind</a>
+<a href=/tags/memcheck/>Memcheck</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2023 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#1介绍>1、介绍</a></li>
+<li><a href=#2准备程序>2、准备程序</a></li>
+<li><a href=#使用-valgrind-执行程序>使用 Valgrind 执行程序</a></li>
+<li><a href=#解释-memcheck-的输出>解释 Memcheck 的输出</a>
+<ol>
+<li><a href=#内存访问越界>内存访问越界</a></li>
+<li><a href=#内存泄露>内存泄露</a></li>
+</ol>
+</li>
+<li><a href=#附加说明>附加说明</a></li>
+<li><a href=#参考>参考</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

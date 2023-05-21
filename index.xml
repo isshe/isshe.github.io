@@ -1,4 +1,88 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 16 May 2023 13:38:34 -0300</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenResty 核心技术点</title><link>https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/</link><pubDate>Tue, 16 May 2023 13:38:34 -0300</pubDate><guid>https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/</guid><description>&lt;img src="https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.jpg" alt="Featured image of post OpenResty 核心技术点" />&lt;h1 id="openresty-核心技术点">OpenResty 核心技术点&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 21 May 2023 04:45:14 -0300</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>Valgrind 快速上手</title><link>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</link><pubDate>Sun, 21 May 2023 04:45:14 -0300</pubDate><guid>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</guid><description>&lt;img src="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image.jpg" alt="Featured image of post Valgrind 快速上手" />&lt;h1 id="valgrind-快速上手">Valgrind 快速上手&lt;/h1>
+&lt;h2 id="1介绍">1、介绍&lt;/h2>
+&lt;p>Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。
+其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。&lt;/p>
+&lt;h2 id="2准备程序">2、准备程序&lt;/h2>
+&lt;p>使用 &lt;code>-g&lt;/code> 选项编译程序，使程序包含调试信息（debug info），这样可以让 Memcheck 的错误信息包含详细的行号。
+如果可以允许程序变慢，使用 &lt;code>-O0&lt;/code> 来编译最好；如果是 &lt;code>-O1&lt;/code> 则行号可能有错，不过一般能正常工作，速度相对 &lt;code>-O0&lt;/code> 也提升明显；&lt;code>-O2&lt;/code> 或以上的优化级别则不建议使用，可能导致 Memcheck 报告&lt;code>未初始化值&lt;/code>的错误。&lt;/p>
+&lt;h2 id="使用-valgrind-执行程序">使用 Valgrind 执行程序&lt;/h2>
+&lt;p>如果程序正常是使用以下方式执行：&lt;/p>
+&lt;pre tabindex="0">&lt;code>myprog arg1 arg
+&lt;/code>&lt;/pre>&lt;p>则，改为下面的方式：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">valgrind --leak-check&lt;span class="o">=&lt;/span>yes myprog arg1 arg2
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>这个命令中没有指定 Memcheck，是因为 Memcheck 是默认的工具；&lt;code>--leak-check&lt;/code> 选项打开详细的内存泄露检测器。
+此时程序可能比平时慢很多（例如 20、30 倍），并且会使用多很多内存。Memcheck 将显示检测到的内存错误或内存泄露信息。&lt;/p>
+&lt;h2 id="解释-memcheck-的输出">解释 Memcheck 的输出&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="c1">// example.c
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;stdlib.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="kt">void&lt;/span> &lt;span class="nf">f&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="kt">int&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">malloc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">x&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// problem 1: heap block overrun
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="c1">// problem 2: memory leak -- x not freed
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="kt">int&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">f&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>这是一个有内存泄露和内存错误的程序。&lt;/p>
+&lt;p>编译：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">gcc ./example.c -g
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>执行：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">valgrind --leak-check&lt;span class="o">=&lt;/span>yes ./a.out
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="内存访问越界">内存访问越界&lt;/h3>
+&lt;p>部分输入如下：&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-valgrind" data-lang="valgrind">==1765727== Invalid write of size 4
+==1765727== at 0x10916B: f (example.c:5)
+==1765727== by 0x109180: main (example.c:11)
+==1765727== Address 0x4a4e068 is 0 bytes after a block of size 40 alloc'd
+==1765727== at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1765727== by 0x10915E: f (example.c:4)
+==1765727== by 0x109180: main (example.c:11)
+&lt;/code>&lt;/pre>&lt;p>这部分输出描述了第一个问题：访问越界。索引应该是 0 - 9，实际访问了 10。
+输出中：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>1765727&lt;/code>：进程 ID。&lt;/li>
+&lt;li>&lt;code>Invalid write of size 4&lt;/code>：第一行说明错误类型。&lt;/li>
+&lt;li>&lt;code>at/by 0xxxxxx&lt;/code>：调用栈。如果调用栈很深，显示不完全，可以通过 &lt;code>--num-caller&lt;/code> 选项来指定。&lt;/li>
+&lt;li>&lt;code>0x10916B&lt;/code>：这些地址通常来说不重要，但是有时候对于追踪一些奇怪的错误特别有用。&lt;/li>
+&lt;li>&lt;code> Address 0x4a4e068 is 0 bytes after a block of size 40 alloc'd&lt;/code>：一些错误消息有第二个组成部分，它描述了涉及的内存地址。这表明写入的内存刚好超过 example.c 第 5 行用 malloc() 分配的块的末尾。&lt;/li>
+&lt;/ul>
+&lt;p>通常应该按照报告的顺序来修复错误，因为后面的错误可能是前面的错误引起的。&lt;/p>
+&lt;h3 id="内存泄露">内存泄露&lt;/h3>
+&lt;pre tabindex="0">&lt;code>==1765727== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==1765727== at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1765727== by 0x10915E: f (a.c:4)
+==1765727== by 0x109180: main (a.c:11)
+&lt;/code>&lt;/pre>&lt;p>调用栈说明了泄漏内存的分配位置。
+内存泄露有几种不同的类型，其中最重要的两个是：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>definitely lost&lt;/code>：绝对发生了内存泄露，需要进行修复。&lt;/li>
+&lt;li>&lt;code>probably lost&lt;/code>：可能发生了内存泄漏。除非：正在做一些不常见的事情，例如把指向内存的指针指向已分配内存的中间部分。如果不想看到这些报告，可以使用 &lt;code>--show-possibly-lost=no&lt;/code> 来关闭。&lt;/li>
+&lt;/ul>
+&lt;p>其他的一些类型：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>indirectly lost&lt;/code>：间接泄露，意味着正在泄露给予指针结构中的内存。例如：如果二叉树的根节点 &lt;code>definitely lost&lt;/code>，则所有子节点都将 &lt;code>indirectly lost&lt;/code>。&lt;/li>
+&lt;li>&lt;code>still reachable&lt;/code>：仍然可访问，意味着程序可能没有问题，只是没有释放一些它可能拥有的内存。这种情况很常见，通常也是合理的。可以使用 &lt;code>--show-reachable=yes/no&lt;/code> 选项控制是否展示。&lt;/li>
+&lt;li>&lt;code>suppressed&lt;/code>：表示内存泄露消息已经被抑制，可以在 valgrind.suppress 文件中进行配置。可以忽略这些错误。&lt;/li>
+&lt;/ul>
+&lt;p>Memcheck 也会报告使用未初始化的值（uninitialised values）的错误，最常见的是 &lt;code>Conditional jump or move depends on uninitialised value(s)&lt;/code> 。要确定这些错误的根本原因可能很困难，但可以尝试使用 &lt;code>--track-origins=yes&lt;/code> 来获得额外的信息。这会导致 Memcheck 运行更慢，但得到额外信息往往可以节省大量的时间来弄清楚未初始化的值来自哪里。&lt;/p>
+&lt;p>如果不清楚 Memcheck 展示的信息的含义，可以查看 Valgrind 用户手册中的 &lt;a class="link" href="https://valgrind.org/docs/manual/mc-manual.html#mc-manual.errormsgs" target="_blank" rel="noopener"
+>Explanation of error messages from Memcheck&lt;/a>。&lt;/p>
+&lt;h2 id="附加说明">附加说明&lt;/h2>
+&lt;p>Memcheck 不是完美的，它可能产生误报，可以通过 valgrind.supress 来控制。详见 Valgrind 用户手册中的 &lt;a class="link" href="https://valgrind.org/docs/manual/manual-core.html#manual-core.suppress" target="_blank" rel="noopener"
+>Suppressing error&lt;/a>。
+不过，通常 99% 都是正确的，所以应该谨慎忽略它的错误消息。
+Memcheck 不能检测出程序中所有的内存错误，例如，它无法检测到&lt;code>静态分配&lt;/code>或&lt;code>栈上分配&lt;/code>的数组的越界读/写。
+尽量让程序达到 Memcheck 不会报告任何错误的状态，这可以更容易知道程序的修改何时会导致 Memcheck 报告新的错误。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://valgrind.org/docs/manual/faq.html#faq.deflost" target="_blank" rel="noopener"
+>Valgrind FAQ&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://valgrind.org/docs/manual/manual-core.html" target="_blank" rel="noopener"
+>Valgrind User Manual&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>OpenResty 核心技术点</title><link>https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/</link><pubDate>Tue, 16 May 2023 13:38:34 -0300</pubDate><guid>https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/</guid><description>&lt;img src="https://isshe.site/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.jpg" alt="Featured image of post OpenResty 核心技术点" />&lt;h1 id="openresty-核心技术点">OpenResty 核心技术点&lt;/h1>
 &lt;p>本文档用于汇总学习过程中遇到的核心技术点。
 记录逻辑：假设相关功能没有实现，简要描述重新实现的要点。&lt;/p>
 &lt;p>TODO: 补充以下相关的&lt;/p>
