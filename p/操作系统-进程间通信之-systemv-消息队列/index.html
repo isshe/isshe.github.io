@@ -8,11 +8,11 @@
  导出的：这种限制来源于其他限制。  如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。    2. 相关函数  key转换标识符的规则，见Readme 创建新队列、引用现有队列。  #include &amp;lt;sys/msg.">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="消息队列"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="消息队列"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel.png">
 <meta name=twitter:title content="操作系统 —— 进程间通信之 SystemV 消息队列">
 <meta name=twitter:description content="消息队列  在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】  详见此Readme 2.4节 若需要客户进程和服务器进程之间的双向数据流，用UNIX域套接字或全双工管道。   队列：消息队列。信息的链接表，存储在内核中，由标识符标识。 队列ID：消息队列标识符。 与队列关联的数据结构：定义队列的当前状态  struct msqid_ds { struct ipc_perm msg_perm; msgqnum_t msg_qnum; // 队列里的消息长度/数量  msglen_t msg_qbytes; // 队列中能容纳的最大字节数  pid_t msg_lspid; // 最后msgsnd()的pid  pid_t msg_lrpid; // 最后msgrcv()的pid  time_t msg_stime; // 最后msgsnd()的时间  time_t msg_rtime; // 最后msgrcv()的时间  time_t msg_ctime; // 最后改变时间 } 1. 消息队列的系统限制  消息队列的系统限制 
  导出的：这种限制来源于其他限制。  如：Linux系统中，最大消息数受限于最大队列数，最大队列数受限于系统安装的RAM大小/数量。    2. 相关函数  key转换标识符的规则，见Readme 创建新队列、引用现有队列。  #include &amp;lt;sys/msg."><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png">
+<meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -31,7 +31,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit_hu2d611c5ade1df2c5480a88cbaf90139f_68661_1600x0_resize_box_3.png 1600w" width=800 height=202 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel_hu498ddc20215e05cce1e1ed9d386c01d9_106974_800x0_resize_box_3.png srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel_hu498ddc20215e05cce1e1ed9d386c01d9_106974_800x0_resize_box_3.png 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel_hu498ddc20215e05cce1e1ed9d386c01d9_106974_1600x0_resize_box_3.png 1600w" width=800 height=320 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列">
 </a>
 </div>
 <div class=article-details>
@@ -186,16 +186,6 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
 <div class=article-image>
 <img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.07ba323945cb6f52ccc9b0f03135b1b3_hu70675371b4d01d0ec6d16ae0abb1373c_296698_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-B7oyOUXLb1LMybDwMTWxsw==">
@@ -216,12 +206,22 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.cc841336fd3696d73f62689361cf5a24_hu919e7e7429058a953ed0cc72caeca2a5_166812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-zIQTNv02ltc/YmiTYc9aJA==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
 </div>
 </a>
 </article>
