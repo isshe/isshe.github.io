@@ -18,7 +18,7 @@
  特点  依赖上一个密文分组。   加解密过程图示  加解密过程图示   OFB模式 输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。">
 <meta property="og:url" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png">
 <meta name=twitter:title content="图解密码技术 —— 第四章-分组密码的模式">
 <meta name=twitter:description content="第四章 分组密码的模式 DES和AES都属于分组密码，它们只能加密固定长度的明文。 如果需要加密任意长度的明文，则需进行迭代，而分组密码的迭代方法，就称为分组密码的模式。
 分组密码与流密码 密码算法可以分为分组密码和流密码。 流密码：一次性密码本 分组密码：DES、AES、3DES等大多数堆成密码算法。
@@ -27,7 +27,7 @@
  加解密过程图示  加解密过程图示   CBC模式 密码分组链接模式：密文分组像链条一样互相连接在一起。（前一个密文分组用于后一个分组的加密）
  特点  无法直接对中间分组进行加密。 一个密文分组损坏，解密时最多只有两个明文分组受影响。（在密文长度没变的情况下）   加解密过程图示  加解密过程图示   CFB模式 密文反馈模式：前一个密文分组被送到密码算法的输入端，用于生成下一个密文分组。
  特点  依赖上一个密文分组。   加解密过程图示  加解密过程图示   OFB模式 输出反馈模式：加密算法的输出作为下一个分组加密算法的输入。"><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F.png">
+<meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -46,7 +46,7 @@ extended">
 <header class=article-header>
 <div class=article-image>
 <a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_800x0_resize_box_3.png srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_800x0_resize_box_3.png 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CFB%E6%A8%A1%E5%BC%8F_hu2daa6686f1e87dce7d28b27274f43c77_166145_1600x0_resize_box_3.png 1600w" width=800 height=640 loading=lazy alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_800x0_resize_box_3.png srcset="/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_800x0_resize_box_3.png 800w, /p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_1600x0_resize_box_3.png 1600w" width=800 height=389 loading=lazy alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式">
 </a>
 </div>
 <div class=article-details>
@@ -206,42 +206,22 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/>
 <div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.ee4ba7fac7661fb58642e5081003a0cc_hu6dd6ce6c6dc89dbbcc548f1b0a61c1d9_261937_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第二章-历史上的密码" data-hash="md5-7kun+sdmH7WGQuUIEAOgzA==">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E8%AF%81%E4%B9%A6/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十章-证书" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第二章-历史上的密码</h2>
+<h2 class=article-title>图解密码技术 —— 第十章-证书</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/>
 <div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8D%95%E5%90%91%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第七章-单向散列函数" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.a21fc7bda2b3395a162e3d375240c1b3_huaffa7cd0d92005921c7eed2441c40670_130886_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第六章-混合密码系统" data-hash="md5-oh/HvaKzOVoWLj03UkDBsw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第七章-单向散列函数</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-pgp/image.f528160e41054c73f08c590e9a9d18a9_hu3d31a301b4a4c10b2474d5b0f818cf15_279379_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十三章-PGP" data-hash="md5-9SgWDkEFTHPwjFkOmp0YqQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第十三章-PGP</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%8E%AF%E6%B8%B8%E5%AF%86%E7%A0%81%E4%B8%96%E7%95%8C/image.93769ba539d05344905d01012b30639d_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第一章-环游密码世界" data-hash="md5-k3abpTnQU0SQXQEBKzBjnQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第一章-环游密码世界</h2>
+<h2 class=article-title>图解密码技术 —— 第六章-混合密码系统</h2>
 </div>
 </a>
 </article>
@@ -252,6 +232,26 @@ extended">
 </div>
 <div class=article-details>
 <h2 class=article-title>图解密码技术 —— 第三章-对称密码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E9%9A%8F%E6%9C%BA%E6%95%B0/image.e86036e45b66ebb96a5d0928eaf99f56_hu9c649052cb6030efdb52e5be8a8c5477_319393_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第十二章-随机数" data-hash="md5-6GA25Ftm67lqXQko6vmfVg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第十二章-随机数</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/image.f39f8d4f543fb1f27803e275a39fd7d9_hu413041019d95a132c5e6526329e5bb43_166854_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第14章-SSL-TLS" data-hash="md5-85+NT1Q/sfJ4A+J1o5/X2Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第14章-SSL-TLS</h2>
 </div>
 </a>
 </article>
