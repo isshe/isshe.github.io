@@ -1,29 +1,20 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
- 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
- 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
- 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
-  教训：不可以用信号来对其他进程中发生的时间计数
-  3."><title>操作系统 —— 信号</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix 系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数：  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送 sig 指定信号到 pid 进程 int kill(pid_t pid, int sig); // 向自己发送 SIGALRM 信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号 SIGINT 然后去处理程序处理信号，此时又来一个 SIGINT 信号，此信号会被阻塞。[疑问][1] （第 2 个信号不是 SIGINT 信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。"><title>操作系统 —— 信号</title>
 <link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 信号">
-<meta property="og:description" content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
- 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
- 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
- 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
-  教训：不可以用信号来对其他进程中发生的时间计数
-  3.">
+<meta property="og:description" content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix 系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数：  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送 sig 指定信号到 pid 进程 int kill(pid_t pid, int sig); // 向自己发送 SIGALRM 信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号 SIGINT 然后去处理程序处理信号，此时又来一个 SIGINT 信号，此信号会被阻塞。[疑问][1] （第 2 个信号不是 SIGINT 信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="signal"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="signal"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png">
 <meta name=twitter:title content="操作系统 —— 信号">
-<meta name=twitter:description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数:  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送sig指定信号到pid进程 int kill(pid_t pid, int sig); // 向自己发送SIGALRM信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
- 例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1] （第2个信号不是SIGINT信号，那是否也还是阻塞？）    待处理信号不会排队等待。
- 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。
- 如read、wait、accept这样的慢速系统调用被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为EINTR。    详见ex_SIGCHLD.c
-  教训：不可以用信号来对其他进程中发生的时间计数
-  3."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="信号  一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件。 每种信号类型都对应于某种系统事件。 信号的默认行为：  1.信号发送和信号接收  待处理信号：一个发出而没有被接收的信号。 内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。 当目的进程被内核强迫以某种方式对信号的发送做出反应时，目的进程就接收了信号。 Unix 系统提供了大量向进程发送信号的机制，所有这些机制都是基于进程组(process group)的。 相关函数：  #include &amp;lt;sys/types.h&amp;gt;#include &amp;lt;signal.h&amp;gt;#include &amp;lt;unistd.h&amp;gt; // 发送 sig 指定信号到 pid 进程 int kill(pid_t pid, int sig); // 向自己发送 SIGALRM 信号 unsigned int alarm(unsigned int secs); typedef void (*sighandler_t)(int); sighandler_t signal(int signum, sighandler_t handler); 2.信号处理问题   待处理信号被阻塞。
+ 例如：一个进程捕获一个信号 SIGINT 然后去处理程序处理信号，此时又来一个 SIGINT 信号，此信号会被阻塞。[疑问][1] （第 2 个信号不是 SIGINT 信号，那是否也还是阻塞？）    待处理信号不会排队等待。
+ 任意类型至多只有一个待处理信号。[疑问][2] （不同类型的信号就可以有多个吗？）    系统调用可以被中断。"><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -57,7 +48,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -79,17 +70,17 @@ extended">
 <li><code>待处理信号</code>：一个发出而没有被接收的信号。</li>
 <li>内核通过更新目的进程上下文的某个状态，发送一个信号给目的进程。</li>
 <li>当目的进程被内核<code>强迫</code>以某种方式对信号的发送做出反应时，目的进程就接收了信号。</li>
-<li>Unix系统提供了大量向进程发送信号的机制，所有这些机制都是基于<code>进程组(process group)</code>的。</li>
-<li>相关函数:</li>
+<li>Unix 系统提供了大量向进程发送信号的机制，所有这些机制都是基于<code>进程组(process group)</code>的。</li>
+<li>相关函数：</li>
 </ul>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;sys/types.h&gt;</span><span class=cp>
 </span><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
 </span><span class=cp>#include</span> <span class=cpf>&lt;unistd.h&gt;</span><span class=cp>
 </span><span class=cp></span>
-<span class=c1>// 发送sig指定信号到pid进程
+<span class=c1>// 发送 sig 指定信号到 pid 进程
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>kill</span><span class=p>(</span><span class=n>pid_t</span> <span class=n>pid</span><span class=p>,</span> <span class=kt>int</span> <span class=n>sig</span><span class=p>);</span>
 
-<span class=c1>// 向自己发送SIGALRM信号
+<span class=c1>// 向自己发送 SIGALRM 信号
 </span><span class=c1></span><span class=kt>unsigned</span> <span class=kt>int</span> <span class=nf>alarm</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>secs</span><span class=p>);</span>
 
 <span class=k>typedef</span> <span class=nf>void</span> <span class=p>(</span><span class=o>*</span><span class=n>sighandler_t</span><span class=p>)(</span><span class=kt>int</span><span class=p>);</span>
@@ -99,8 +90,8 @@ extended">
 <li>
 <p>待处理信号被阻塞。</p>
 <ul>
-<li>例如：一个进程捕获一个信号SIGINT然后去处理程序处理信号，此时又来一个SIGINT信号，此信号会被阻塞。[疑问][1]</li>
-<li>（第2个信号不是SIGINT信号，那是否也还是阻塞？）</li>
+<li>例如：一个进程捕获一个信号 SIGINT 然后去处理程序处理信号，此时又来一个 SIGINT 信号，此信号会被阻塞。[疑问][1]</li>
+<li>（第 2 个信号不是 SIGINT 信号，那是否也还是阻塞？）</li>
 </ul>
 </li>
 <li>
@@ -113,7 +104,7 @@ extended">
 <li>
 <p>系统调用可以被中断。</p>
 <ul>
-<li>如read、wait、accept这样的<code>慢速系统调用</code>被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno为<code>EINTR</code>。</li>
+<li>如 read、wait、accept 这样的<code>慢速系统调用</code>被信号打断，但是信号处理函数返回后不再继续被打断的系统调用，而是立即返回错误，errno 为<code>EINTR</code>。</li>
 </ul>
 </li>
 <li>
@@ -124,36 +115,36 @@ extended">
 </li>
 </ul>
 <h2 id=3-显式地阻塞和取消阻塞信号>3. 显式地阻塞和取消阻塞信号</h2>
-<p>这2个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见<a class=link href=./Examples/3_ex_procmask_bug.c>ex3</a>和<a class=link href=Examples/4_ex_procmask_fix_bug.c>ex4</a>）</p>
+<p>这 2 个操作在某些情况下也是什么有用的，且必须的，能消除一些竞争条件。（详见<a class=link href=./Examples/3_ex_procmask_bug.c>ex3</a>和<a class=link href=Examples/4_ex_procmask_fix_bug.c>ex4</a>）</p>
 <ul>
 <li>相关函数</li>
 </ul>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
 </span><span class=cp></span><span class=c1>// 设置阻塞、不阻塞、添加到阻塞
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigprocmask</span><span class=p>(</span><span class=kt>int</span> <span class=n>how</span><span class=p>,</span> <span class=k>const</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>set</span><span class=p>,</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=kr>restrict</span> <span class=n>oset</span><span class=p>);</span>
-<span class=c1>// 添加signo到set中
+<span class=c1>// 添加 signo 到 set 中
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigaddset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
-<span class=c1>// 吧signo从set中删除
+<span class=c1>// 吧 signo 从 set 中删除
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigdelset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
-<span class=c1>// 初始化set为空集
+<span class=c1>// 初始化 set 为空集
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigemptyset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>);</span>
-<span class=c1>// 将每个(所有？)信号添加到set中
+<span class=c1>// 将每个 (所有？) 信号添加到 set 中
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigfillset</span><span class=p>(</span><span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>);</span>
-<span class=c1>// 判断signo是否是set的成员，是返回1，否则0
+<span class=c1>// 判断 signo 是否是 set 的成员，是返回 1，否则 0
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>sigismember</span><span class=p>(</span><span class=k>const</span> <span class=n>sigset_t</span> <span class=o>*</span><span class=n>set</span><span class=p>,</span> <span class=kt>int</span> <span class=n>signo</span><span class=p>);</span>
 </code></pre></div><h2 id=a拓展>A.拓展</h2>
 <ul>
 <li>进程组。详见<a class=link href=../../1.%e8%bf%9b%e7%a8%8b>1.进程</a></li>
-<li>Linux信号
+<li>Linux 信号
 <figure class=gallery-image style=flex-grow:101;flex-basis:243px>
 <a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png data-size=646x638>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png width=646 height=638 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_1024x0_resize_box_3.png 1024w" loading=lazy alt=Linux信号>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.png width=646 height=638 srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_480x0_resize_box_3.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal_huec7bd37c00e9f0f66a7da81ead81d61e_182649_1024x0_resize_box_3.png 1024w" loading=lazy alt="Linux 信号">
 </a>
-<figcaption>Linux信号</figcaption>
+<figcaption>Linux 信号</figcaption>
 </figure></li>
-<li>回收子进程的方式：用SIGCHLD信号。子进程终止时，会发送SIGCHLD信号给其父进程。【详见<a class=link href=Examples/ex_SIGCHLD.c>ex_SIGCHILD.c</a>】</li>
-<li>可移植的signal函数。【详见<a class=link href=../../A.lib/isshe_signal.h>isshe_signal.h</a>和<a class=link href=../../A.lib/isshe_signal.c>isshe_signal.c</a>】</li>
-<li>非本地跳转：可和信号一起实现程序重启功能。【详见<a class=link href=Examples/5_ex_restart.c>ex_restart</a>，macOS上行为和书本有所不同】
+<li>回收子进程的方式：用 SIGCHLD 信号。子进程终止时，会发送 SIGCHLD 信号给其父进程。【详见<a class=link href=Examples/ex_SIGCHLD.c>ex_SIGCHILD.c</a>】</li>
+<li>可移植的 signal 函数。【详见<a class=link href=../../A.lib/isshe_signal.h>isshe_signal.h</a>和<a class=link href=../../A.lib/isshe_signal.c>isshe_signal.c</a>】</li>
+<li>非本地跳转：可和信号一起实现程序重启功能。【详见<a class=link href=Examples/5_ex_restart.c>ex_restart</a>，macOS 上行为和书本有所不同】
 <ul>
 <li>相关函数</li>
 </ul>
@@ -168,7 +159,7 @@ extended">
 <h2 id=b疑问>B.疑问</h2>
 <ul>
 <li><code>2.信号处理问题</code>中：
-[1]第2个信号不是SIGINT信号，那是否也还是阻塞？
+[1]第 2 个信号不是 SIGINT 信号，那是否也还是阻塞？
 [2]不同类型的信号就可以有多个吗？</li>
 </ul>
 <h2 id=c参考>C.参考</h2>
@@ -193,22 +184,32 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.d5d5e8f382535f864b263739f674da2c_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-1dXo84JTX4ZLJjc59nTaLA==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/image.8b8ef55b082cb1ea1184f5e18c17fcba_hu43fd9dd67e88f65321bb52f25c31188e_174771_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 消息队列" data-hash="md5-i471WwgsseoRhPXhjBf8ug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 消息队列</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.4bf2335a98bd1515921cbc5a0c5a1d8b_hu575c6395d5e84185e674e7125c58f205_133704_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程" data-hash="md5-S/IzWpi9FRWSHLxaDFodiw==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.3ed9c5f414802245d2ffabd15e9b7b8a_hu2eb95bf5c5ba7e990e649bbb75c2aacc_298769_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 select" data-hash="md5-PtnF9BSAIkXS/6vRXpt7ig==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程</h2>
+<h2 class=article-title>操作系统 —— IO 多路复用之 select</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
 </div>
 </a>
 </article>
@@ -223,22 +224,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.07ba323945cb6f52ccc9b0f03135b1b3_hu70675371b4d01d0ec6d16ae0abb1373c_296698_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-B7oyOUXLb1LMybDwMTWxsw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8Bfifo/image.cc841336fd3696d73f62689361cf5a24_hu919e7e7429058a953ed0cc72caeca2a5_166812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之FIFO" data-hash="md5-zIQTNv02ltc/YmiTYc9aJA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
 </div>
 </a>
 </article>

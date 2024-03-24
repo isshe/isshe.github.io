@@ -1,29 +1,29 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="DNS DNS - 域名系统（Domain Name System）。
- 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
-主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
- 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS 是应用层协议，使用 TCP 和 UDP 的 53 端口。 每一级域名长度的限制是 63 个字符，域名总长度不能超过 253 个字符。  作用  将对人友好的域名转换为对计算机友好的 IP 地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的 NS 记录。
+ 从根域名服务器查询顶级域名服务器的 NS 记录和 A 记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的 NS 记录和 A 记录； 从次级域名服务器查询主机名的 A 记录；  分级查询示例：www.isshe.xyz
  dig +trace www.isshe.xyz 进行查看
-  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m."><title>网络协议 —— DNS</title>
+  列出根域名服务器：  . 227343 IN NS e."><title>网络协议 —— DNS</title>
 <link rel=canonical href=https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="网络协议 —— DNS">
 <meta property="og:description" content="DNS DNS - 域名系统（Domain Name System）。
- 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
-主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
- 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS 是应用层协议，使用 TCP 和 UDP 的 53 端口。 每一级域名长度的限制是 63 个字符，域名总长度不能超过 253 个字符。  作用  将对人友好的域名转换为对计算机友好的 IP 地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的 NS 记录。
+ 从根域名服务器查询顶级域名服务器的 NS 记录和 A 记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的 NS 记录和 A 记录； 从次级域名服务器查询主机名的 A 记录；  分级查询示例：www.isshe.xyz
  dig +trace www.isshe.xyz 进行查看
-  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m.">
+  列出根域名服务器：  . 227343 IN NS e.">
 <meta property="og:url" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="DNS"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="DNS"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg">
 <meta name=twitter:title content="网络协议 —— DNS">
 <meta name=twitter:description content="DNS DNS - 域名系统（Domain Name System）。
- 是一个将域名和IP地址进行映射的分布式数据库。 DNS是应用层协议，使用TCP和UDP的53端口。 每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。  作用  将对人友好的域名转换为对计算机友好的IP地址。  原理/过程 域名层级
-主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的NS记录。
- 从根域名服务器查询顶级域名服务器的NS记录和A记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的NS记录和A记录； 从次级域名服务器查询主机名的A记录；  分级查询示例：www.isshe.xyz
+ 是一个将域名和IP地址进行映射的分布式数据库。 DNS 是应用层协议，使用 TCP 和 UDP 的 53 端口。 每一级域名长度的限制是 63 个字符，域名总长度不能超过 253 个字符。  作用  将对人友好的域名转换为对计算机友好的 IP 地址。  原理/过程 域名层级
+主机名.次级域名.顶级域名.根域名 host.sld.tld.root www.isshe.xyz.root abc.isshe.xyz.root 分级查询：从根域名开始，依次查询每一级域名的 NS 记录。
+ 从根域名服务器查询顶级域名服务器的 NS 记录和 A 记录；  根域名服务器是总所周知的，不用查。   从顶级域名服务器查询次级域名服务器的 NS 记录和 A 记录； 从次级域名服务器查询主机名的 A 记录；  分级查询示例：www.isshe.xyz
  dig +trace www.isshe.xyz 进行查看
-  列出根域名服务器：  . 227343 IN NS e.root-servers.net. . 227343 IN NS k.root-servers.net. . 227343 IN NS i.root-servers.net. . 227343 IN NS d.root-servers.net. . 227343 IN NS j.root-servers.net. . 227343 IN NS m."><meta name=twitter:card content="summary_large_image">
+  列出根域名服务器：  . 227343 IN NS e."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -60,7 +60,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -75,12 +75,12 @@ extended">
 <p>DNS - 域名系统（Domain Name System）。</p>
 <ul>
 <li>是一个将<code>域名</code>和<code>IP地址</code>进行映射的<code>分布式数据库</code>。</li>
-<li>DNS是应用层协议，使用TCP和UDP的53端口。</li>
-<li>每一级域名长度的限制是63个字符，域名总长度不能超过253个字符。</li>
+<li>DNS 是应用层协议，使用 TCP 和 UDP 的 53 端口。</li>
+<li>每一级域名长度的限制是 63 个字符，域名总长度不能超过 253 个字符。</li>
 </ul>
 <h1 id=作用>作用</h1>
 <ul>
-<li>将对人友好的域名转换为对计算机友好的IP地址。</li>
+<li>将对人友好的域名转换为对计算机友好的 IP 地址。</li>
 </ul>
 <h1 id=原理过程>原理/过程</h1>
 <p>域名层级</p>
@@ -88,15 +88,15 @@ extended">
 host.sld.tld.root
 www.isshe.xyz.root
 abc.isshe.xyz.root
-</code></pre><p>分级查询：从根域名开始，依次查询每一级域名的NS记录。</p>
+</code></pre><p>分级查询：从根域名开始，依次查询每一级域名的 NS 记录。</p>
 <ul>
-<li>从<code>根域名服务器</code>查询<code>顶级域名服务器</code>的NS记录和A记录；
+<li>从<code>根域名服务器</code>查询<code>顶级域名服务器</code>的 NS 记录和 A 记录；
 <ul>
 <li><code>根域名服务器</code>是总所周知的，不用查。</li>
 </ul>
 </li>
-<li>从<code>顶级域名服务器</code>查询<code>次级域名服务器</code>的NS记录和A记录；</li>
-<li>从<code>次级域名服务器</code>查询<code>主机名</code>的A记录；</li>
+<li>从<code>顶级域名服务器</code>查询<code>次级域名服务器</code>的 NS 记录和 A 记录；</li>
+<li>从<code>次级域名服务器</code>查询<code>主机名</code>的 A 记录；</li>
 </ul>
 <p>分级查询示例：<code>www.isshe.xyz</code></p>
 <blockquote>
@@ -160,7 +160,7 @@ isshe.xyz.              86400   IN      NS      f1g1ns2.dnspod.net.
 +---------------------------------------+
 </code></pre><h2 id=transaction-id>Transaction ID</h2>
 <ul>
-<li>会话ID，DNS报文的ID标识。</li>
+<li>会话 ID，DNS 报文的 ID 标识。</li>
 <li>请求和应答报文的这个字段相同。</li>
 </ul>
 <h2 id=flags>Flags</h2>
@@ -172,13 +172,13 @@ isshe.xyz.              86400   IN      NS      f1g1ns2.dnspod.net.
 +----+--------+----+----+----+----+--------+-------+
   1      4      1    1    1    1      3        4
 </code></pre><ul>
-<li>QR: 查询/响应标记，0查询，1响应。</li>
-<li>opcode：0标准查询，1反向查询，2服务器状态请求。</li>
+<li>QR: 查询/响应标记，0 查询，1 响应。</li>
+<li>opcode：0 标准查询，1 反向查询，2 服务器状态请求。</li>
 <li>AA：授权回答。</li>
 <li>TC：可截断的。</li>
 <li>RD：期望递归。</li>
 <li>RA：可用递归。</li>
-<li>rcode：表示返回码。0没有差错，2服务器错误，3名字差错</li>
+<li>rcode：表示返回码。0 没有差错，2 服务器错误，3 名字差错</li>
 </ul>
 <h2 id=question>Question</h2>
 <pre tabindex=0><code>0                   16                 32
@@ -189,7 +189,7 @@ isshe.xyz.              86400   IN      NS      f1g1ns2.dnspod.net.
 | Type              | Class             |
 +-------------------+-------------------+
 </code></pre><ul>
-<li>Name：查询的域名名称。按Lable划分(isshe.xyz，为2个lable)，以<code>'\0'</code>结尾；可能为奇数个字节。</li>
+<li>Name：查询的域名名称。按 Lable 划分 (isshe.xyz，为 2 个 lable)，以<code>'\0'</code>结尾；可能为奇数个字节。</li>
 <li>Type：查询类型。A：主机。</li>
 <li>Class：查询的协议类。IN：internet。</li>
 </ul>
@@ -210,36 +210,36 @@ isshe.xyz.              86400   IN      NS      f1g1ns2.dnspod.net.
 </code></pre><ul>
 <li>Name: 域名。</li>
 <li>Type：类型。</li>
-<li>Class：Rdata的类。</li>
-<li>TTL：资源记录的生存时间。0表示只能被传输，不能被缓存。（无符号整型）</li>
-<li>RdLenght：Rdata的长度。</li>
-<li>Rdata：资源数据，表示记录。格式和Type、Class有关。如Type=A、Class=IN，Rdata就是一个IP地址。</li>
+<li>Class：Rdata 的类。</li>
+<li>TTL：资源记录的生存时间。0 表示只能被传输，不能被缓存。（无符号整型）</li>
+<li>RdLenght：Rdata 的长度。</li>
+<li>Rdata：资源数据，表示记录。格式和 Type、Class 有关。如 Type=A、Class=IN，Rdata 就是一个 IP 地址。</li>
 </ul>
 <h2 id=rrs>RRs</h2>
-<p>Questions：指明Question的数量。
-Answer RRs：指明Answer的数量。
-Authority RRs：指明Antuority的数量。
-Additional RRs：指明Additional的数量。</p>
+<p>Questions：指明 Question 的数量。
+Answer RRs：指明 Answer 的数量。
+Authority RRs：指明 Antuority 的数量。
+Additional RRs：指明 Additional 的数量。</p>
 <h1 id=记录类型>记录类型</h1>
 <blockquote>
-<p>详见<a class=link href=https://zh.wikipedia.org/wiki/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B%E5%88%97%E8%A1%A8 target=_blank rel=noopener>DNS记录类型列表</a></p>
+<p>详见<a class=link href=https://zh.wikipedia.org/wiki/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B%E5%88%97%E8%A1%A8 target=_blank rel=noopener>DNS 记录类型列表</a></p>
 </blockquote>
 <p>常见记录类型：</p>
 <ul>
 <li>A：主机记录（Address）。</li>
 <li>NS：域名服务器记录（Name Server）。
 <ul>
-<li>返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为IP地址。</li>
+<li>返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为 IP 地址。</li>
 </ul>
 </li>
-<li>CNAME：规范名称记录，当前查询域名是另一个域名的跳转。（即别名记录，指向某个A记录）</li>
-<li>AAAA：IPv6主机记录。</li>
+<li>CNAME：规范名称记录，当前查询域名是另一个域名的跳转。（即别名记录，指向某个 A 记录）</li>
+<li>AAAA：IPv6 主机记录。</li>
 <li>SRV：服务位置记录。</li>
-<li>MX: 邮件记录(Mail eXchange)，返回接收电子邮件的服务器地址。</li>
-<li>PTR：逆向查询记录（Pointer Record），从IP查域名。</li>
+<li>MX: 邮件记录 (Mail eXchange)，返回接收电子邮件的服务器地址。</li>
+<li>PTR：逆向查询记录（Pointer Record），从 IP 查域名。</li>
 </ul>
 <h1 id=报文示例>报文示例</h1>
-<h2 id=报文示例-查询>报文示例-查询</h2>
+<h2 id=报文示例---查询>报文示例 - 查询</h2>
 <pre tabindex=0><code>               +---------------------------------------------------+
     Header     | OPCODE=SQUERY                                     |
                +---------------------------------------------------+
@@ -251,7 +251,7 @@ Additional RRs：指明Additional的数量。</p>
                +---------------------------------------------------+
     Additional | &lt;empty&gt;                                           |
                +---------------------------------------------------+
-</code></pre><h2 id=报文示例-响应>报文示例-响应</h2>
+</code></pre><h2 id=报文示例---响应>报文示例 - 响应</h2>
 <pre tabindex=0><code>               +---------------------------------------------------+
     Header     | OPCODE=SQUERY, RESPONSE, AA                       |
                +---------------------------------------------------+
@@ -267,13 +267,13 @@ Additional RRs：指明Additional的数量。</p>
 </code></pre><h1 id=疑问>疑问</h1>
 <h1 id=相关>相关</h1>
 <ul>
-<li>dig 命令：可用于DNS相关操作。</li>
-<li>host 命令：dig的简化版本。</li>
-<li>whois 命令: 查看域名注册情况。</li>
-<li>nslookup 命令: 可互动式查询域名记录。</li>
-<li><a class=link href=https://www.ruanyifeng.com/blog/2016/06/dns.html target=_blank rel=noopener>DNS 原理入门-阮一峰</a></li>
+<li>dig 命令：可用于 DNS 相关操作。</li>
+<li>host 命令：dig 的简化版本。</li>
+<li>whois 命令：查看域名注册情况。</li>
+<li>nslookup 命令：可互动式查询域名记录。</li>
+<li><a class=link href=https://www.ruanyifeng.com/blog/2016/06/dns.html target=_blank rel=noopener>DNS 原理入门 - 阮一峰</a></li>
 <li><a class=link href=https://en.wikipedia.org/wiki/Domain_Name_System#DNS_message_format target=_blank rel=noopener>wiki</a></li>
-<li><a class=link href=https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8 target=_blank rel=noopener>wiki中文</a></li>
+<li><a class=link href=https://zh.wikipedia.org/wiki/DNS%e8%ae%b0%e5%bd%95%e7%b1%bb%e5%9e%8b%e5%88%97%e8%a1%a8 target=_blank rel=noopener>wiki 中文</a></li>
 </ul>
 </section>
 <footer class=article-footer>
@@ -293,6 +293,16 @@ Additional RRs：指明Additional的数量。</p>
 <h2 class=section-title>相关文章</h2>
 <div class=related-contents>
 <div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.ee4ba7fac7661fb58642e5081003a0cc_hu6dd6ce6c6dc89dbbcc548f1b0a61c1d9_261937_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-7kun+sdmH7WGQuUIEAOgzA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
 <article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
 <div class=article-image>
@@ -320,16 +330,6 @@ Additional RRs：指明Additional的数量。</p>
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— ARP</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
-<div class=article-image>
-<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.ee4ba7fac7661fb58642e5081003a0cc_hu6dd6ce6c6dc89dbbcc548f1b0a61c1d9_261937_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-7kun+sdmH7WGQuUIEAOgzA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>VLAN 介绍</h2>
 </div>
 </a>
 </article>
@@ -408,8 +408,8 @@ Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=
 <li><a href=#rrs>RRs</a></li>
 </ol>
 <ol>
-<li><a href=#报文示例-查询>报文示例-查询</a></li>
-<li><a href=#报文示例-响应>报文示例-响应</a></li>
+<li><a href=#报文示例---查询>报文示例 - 查询</a></li>
+<li><a href=#报文示例---响应>报文示例 - 响应</a></li>
 </ol>
 </nav>
 </div>

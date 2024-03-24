@@ -1,17 +1,17 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="第二章 历史上的密码 历史上著名的密码  凯撒密码 简单替换密码 Enigma  破译方法  暴力攻击 频率分析  凯撒密码 通过将明文中使用的字母表&amp;quot;平移&amp;quot;来进行加密。 秘钥空间：26 破解方式：直接暴力破解。
-简单替换密码  更改26个字母的对应关系。如A表示X（A不再是A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略"><title>图解密码技术 —— 第二章-历史上的密码</title>
+简单替换密码  更改 26 个字母的对应关系。如 A 表示 X（A 不再是 A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略"><title>图解密码技术 —— 第二章-历史上的密码</title>
 <link rel=canonical href=https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="图解密码技术 —— 第二章-历史上的密码">
 <meta property="og:description" content="第二章 历史上的密码 历史上著名的密码  凯撒密码 简单替换密码 Enigma  破译方法  暴力攻击 频率分析  凯撒密码 通过将明文中使用的字母表&amp;quot;平移&amp;quot;来进行加密。 秘钥空间：26 破解方式：直接暴力破解。
-简单替换密码  更改26个字母的对应关系。如A表示X（A不再是A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略">
+简单替换密码  更改 26 个字母的对应关系。如 A 表示 X（A 不再是 A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略">
 <meta property="og:url" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="读书笔记"><meta property="article:tag" content="图解编码技术"><meta property="article:tag" content="Study Notes"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg">
 <meta name=twitter:title content="图解密码技术 —— 第二章-历史上的密码">
 <meta name=twitter:description content="第二章 历史上的密码 历史上著名的密码  凯撒密码 简单替换密码 Enigma  破译方法  暴力攻击 频率分析  凯撒密码 通过将明文中使用的字母表&amp;quot;平移&amp;quot;来进行加密。 秘钥空间：26 破解方式：直接暴力破解。
-简单替换密码  更改26个字母的对应关系。如A表示X（A不再是A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略"><meta name=twitter:card content="summary_large_image">
+简单替换密码  更改 26 个字母的对应关系。如 A 表示 X（A 不再是 A）。 秘钥空间：26 x 25 x 24 x &amp;hellip; x 1 = 403291461126605635584000000 破解方式：频率分析  Enigma 略"><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8E%86%E5%8F%B2%E4%B8%8A%E7%9A%84%E5%AF%86%E7%A0%81/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -48,7 +48,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -77,7 +77,7 @@ extended">
 破解方式：直接暴力破解。</p>
 <h1 id=简单替换密码>简单替换密码</h1>
 <ul>
-<li>更改26个字母的对应关系。如A表示X（A不再是A）。</li>
+<li>更改 26 个字母的对应关系。如 A 表示 X（A 不再是 A）。</li>
 <li>秘钥空间：26 x 25 x 24 x &mldr; x 1 = 403291461126605635584000000</li>
 <li>破解方式：频率分析</li>
 </ul>
@@ -110,32 +110,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/>
 <div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.a21fc7bda2b3395a162e3d375240c1b3_huaffa7cd0d92005921c7eed2441c40670_130886_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第六章-混合密码系统" data-hash="md5-oh/HvaKzOVoWLj03UkDBsw==">
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81/image.5e7f7644d06eeacb06330702697539f1_hud37660a567da8df0403875e6c802b8b7_242254_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第五章-公钥密码" data-hash="md5-Xn92RNBu6ssGMwcCaXU58Q==">
 </div>
 <div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第六章-混合密码系统</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC14%E7%AB%A0-ssl-tls/image.f39f8d4f543fb1f27803e275a39fd7d9_hu413041019d95a132c5e6526329e5bb43_166854_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第14章-SSL-TLS" data-hash="md5-85+NT1Q/sfJ4A+J1o5/X2Q==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第14章-SSL-TLS</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.2752226f3c1c59ea87a8b78a4d28eec8_huc9c2406ee84bbdd2b0b3e1a17648a8ee_86626_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式" data-hash="md5-J1IibzwcWeqHqLeKTSjuyA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>图解密码技术 —— 第四章-分组密码的模式</h2>
+<h2 class=article-title>图解密码技术 —— 第五章-公钥密码</h2>
 </div>
 </a>
 </article>
@@ -146,6 +126,26 @@ extended">
 </div>
 <div class=article-details>
 <h2 class=article-title>图解密码技术 —— 第三章-对称密码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AB%E7%AB%A0-%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E7%A0%81/image.e496e5da02a4166dfe668257b5251e40_huf847cb5c306e77516f0a4bc72ff03aec_308630_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第八章-消息认证码" data-hash="md5-5Jbl2gKkFm3+ZoJXtSUeQA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第八章-消息认证码</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/>
+<div class=article-image>
+<img src=/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.a21fc7bda2b3395a162e3d375240c1b3_huaffa7cd0d92005921c7eed2441c40670_130886_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 图解密码技术 —— 第六章-混合密码系统" data-hash="md5-oh/HvaKzOVoWLj03UkDBsw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>图解密码技术 —— 第六章-混合密码系统</h2>
 </div>
 </a>
 </article>

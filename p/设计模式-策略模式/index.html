@@ -1,14 +1,14 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context使用这个接口来调用某个ConcreteStrategy定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而ConcreteStrategy对象来配置；【？？？】 维护一个对Strategy对象的引用； 可定义一个接口来让Strategy访问它的数据。     协作/工作流程  Strategy和Context相互作用，以实现选定的算法。  Context将算法需要的参数传给Strategy，或 Context将自己作为参数传给Strategy。   Context将它的客户的请求转发给它的Strategy。  客户通常创建并传递一个ConcreteStrategy对象给该Context（客户仅与Context交互）。 客户通常可以选择一系列的ConcreteStrategy。      2. 优缺点是什么？ 2.1 优点  Strategy类层次为Context定义了一系列可供重用的算法/行为。 提供一个代替继承的方法。  继承提供了另一种支持多种算法/行为的方法——直接生成Context的子类，但提供不同的行为。   消除了一些条件语句（客户进行指定，不需要switch和if） 可提供相同行为的不同实现。  2."><title>设计模式 —— 策略模式</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context 使用这个接口来调用某个 ConcreteStrategy 定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而 ConcreteStrategy 对象来配置；【？？？】 维护一个对 Strategy 对象的引用； 可定义一个接口来让 Strategy 访问它的数据。     协作/工作流程  Strategy 和 Context 相互作用，以实现选定的算法。  Context 将算法需要的参数传给 Strategy，或 Context 将自己作为参数传给 Strategy。   Context 将它的客户的请求转发给它的 Strategy。  客户通常创建并传递一个 ConcreteStrategy 对象给该 Context（客户仅与 Context 交互）。 客户通常可以选择一系列的 ConcreteStrategy。      2."><title>设计模式 —— 策略模式</title>
 <link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 策略模式">
-<meta property="og:description" content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context使用这个接口来调用某个ConcreteStrategy定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而ConcreteStrategy对象来配置；【？？？】 维护一个对Strategy对象的引用； 可定义一个接口来让Strategy访问它的数据。     协作/工作流程  Strategy和Context相互作用，以实现选定的算法。  Context将算法需要的参数传给Strategy，或 Context将自己作为参数传给Strategy。   Context将它的客户的请求转发给它的Strategy。  客户通常创建并传递一个ConcreteStrategy对象给该Context（客户仅与Context交互）。 客户通常可以选择一系列的ConcreteStrategy。      2. 优缺点是什么？ 2.1 优点  Strategy类层次为Context定义了一系列可供重用的算法/行为。 提供一个代替继承的方法。  继承提供了另一种支持多种算法/行为的方法——直接生成Context的子类，但提供不同的行为。   消除了一些条件语句（客户进行指定，不需要switch和if） 可提供相同行为的不同实现。  2.">
+<meta property="og:description" content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context 使用这个接口来调用某个 ConcreteStrategy 定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而 ConcreteStrategy 对象来配置；【？？？】 维护一个对 Strategy 对象的引用； 可定义一个接口来让 Strategy 访问它的数据。     协作/工作流程  Strategy 和 Context 相互作用，以实现选定的算法。  Context 将算法需要的参数传给 Strategy，或 Context 将自己作为参数传给 Strategy。   Context 将它的客户的请求转发给它的 Strategy。  客户通常创建并传递一个 ConcreteStrategy 对象给该 Context（客户仅与 Context 交互）。 客户通常可以选择一系列的 ConcreteStrategy。      2.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <meta name=twitter:title content="设计模式 —— 策略模式">
-<meta name=twitter:description content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context使用这个接口来调用某个ConcreteStrategy定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而ConcreteStrategy对象来配置；【？？？】 维护一个对Strategy对象的引用； 可定义一个接口来让Strategy访问它的数据。     协作/工作流程  Strategy和Context相互作用，以实现选定的算法。  Context将算法需要的参数传给Strategy，或 Context将自己作为参数传给Strategy。   Context将它的客户的请求转发给它的Strategy。  客户通常创建并传递一个ConcreteStrategy对象给该Context（客户仅与Context交互）。 客户通常可以选择一系列的ConcreteStrategy。      2. 优缺点是什么？ 2.1 优点  Strategy类层次为Context定义了一系列可供重用的算法/行为。 提供一个代替继承的方法。  继承提供了另一种支持多种算法/行为的方法——直接生成Context的子类，但提供不同的行为。   消除了一些条件语句（客户进行指定，不需要switch和if） 可提供相同行为的不同实现。  2."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="策略模式——用委托改变算法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：  定义一系列算法，把它们一个个封装起来，并使它们可以相互替换。 本模式使得算法可以独立于使用它的客户而变化。   别名：Policy（政策） 类图：  类图  出场嘉宾  Strategy：策略，定义算法的公共接口。  Context 使用这个接口来调用某个 ConcreteStrategy 定义的算法。   ConcreteStrategy：具体策略，实现具体的算法。 Context：上下文  用已成而 ConcreteStrategy 对象来配置；【？？？】 维护一个对 Strategy 对象的引用； 可定义一个接口来让 Strategy 访问它的数据。     协作/工作流程  Strategy 和 Context 相互作用，以实现选定的算法。  Context 将算法需要的参数传给 Strategy，或 Context 将自己作为参数传给 Strategy。   Context 将它的客户的请求转发给它的 Strategy。  客户通常创建并传递一个 ConcreteStrategy 对象给该 Context（客户仅与 Context 交互）。 客户通常可以选择一系列的 ConcreteStrategy。      2."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -42,7 +42,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -82,31 +82,31 @@ extended">
 <ul>
 <li>Strategy：策略，定义算法的公共接口。
 <ul>
-<li>Context使用这个接口来调用某个ConcreteStrategy定义的算法。</li>
+<li>Context 使用这个接口来调用某个 ConcreteStrategy 定义的算法。</li>
 </ul>
 </li>
 <li>ConcreteStrategy：具体策略，实现具体的算法。</li>
 <li>Context：上下文
 <ul>
-<li>用已成而ConcreteStrategy对象来配置；【？？？】</li>
-<li>维护一个对Strategy对象的引用；</li>
-<li>可定义一个接口来让Strategy访问它的数据。</li>
+<li>用已成而 ConcreteStrategy 对象来配置；【？？？】</li>
+<li>维护一个对 Strategy 对象的引用；</li>
+<li>可定义一个接口来让 Strategy 访问它的数据。</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>协作/工作流程
 <ul>
-<li>Strategy和Context相互作用，以实现选定的算法。
+<li>Strategy 和 Context 相互作用，以实现选定的算法。
 <ul>
-<li>Context将算法需要的参数传给Strategy，或</li>
-<li>Context将自己作为参数传给Strategy。</li>
+<li>Context 将算法需要的参数传给 Strategy，或</li>
+<li>Context 将自己作为参数传给 Strategy。</li>
 </ul>
 </li>
-<li>Context将它的客户的请求转发给它的Strategy。
+<li>Context 将它的客户的请求转发给它的 Strategy。
 <ul>
-<li>客户通常创建并传递一个ConcreteStrategy对象给该Context（客户仅与Context交互）。</li>
-<li>客户通常可以选择一系列的ConcreteStrategy。</li>
+<li>客户通常创建并传递一个 ConcreteStrategy 对象给该 Context（客户仅与 Context 交互）。</li>
+<li>客户通常可以选择一系列的 ConcreteStrategy。</li>
 </ul>
 </li>
 </ul>
@@ -115,19 +115,19 @@ extended">
 <h2 id=2-优缺点是什么>2. 优缺点是什么？</h2>
 <h3 id=21-优点>2.1 优点</h3>
 <ul>
-<li>Strategy类层次为Context定义了一系列可供重用的算法/行为。</li>
+<li>Strategy 类层次为 Context 定义了一系列可供重用的算法/行为。</li>
 <li>提供一个代替继承的方法。
 <ul>
-<li>继承提供了另一种支持多种算法/行为的方法——直接生成Context的子类，但提供不同的行为。</li>
+<li>继承提供了另一种支持多种算法/行为的方法——直接生成 Context 的子类，但提供不同的行为。</li>
 </ul>
 </li>
-<li>消除了一些条件语句（客户进行指定，不需要switch和if）</li>
+<li>消除了一些条件语句（客户进行指定，不需要 switch 和 if）</li>
 <li>可提供相同行为的不同实现。</li>
 </ul>
 <h3 id=22-缺点>2.2 缺点</h3>
 <ul>
-<li>客户必须了解各种ConcreteStrategy。</li>
-<li>Strategy和Context之间的通信开销——某些ConcreteStrategy可能永远用不上某些参数。</li>
+<li>客户必须了解各种 ConcreteStrategy。</li>
+<li>Strategy 和 Context 之间的通信开销——某些 ConcreteStrategy 可能永远用不上某些参数。</li>
 <li>增加了对象的数目。</li>
 <li></li>
 </ul>
@@ -138,7 +138,7 @@ extended">
 <li>算法使用客户端不应该知道的数据。</li>
 <li>一个类定义类多种行为，并且这些行为在这个类的操作中已多个条件语句的形式出现。
 <ul>
-<li>将相关的条件分支移入它们各自的Strategy类中以代替这些条件语句。</li>
+<li>将相关的条件分支移入它们各自的 Strategy 类中以代替这些条件语句。</li>
 </ul>
 </li>
 </ul>
@@ -146,35 +146,35 @@ extended">
 <ul>
 <li>需要考虑的实现问题：
 <ul>
-<li>Strategy和Context接口必须使得ConcreteStrategy能够有效访问它所需要的Context中的任何数据。
+<li>Strategy 和 Context 接口必须使得 ConcreteStrategy 能够有效访问它所需要的 Context 中的任何数据。
 <ul>
-<li>方法一：Context将数据作为参数传递给Strategy
+<li>方法一：Context 将数据作为参数传递给 Strategy
 <ul>
-<li>缺点：Context可能发送一些Stratege不需要的数据。</li>
-<li>优点：Context和Strategy解耦。</li>
+<li>缺点：Context 可能发送一些 Stratege 不需要的数据。</li>
+<li>优点：Context 和 Strategy 解耦。</li>
 </ul>
 </li>
-<li>方法二：Context将自身作为参数传递给Strategy，Strategy再显式想Context请求数据或者存储Context的一个引用（这样就根本不需要再传递任何东西）
+<li>方法二：Context 将自身作为参数传递给 Strategy，Strategy 再显式想 Context 请求数据或者存储 Context 的一个引用（这样就根本不需要再传递任何东西）
 <ul>
-<li>缺点：Context和Strategy紧密耦合。</li>
+<li>缺点：Context 和 Strategy 紧密耦合。</li>
 <li>优点：传递数据少。</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>使Strategy对象成为可选的。
+<li>使 Strategy 对象成为可选的。
 <ul>
-<li>如果想要不使用额外的Strategy对象的情况下，Context仍有意义的话，可以：
+<li>如果想要不使用额外的 Strategy 对象的情况下，Context 仍有意义的话，可以：
 <ul>
-<li>访问某个Strategy对象前，先检查是否存在，存在就使用，不存在就使用默认（缺省）的行为。</li>
-<li>优点：用户只在需要时，才需要了解ConcreteStrategy对象。</li>
+<li>访问某个 Strategy 对象前，先检查是否存在，存在就使用，不存在就使用默认（缺省）的行为。</li>
+<li>优点：用户只在需要时，才需要了解 ConcreteStrategy 对象。</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>C++中，只有满足下面的条件才能将Strategy作为<code>模板参数</code>：
+<li>C++ 中，只有满足下面的条件才能将 Strategy 作为<code>模板参数</code>：
 <ul>
-<li>1.可以在编译时选择Strategy；</li>
+<li>1.可以在编译时选择 Strategy；</li>
 <li>2.它不需要在运行时改变</li>
 <li>示例：</li>
 </ul>
@@ -218,7 +218,7 @@ extended">
 <h2 id=z-参考>z. 参考</h2>
 <ul>
 <li>《设计模式：可复用面向对象软件的基础》</li>
-<li>《Head First设计模式》</li>
+<li>《Head First 设计模式》</li>
 </ul>
 </section>
 <footer class=article-footer>
@@ -236,22 +236,22 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.a8e074fd01466f138e450b5c7c671f1b_hu69318f5e689d278930c659afc06e18d5_32592_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 组合模式" data-hash="md5-qOB0/QFGbxOORQtcfGcfGw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 组合模式</h2>
+<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.1491243c7e18885a52b53d4e0295699c_hubb814909749ccb8edb1429126b62c316_29214_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 工厂方法模式" data-hash="md5-FJEkPH4YiFpStT1OApVpnA==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 工厂方法模式</h2>
+<h2 class=article-title>设计模式 —— 模板方法模式</h2>
 </div>
 </a>
 </article>
@@ -266,22 +266,22 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.7bd87ea30596f8b88461cd7488ebb365_hub0bc657ad31b110e47045ee0ac7e408b_22439_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-e9h+owWW+LiEYc10iOuzZQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+<h2 class=article-title>设计模式 —— 外观模式</h2>
 </div>
 </a>
 </article>

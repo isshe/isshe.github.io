@@ -1,17 +1,17 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
- 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5."><title>设计模式 —— 单件模式</title>
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new 或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4."><title>设计模式 —— 单件模式</title>
 <link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 单件模式">
 <meta property="og:description" content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
- 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5.">
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new 或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <meta name=twitter:title content="设计模式 —— 单件模式">
 <meta name=twitter:description content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
- 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4. 使用场景是什么？  多个模块共用的全局数据库/配置。  5."><meta name=twitter:card content="summary_large_image">
+ 创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new 或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -60,7 +60,7 @@ extended">
 <p>初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：</p>
 <ul>
 <li>创建对象的时候，如何知道现在只有一个？</li>
-<li>如何保证创建对象时候的原子性？（不能保证就有可能创建多于1个的对象）</li>
+<li>如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象）</li>
 <li>如何获取/访问这个唯一对象？</li>
 </ul>
 <h2 id=1-基础概念>1. 基础概念</h2>
@@ -93,7 +93,7 @@ extended">
 <h2 id=3-优缺点是什么>3. 优缺点是什么？</h2>
 <h3 id=31-优点>3.1 优点</h3>
 <ul>
-<li>对唯一实例的创建是受控的——不允许直接创建（new或变量）。</li>
+<li>对唯一实例的创建是受控的——不允许直接创建（new 或变量）。</li>
 <li>对唯一实例的访问是受控的。</li>
 <li>缩小命名空间。
 <ul>
@@ -111,10 +111,10 @@ extended">
 <li>允许可变的数目的实例。</li>
 <li>比类操作更灵活。
 <ul>
-<li>如果使用类操作（C++的静态成员函数、Smalltalk的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。</li>
+<li>如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。</li>
 </ul>
 </li>
-<li>惰性(lazy)初始化，惰性创建——不需要的时候，不会创建。</li>
+<li>惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。</li>
 </ul>
 <h3 id=32-缺点>3.2 缺点</h3>
 <ul>
@@ -127,11 +127,11 @@ extended">
 <h2 id=5-注意>5. 注意</h2>
 <ul>
 <li>保证一个唯一的实例。</li>
-<li>C++实现注意：如果将单件定义为一个全局或静态的对象，然后依赖自动的初始化，是不够的，原因：
+<li>C++ 实现注意：如果将单件定义为一个全局或静态的对象，然后依赖自动的初始化，是不够的，原因：
 <ul>
 <li>不能保证静态对象只有一个实例会被声明。</li>
 <li>可能没有足够的信息初始化实例。（可能需要在运行时获取信息）</li>
-<li>C++没有定义转换单元（Translation unit）上全局对象的构造器的调用顺序。【？！】</li>
+<li>C++ 没有定义转换单元（Translation unit）上全局对象的构造器的调用顺序。【？！】</li>
 <li>无论是否使用，都会被创建。（一开始就创建了）</li>
 </ul>
 </li>
@@ -147,7 +147,7 @@ extended">
 <h2 id=x-疑问>x. 疑问</h2>
 <ul>
 <li>如何拓展单件类？</li>
-<li><code>5. 注意</code>里面第2点第3个原因，不理解！</li>
+<li><code>5. 注意</code>里面第 2 点第 3 个原因，不理解！</li>
 <li><code>单件注册表</code>？</li>
 <li>《设计模式：可复用面向对象软件的基础》里面好像没有考虑线程安全？</li>
 </ul>
@@ -175,52 +175,52 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_huceb84dfea0e2d8d20328e44ecabed167_14280_0fd8b128c0c54b483a529fade247f280.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-HYelROkzOUXt6/380SDluA==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.7bd87ea30596f8b88461cd7488ebb365_hub0bc657ad31b110e47045ee0ac7e408b_22439_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-e9h+owWW+LiEYc10iOuzZQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 适配器模式</h2>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.a8e074fd01466f138e450b5c7c671f1b_hu69318f5e689d278930c659afc06e18d5_32592_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 组合模式" data-hash="md5-qOB0/QFGbxOORQtcfGcfGw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
+<h2 class=article-title>设计模式 —— 组合模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.1491243c7e18885a52b53d4e0295699c_hubb814909749ccb8edb1429126b62c316_29214_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 工厂方法模式" data-hash="md5-FJEkPH4YiFpStT1OApVpnA==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 工厂方法模式</h2>
+<h2 class=article-title>设计模式 —— 装饰者模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.a84c31f9b6ee8b690aea1f3137b5fde8_huc03f68792e55e175b4455a14e3ef74ad_21728_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 状态模式" data-hash="md5-qEwx+bbui2kK6h8xN7X96A==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
+<h2 class=article-title>设计模式 —— 状态模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.4ce09f29da8c76e58f7cb5f426b2ff52_hua4fa13d1bdf22ddd96376562d855ae4a_134997_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 观察者模式" data-hash="md5-TOCfKdqMduWPfLX0JrL/Ug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 迭代器模式</h2>
+<h2 class=article-title>设计模式 —— 观察者模式</h2>
 </div>
 </a>
 </article>

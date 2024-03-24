@@ -8,7 +8,7 @@
 用法 tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ] [ -c count ] [ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ] [ --number ] [ -Q in|out|inout ] [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,.">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="tcpdump"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="tcpdump"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— tcpdump">
 <meta name=twitter:description content="tcpdump tcpdump - dump traffic on a network（转储网络上的流量）。
 用法 tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ] [ -c count ] [ -C file_size ] [ -G rotate_seconds ] [ -F file ] [ -i interface ] [ -j tstamp_type ] [ -m module ] [ -M secret ] [ --number ] [ -Q in|out|inout ] [ -r file ] [ -V file ] [ -s snaplen ] [ -T type ] [ -w file ] [ -W filecount ] [ -E spi@ipaddr algo:secret,."><meta name=twitter:card content="summary_large_image">
@@ -45,7 +45,7 @@ Linux 命令
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -346,7 +346,7 @@ Linux 命令
               通常，如果表达式包含Shell元字符，例如用于转义协议名称的反斜杠，则更容易将其作为单个引用参数传递，
               而不是转义Shell元字符。在解析之前，多个参数与空格连接在一起。
 </code></pre></div><h1 id=示例>示例</h1>
-<h2 id=指定接口主机写到文件>指定接口+主机，写到文件</h2>
+<h2 id=指定接口--主机写到文件>指定接口 + 主机，写到文件</h2>
 <blockquote>
 <p>tcpdump -i br-lan1 -w x_xxxx.cap -v host xx.xx.xx.xx</p>
 </blockquote>
@@ -363,38 +363,38 @@ Linux 命令
 <p>tcpdump host helios and ( hot or ace )</p>
 </blockquote>
 <ul>
-<li>helios 和 hot 、 helios 和 ace之间的流量。</li>
+<li>helios 和 hot、helios 和 ace 之间的流量。</li>
 </ul>
-<h2 id=打印所有本地主机和berkeley主机间的流量>打印所有本地主机和Berkeley主机间的流量</h2>
+<h2 id=打印所有本地主机和-berkeley-主机间的流量>打印所有本地主机和 Berkeley 主机间的流量</h2>
 <blockquote>
 <p>tcpdump net ucb-ether</p>
 </blockquote>
-<h2 id=通过互联网网关snup打印所有ftp流量请注意引用该表达式是为了防止shell错误地解释括号>通过互联网网关snup打印所有ftp流量(请注意，引用该表达式是为了防止shell（错误地）解释括号）</h2>
+<h2 id=通过互联网网关-snup-打印所有-ftp-流量-请注意引用该表达式是为了防止-shell错误地解释括号>通过互联网网关 snup 打印所有 ftp 流量 (请注意，引用该表达式是为了防止 shell（错误地）解释括号）</h2>
 <blockquote>
 <p>tcpdump &lsquo;gateway snup and (port ftp or ftp-data)&rsquo;</p>
 </blockquote>
-<h2 id=要打印既不是来自本地主机也不是发往本地主机的流量如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量(如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</h2>
+<h2 id=要打印既不是来自本地主机也不是发往本地主机的流量-如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量 (如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</h2>
 <blockquote>
 <p>tcpdump ip and not net localnet</p>
 </blockquote>
-<h2 id=打印涉及非本地主机的每个tcp对话的开始和结束数据包syn和fin数据包>打印涉及非本地主机的每个TCP对话的<code>开始</code>和<code>结束</code>数据包（SYN和FIN数据包）</h2>
+<h2 id=打印涉及非本地主机的每个-tcp-对话的开始和结束数据包syn-和-fin-数据包>打印涉及非本地主机的每个 TCP 对话的<code>开始</code>和<code>结束</code>数据包（SYN 和 FIN 数据包）</h2>
 <blockquote>
 <p>tcpdump &lsquo;tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet&rsquo;</p>
 </blockquote>
-<h2 id=打印与端口80之间的所有ipv4-http数据包>打印与端口80之间的所有IPv4 HTTP数据包</h2>
+<h2 id=打印与端口-80-之间的所有-ipv4-http-数据包>打印与端口 80 之间的所有 IPv4 HTTP 数据包</h2>
 <blockquote>
-<p>仅打印包含数据的数据包，而不打印例如SYN和FIN数据包以及仅ACK数据包
+<p>仅打印包含数据的数据包，而不打印例如 SYN 和 FIN 数据包以及仅 ACK 数据包
 tcpdump &lsquo;tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)&#171;2)) - ((tcp[12]&0xf0)&#187;2)) != 0)&rsquo;</p>
 </blockquote>
-<h2 id=打印通过网关snup发送的长度超过576字节的ip数据包>打印通过网关snup发送的长度超过576字节的IP数据包</h2>
+<h2 id=打印通过网关-snup-发送的长度超过-576-字节的-ip-数据包>打印通过网关 snup 发送的长度超过 576 字节的 IP 数据包</h2>
 <blockquote>
 <p>tcpdump &lsquo;gateway snup and ip[2:2] > 576&rsquo;</p>
 </blockquote>
-<h2 id=打印未通过以太网广播或多播发送的ip广播或多播数据包>打印未通过以太网广播或多播发送的IP广播或多播数据包</h2>
+<h2 id=打印未通过以太网广播或多播发送的-ip-广播或多播数据包>打印未通过以太网广播或多播发送的 IP 广播或多播数据包</h2>
 <blockquote>
 <p>tcpdump &lsquo;ether[0] & 1 = 0 and ip[16] >= 224&rsquo;</p>
 </blockquote>
-<h2 id=打印所有不是回应请求回复的icmp数据包即不ping数据包>打印所有不是回应请求/回复的ICMP数据包（即不ping数据包）</h2>
+<h2 id=打印所有不是回应请求回复的-icmp-数据包即不-ping-数据包>打印所有不是回应请求/回复的 ICMP 数据包（即不 ping 数据包）</h2>
 <blockquote>
 <p>tcpdump &lsquo;icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply&rsquo;</p>
 </blockquote>
@@ -431,12 +431,12 @@ linux man page</p>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.31211f1b99cf737a0afe169a49b7d6ab_hu9a6e15c100f49a1259729f1a9f46ad7a_252829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-MSEfG5nPc3oK/haaSbfWqw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.5c8098a5b159a2f95ef414180176eb3c_hud0302cb28f3acf717dc2c63099887f29_175873_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-XICYpbFZovle9BQYAXbrPA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— gdb</h2>
+<h2 class=article-title>Linux 命令 —— strace</h2>
 </div>
 </a>
 </article>
@@ -451,22 +451,22 @@ linux man page</p>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.31211f1b99cf737a0afe169a49b7d6ab_hu9a6e15c100f49a1259729f1a9f46ad7a_252829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-MSEfG5nPc3oK/haaSbfWqw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— vmstat</h2>
+<h2 class=article-title>Linux 命令 —— gdb</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.fac68dee51dbe600df5776eb43d6c14f_hu0d592102e033b96588ada77308d430a0_228400_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-+saN7lHb5gDfV3brQ9bBTw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-git/image.956ee167559ea6bb2ecd7f2265db44b3_hu9a230336efb1ccd23b21d20aba4c6df2_292131_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— git" data-hash="md5-lW7hZ1WeprsuzX8iZdtEsw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— netstat</h2>
+<h2 class=article-title>Linux 命令 —— git</h2>
 </div>
 </a>
 </article>
@@ -538,18 +538,18 @@ Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=
 <li><a href=#tcpdump>tcpdump</a></li>
 </ol>
 <ol>
-<li><a href=#指定接口主机写到文件>指定接口+主机，写到文件</a></li>
+<li><a href=#指定接口--主机写到文件>指定接口 + 主机，写到文件</a></li>
 <li><a href=#指定端口范围>指定端口范围</a></li>
 <li><a href=#捕获和指定主机相关的数据包>捕获和指定主机相关的数据包</a></li>
 <li><a href=#打印指定主机间的流量>打印指定主机间的流量</a></li>
-<li><a href=#打印所有本地主机和berkeley主机间的流量>打印所有本地主机和Berkeley主机间的流量</a></li>
-<li><a href=#通过互联网网关snup打印所有ftp流量请注意引用该表达式是为了防止shell错误地解释括号>通过互联网网关snup打印所有ftp流量(请注意，引用该表达式是为了防止shell（错误地）解释括号）</a></li>
-<li><a href=#要打印既不是来自本地主机也不是发往本地主机的流量如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量(如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</a></li>
-<li><a href=#打印涉及非本地主机的每个tcp对话的开始和结束数据包syn和fin数据包>打印涉及非本地主机的每个TCP对话的<code>开始</code>和<code>结束</code>数据包（SYN和FIN数据包）</a></li>
-<li><a href=#打印与端口80之间的所有ipv4-http数据包>打印与端口80之间的所有IPv4 HTTP数据包</a></li>
-<li><a href=#打印通过网关snup发送的长度超过576字节的ip数据包>打印通过网关snup发送的长度超过576字节的IP数据包</a></li>
-<li><a href=#打印未通过以太网广播或多播发送的ip广播或多播数据包>打印未通过以太网广播或多播发送的IP广播或多播数据包</a></li>
-<li><a href=#打印所有不是回应请求回复的icmp数据包即不ping数据包>打印所有不是回应请求/回复的ICMP数据包（即不ping数据包）</a></li>
+<li><a href=#打印所有本地主机和-berkeley-主机间的流量>打印所有本地主机和 Berkeley 主机间的流量</a></li>
+<li><a href=#通过互联网网关-snup-打印所有-ftp-流量-请注意引用该表达式是为了防止-shell错误地解释括号>通过互联网网关 snup 打印所有 ftp 流量 (请注意，引用该表达式是为了防止 shell（错误地）解释括号）</a></li>
+<li><a href=#要打印既不是来自本地主机也不是发往本地主机的流量-如果你通往另一个网络那么这些东西永远不应该进入你的本地网络>要打印既不是来自本地主机也不是发往本地主机的流量 (如果你通往另一个网络，那么这些东西永远不应该进入你的本地网络)</a></li>
+<li><a href=#打印涉及非本地主机的每个-tcp-对话的开始和结束数据包syn-和-fin-数据包>打印涉及非本地主机的每个 TCP 对话的<code>开始</code>和<code>结束</code>数据包（SYN 和 FIN 数据包）</a></li>
+<li><a href=#打印与端口-80-之间的所有-ipv4-http-数据包>打印与端口 80 之间的所有 IPv4 HTTP 数据包</a></li>
+<li><a href=#打印通过网关-snup-发送的长度超过-576-字节的-ip-数据包>打印通过网关 snup 发送的长度超过 576 字节的 IP 数据包</a></li>
+<li><a href=#打印未通过以太网广播或多播发送的-ip-广播或多播数据包>打印未通过以太网广播或多播发送的 IP 广播或多播数据包</a></li>
+<li><a href=#打印所有不是回应请求回复的-icmp-数据包即不-ping-数据包>打印所有不是回应请求/回复的 ICMP 数据包（即不 ping 数据包）</a></li>
 </ol>
 </nav>
 </div>

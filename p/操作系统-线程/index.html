@@ -1,17 +1,17 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="线程  当一个程序由exec启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快10~100倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程ID和退出状态将保留，直到另一个线程调用pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
- 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户ID和组ID； 线程私有的内容： 线程ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx值    2."><title>操作系统 —— 线程</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="线程  当一个程序由 exec 启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快 10~100 倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程 ID 和退出状态将保留，直到另一个线程调用 pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
+ 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户 ID 和组 ID； 线程私有的内容： 线程 ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程 ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx 值    2."><title>操作系统 —— 线程</title>
 <link rel=canonical href=https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="操作系统 —— 线程">
-<meta property="og:description" content="线程  当一个程序由exec启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快10~100倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程ID和退出状态将保留，直到另一个线程调用pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
- 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户ID和组ID； 线程私有的内容： 线程ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx值    2.">
+<meta property="og:description" content="线程  当一个程序由 exec 启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快 10~100 倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程 ID 和退出状态将保留，直到另一个线程调用 pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
+ 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户 ID 和组 ID； 线程私有的内容： 线程 ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程 ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx 值    2.">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="thread"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="thread"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png">
 <meta name=twitter:title content="操作系统 —— 线程">
-<meta name=twitter:description content="线程  当一个程序由exec启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快10~100倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程ID和退出状态将保留，直到另一个线程调用pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
- 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户ID和组ID； 线程私有的内容： 线程ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx值    2."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="线程  当一个程序由 exec 启动执行时，系统将创建一个称为初始线程(initail thread)或主线程(main thread)的单个线程。 线程取消在8.5章，被取消的线程要释放相关资源（锁等），需要注意。 线程创建可能比进程创建快 10~100 倍； 线程或者是可汇合的(joinable)或者是脱离/分离的(detached)。（默认可汇合的）  可汇合的线程可以被其他线程回收其资源和杀死。  当可汇合的线程终止时，其线程 ID 和退出状态将保留，直到另一个线程调用 pthread_join;   脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；   线程是运行在进程上下文中的逻辑流。  1. 共享及私有 线程共享的内容：
+ 进程指令； 大多数数据； 打开的文件（如描述符）； 信号处理程序和信号处置； 当前工作目录； 用户 ID 和组 ID； 线程私有的内容： 线程 ID； 寄存器集合（包括程序计数器和栈指针）； 栈； 栈指针； 程序计数器； errno； 信号掩码； 优先级；  2. 相关函数 2.1 pthread_create #include &amp;lt;pthread.h&amp;gt; int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);  作用：创建线程 参数：  tid：线程 ID；这是结果参数； attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值； start_routine: 创建的线程所需要执行的函数；称为线程启动函数(thread start function); arg: 参数；如果有多个，则打包成一个结构即可；   返回：  成功：0 失败：Exxx 值    2."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B/prethreading.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -58,14 +58,14 @@ extended">
 <section class=article-content>
 <h1 id=线程>线程</h1>
 <ul>
-<li>当一个程序由exec启动执行时，系统将创建一个称为<code>初始线程(initail thread)</code>或<code>主线程(main thread)</code>的单个线程。</li>
+<li>当一个程序由 exec 启动执行时，系统将创建一个称为<code>初始线程(initail thread)</code>或<code>主线程(main thread)</code>的单个线程。</li>
 <li>线程取消在<code>8.5</code>章，被取消的线程要释放相关资源（锁等），需要注意。</li>
-<li>线程创建可能比进程创建快10~100倍；</li>
+<li>线程创建可能比进程创建快 10~100 倍；</li>
 <li>线程或者是<code>可汇合的(joinable)</code>或者是<code>脱离/分离的(detached)</code>。（默认<code>可汇合的</code>）
 <ul>
 <li>可汇合的线程可以被其他线程回收其资源和杀死。
 <ul>
-<li>当可汇合的线程终止时，其线程ID和退出状态将保留，直到另一个线程调用pthread_join;</li>
+<li>当可汇合的线程终止时，其线程 ID 和退出状态将保留，直到另一个线程调用 pthread_join;</li>
 </ul>
 </li>
 <li>脱离的线程则像守护进程：终止时，所有资源都释放，因此不能等待它终止；</li>
@@ -81,9 +81,9 @@ extended">
 <li>打开的文件（如描述符）；</li>
 <li>信号处理程序和信号处置；</li>
 <li>当前工作目录；</li>
-<li>用户ID和组ID；
+<li>用户 ID 和组 ID；
 线程私有的内容：</li>
-<li>线程ID；</li>
+<li>线程 ID；</li>
 <li>寄存器集合（包括程序计数器和栈指针）；</li>
 <li>栈；</li>
 <li>栈指针；</li>
@@ -102,7 +102,7 @@ extended">
 <li>作用：创建线程</li>
 <li>参数：
 <ul>
-<li>tid：线程ID；这是<code>结果</code>参数；</li>
+<li>tid：线程 ID；这是<code>结果</code>参数；</li>
 <li>attr: 线程属性，如优先级、初始栈大小、是否是一个守护线程等；通常采用默认值；</li>
 <li>start_routine: 创建的线程所需要执行的函数；称为<code>线程启动函数(thread start function)</code>;</li>
 <li>arg: 参数；如果有多个，则打包成一个结构即可；</li>
@@ -111,7 +111,7 @@ extended">
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 </ul>
@@ -121,23 +121,23 @@ extended">
 <li>作用：等待一个线程结束/终止；（不是任意一个线程的终止都能等待）</li>
 <li>参数：
 <ul>
-<li>tid：等待线程的线程id；</li>
+<li>tid：等待线程的线程 id；</li>
 <li>status：等待线程的终止状态；</li>
 </ul>
 </li>
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 </ul>
 <h3 id=23-pthread_self>2.3 pthread_self</h3>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>pthread_t</span> <span class=nf>pthread_self</span><span class=p>(</span><span class=kt>void</span><span class=p>);</span>
 </code></pre></div><ul>
-<li>作用：获取自身的线程ID；</li>
+<li>作用：获取自身的线程 ID；</li>
 <li>参数：无</li>
-<li>返回：调用线程的线程ID；</li>
+<li>返回：调用线程的线程 ID；</li>
 </ul>
 <h3 id=24-pthread_detach>2.4 pthread_detach</h3>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=nf>pthread_detach</span><span class=p>(</span><span class=n>pthread_t</span> <span class=n>tid</span><span class=p>);</span>
@@ -145,13 +145,13 @@ extended">
 <li>作用：将指定线程变为脱离的。</li>
 <li>参数：
 <ul>
-<li>tid：线程id；</li>
+<li>tid：线程 id；</li>
 </ul>
 </li>
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 <li>通常用法：<code>pthread_detach(pthread_self());</code></li>
@@ -168,7 +168,7 @@ extended">
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 <li>通常用法：<code>pthread_detach(pthread_self());</code></li>
@@ -179,13 +179,13 @@ extended">
 <li>作用：退出指定线程</li>
 <li>参数：
 <ul>
-<li>tid: 线程ID；</li>
+<li>tid: 线程 ID；</li>
 </ul>
 </li>
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 </ul>
@@ -198,25 +198,25 @@ extended">
 </code></pre></div><ul>
 <li>作用：初始化线程——初始化与线程例程相关的状态。
 <ul>
-<li>当需要<code>动态</code>初始化多个线程共享的全局变量时，pthread_once是很有用的；</li>
+<li>当需要<code>动态</code>初始化多个线程共享的全局变量时，pthread_once 是很有用的；</li>
 </ul>
 </li>
 <li>参数：
 <ul>
 <li>once_control：全局或者静态变量，总是被初始化为<code>PTHREAD_ONCE_INIT</code>;</li>
-<li>init_routine：初始化例程。第一次用once_control调用pthread_once时，会调用init_routine;</li>
+<li>init_routine：初始化例程。第一次用 once_control 调用 pthread_once 时，会调用 init_routine;</li>
 </ul>
 </li>
 <li>返回：
 <ul>
 <li>成功：0</li>
-<li>失败：Exxx值</li>
+<li>失败：Exxx 值</li>
 </ul>
 </li>
 </ul>
 <h2 id=3-共享变量>3. 共享变量</h2>
 <p>一个变量是<code>共享的</code>，当且仅当多个线程引用这个变量的某个实例。（访问相同的东西）
-解答以下问题，有助于理解C程序中一个变量是否是共享的：</p>
+解答以下问题，有助于理解 C 程序中一个变量是否是共享的：</p>
 <ul>
 <li>线程的基础存储器模型是什么？
 <ul>
@@ -234,13 +234,13 @@ extended">
 <li>自身显式终止：pthread_exit;</li>
 <li>他人显式终止：pthread_join;</li>
 <li>隐式终止：函数返回；</li>
-<li>某个线程调用exit函数；</li>
+<li>某个线程调用 exit 函数；</li>
 </ul>
 </li>
 </ul>
 <h2 id=5-线程安全>5. 线程安全</h2>
 <p>线程安全：被多个并发线程反复调用，仍然能一直产生正确的结果。
-4类线程不安全函数：</p>
+4 类线程不安全函数：</p>
 <ul>
 <li>不保护共享变量的函数；</li>
 <li>保持跨越多个调用的状态的函数；
@@ -251,14 +251,14 @@ extended">
 </ul>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>next</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
 
-<span class=c1>// 返回0-32767的伪随机书
+<span class=c1>// 返回 0-32767 的伪随机书
 </span><span class=c1></span><span class=kt>int</span> <span class=nf>rand</span><span class=p>(</span><span class=kt>void</span><span class=p>)</span>
 <span class=p>{</span>
     <span class=n>next</span> <span class=o>=</span> <span class=n>next</span> <span class=o>*</span> <span class=mi>1103515245</span> <span class=o>+</span> <span class=mi>12345</span><span class=p>;</span>
     <span class=k>return</span> <span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span><span class=p>)(</span><span class=n>next</span> <span class=o>/</span> <span class=mi>65536</span><span class=p>)</span> <span class=o>%</span> <span class=mi>32768</span><span class=p>;</span>
 <span class=p>}</span>
 
-<span class=c1>// 为rand()设置种子
+<span class=c1>// 为 rand() 设置种子
 </span><span class=c1></span><span class=kt>void</span> <span class=nf>srand</span><span class=p>(</span><span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>seed</span><span class=p>)</span>
 <span class=p>{</span>
     <span class=n>next</span> <span class=o>=</span> <span class=n>seed</span><span class=p>;</span>
@@ -300,11 +300,11 @@ int rand_r(unsigned int *nextp)
 </code></pre><h2 id=7-竞争>7. 竞争</h2>
 <ul>
 <li>现成话的程序必须对任何可行的轨迹线都正确工作。</li>
-<li><a class=link href=Examples/1_3_ex_sharing_thread.c>示例1_3_ex</a></li>
+<li><a class=link href=Examples/1_3_ex_sharing_thread.c>示例 1_3_ex</a></li>
 </ul>
 <h2 id=8-死锁>8. 死锁</h2>
 <ul>
-<li>信号量引入一种潜在的运行时错误：死锁(deadlock)。
+<li>信号量引入一种潜在的运行时错误：死锁 (deadlock)。
 <ul>
 <li>一组线程被阻塞，等待一个永远不会为真的条件。</li>
 </ul>
@@ -313,7 +313,7 @@ int rand_r(unsigned int *nextp)
 </ul>
 <h2 id=a拓展>A.拓展</h2>
 <ul>
-<li>预线程化：生成一个管理线程+多个工作线程；
+<li>预线程化：生成一个管理线程 + 多个工作线程；
 <ul>
 <li>用一个<code>有限</code>缓冲区存储数据，这些数据被工作线程处理。
 <figure class=gallery-image style=flex-grow:284;flex-basis:681px>
@@ -342,42 +342,12 @@ int rand_r(unsigned int *nextp)
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E4%BF%A1%E5%8F%B7%E9%87%8F/%E4%BF%A1%E5%8F%B7%E9%87%8F%E9%9B%86%E7%BB%93%E6%9E%84%E5%9B%BE.a704e4d15b423e3204d1f034b0b1fb2c_hud9a8ce691ceb8a1dec4e4cada9270f74_93751_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 信号量" data-hash="md5-pwTk0VtCPjIE0fA0sLH7LA==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.5e7f7644d06eeacb06330702697539f1_hud37660a567da8df0403875e6c802b8b7_242254_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进线程同步之读写锁" data-hash="md5-Xn92RNBu6ssGMwcCaXU58Q==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E5%8F%B7/Linux_signal.90b39cdd9bb2ca10932404bab31af250_huec7bd37c00e9f0f66a7da81ead81d61e_182649_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 信号" data-hash="md5-kLOc3ZuyyhCTJAS6sxryUA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 信号</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F/_hu4c4a95ca1f84995e0b95f38afb7a4234_34003_0977a5e6a63a00292afe6c1acc2e85ca.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 信号量" data-hash="md5-ynK4qn49RGnMFsmdTxa/zQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.4bf2335a98bd1515921cbc5a0c5a1d8b_hu575c6395d5e84185e674e7125c58f205_133704_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程" data-hash="md5-S/IzWpi9FRWSHLxaDFodiw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程</h2>
+<h2 class=article-title>操作系统 —— 进线程同步之读写锁</h2>
 </div>
 </a>
 </article>
@@ -388,6 +358,36 @@ int rand_r(unsigned int *nextp)
 </div>
 <div class=article-details>
 <h2 class=article-title>操作系统 —— 进程间通信之FIFO</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/filesize_eq_mmapsize.d5d5e8f382535f864b263739f674da2c_hub58ccb474a4ad052ae8ccf0a096bec5d_65827_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之共享内存" data-hash="md5-1dXo84JTX4ZLJjc59nTaLA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之共享内存</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.31211f1b99cf737a0afe169a49b7d6ab_hu9a6e15c100f49a1259729f1a9f46ad7a_252829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 poll" data-hash="md5-MSEfG5nPc3oK/haaSbfWqw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— IO 多路复用之 poll</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.07ba323945cb6f52ccc9b0f03135b1b3_hu70675371b4d01d0ec6d16ae0abb1373c_296698_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 共享内存" data-hash="md5-B7oyOUXLb1LMybDwMTWxsw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 共享内存</h2>
 </div>
 </a>
 </article>

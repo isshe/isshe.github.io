@@ -1,19 +1,19 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="OpenResty shared dict 目的：
- 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解 shared dict 的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
 http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用："><title>OpenResty 共享字典（内存）</title>
 <link rel=canonical href=https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty 共享字典（内存）">
 <meta property="og:description" content="OpenResty shared dict 目的：
- 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解 shared dict 的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
 http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用：">
 <meta property="og:url" content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-05-03T06:00:05-03:00"><meta property="article:modified_time" content="2023-05-03T06:00:05-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.jpg">
 <meta name=twitter:title content="OpenResty 共享字典（内存）">
 <meta name=twitter:description content="OpenResty shared dict 目的：
- 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
+ 相关 Lua API 如 ngx.shared.DICT.get 是如何使用的？ 如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？ 详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解 shared dict 的设计/实现细节。 这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？ ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？  使用 使用示例：
 http { lua_shared_dict dogs 10m; server { location / { content_by_lua_block { -- 设置 local dogs = ngx.shared.dogs dogs:set(&amp;#34;Jim&amp;#34;, 8) -- 获取 local jim_age = dogs:get(&amp;#34;Jim&amp;#34;) ngx.say(jim_age) -- 替换 dogs:replace(&amp;#34;Jim&amp;#34;, 9) -- 递增, value = 10 dogs:incr(&amp;#34;Jim&amp;#34;) -- 更新/设置超时 dogs:expire(&amp;#34;Jim&amp;#34;, 10) -- 获取 TTL dogs:ttl(&amp;#34;Jim&amp;#34;) -- 删除 dogs:delete(&amp;#34;Jim&amp;#34;) } } } } 以下是所有 Lua Api 的作用："><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
@@ -57,7 +57,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>May 03, 2023</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -73,7 +73,7 @@ Nginx
 <ul>
 <li>相关 Lua API 如 <code>ngx.shared.DICT.get</code> 是如何使用的？</li>
 <li>如何定义 lua_shared_dict 的，lua_shared_dict 做了哪些工作？</li>
-<li>详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解shared dict的设计/实现细节。</li>
+<li>详细跟踪各类 Lua 接口（set、get 每类一个）的实现，了解 shared dict 的设计/实现细节。</li>
 <li>这些 Lua 接口是否是原子的？是否需要考虑竞争问题？原子性是如何保证的？</li>
 <li>ngx_http_lua_shdict_shctx_t 等关键数据结构是什么作用？它们之间有什么联系？</li>
 </ul>
@@ -138,8 +138,8 @@ Nginx
 <li>free_space: 返回 shared dict 的剩余空间，单位字节。</li>
 </ul>
 <h2 id=实现>实现</h2>
-<p>怎么入手呢？先看看shared dict是怎么定义的吧。</p>
-<h3 id=定义shared-dictlua_shared_dict>定义shared dict（lua_shared_dict）</h3>
+<p>怎么入手呢？先看看 shared dict 是怎么定义的吧。</p>
+<h3 id=定义-shared-dictlua_shared_dict>定义 shared dict（lua_shared_dict）</h3>
 <p>指令定义：</p>
 <pre tabindex=0><code>    { ngx_string(&quot;lua_shared_dict&quot;),
       NGX_HTTP_MAIN_CONF|NGX_CONF_TAKE2,
@@ -175,7 +175,7 @@ Nginx
 <ul>
 <li>获取并检查名称、大小参数</li>
 <li>分配 shared dict 上下文结构</li>
-<li>分配shared dict、设置相关初始化函数</li>
+<li>分配 shared dict、设置相关初始化函数</li>
 <li>加入到 main 配置的 shdict_zones 数组中</li>
 </ul>
 <p>ngx_http_lua_shared_memory_add 只是注册一个新的 shared dict，不会立即分配对应大小的内存。</p>
@@ -349,7 +349,7 @@ Nginx
                     \- ngx_queue_insert_tail(queue, &amp;lnode-&gt;queue)
 </code></pre><p>这个函数的主要逻辑是：</p>
 <ul>
-<li>先找 key 是否存在于shared dict中</li>
+<li>先找 key 是否存在于 shared dict 中</li>
 <li>如果 key 存在，就检查过期了没有</li>
 <li>过期了，如果是 list 类型，就直接复用，只是删除列表里面的所有值；如果不是 list 类型，直接删除这个 key。</li>
 <li>没过期，如果是 list 类型，就表示是要找的那个 list，直接 push，如果不是 list 类型，就报错返回，说明不是要找的，用户操作错了。</li>
@@ -377,14 +377,14 @@ Nginx
 <p>详细结构定义见 <a class=link href=../OpenResty%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_shared_dict.md>ngx_shared_dict.md</a></p>
 <p>内存分布：</p>
 <ul>
-<li>list 类型, <code>-</code> 表示减去</li>
+<li>list 类型，<code>-</code> 表示减去</li>
 </ul>
 <pre tabindex=0><code>[ngx_rbtree_node_t-color-data|color|ngx_http_lua_shdict_node_t-data|key|ngx_queue_t]
 </code></pre><p><code>ngx_rbtree_node_t</code> 和 <code>ngx_http_lua_shdict_node_t</code> 交接在一起了，公用了一些元素。
 <code>ngx_http_lua_shdict_node_t</code> 的 data 就是 key 的开始，包含了 key 的首个字符。
 <code>ngx_queue_t</code> 是双端队列，用于存储所有值。</p>
 <ul>
-<li>list 中每个值, <code>-</code> 表示减去</li>
+<li>list 中每个值，<code>-</code> 表示减去</li>
 </ul>
 <pre tabindex=0><code>[ngx_http_lua_shdict_list_node_t-data|value]
 </code></pre><p><code>ngx_http_lua_shdict_list_node_t</code> 的 data 是 value 的开始，存储了 value 的一个字符。</p>
@@ -411,12 +411,32 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<a href=/p/openresty-access_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
+<img src=/p/openresty-access_by_lua/image.390acef109b33b78b36bd9c39d19a4b7_hua2c3de042391b06a6fd250468293caa8_267334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-OQrO8QmzO3iza9nDnRmktw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 线程</h2>
+<h2 class=article-title>OpenResty access_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-content_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-content_by_lua/image.0a3f2e0a36bdf47265b1c1a8896e83cb_hud65e514ff14931b6d473072786819b50_270380_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-Cj8uCja99HJlscGoiW6Dyw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty content_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
+<div class=article-image>
+<img src=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty *_by_lua* 及阶段" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty *_by_lua* 及阶段</h2>
 </div>
 </a>
 </article>
@@ -431,32 +451,12 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/openresty-init_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
+<img src=/p/openresty-init_by_lua/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_by_lua*" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
-<div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty Lua VM 初始化</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-cosocket/>
-<div class=article-image>
-<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty cosocket</h2>
+<h2 class=article-title>OpenResty init_by_lua*</h2>
 </div>
 </a>
 </article>
@@ -528,7 +528,7 @@ Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=
 <li><a href=#使用>使用</a></li>
 <li><a href=#实现>实现</a>
 <ol>
-<li><a href=#定义shared-dictlua_shared_dict>定义shared dict（lua_shared_dict）</a></li>
+<li><a href=#定义-shared-dictlua_shared_dict>定义 shared dict（lua_shared_dict）</a></li>
 <li><a href=#ngxshareddictget>ngx.shared.DICT.get</a></li>
 <li><a href=#ngxshareddictset>ngx.shared.DICT.set</a></li>
 <li><a href=#ngxshareddictlpush>ngx.shared.DICT.lpush</a></li>

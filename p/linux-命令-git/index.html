@@ -1,17 +1,17 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="git submodule 添加submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看subproject的commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看subproject的.gitmodules： git diff --cached --submodule 自动clone每个submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
-git submodule update --remote 调整submodule的commit： git pull origin xxx 切submodule的分支： git config -f .gitmodules submodule."><title>Linux 命令 —— git</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="git submodule 添加 submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看 subproject 的 commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看 subproject 的.gitmodules： git diff --cached --submodule 自动 clone 每个 submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
+git submodule update --remote 调整 submodule 的 commit： git pull origin xxx 切 submodule 的分支： git config -f ."><title>Linux 命令 —— git</title>
 <link rel=canonical href=https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Linux 命令 —— git">
-<meta property="og:description" content="git submodule 添加submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看subproject的commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看subproject的.gitmodules： git diff --cached --submodule 自动clone每个submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
-git submodule update --remote 调整submodule的commit： git pull origin xxx 切submodule的分支： git config -f .gitmodules submodule.">
+<meta property="og:description" content="git submodule 添加 submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看 subproject 的 commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看 subproject 的.gitmodules： git diff --cached --submodule 自动 clone 每个 submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
+git submodule update --remote 调整 submodule 的 commit： git pull origin xxx 切 submodule 的分支： git config -f .">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="git"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="git"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— git">
-<meta name=twitter:description content="git submodule 添加submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看subproject的commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看subproject的.gitmodules： git diff --cached --submodule 自动clone每个submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
-git submodule update --remote 调整submodule的commit： git pull origin xxx 切submodule的分支： git config -f .gitmodules submodule."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="git submodule 添加 submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看 subproject 的 commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看 subproject 的.gitmodules： git diff --cached --submodule 自动 clone 每个 submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
+git submodule update --remote 调整 submodule 的 commit： git pull origin xxx 切 submodule 的分支： git config -f ."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -45,7 +45,7 @@ Linux 命令
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -58,15 +58,15 @@ Linux 命令
 <section class=article-content>
 <h2 id=git>git</h2>
 <h1 id=submodule>submodule</h1>
-<h2 id=添加submodule>添加submodule：</h2>
+<h2 id=添加-submodule>添加 submodule：</h2>
 <pre tabindex=0><code>git submodule add &lt;subproject URL&gt;
 &gt; git submodule add https://github.com/isshe/gitsubproject
-</code></pre><h2 id=查看subproject的commit>查看subproject的commit：</h2>
+</code></pre><h2 id=查看-subproject-的-commit>查看 subproject 的 commit：</h2>
 <pre tabindex=0><code>git diff --cached &lt;subproject dir&gt;
 &gt; git diff --cached gitsubproject/
-</code></pre><h2 id=查看subproject的gitmodules>查看subproject的.gitmodules：</h2>
+</code></pre><h2 id=查看-subproject-的gitmodules>查看 subproject 的.gitmodules：</h2>
 <pre tabindex=0><code>git diff --cached --submodule
-</code></pre><h2 id=自动clone每个submodule>自动clone每个submodule：</h2>
+</code></pre><h2 id=自动-clone-每个-submodule>自动 clone 每个 submodule：</h2>
 <pre tabindex=0><code>git clone --recursive &lt;your repository url&gt;
 &gt; git clone --recursive https://github.com/isshe/gitproject
 </code></pre><h2 id=拉取子模块>拉取子模块：</h2>
@@ -76,15 +76,15 @@ git submodule update
 git submodule update --init --recursive
 </code></pre><p>子模块的后续更新：</p>
 <pre tabindex=0><code>git submodule update --remote
-</code></pre><h2 id=调整submodule的commit>调整submodule的commit：</h2>
+</code></pre><h2 id=调整-submodule-的-commit>调整 submodule 的 commit：</h2>
 <pre tabindex=0><code>git pull origin xxx
-</code></pre><h2 id=切submodule的分支>切submodule的分支：</h2>
+</code></pre><h2 id=切-submodule-的分支>切 submodule 的分支：</h2>
 <pre tabindex=0><code>git config -f .gitmodules submodule.&lt;submodule dir&gt;.branch &lt;submodule target branch name&gt;
 &gt; git config -f .gitmodules submodule.DbConnector.branch stable
 </code></pre><p>更新到相应的分支：</p>
 <pre tabindex=0><code>git checkout -b &lt;branch name&gt; --track origin/&lt;branch name&gt;
 &gt; git checkout -b chudai  --track origin/chudai
-</code></pre><h2 id=删除一个submodule>删除一个submodule：</h2>
+</code></pre><h2 id=删除一个-submodule>删除一个 submodule：</h2>
 <ul>
 <li>Delete the relevant section from the <code>.gitmodules</code> file.</li>
 <li>Stage the <code>.gitmodules</code> changes <code>git add .gitmodules</code></li>
@@ -157,16 +157,6 @@ git push origin master
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.5c8098a5b159a2f95ef414180176eb3c_hud0302cb28f3acf717dc2c63099887f29_175873_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-XICYpbFZovle9BQYAXbrPA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— strace</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
 <img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.956ee167559ea6bb2ecd7f2265db44b3_hu9a230336efb1ccd23b21d20aba4c6df2_292131_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-lW7hZ1WeprsuzX8iZdtEsw==">
@@ -177,12 +167,22 @@ git push origin master
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-strace/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.fac68dee51dbe600df5776eb43d6c14f_hu0d592102e033b96588ada77308d430a0_228400_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-+saN7lHb5gDfV3brQ9bBTw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-strace/image.5c8098a5b159a2f95ef414180176eb3c_hud0302cb28f3acf717dc2c63099887f29_175873_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— strace" data-hash="md5-XICYpbFZovle9BQYAXbrPA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— netstat</h2>
+<h2 class=article-title>Linux 命令 —— strace</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— vmstat</h2>
 </div>
 </a>
 </article>
@@ -254,14 +254,14 @@ Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=
 <li><a href=#git>git</a></li>
 </ol>
 <ol>
-<li><a href=#添加submodule>添加submodule：</a></li>
-<li><a href=#查看subproject的commit>查看subproject的commit：</a></li>
-<li><a href=#查看subproject的gitmodules>查看subproject的.gitmodules：</a></li>
-<li><a href=#自动clone每个submodule>自动clone每个submodule：</a></li>
+<li><a href=#添加-submodule>添加 submodule：</a></li>
+<li><a href=#查看-subproject-的-commit>查看 subproject 的 commit：</a></li>
+<li><a href=#查看-subproject-的gitmodules>查看 subproject 的.gitmodules：</a></li>
+<li><a href=#自动-clone-每个-submodule>自动 clone 每个 submodule：</a></li>
 <li><a href=#拉取子模块>拉取子模块：</a></li>
-<li><a href=#调整submodule的commit>调整submodule的commit：</a></li>
-<li><a href=#切submodule的分支>切submodule的分支：</a></li>
-<li><a href=#删除一个submodule>删除一个submodule：</a></li>
+<li><a href=#调整-submodule-的-commit>调整 submodule 的 commit：</a></li>
+<li><a href=#切-submodule-的分支>切 submodule 的分支：</a></li>
+<li><a href=#删除一个-submodule>删除一个 submodule：</a></li>
 </ol>
 <ol>
 <li><a href=#显示某次提交修改的文件>显示某次提交修改的文件</a></li>

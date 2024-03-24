@@ -22,7 +22,7 @@
  一个 I/O 操作无法在一次执行中完成。 调用了 coroutine.">
 <meta property="og:url" content="https://isshe.site/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-01-08T06:00:04-04:00"><meta property="article:modified_time" content="2023-01-08T06:00:04-04:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/image.jpg">
 <meta name=twitter:title content="OpenResty 轻量级线程">
 <meta name=twitter:description content="轻量级线程 与前一个文档中介绍的协程不同，轻量级线程不需要自行 resume、yield 来调度协程，因此使用起来更方便，有并行操作时，通常会使用此方式。
  看是否和此函数强关联：ngx_http_lua_run_thread； 如果此文章无法完成对 ngx_http_lua_run_thread 的理解，则另外文章。
@@ -75,7 +75,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Jan 08, 2023</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -235,7 +235,7 @@ Nginx
 
     <span class=n>lua_setfield</span><span class=p>(</span><span class=n>L</span><span class=p>,</span> <span class=o>-</span><span class=mi>2</span><span class=p>,</span> <span class=s>&#34;thread&#34;</span><span class=p>);</span>
 <span class=p>}</span>
-</code></pre></div><p>在这个函数中，拿到了 “spawn” 等操作实际调用的 C 函数，我们后续从这些函数着手进行探索。</p>
+</code></pre></div><p>在这个函数中，拿到了“spawn”等操作实际调用的 C 函数，我们后续从这些函数着手进行探索。</p>
 <h3 id=ngxthreadspawn-ngx_http_lua_uthread_spawn>ngx.thread.spawn: ngx_http_lua_uthread_spawn</h3>
 <pre tabindex=0><code>- ngx_http_lua_uthread_spawn
     \- lua_gettop：获取栈中元素数量。
@@ -344,36 +344,6 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
-<div class=article-image>
-<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty 线程</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
-<div class=article-image>
-<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty 核心技术点</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
-<div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty Lua VM 初始化</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/openresty-cosocket/>
 <div class=article-image>
 <img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
@@ -384,12 +354,42 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/openresty-log_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
+<img src=/p/openresty-log_by_lua/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 信号量</h2>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.a0361e8eb497178f720cc044983faa34_hudab9f7e78110512db634a199699a7696_211640_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-oDYejrSXF49yDMBEmD+qNA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.e836eb48dfa8209123106b8a15c78e8c_hub58aa43631c748bc46260e35845799bd_220559_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-6DbrSN+oIJEjEGuKFceOjA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 共享字典（内存）</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-access_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-access_by_lua/image.390acef109b33b78b36bd9c39d19a4b7_hua2c3de042391b06a6fd250468293caa8_267334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-OQrO8QmzO3iza9nDnRmktw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty access_by_lua*</h2>
 </div>
 </a>
 </article>

@@ -1,14 +1,14 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回ConcreteIterator的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2."><title>设计模式 —— 迭代器模式</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回 ConcreteIterator 的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2."><title>设计模式 —— 迭代器模式</title>
 <link rel=canonical href=https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="设计模式 —— 迭代器模式">
-<meta property="og:description" content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回ConcreteIterator的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2.">
+<meta property="og:description" content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回 ConcreteIterator 的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:23:30-03:00"><meta property="article:modified_time" content="2022-10-16T12:23:30-03:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <meta name=twitter:title content="设计模式 —— 迭代器模式">
-<meta name=twitter:description content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回ConcreteIterator的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:description content="迭代器模式——提供不暴露聚合对象内部表示的访问聚合对象各个元素的方法  目标：  初接触此模式时，熟悉最常用的使用方式。 有更深的理解后，再研究其他使用方法。    1. 基础概念  定义/意图：提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露改对象的内部表示。 别名：游标（Cursor） 分类：对象行为型模式 类图：  类图  出场嘉宾  Iterator: 迭代器  定义访问和遍历元素的接口。   ConcreteIterator: 具体迭代器  实现对具体聚合对象的迭代器接口。 对聚合对象遍历时，跟踪当前位置。   Aggregate：聚合  定义创建相应迭代器对象的接口。   ConcreteAggregate：具体聚合  实现创建相应迭代器的接口 返回 ConcreteIterator 的一个适当实例。     协作/工作流程  通过 ConcreteAggregate 创建 ConcreteIterator； 通过 ConcreteIterator 访问/遍历 ConcreteAggregate。    2. 优缺点是什么？ 2.1 优点  支持以不同的方式遍历一个聚合。  复杂的聚合可用多种方式进行遍历。   迭代器简化了聚合的接口。  用了迭代器的遍历接口，聚合就不需要提供遍历接口，于是就简化了聚合的接口。   同一个聚合上可以有多个聚合。  每个迭代器保持自己的遍历状态，因此可以同时进行多个遍历。    2."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
@@ -42,7 +42,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Oct 16, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -95,7 +95,7 @@ extended">
 <li>ConcreteAggregate：具体聚合
 <ul>
 <li><code>实现</code>创建相应迭代器的接口</li>
-<li>返回ConcreteIterator的一个适当实例。</li>
+<li>返回 ConcreteIterator 的一个适当实例。</li>
 </ul>
 </li>
 </ul>
@@ -160,14 +160,14 @@ extended">
 <li>附加的迭代器操作。
 <ul>
 <li>最小接口：First、Next、IsDone、CurrentItem</li>
-<li>附加操作：SkipTo、Previous等</li>
+<li>附加操作：SkipTo、Previous 等</li>
 </ul>
 </li>
-<li>在C++中使用多态的迭代器。
+<li>在 C++ 中使用多态的迭代器。
 <ul>
 <li>代价：要求用一个<code>工厂方法</code>动态地分配迭代器对象。</li>
 <li><strong>仅当必须多态时，才使用！</strong></li>
-<li>另一个缺点：客户必须负责删除它们。（这里常常出现bug）</li>
+<li>另一个缺点：客户必须负责删除它们。（这里常常出现 bug）</li>
 </ul>
 </li>
 <li>迭代器的特权访问。
@@ -206,7 +206,7 @@ extended">
 <h2 id=z-参考>z. 参考</h2>
 <ul>
 <li>《设计模式：可复用面向对象软件的基础》</li>
-<li>《Head First设计模式》</li>
+<li>《Head First 设计模式》</li>
 </ul>
 </section>
 <footer class=article-footer>
@@ -224,6 +224,16 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.7bd87ea30596f8b88461cd7488ebb365_hub0bc657ad31b110e47045ee0ac7e408b_22439_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-e9h+owWW+LiEYc10iOuzZQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
 <img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.4ce09f29da8c76e58f7cb5f426b2ff52_hua4fa13d1bdf22ddd96376562d855ae4a_134997_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 观察者模式" data-hash="md5-TOCfKdqMduWPfLX0JrL/Ug==">
@@ -234,42 +244,32 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.f9429e6c6f20b367f1ef79a3a4cd148a_hu8ca9ff7362688b461397facff0e6ed9b_16668_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 单件模式" data-hash="md5-+UKebG8gs2fx73mjpM0Uig==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 单件模式</h2>
+<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 装饰者模式</h2>
+<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.a84c31f9b6ee8b690aea1f3137b5fde8_huc03f68792e55e175b4455a14e3ef74ad_21728_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 状态模式" data-hash="md5-qEwx+bbui2kK6h8xN7X96A==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.a8e074fd01466f138e450b5c7c671f1b_hu69318f5e689d278930c659afc06e18d5_32592_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 组合模式" data-hash="md5-qOB0/QFGbxOORQtcfGcfGw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 状态模式</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.eab7371ce4fb27578e68f5a30eab0e60_hu771149e49c462b26432a5b0e1acd417c_27093_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 策略模式" data-hash="md5-6rc3HOT7J1eOaPWjDqsOYA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>设计模式 —— 策略模式</h2>
+<h2 class=article-title>设计模式 —— 组合模式</h2>
 </div>
 </a>
 </article>

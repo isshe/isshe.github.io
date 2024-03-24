@@ -1,21 +1,21 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="log_by_lua* 在日志处理阶段执行 Lua 源代码，不会替换当前的访问日志，并在打印日志之前运行。
-用法  上下文: http, server, location, location if 阶段: log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
+用法  上下文：http, server, location, location if 阶段：log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
   header_filter_by_lua*、 body_filter_by_lua* 等都是一样的套路，就不再赘述了。
  "><title>OpenResty log_by_lua*</title>
 <link rel=canonical href=https://isshe.site/p/openresty-log_by_lua/>
 <link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty log_by_lua*">
 <meta property="og:description" content="log_by_lua* 在日志处理阶段执行 Lua 源代码，不会替换当前的访问日志，并在打印日志之前运行。
-用法  上下文: http, server, location, location if 阶段: log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
+用法  上下文：http, server, location, location if 阶段：log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
   header_filter_by_lua*、 body_filter_by_lua* 等都是一样的套路，就不再赘述了。
  ">
 <meta property="og:url" content="https://isshe.site/p/openresty-log_by_lua/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2022-11-13T06:00:04-04:00"><meta property="article:modified_time" content="2022-11-13T06:00:04-04:00"><meta property="og:image" content="https://isshe.site/p/openresty-log_by_lua/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-log_by_lua/image.jpg">
 <meta name=twitter:title content="OpenResty log_by_lua*">
 <meta name=twitter:description content="log_by_lua* 在日志处理阶段执行 Lua 源代码，不会替换当前的访问日志，并在打印日志之前运行。
-用法  上下文: http, server, location, location if 阶段: log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
+用法  上下文：http, server, location, location if 阶段：log 语法：  与 init_by_lua* 类似，不再赘述。   注意：  以下 API 无法在此指令中使用：  Output API functions (e.g., ngx.say and ngx.send_headers) Control API functions (e.g., ngx.exit) Subrequest API functions (e.g., ngx.location.capture and ngx.location.capture_multi) Cosocket API functions (e.g., ngx.socket.tcp and ngx.req.socket).      实现  与 005-rewrite_by_lua 类似，不再赘述。
   header_filter_by_lua*、 body_filter_by_lua* 等都是一样的套路，就不再赘述了。
  "><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/openresty-log_by_lua/image.jpg">
@@ -60,7 +60,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Nov 13, 2022</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -75,8 +75,8 @@ Nginx
 <p>在日志处理阶段执行 Lua 源代码，不会替换当前的访问日志，并在打印日志之前运行。</p>
 <h2 id=用法>用法</h2>
 <ul>
-<li>上下文: http, server, location, location if</li>
-<li>阶段: log</li>
+<li>上下文：http, server, location, location if</li>
+<li>阶段：log</li>
 <li>语法：
 <ul>
 <li>与 <code>init_by_lua*</code> 类似，不再赘述。</li>
@@ -120,52 +120,52 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<a href=/p/openresty-init_worker_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
+<img src=/p/openresty-init_worker_by_lua/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 线程</h2>
+<h2 class=article-title>OpenResty init_worker_by_lua*</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<a href=/p/openresty-rewrite_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
+<img src=/p/openresty-rewrite_by_lua/image.8d6393ed524ea8c96a0fc0d11a489908_hu488b2f82ab20ee50f487200f2be764c2_242367_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-jWOT7VJOqMlqD8DRGkiZCA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 核心技术点</h2>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
 <div class=article-image>
-<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
+<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 信号量</h2>
+<h2 class=article-title>OpenResty 管道（pipe）</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<a href=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
+<img src=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 轻量级线程" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty Lua VM 初始化</h2>
+<h2 class=article-title>OpenResty 轻量级线程</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-cosocket/>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image.9cfccc20d168493fc76af305bbc06809_hu689d4fb24de3faf3d6ece04efc963d1d_254728_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 协程" data-hash="md5-nPzMINFoST/HavMFu8BoCQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty cosocket</h2>
+<h2 class=article-title>OpenResty 协程</h2>
 </div>
 </a>
 </article>

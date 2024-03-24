@@ -14,7 +14,7 @@
  coroutine Lua 接口的使用？主要使用场景？  如前面提到，这个较为少用。lua-nginx-module 支持，主要应该是为了兼容第三方 Lua 模块。   coroutine 是如何实现的？ 与 Luajit 的协程是什么关系？  使用  coroutine.create(f)：创建一个协程并返回此协程，类型为“thread”，f 必须是一个函数。 coroutine.resume (co [, val1, ···])：开始或继续执行协程 co。如果协程执行出错，则返回 false 和错误信息，如果协程执行正常，返回 true。  首次调用会开始调用 f 函数，val1 等作为参数传递给 f。 后续调用会用 yield 的地方继续，val1 等作为 yield 的结果传递给 f。   coroutine.yield (···)：暂停正在执行的协程的执行。传递给 yield 的参数，将作为 resume 额外的结果返回。 coroutine.running ()：返回正在运行的协程，主协程正在运行，则返回 nil。 coroutine.status (co)：返回协程 co 的状态。  running：协程正在执行 suspended：调用了 yield，或者还没开始运行。 normal：激活但没有在运行，意味着它正在 resume 其他协程。 dead：执行完 f 函数，或者出错了。   coroutine.">
 <meta property="og:url" content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-01-01T06:00:04-04:00"><meta property="article:modified_time" content="2023-01-01T06:00:04-04:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-%E5%8D%8F%E7%A8%8B/image.jpg">
 <meta name=twitter:title content="OpenResty 协程">
 <meta name=twitter:description content="协程 lua-nginx-module 提供了 coroutine 系列 Lua 接口，用于操作协程。
 这个与 ngx_http_lua_new_thread 相关的 lua-nginx-module 内部使用的协程不同，切勿搞混了。
@@ -63,7 +63,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Jan 01, 2023</time>
+<time class=article-time--published>Mar 24, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -285,7 +285,7 @@ Nginx
 </code></pre></div></li>
 </ul>
 <p>不是应该 resume 吗？这里为什么调用的 lua_yield 呢？看到这里或许会有这样的疑惑。
-其实 review、access 等阶段的 Lua 代码，都是通过 ngx_http_lua_run_thread 来执行的，ngx_http_lua_coroutine_resume 这里执行完 lua_yield 后，会回到 ngx_http_lua_run_thread 中，由于状态是 LUA_YIELD 和操作是 NGX_HTTP_LUA_USER_CORO_RESUME，会继续(continue) ngx_http_lua_run_thread 的死循环，进而执行到刚刚要 resume 的协程。</p>
+其实 review、access 等阶段的 Lua 代码，都是通过 ngx_http_lua_run_thread 来执行的，ngx_http_lua_coroutine_resume 这里执行完 lua_yield 后，会回到 ngx_http_lua_run_thread 中，由于状态是 LUA_YIELD 和操作是 NGX_HTTP_LUA_USER_CORO_RESUME，会继续 (continue) ngx_http_lua_run_thread 的死循环，进而执行到刚刚要 resume 的协程。</p>
 <ul>
 <li>lj_ffh_coroutine_resume</li>
 </ul>
@@ -336,6 +336,16 @@ Luajit 的 coroutine.resume 及 coroutine.yield 底层接口看起来都是汇�
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/openresty-cosocket/>
+<div class=article-image>
+<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty cosocket</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
 <div class=article-image>
 <img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
@@ -346,42 +356,32 @@ Luajit 的 coroutine.resume 及 coroutine.yield 底层接口看起来都是汇�
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E7%BA%BF%E7%A8%8B/>
+<a href=/p/openresty-ngx.sleep/>
 <div class=article-image>
-<img src=/p/openresty-%E7%BA%BF%E7%A8%8B/image.fa3460183bd6813650702a42985e6c2f_hu818ee36d4363169fc9a3aaeaa8549fc5_273897_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 线程" data-hash="md5-+jRgGDvWgTZQcCpCmF5sLw==">
+<img src=/p/openresty-ngx.sleep/image.022e6f17ce69c48792e75233a6d037d7_hufcdb8a4692f8ada50966e20cd23479ea_226817_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.sleep" data-hash="md5-Ai5vF85pxIeS51IzptA31w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 线程</h2>
+<h2 class=article-title>OpenResty ngx.sleep</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<a href=/p/openresty-log_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-lua-vm-%E5%88%9D%E5%A7%8B%E5%8C%96/image.591812376bdff8e1b336034bbbe4c01b_hu8b1a295022397cfd38b972b1dd920be7_248987_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua VM 初始化" data-hash="md5-WRgSN2vf+OGzNgNLu+TAGw==">
+<img src=/p/openresty-log_by_lua/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty Lua VM 初始化</h2>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/>
+<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
 <div class=article-image>
-<img src=/p/openresty-%E4%BF%A1%E5%8F%B7%E9%87%8F/image.d2df3a759985085045023169d51d50d8_hud257672d761052d10876c00530251082_250335_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 信号量" data-hash="md5-0t86dZmFCFBFAjFp1R1Q2A==">
+<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.a0361e8eb497178f720cc044983faa34_hudab9f7e78110512db634a199699a7696_211640_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-oDYejrSXF49yDMBEmD+qNA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 信号量</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-cosocket/>
-<div class=article-image>
-<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty cosocket</h2>
+<h2 class=article-title>OpenResty 模块初始化</h2>
 </div>
 </a>
 </article>
