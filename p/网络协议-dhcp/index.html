@@ -8,7 +8,7 @@
 作用  用于内网或网络服务供应商自动分配 IP 给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP 在 1993 年 10 月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP 是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP 发现（DISCOVER）：client 在物理子网上发送广播来寻找可用的服务器。 DHCP 提供（OFFER）：当 DHCP 服务器收到一个来自客户的 IP 租约请求时，它会提供一个 IP 租约。 DHCP 请求（REQUEST）：当客户 PC 收到一个 IP 租约提供时，它必须告诉所有其他的 DHCP 服务器它已经接受了一个租约提供。 DHCP 确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP 释放 (RELEASE)：客户端向 DHCP 服务器发送一个请求以释放 DHCP 资源，并注销其 IP 地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送 DHCP 服务器发现 (DISCOVER)广播包。 服务器收到 DISCOVER 包后，回复OFFER单播或广播包。【疑问？】 客户主机收到 OFFER 包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的 IP 及网关 IP(next server IP)、租约等。   典型 DHCP 会话的模式">
 <meta property="og:url" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="DHCP"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="DHCP"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.png">
 <meta name=twitter:title content="网络协议 —— DHCP">
 <meta name=twitter:description content="DHCP DHCP - 动态主机设置协议（Dynamic Host Configuration Protocol）。 DHCP 是一个应用层协议。基于UDP。
 作用  用于内网或网络服务供应商自动分配 IP 给用户。 作为内部管理员对所有计算机进行中央管理的手段。  历史  DHCP 在 1993 年 10 月成为标准协议，它的前身是BOOTP协议。 BOOTP：BOOTP 是一种网络协议，让电脑或其他周边仪器可以从服务器下载启动程序。  数据包类型  DHCP 发现（DISCOVER）：client 在物理子网上发送广播来寻找可用的服务器。 DHCP 提供（OFFER）：当 DHCP 服务器收到一个来自客户的 IP 租约请求时，它会提供一个 IP 租约。 DHCP 请求（REQUEST）：当客户 PC 收到一个 IP 租约提供时，它必须告诉所有其他的 DHCP 服务器它已经接受了一个租约提供。 DHCP 确认（Acknowledge，ACK）：确认租约，包含租期和客户可能请求的其他所有配置信息。 DHCP 释放 (RELEASE)：客户端向 DHCP 服务器发送一个请求以释放 DHCP 资源，并注销其 IP 地址。 DHCP NAK：服务器回复客户，客户要求的网址不能被分配。  原理/流程  客户主机发送 DHCP 服务器发现 (DISCOVER)广播包。 服务器收到 DISCOVER 包后，回复OFFER单播或广播包。【疑问？】 客户主机收到 OFFER 包后，发送REQUEST广播包。 服务器回复ACK单播或广播包。包含分配的 IP 及网关 IP(next server IP)、租约等。   典型 DHCP 会话的模式"><meta name=twitter:card content="summary_large_image">
@@ -192,22 +192,22 @@ DHCP 是一个应用层协议。基于<code>UDP</code>。</p>
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
+<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<div class=article-image>
+<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.ee4ba7fac7661fb58642e5081003a0cc_hu6dd6ce6c6dc89dbbcc548f1b0a61c1d9_261937_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-7kun+sdmH7WGQuUIEAOgzA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>VLAN 介绍</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
 <div class=article-image>
 <img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.3ed9c5f414802245d2ffabd15e9b7b8a_hu2eb95bf5c5ba7e990e649bbb75c2aacc_298769_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-PtnF9BSAIkXS/6vRXpt7ig==">
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— DNS</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
-<div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>网络协议 —— ARP</h2>
 </div>
 </a>
 </article>
@@ -222,12 +222,12 @@ DHCP 是一个应用层协议。基于<code>UDP</code>。</p>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/vlan-%E4%BB%8B%E7%BB%8D/>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
 <div class=article-image>
-<img src=/p/vlan-%E4%BB%8B%E7%BB%8D/image.ee4ba7fac7661fb58642e5081003a0cc_hu6dd6ce6c6dc89dbbcc548f1b0a61c1d9_261937_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post VLAN 介绍" data-hash="md5-7kun+sdmH7WGQuUIEAOgzA==">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>VLAN 介绍</h2>
+<h2 class=article-title>网络协议 —— ARP</h2>
 </div>
 </a>
 </article>

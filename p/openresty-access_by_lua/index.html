@@ -8,7 +8,7 @@
 用法  上下文：http, server, location, location if 阶段：access tail  注意：执行阶段晚于标准 ngx_http_access_module 模块。   语法：  与 init_by_lua* 类似，不再赘述。    实现 实现逻辑与 rewrite_by_lua* 别无二致，不再赘述。">
 <meta property="og:url" content="https://isshe.site/p/openresty-access_by_lua/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-access_by_lua/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-access_by_lua/image.jpg">
 <meta name=twitter:title content="OpenResty access_by_lua*">
 <meta name=twitter:description content="access_by_lua* access_by_lua* 充当一个 access 阶段的处理程序，对每个请求执行指定的 Lua 代码，代码会在独立的全局环境（沙箱）中执行。
 用法  上下文：http, server, location, location if 阶段：access tail  注意：执行阶段晚于标准 ngx_http_access_module 模块。   语法：  与 init_by_lua* 类似，不再赘述。    实现 实现逻辑与 rewrite_by_lua* 别无二致，不再赘述。"><meta name=twitter:card content="summary_large_image">
@@ -101,12 +101,22 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
 <div class=article-image>
-<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.a0361e8eb497178f720cc044983faa34_hudab9f7e78110512db634a199699a7696_211640_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-oDYejrSXF49yDMBEmD+qNA==">
+<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.e836eb48dfa8209123106b8a15c78e8c_hub58aa43631c748bc46260e35845799bd_220559_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-6DbrSN+oIJEjEGuKFceOjA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 模块初始化</h2>
+<h2 class=article-title>OpenResty 共享字典（内存）</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 核心技术点</h2>
 </div>
 </a>
 </article>
@@ -121,12 +131,12 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<a href=/p/openresty-cosocket/>
 <div class=article-image>
-<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 管道（pipe）</h2>
+<h2 class=article-title>OpenResty cosocket</h2>
 </div>
 </a>
 </article>
@@ -137,16 +147,6 @@ Nginx
 </div>
 <div class=article-details>
 <h2 class=article-title>OpenResty log_by_lua*</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-content_by_lua/>
-<div class=article-image>
-<img src=/p/openresty-content_by_lua/image.0a3f2e0a36bdf47265b1c1a8896e83cb_hud65e514ff14931b6d473072786819b50_270380_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-Cj8uCja99HJlscGoiW6Dyw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty content_by_lua*</h2>
 </div>
 </a>
 </article>

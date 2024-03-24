@@ -20,7 +20,7 @@ ngx.socket.tcp   语法：tcpsock = ngx.socket.tcp()
  此 API 创建的 cosocket 对象与创建它的 Lua 处理程序具有完全相同的生命周期。所以永远不要将 cosocket 对象传递给任何其他 Lua 处理程序（包括 ngx.timer 回调函数），也永远不要在不同的 Nginx 请求之间共享 cosocket 对象。 如果没有显式关闭 cosocket 对象的底层连接或把连接放回到连接池，那么连接将在以下情况下自动关闭：  当前请求处理程序（handler）执行完成 Lua cosocket 对象被 Lua GC 回收   发生致命错误时，也会自动关闭连接，读超时是唯一的不致命错误。    tcpsock:bind  此接口需要更新的版本，v0.">
 <meta property="og:url" content="https://isshe.site/p/openresty-cosocket/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-cosocket/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-cosocket/image.jpg">
 <meta name=twitter:title content="OpenResty cosocket">
 <meta name=twitter:description content="OpenResty cosocket 使用 openresty 过程中，常常听说 cosocket，那么，cosocket 是什么呢？
 目的：
@@ -540,22 +540,22 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<a href=/p/openresty-ngx.sleep/>
 <div class=article-image>
-<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
+<img src=/p/openresty-ngx.sleep/image.022e6f17ce69c48792e75233a6d037d7_hufcdb8a4692f8ada50966e20cd23479ea_226817_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.sleep" data-hash="md5-Ai5vF85pxIeS51IzptA31w==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 核心技术点</h2>
+<h2 class=article-title>OpenResty ngx.sleep</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-init_worker_by_lua/>
+<a href=/p/openresty-log_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-init_worker_by_lua/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/openresty-log_by_lua/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty init_worker_by_lua*</h2>
+<h2 class=article-title>OpenResty log_by_lua*</h2>
 </div>
 </a>
 </article>
@@ -570,22 +570,22 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-init_by_lua/>
+<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
 <div class=article-image>
-<img src=/p/openresty-init_by_lua/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_by_lua*" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
+<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.e836eb48dfa8209123106b8a15c78e8c_hub58aa43631c748bc46260e35845799bd_220559_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-6DbrSN+oIJEjEGuKFceOjA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty init_by_lua*</h2>
+<h2 class=article-title>OpenResty 共享字典（内存）</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-log_by_lua/>
+<a href=/p/openresty-access_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-log_by_lua/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
+<img src=/p/openresty-access_by_lua/image.390acef109b33b78b36bd9c39d19a4b7_hua2c3de042391b06a6fd250468293caa8_267334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-OQrO8QmzO3iza9nDnRmktw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty log_by_lua*</h2>
+<h2 class=article-title>OpenResty access_by_lua*</h2>
 </div>
 </a>
 </article>

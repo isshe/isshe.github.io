@@ -8,7 +8,7 @@ git submodule update --remote 调整 submodule 的 commit： git pull origin xxx
 git submodule update --remote 调整 submodule 的 commit： git pull origin xxx 切 submodule 的分支： git config -f .">
 <meta property="og:url" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="git"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T20:58:12+08:00"><meta property="article:modified_time" content="2024-03-24T20:58:12+08:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="git"><meta property="article:tag" content="linux 命令"><meta property="article:tag" content="command"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/linux-%E5%91%BD%E4%BB%A4-git/image.jpg">
 <meta name=twitter:title content="Linux 命令 —— git">
 <meta name=twitter:description content="git submodule 添加 submodule： git submodule add &amp;lt;subproject URL&amp;gt; &amp;gt; git submodule add https://github.com/isshe/gitsubproject 查看 subproject 的 commit： git diff --cached &amp;lt;subproject dir&amp;gt; &amp;gt; git diff --cached gitsubproject/ 查看 subproject 的.gitmodules： git diff --cached --submodule 自动 clone 每个 submodule： git clone --recursive &amp;lt;your repository url&amp;gt; &amp;gt; git clone --recursive https://github.com/isshe/gitproject 拉取子模块： git submodule init git submodule update &amp;gt; 更常用的是：递归更新 git submodule update --init --recursive 子模块的后续更新：
 git submodule update --remote 调整 submodule 的 commit： git pull origin xxx 切 submodule 的分支： git config -f ."><meta name=twitter:card content="summary_large_image">
@@ -137,32 +137,22 @@ git push origin master
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-netstat/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.873bc0b666a36ed81b38df2a3776b3ba_hu12db0d530281f422d028abea45bb4587_242967_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-hzvAtmajbtgbON8qN3azug==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-netstat/image.fac68dee51dbe600df5776eb43d6c14f_hu0d592102e033b96588ada77308d430a0_228400_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— netstat" data-hash="md5-+saN7lHb5gDfV3brQ9bBTw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— ssh</h2>
+<h2 class=article-title>Linux 命令 —— netstat</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-gdb/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-gdb/image.31211f1b99cf737a0afe169a49b7d6ab_hu9a6e15c100f49a1259729f1a9f46ad7a_252829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— gdb" data-hash="md5-MSEfG5nPc3oK/haaSbfWqw==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-tcpdump/image.7670d23a97e5f347eef4dfd2083151bf_hu8886b919104ef84c776323591f53caab_196334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— tcpdump" data-hash="md5-dnDSOpfl80fu9N/SCDFRvw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— gdb</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
-<div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.956ee167559ea6bb2ecd7f2265db44b3_hu9a230336efb1ccd23b21d20aba4c6df2_292131_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-lW7hZ1WeprsuzX8iZdtEsw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>Linux 命令 —— ip</h2>
+<h2 class=article-title>Linux 命令 —— tcpdump</h2>
 </div>
 </a>
 </article>
@@ -177,12 +167,22 @@ git push origin master
 </a>
 </article>
 <article class=has-image>
-<a href=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ip/>
 <div class=article-image>
-<img src=/p/linux-%E5%91%BD%E4%BB%A4-vmstat/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— vmstat" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ip/image.956ee167559ea6bb2ecd7f2265db44b3_hu9a230336efb1ccd23b21d20aba4c6df2_292131_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ip" data-hash="md5-lW7hZ1WeprsuzX8iZdtEsw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>Linux 命令 —— vmstat</h2>
+<h2 class=article-title>Linux 命令 —— ip</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/linux-%E5%91%BD%E4%BB%A4-ssh/>
+<div class=article-image>
+<img src=/p/linux-%E5%91%BD%E4%BB%A4-ssh/image.873bc0b666a36ed81b38df2a3776b3ba_hu12db0d530281f422d028abea45bb4587_242967_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Linux 命令 —— ssh" data-hash="md5-hzvAtmajbtgbON8qN3azug==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Linux 命令 —— ssh</h2>
 </div>
 </a>
 </article>
