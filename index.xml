@@ -4163,7 +4163,7 @@ E x D mode L = 1
 &lt;li>无法防止否认的本质是：相同的秘钥有多于 1 个人获得。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第六章-混合密码系统</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.png" alt="Featured image of post 图解密码技术 —— 第六章-混合密码系统" />&lt;h2 id="第六章-混合密码系统">第六章 混合密码系统&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第六章-混合密码系统</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86.png" alt="Featured image of post 图解密码技术 —— 第六章-混合密码系统" />&lt;h2 id="第六章-混合密码系统">第六章 混合密码系统&lt;/h2>
 &lt;p>用对称密码提高速度，用公钥密码保护会话密钥。&lt;/p>
 &lt;ul>
 &lt;li>对称密码：用于加密消息/数据。&lt;/li>
@@ -4414,7 +4414,7 @@ alt="混合密码解密过程">
 &lt;li>认证机构：颁发证书的人。&lt;/li>
 &lt;li>仓库：保存证书的数据库。&lt;/li>
 &lt;/ul>
-&lt;h1 id="为什么需要证书">为什么需要证书？&lt;/h1></description></item><item><title>图解密码技术 —— 第四章-分组密码的模式</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png" alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式" />&lt;h2 id="第四章-分组密码的模式">第四章 分组密码的模式&lt;/h2>
+&lt;h1 id="为什么需要证书">为什么需要证书？&lt;/h1></description></item><item><title>图解密码技术 —— 第四章-分组密码的模式</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F1.png" alt="Featured image of post 图解密码技术 —— 第四章-分组密码的模式" />&lt;h2 id="第四章-分组密码的模式">第四章 分组密码的模式&lt;/h2>
 &lt;p>DES 和 AES 都属于分组密码，它们只能加密固定长度的明文。
 如果需要加密任意长度的明文，则需进行迭代，而分组密码的&lt;code>迭代方法&lt;/code>，就称为分组密码的&lt;code>模式&lt;/code>。&lt;/p>
 &lt;h1 id="分组密码与流密码">分组密码与流密码&lt;/h1>
@@ -8243,7 +8243,7 @@ alt="类图">
 &lt;h2 id="z-参考">z. 参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 外观模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.png" alt="Featured image of post 设计模式 —— 外观模式" />&lt;h1 id="外观模式让接口更简单">外观模式——让接口更简单&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 外观模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Facede.png" alt="Featured image of post 设计模式 —— 外观模式" />&lt;h1 id="外观模式让接口更简单">外观模式——让接口更简单&lt;/h1>
 &lt;blockquote>
 &lt;p>外观模式：Facade /fəˈsɑːd/&lt;/p>
 &lt;/blockquote>
@@ -8382,7 +8382,7 @@ alt="类图">
 &lt;ul>
 &lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 工厂方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 工厂方法模式" />&lt;h1 id="工厂方法">工厂方法&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 工厂方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_Java.png" alt="Featured image of post 设计模式 —— 工厂方法模式" />&lt;h1 id="工厂方法">工厂方法&lt;/h1>
 &lt;p>工厂方法模式 (Factory Method Pattern) 又称为：&lt;/p>
 &lt;ul>
 &lt;li>工厂模式；&lt;/li>
@@ -8554,7 +8554,7 @@ alt="依赖倒置原则示例">
 &lt;h2 id="z-参考">z. 参考&lt;/h2>
 &lt;ul>
 &lt;li>《Head First 设计模式》p118&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 抽象工厂模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 抽象工厂模式" />&lt;h1 id="设计模式-readme-模板">设计模式 Readme 模板&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 抽象工厂模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/compare_method_abstract1.png" alt="Featured image of post 设计模式 —— 抽象工厂模式" />&lt;h1 id="设计模式-readme-模板">设计模式 Readme 模板&lt;/h1>
 &lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
 &lt;ul>
 &lt;li>
@@ -9489,7 +9489,7 @@ alt="对象图">
 &lt;ul>
 &lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 装饰者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png" alt="Featured image of post 设计模式 —— 装饰者模式" />&lt;h1 id="装饰者模式不改变接口但加入责任">装饰者模式——不改变接口，但加入责任&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 装饰者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.png" alt="Featured image of post 设计模式 —— 装饰者模式" />&lt;h1 id="装饰者模式不改变接口但加入责任">装饰者模式——不改变接口，但加入责任&lt;/h1>
 &lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
 &lt;ul>
 &lt;li>
@@ -9887,7 +9887,7 @@ alt="类图">
 &lt;ul>
 &lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 适配器模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Multi_Adaptee.png" alt="Featured image of post 设计模式 —— 适配器模式" />&lt;h1 id="适配器模式将一个接口转换成另一个接口">适配器模式——将一个接口转换成另一个接口&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 适配器模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 24 Mar 2024 21:06:54 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram_Object_Adapter.png" alt="Featured image of post 设计模式 —— 适配器模式" />&lt;h1 id="适配器模式将一个接口转换成另一个接口">适配器模式——将一个接口转换成另一个接口&lt;/h1>
 &lt;ul>
 &lt;li>目标：
 &lt;ul>
