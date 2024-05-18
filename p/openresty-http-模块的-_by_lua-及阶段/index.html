@@ -1,33 +1,33 @@
 <!doctype html><html lang=en-us>
 <head><meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="OpenResty 中的 *_by_lua* 及阶段 目的：
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="OpenResty 中 HTTP 模块的 *_by_lua* 及阶段 目的：
  了解都有哪些阶段：*_by_lua*。 了解各个阶段的执行时机，各阶段有什么限制：如是否可以 yield，原因是什么。  所有的 *_by_lua*：
  执行阶段：指的是对应的 Nginx 的阶段
    init_by_lua*：可用于加载配置、初始化全局变量等
  上下文：无 执行阶段：初始化阶段是在 master 进程中 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    init_worker_by_lua*：可用于加载 Lua 模块等
  上下文：NGX_HTTP_LUA_CONTEXT_INIT_WORKER 执行阶段：初始化 worker 进程阶段 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    ssl_client_hello_by_lua*：可以用于设置 TLS 算法，HTTP 协议版本 (1.1/2/3)。
- 上下文：NGX_HTTP_LUA_CONTEXT_SSL_CLIENT_HELLO 执行阶段：客户端发来 Client Hello 时后，处理 Client Hello 消息前 设置执行阶段的位置：SSL_CTX_set_client_hello_cb 是否可以 yield：是    ssl_session_fetch_by_lua*：根据客户端提供的 Session ID 查找并恢复会话。"><title>OpenResty *_by_lua* 及阶段</title>
-<link rel=canonical href=https://isshe.site/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
-<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty *_by_lua* 及阶段">
-<meta property="og:description" content="OpenResty 中的 *_by_lua* 及阶段 目的：
+ 上下文：NGX_HTTP_LUA_CONTEXT_SSL_CLIENT_HELLO 执行阶段：客户端发来 Client Hello 时后，处理 Client Hello 消息前 设置执行阶段的位置：SSL_CTX_set_client_hello_cb 是否可以 yield：是    ssl_session_fetch_by_lua*：根据客户端提供的 Session ID 查找并恢复会话。"><title>OpenResty HTTP 模块的 *_by_lua* 及阶段</title>
+<link rel=canonical href=https://isshe.site/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="OpenResty HTTP 模块的 *_by_lua* 及阶段">
+<meta property="og:description" content="OpenResty 中 HTTP 模块的 *_by_lua* 及阶段 目的：
  了解都有哪些阶段：*_by_lua*。 了解各个阶段的执行时机，各阶段有什么限制：如是否可以 yield，原因是什么。  所有的 *_by_lua*：
  执行阶段：指的是对应的 Nginx 的阶段
    init_by_lua*：可用于加载配置、初始化全局变量等
  上下文：无 执行阶段：初始化阶段是在 master 进程中 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    init_worker_by_lua*：可用于加载 Lua 模块等
  上下文：NGX_HTTP_LUA_CONTEXT_INIT_WORKER 执行阶段：初始化 worker 进程阶段 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    ssl_client_hello_by_lua*：可以用于设置 TLS 算法，HTTP 协议版本 (1.1/2/3)。
  上下文：NGX_HTTP_LUA_CONTEXT_SSL_CLIENT_HELLO 执行阶段：客户端发来 Client Hello 时后，处理 Client Hello 消息前 设置执行阶段的位置：SSL_CTX_set_client_hello_cb 是否可以 yield：是    ssl_session_fetch_by_lua*：根据客户端提供的 Session ID 查找并恢复会话。">
-<meta property="og:url" content="https://isshe.site/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/">
+<meta property="og:url" content="https://isshe.site/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.jpg">
-<meta name=twitter:title content="OpenResty *_by_lua* 及阶段">
-<meta name=twitter:description content="OpenResty 中的 *_by_lua* 及阶段 目的：
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-05-19T01:15:10+08:00"><meta property="article:modified_time" content="2024-05-19T01:15:10+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.jpg">
+<meta name=twitter:title content="OpenResty HTTP 模块的 *_by_lua* 及阶段">
+<meta name=twitter:description content="OpenResty 中 HTTP 模块的 *_by_lua* 及阶段 目的：
  了解都有哪些阶段：*_by_lua*。 了解各个阶段的执行时机，各阶段有什么限制：如是否可以 yield，原因是什么。  所有的 *_by_lua*：
  执行阶段：指的是对应的 Nginx 的阶段
    init_by_lua*：可用于加载配置、初始化全局变量等
  上下文：无 执行阶段：初始化阶段是在 master 进程中 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    init_worker_by_lua*：可用于加载 Lua 模块等
  上下文：NGX_HTTP_LUA_CONTEXT_INIT_WORKER 执行阶段：初始化 worker 进程阶段 设置执行阶段的位置：无 是否可以 yield：否，初始化阶段，无需 yield。    ssl_client_hello_by_lua*：可以用于设置 TLS 算法，HTTP 协议版本 (1.1/2/3)。
  上下文：NGX_HTTP_LUA_CONTEXT_SSL_CLIENT_HELLO 执行阶段：客户端发来 Client Hello 时后，处理 Client Hello 消息前 设置执行阶段的位置：SSL_CTX_set_client_hello_cb 是否可以 yield：是    ssl_session_fetch_by_lua*：根据客户端提供的 Session ID 查找并恢复会话。"><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://isshe.site/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.jpg">
+<meta name=twitter:image content="https://isshe.site/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.jpg">
 <link rel="shortcut icon" href=/favicon/favicon-ss.svg>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
@@ -87,8 +87,8 @@ on-phone--column extended">
 <article class="has-image main-article">
 <header class=article-header>
 <div class=article-image>
-<a href=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
-<img src=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_800x0_resize_q75_box.jpg srcset="/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_800x0_resize_q75_box.jpg 800w, /p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty *_by_lua* 及阶段">
+<a href=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
+<img src=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_800x0_resize_q75_box.jpg srcset="/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_800x0_resize_q75_box.jpg 800w, /p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image_huab6d4bf2fac89bf04d136b1532e709da_268856_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post OpenResty HTTP 模块的 *_by_lua* 及阶段">
 </a>
 </div>
 <div class=article-details>
@@ -107,11 +107,11 @@ Nginx
 </a>
 </header>
 <h2 class=article-title>
-<a href=/p/openresty-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>OpenResty *_by_lua* 及阶段</a>
+<a href=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>OpenResty HTTP 模块的 *_by_lua* 及阶段</a>
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>May 19, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -122,7 +122,7 @@ Nginx
 </div>
 </header>
 <section class=article-content>
-<h1 id=openresty-中的-_by_lua-及阶段>OpenResty 中的 <code>*_by_lua*</code> 及阶段</h1>
+<h1 id=openresty-中-http-模块的-_by_lua-及阶段>OpenResty 中 HTTP 模块的 <code>*_by_lua*</code> 及阶段</h1>
 <p>目的：</p>
 <ul>
 <li>了解都有哪些阶段：<code>*_by_lua*</code>。</li>
@@ -303,12 +303,12 @@ Nginx
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/>
 <div class=article-image>
-<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/image.b2420bfcfc4a2b91bb002f59bcc2df48_hue5dc0d3f3cdfdc2db7e9f7df6176631d_248590_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码执行实例跟踪" data-hash="md5-skIL/PxKK5G7AC9ZvMLfSA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 管道（pipe）</h2>
+<h2 class=article-title>OpenResty Lua 代码执行实例跟踪</h2>
 </div>
 </a>
 </article>
@@ -323,6 +323,16 @@ Nginx
 </a>
 </article>
 <article class=has-image>
+<a href=/p/openresty-content_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-content_by_lua/image.0a3f2e0a36bdf47265b1c1a8896e83cb_hud65e514ff14931b6d473072786819b50_270380_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-Cj8uCja99HJlscGoiW6Dyw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty content_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/openresty-init_worker_by_lua/>
 <div class=article-image>
 <img src=/p/openresty-init_worker_by_lua/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_worker_by_lua*" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
@@ -333,22 +343,12 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/>
+<a href=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/openresty-%E5%85%B1%E4%BA%AB%E5%AD%97%E5%85%B8%E5%86%85%E5%AD%98/image.e836eb48dfa8209123106b8a15c78e8c_hub58aa43631c748bc46260e35845799bd_220559_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 共享字典（内存）" data-hash="md5-6DbrSN+oIJEjEGuKFceOjA==">
+<img src=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 轻量级线程" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 共享字典（内存）</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
-<div class=article-image>
-<img src=/p/openresty-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.a0361e8eb497178f720cc044983faa34_hudab9f7e78110512db634a199699a7696_211640_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 模块初始化" data-hash="md5-oDYejrSXF49yDMBEmD+qNA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty 模块初始化</h2>
+<h2 class=article-title>OpenResty 轻量级线程</h2>
 </div>
 </a>
 </article>

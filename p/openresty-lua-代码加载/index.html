@@ -10,7 +10,7 @@ ngx_http_lua_cache_loadbuffer - ngx_http_lua_cache_loadbuffer: 加载 Lua 代码
 ngx_http_lua_cache_loadbuffer - ngx_http_lua_cache_loadbuffer: 加载 Lua 代码 \- ngx_http_lua_cache_load_code: 从缓存中加载，有直接返回，没有则继续。 \- lua_pushlightuserdata(L, ngx_http_lua_lightudata_mask(code_cache_key)) \- lua_rawget(L, LUA_REGISTRYINDEX): 把 Lua 代码缓存表加载到栈顶 \- if (*ref == LUA_NOREF): 通过 ref 和 key 结合来获取缓存。如果有 ref，就用 ref，如果没有，就用 key。如果用 key 也没找到，就是没缓存，后续需要加载。 \- lua_isfunction: 这是闭包工厂函数，通过此函数来生成闭包 \- rc = lua_pcall(L, 0, 1, 0): 正式调用闭包工厂，生成闭包，返回值是 0 表示成功，否则就是失败了。 \- ngx_http_lua_clfactory_loadbuffer: 加载闭包工厂 \- lua_load(L, ngx_http_lua_clfactory_getS, &amp;amp;ls, name): 加载 Lua Chunk 成一个函数。这个函数其实是一个闭包 &amp;#34;return function() .">
 <meta property="og:url" content="https://isshe.site/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-04-22T06:00:02-03:00"><meta property="article:modified_time" content="2023-04-22T06:00:02-03:00"><meta property="og:image" content="https://isshe.site/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-05-19T01:15:10+08:00"><meta property="article:modified_time" content="2024-05-19T01:15:10+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-lua-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD/image.jpg">
 <meta name=twitter:title content="OpenResty Lua 代码加载">
 <meta name=twitter:description content="OpenResty 加载及缓存 Lua 代码 目的：
  了解 OpenResty 是如何加载及缓存 Lua 代码的。  加载 Lua 代码之前的代码逻辑见 005-rewrite_by_lua.md，本文接着从 ngx_http_lua_cache_loadbuffer 开始深入。
@@ -57,7 +57,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Apr 22, 2023</time>
+<time class=article-time--published>May 19, 2024</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -125,22 +125,22 @@ Nginx
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/>
+<a href=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
 <div class=article-image>
-<img src=/p/openresty-%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 轻量级线程" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+<img src=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty HTTP 模块的 *_by_lua* 及阶段" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty 轻量级线程</h2>
+<h2 class=article-title>OpenResty HTTP 模块的 *_by_lua* 及阶段</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-access_by_lua/>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/>
 <div class=article-image>
-<img src=/p/openresty-access_by_lua/image.390acef109b33b78b36bd9c39d19a4b7_hua2c3de042391b06a6fd250468293caa8_267334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty access_by_lua*" data-hash="md5-OQrO8QmzO3iza9nDnRmktw==">
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/image.b2420bfcfc4a2b91bb002f59bcc2df48_hue5dc0d3f3cdfdc2db7e9f7df6176631d_248590_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码执行实例跟踪" data-hash="md5-skIL/PxKK5G7AC9ZvMLfSA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty access_by_lua*</h2>
+<h2 class=article-title>OpenResty Lua 代码执行实例跟踪</h2>
 </div>
 </a>
 </article>
