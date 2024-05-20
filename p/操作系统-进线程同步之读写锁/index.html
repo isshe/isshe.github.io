@@ -6,7 +6,7 @@
 <meta property="og:description" content="读写锁 1. 什么是读写锁  互斥锁把试图进入临界区的 (多余) 线程都阻塞住，无论是读还是写。（不区分读写）  独占锁。   读写锁区分读和写，同时只能一个线程写 (写时不能读)；允许同时多个线程读 (读时没有写)。  读为共享锁，写为独占锁。 读比写更频繁的应用中，用读写锁更好。    2. 读写锁的分配规则  只要没有线程持有读写锁用于写，任意数目的线程可以持有该读写锁用于读。 仅当没有线程持有读写锁时 (用于读或写)，才能分配读写锁用于写。  3. 相关函数  静态分配用PTHREAD_RWLOCK_INITIALIZER进行初始化。  #include &amp;lt;pthread.h&amp;gt; // 初始化、销毁 int pthread_rwlock_init(pthread_rwlock_t *lock, const pthread_rwlockattr_t *attr); int pthread_rwlock_destroy(pthread_rwlock_t *lock); // 加锁、解锁 int pthread_rwlock_rdlock(pthread_rwlock_t *lock); int pthread_rwlock_tryrdlock(pthread_rwlock_t *lock); int pthread_rwlock_wrlock(pthread_rwlock_t *lock); int pthread_rwlock_trywrlock(pthread_rwlock_t *lock); int pthread_rwlock_unlock(pthread_rwlock_t *lock); // 属性初始化、销毁 int pthread_rwlockattr_init(pthread_rwlockattr_t *attr); int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr); // 属性设置：设置进程间共享：PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *attr, int *pshared); int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared); ">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="rwlock"><meta property="article:tag" content="进线程同步"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="rwlock"><meta property="article:tag" content="进线程同步"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:00:00+08:00"><meta property="article:modified_time" content="2022-10-16T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg">
 <meta name=twitter:title content="操作系统 —— 进线程同步之读写锁">
 <meta name=twitter:description content="读写锁 1. 什么是读写锁  互斥锁把试图进入临界区的 (多余) 线程都阻塞住，无论是读还是写。（不区分读写）  独占锁。   读写锁区分读和写，同时只能一个线程写 (写时不能读)；允许同时多个线程读 (读时没有写)。  读为共享锁，写为独占锁。 读比写更频繁的应用中，用读写锁更好。    2. 读写锁的分配规则  只要没有线程持有读写锁用于写，任意数目的线程可以持有该读写锁用于读。 仅当没有线程持有读写锁时 (用于读或写)，才能分配读写锁用于写。  3. 相关函数  静态分配用PTHREAD_RWLOCK_INITIALIZER进行初始化。  #include &amp;lt;pthread.h&amp;gt; // 初始化、销毁 int pthread_rwlock_init(pthread_rwlock_t *lock, const pthread_rwlockattr_t *attr); int pthread_rwlock_destroy(pthread_rwlock_t *lock); // 加锁、解锁 int pthread_rwlock_rdlock(pthread_rwlock_t *lock); int pthread_rwlock_tryrdlock(pthread_rwlock_t *lock); int pthread_rwlock_wrlock(pthread_rwlock_t *lock); int pthread_rwlock_trywrlock(pthread_rwlock_t *lock); int pthread_rwlock_unlock(pthread_rwlock_t *lock); // 属性初始化、销毁 int pthread_rwlockattr_init(pthread_rwlockattr_t *attr); int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr); // 属性设置：设置进程间共享：PTHREAD_PROCESS_SHARED/PTHREAD_PROCESS_PRIVATE int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *attr, int *pshared); int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared); "><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%AF%BB%E5%86%99%E9%94%81/image.jpg">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -130,22 +130,12 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-epoll/image.f528160e41054c73f08c590e9a9d18a9_hu3d31a301b4a4c10b2474d5b0f818cf15_279379_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 epoll" data-hash="md5-9SgWDkEFTHPwjFkOmp0YqQ==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B/process_address_map.4bf2335a98bd1515921cbc5a0c5a1d8b_hu575c6395d5e84185e674e7125c58f205_133704_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程" data-hash="md5-S/IzWpi9FRWSHLxaDFodiw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— IO 多路复用之 epoll</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
-<div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
-</div>
-<div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+<h2 class=article-title>操作系统 —— 进程</h2>
 </div>
 </a>
 </article>
@@ -160,12 +150,22 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-select/image.3ed9c5f414802245d2ffabd15e9b7b8a_hu2eb95bf5c5ba7e990e649bbb75c2aacc_298769_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 select" data-hash="md5-PtnF9BSAIkXS/6vRXpt7ig==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-io-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E4%B9%8B-poll/image.31211f1b99cf737a0afe169a49b7d6ab_hu9a6e15c100f49a1259729f1a9f46ad7a_252829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— IO 多路复用之 poll" data-hash="md5-MSEfG5nPc3oK/haaSbfWqw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— IO 多路复用之 select</h2>
+<h2 class=article-title>操作系统 —— IO 多路复用之 poll</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<div class=article-image>
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
 </div>
 </a>
 </article>

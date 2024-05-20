@@ -8,7 +8,7 @@
 作用  VLAN 可以为网络提供以下作用：  广播控制 带宽利用 降低延迟 安全性（非设计作用，本身功能所附加出的）   采用虚拟局域网技术实现交换机以太网的广播隔离。 一个 VLAN 相当于 OSI 模型第 2 层的广播域，它能将广播控制在一个 VLAN 内部。 不同 VLAN 之间或 VLAN 与 LAN/WAN 的数据通信必须通过第 3 层（网络层）完成。  原理（划分方式） 物理层 (physical layer)  以交换机端口作为划分 VLAN 的基础。 适合规模不大的组织。  数据链路层 (data link layer)  以每台主机的MAC地址作为划分 VLAN 的基础。 实现方法：  创建一个 MAC 与 VLAN 映射的数据库。 当网络设备连接到端口后，交换机向VMPS(VLAN管理策略服务器)请求这个数据库。 找到相应的映射，完成 VLAN 的分配。   优点：  计算机物理位置的不同，也不影响 VLAN 的运作。   缺点：  人为建立 MAC 与 VLAN 的映射关系；因此导致管理复杂度增加。    网络层  以IP地址作为划分 VLAN 的基础；以子网视为 VLAN 设置的依据。【？？？】 优点：  网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置 VLANs 架构的复杂度。   缺点：  交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。    ">
 <meta property="og:url" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="VLAN"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="VLAN"><meta property="article:tag" content="网络协议"><meta property="article:tag" content="计算机网络"><meta property="article:tag" content="protocol"><meta property="article:tag" content="Computer Network"><meta property="article:published_time" content="2022-10-16T12:00:00+08:00"><meta property="article:modified_time" content="2022-10-16T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/vlan-%E4%BB%8B%E7%BB%8D/image.jpg">
 <meta name=twitter:title content="VLAN 介绍">
 <meta name=twitter:description content="VLAN VLAN - 虚拟局域网（Virtual Local Area Network）。 在 IEEE 802.1Q 中，给定以太网上的最大 VLAN 数为 4094。（12 位 VID。减去头尾的 0 和 4095）
 作用  VLAN 可以为网络提供以下作用：  广播控制 带宽利用 降低延迟 安全性（非设计作用，本身功能所附加出的）   采用虚拟局域网技术实现交换机以太网的广播隔离。 一个 VLAN 相当于 OSI 模型第 2 层的广播域，它能将广播控制在一个 VLAN 内部。 不同 VLAN 之间或 VLAN 与 LAN/WAN 的数据通信必须通过第 3 层（网络层）完成。  原理（划分方式） 物理层 (physical layer)  以交换机端口作为划分 VLAN 的基础。 适合规模不大的组织。  数据链路层 (data link layer)  以每台主机的MAC地址作为划分 VLAN 的基础。 实现方法：  创建一个 MAC 与 VLAN 映射的数据库。 当网络设备连接到端口后，交换机向VMPS(VLAN管理策略服务器)请求这个数据库。 找到相应的映射，完成 VLAN 的分配。   优点：  计算机物理位置的不同，也不影响 VLAN 的运作。   缺点：  人为建立 MAC 与 VLAN 的映射关系；因此导致管理复杂度增加。    网络层  以IP地址作为划分 VLAN 的基础；以子网视为 VLAN 设置的依据。【？？？】 优点：  网管人员已经将内部网段做好规划与分配后，将可大辐降低规划并设置 VLANs 架构的复杂度。   缺点：  交换机需要对帧进行处理（原本不需要），降低交换机接收和分派分组的效率。    "><meta name=twitter:card content="summary_large_image">
@@ -48,7 +48,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -136,12 +136,12 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
 <div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DHCP" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>网络协议 —— DHCP</h2>
+<h2 class=article-title>网络协议 —— ARP</h2>
 </div>
 </a>
 </article>
@@ -156,22 +156,22 @@ extended">
 </a>
 </article>
 <article class=has-image>
+<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/>
+<div class=article-image>
+<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dhcp/dhcp.814442b13dd47741fcbde1d5deabf5e9_hudbf177609d4e03da36b00b06f63101bd_20695_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DHCP" data-hash="md5-gURCsT3Ud0H8veHV3qv16Q==">
+</div>
+<div class=article-details>
+<h2 class=article-title>网络协议 —— DHCP</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
 <a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/>
 <div class=article-image>
 <img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-dns/image.3ed9c5f414802245d2ffabd15e9b7b8a_hu2eb95bf5c5ba7e990e649bbb75c2aacc_298769_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— DNS" data-hash="md5-PtnF9BSAIkXS/6vRXpt7ig==">
 </div>
 <div class=article-details>
 <h2 class=article-title>网络协议 —— DNS</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/>
-<div class=article-image>
-<img src=/p/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE-arp/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 网络协议 —— ARP" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>网络协议 —— ARP</h2>
 </div>
 </a>
 </article>

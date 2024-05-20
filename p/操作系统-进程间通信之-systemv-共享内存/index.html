@@ -6,7 +6,7 @@
 <meta property="og:description" content="System V 共享内存区 1. 概述  System V 共享内存区在概念上类似于 Posix 共享内存区；  Posix 共享内存区：先调用 shm_open，后调用 mmap; System V 共享内存区：先调用 shmget, 后调用 shmat;    2. shmget 函数 #include &amp;lt;sys/shm.h&amp;gt; int shmget(key_t key, size_t size, int shmflg);  作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。 参数：  key: ftok 的返回值或者 IPC_PRIVATE。  如果 key=IPC_PRIVATE 并且 shmflg 指定 IPC_CREAT 标记，则创建共享内存区。 如果没有 key 对应的共享内存标识符并且指定 IPC_CREAT，则创建共享内存区。 创建内存区会初始化内存区为 0。（size 字节） 创建共享内存区会分配shmid_ds结构  struct shmid_ds { struct ipc_perm shm_perm; /* operation permissions */ int shm_segsz; /* size of segment in bytes */ pid_t shm_lpid; /* pid of last shm op */ pid_t shm_cpid; /* pid of creator */ short shm_nattch; /* # of current attaches */ time_t shm_atime; /* last shmat() time*/ time_t shm_dtime; /* last shmdt() time */ time_t shm_ctime; /* last change by shmctl() */ void *shm_internal; /* sysv stupidity */ };  size: 大小 shmflg：标记   返回：共享内存区标识符 (整数)  3.">
 <meta property="og:url" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="systemv"><meta property="article:tag" content="共享内存"><meta property="article:tag" content="进程间通信"><meta property="article:tag" content="操作系统"><meta property="article:tag" content="application"><meta property="article:tag" content="linux"><meta property="article:published_time" content="2022-10-16T12:00:00+08:00"><meta property="article:modified_time" content="2022-10-16T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg">
 <meta name=twitter:title content="操作系统 —— 进程间通信之 SystemV 共享内存">
 <meta name=twitter:description content="System V 共享内存区 1. 概述  System V 共享内存区在概念上类似于 Posix 共享内存区；  Posix 共享内存区：先调用 shm_open，后调用 mmap; System V 共享内存区：先调用 shmget, 后调用 shmat;    2. shmget 函数 #include &amp;lt;sys/shm.h&amp;gt; int shmget(key_t key, size_t size, int shmflg);  作用：创建一个新的共享内存区或者访问一个已存在的共享内存区。 参数：  key: ftok 的返回值或者 IPC_PRIVATE。  如果 key=IPC_PRIVATE 并且 shmflg 指定 IPC_CREAT 标记，则创建共享内存区。 如果没有 key 对应的共享内存标识符并且指定 IPC_CREAT，则创建共享内存区。 创建内存区会初始化内存区为 0。（size 字节） 创建共享内存区会分配shmid_ds结构  struct shmid_ds { struct ipc_perm shm_perm; /* operation permissions */ int shm_segsz; /* size of segment in bytes */ pid_t shm_lpid; /* pid of last shm op */ pid_t shm_cpid; /* pid of creator */ short shm_nattch; /* # of current attaches */ time_t shm_atime; /* last shmat() time*/ time_t shm_dtime; /* last shmdt() time */ time_t shm_ctime; /* last change by shmctl() */ void *shm_internal; /* sysv stupidity */ };  size: 大小 shmflg：标记   返回：共享内存区标识符 (整数)  3."><meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/image.jpg">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -211,12 +211,12 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.b05c1e269aedee6fcf2290a4d4e4c913_hu2d611c5ade1df2c5480a88cbaf90139f_68661_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" data-hash="md5-sFweJprt7m/PIpCk1OTJEw==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 消息队列</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
 </div>
 </a>
 </article>
@@ -241,22 +241,22 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98/_hu884d2f2f6c651f24e84f37946b6832f5_75534_3f5d524f2a75f8ac0bbd55425636cd4e.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 Posix 共享内存" data-hash="md5-a9OT1bUgEeXjtsU4ofcM2Q==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.b05c1e269aedee6fcf2290a4d4e4c913_hu2d611c5ade1df2c5480a88cbaf90139f_68661_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" data-hash="md5-sFweJprt7m/PIpCk1OTJEw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之 Posix 共享内存</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 SystemV 消息队列</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/>
+<a href=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-fifo/>
 <div class=article-image>
-<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B%E7%AE%A1%E9%81%93/image.edd5dd12021bde97d21fe617b10901fd_hua7dd9656545c33c7233f1072aca164a6_218829_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之管道" data-hash="md5-7dXdEgIb3pfSH+YXsQkB/Q==">
+<img src=/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-fifo/image.cc841336fd3696d73f62689361cf5a24_hu919e7e7429058a953ed0cc72caeca2a5_166812_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 操作系统 —— 进程间通信之 FIFO" data-hash="md5-zIQTNv02ltc/YmiTYc9aJA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>操作系统 —— 进程间通信之管道</h2>
+<h2 class=article-title>操作系统 —— 进程间通信之 FIFO</h2>
 </div>
 </a>
 </article>

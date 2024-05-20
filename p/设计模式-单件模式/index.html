@@ -8,7 +8,7 @@
  创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new 或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:00:00+08:00"><meta property="article:modified_time" content="2022-10-16T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/ClassDiagram.png">
 <meta name=twitter:title content="设计模式 —— 单件模式">
 <meta name=twitter:description content="单件模式——独一无二的对象 初看起来好像很简单，实际接触后，发现并不是这么一回事。先给自己几个问题：
  创建对象的时候，如何知道现在只有一个？ 如何保证创建对象时候的原子性？（不能保证就有可能创建多于 1 个的对象） 如何获取/访问这个唯一对象？  1. 基础概念  定义/意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。 原理：让类自身保存它的唯一实例，并提供一个访问该实例的方法。实例的唯一性由类来保证。 类图：  类图  出场嘉宾  Singleton：单件类。  定义一个接口，允许客户访问唯一实例。此接口是一个类操作。 负责创建唯一实例。      2. 解决什么问题？如何解决？  系统中，有些东西只需要一份就够了，因此要保证只有一份。 解决方法：只允许创建一个。但如何保证只有一个呢，见其他部分。  3. 优缺点是什么？ 3.1 优点  对唯一实例的创建是受控的——不允许直接创建（new 或变量）。 对唯一实例的访问是受控的。 缩小命名空间。  此模式是对全局变量的一种改进。 避免了存储唯一实例的全局变量污染命名空间。 （同一命名空间内，两个名字相同，就会冲突。）   允许对操作和表示的精化。【？！】  单件类可以有子类。 可以使用所需的拓展类在运行时配置应用。   允许可变的数目的实例。 比类操作更灵活。  如果使用类操作（C++ 的静态成员函数、Smalltalk 的类方法）的方式来封装单件功能，会使得改变设计以允许多个实例变得困难。   惰性 (lazy) 初始化，惰性创建——不需要的时候，不会创建。  3.2 缺点    4."><meta name=twitter:card content="summary_large_image">
@@ -45,7 +45,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -175,52 +175,52 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.aae04168a97bebb63438e632acf36c6e_hu5f455159e5a15331f999b11eee4a3509_10198_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 代理模式" data-hash="md5-quBBaKl767Y0OOYyrPNsbg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 简单工厂模式</h2>
+<h2 class=article-title>设计模式 —— 代理模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.15f0930b249af6d65f1369f38da16ca2_hue33f08942c564290cfaa213924c33a5d_47603_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 装饰者模式" data-hash="md5-FfCTCySa9tZfE2nzjaFsog==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 模板方法模式</h2>
+<h2 class=article-title>设计模式 —— 装饰者模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/ClassDiagram.eab7371ce4fb27578e68f5a30eab0e60_hu771149e49c462b26432a5b0e1acd417c_27093_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 策略模式" data-hash="md5-6rc3HOT7J1eOaPWjDqsOYA==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_hu529bcb407ef01bc0200901c2da9427ff_24123_3cd25cdf4f10dc74637ae6e254597b79.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-XlzLibmUXUQzTj+yojJ8vw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 策略模式</h2>
+<h2 class=article-title>设计模式 —— 适配器模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/ClassDiagram.a84c31f9b6ee8b690aea1f3137b5fde8_huc03f68792e55e175b4455a14e3ef74ad_21728_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 状态模式" data-hash="md5-qEwx+bbui2kK6h8xN7X96A==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 状态模式</h2>
+<h2 class=article-title>设计模式 —— 外观模式</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram.ca7491dbd639deec7f0eafb641c56e20_hu6b5056fb0e38f8f68f1de8ab5ac4a88a_19258_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 组合模式" data-hash="md5-ynSR29Y53ux/Dq+2QcVuIA==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 组合模式</h2>
+<h2 class=article-title>设计模式 —— 迭代器模式</h2>
 </div>
 </a>
 </article>

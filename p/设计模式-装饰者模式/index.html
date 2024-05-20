@@ -12,7 +12,7 @@
  [基础]组件 (Conponent): 被装饰者，定义一个对象接口（Java：接口，C++：抽象类）； 具体[基础]组件 (Concrete Conponent): 定义一个具体的基础组件对象，可以给这个对象添加一些职责（装饰该对象）。 装饰者 (Decorator): 维持一个指向组件对象的指针，并定义一个与组件接口一致的接口。(指针是为了知道所修饰的是什么) 具体装饰者 (Concrete Decorator): 可以向具体组件添加职责（修饰）。    2. 解决什么问题？如何解决？  解决用继承给对象添加功能不够灵活的问题。  通常拓展一个类都是用继承的方法，这是静态拓展，随着拓展增多，子类会膨胀。   解决方法：具体组件和修饰者都继承自公共的类，使一个对象能装饰另一个对象。  3. 优缺点是什么？ 3.1 优点  拓展功能时，提供比继承更有弹性的解决方案。（可增加、删除职责）  比静态继承更灵活。   可通过动态的方式在运行时选择不同的具体装饰类，实现不同的行为。 可以对一个对象进行多次修饰（甚至多次相同的修饰）。 符合开闭原则，具体组件和具体修饰者可以独立变化，用户根据需要添加组件或装饰者，原代码不需修改。 装饰者可以在所委托的装饰者行为之前或之后加上自己的行为，以达到特定的目的  3.2 缺点  可能有许多小对象，排错难度加大、代码阅读难度加大。 可能不同的东西，继承自一个公共类。（个人理解）  4. 使用场景是什么？  在不影响其他对象的情况下，已动态、透明的方式给单个对象添加职责。 处理那些可以撤销的职责。  怎么实现撤销？？？   当不能使用子类/继承的方法进行扩充时。  情况一：类定义被隐藏，因此无法用于生成子类。 情况二：有大量独立的扩展，为支持每一种组合将产生大量子类。（使子类书目爆炸性增长）    5.">
 <meta property="og:url" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2024-03-24T21:06:54+08:00"><meta property="article:modified_time" content="2024-03-24T21:06:54+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="设计模式"><meta property="article:tag" content="Design Pattern"><meta property="article:published_time" content="2022-10-16T12:00:00+08:00"><meta property="article:modified_time" content="2022-10-16T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png">
 <meta name=twitter:title content="设计模式 —— 装饰者模式">
 <meta name=twitter:description content="装饰者模式——不改变接口，但加入责任 1. 基础概念   定义：动态地给一个对象添加一些额外的职责。
  注意是针对对象而不是类    类图：  类图 
@@ -51,7 +51,7 @@ extended">
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>Mar 24, 2024</time>
+<time class=article-time--published>Oct 16, 2022</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -198,26 +198,6 @@ extended">
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/ClassDiagram.b25e060c1b52f9c2a270c15df7f056c7_hu897b61bb969f01c171036b03c5d31606_29647_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 迭代器模式" data-hash="md5-sl4GDBtS+cKicMFd9/BWxw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>设计模式 —— 迭代器模式</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/>
-<div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/Struct.777afa2c330f1f20d2290f5892fbc036_hu769c2cc54f67243d0c04bf7a939c27e8_60141_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 外观模式" data-hash="md5-d3r6LDMPHyDSKQ9YkvvANg==">
-</div>
-<div class=article-details>
-<h2 class=article-title>设计模式 —— 外观模式</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
 <img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.3ac4274c41fa3d796548d24b96e5ec69_hu9641347351fb55904fe95979a1ea9ec9_12938_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 简单工厂模式" data-hash="md5-OsQnTEH6PXllSNJLluXsaQ==">
@@ -228,12 +208,32 @@ extended">
 </a>
 </article>
 <article class=has-image>
-<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/>
 <div class=article-image>
-<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram.3fd141dc2e651861d37088fad35b5587_hub9d6bae174a5f1cfb65be2d66f40f19e_28066_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 模板方法模式" data-hash="md5-P9FB3C5lGGHTcIj601tVhw==">
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/_hu529bcb407ef01bc0200901c2da9427ff_24123_3cd25cdf4f10dc74637ae6e254597b79.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 适配器模式" data-hash="md5-XlzLibmUXUQzTj+yojJ8vw==">
 </div>
 <div class=article-details>
-<h2 class=article-title>设计模式 —— 模板方法模式</h2>
+<h2 class=article-title>设计模式 —— 适配器模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/ClassDiagram.7fae3fae28f3507b55adc2102286f1ba_hu3824ce93c6ac44c5f4d3910cd64b5b48_67234_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 抽象工厂模式" data-hash="md5-f64/rijzUHtVrcIQIobxug==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 抽象工厂模式</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/>
+<div class=article-image>
+<img src=/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram.ca7491dbd639deec7f0eafb641c56e20_hu6b5056fb0e38f8f68f1de8ab5ac4a88a_19258_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 设计模式 —— 组合模式" data-hash="md5-ynSR29Y53ux/Dq+2QcVuIA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>设计模式 —— 组合模式</h2>
 </div>
 </a>
 </article>

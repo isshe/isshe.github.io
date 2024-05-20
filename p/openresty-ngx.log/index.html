@@ -18,7 +18,7 @@
  Lua nil 会被输出为字符串 &amp;ldquo;nil&amp;rdquo;；Lua 的布尔类型会输出为 &amp;ldquo;true&amp;rdquo; or &amp;ldquo;false&amp;rdquo;；ngx.null 被输出为 &amp;ldquo;null&amp;rdquo; 字符串；Lua table 将会调用其元表的 __tostring 函数，调用失败则抛出异常，异常也被输出到错误日志中；如果是 userdata，则输出字符串 &amp;ldquo;null&amp;rdquo;；其他类型一律抛出异常。 Nginx 内核中的错误消息长度有一个硬编码的 2048 字节限制。此限制包括尾部换行符和前置时间戳。如果消息大小超过此限制，Nginx 将相应地截断消息。可以通过编辑 Nginx 源代码树中 src/core/ngx_log.">
 <meta property="og:url" content="https://isshe.site/p/openresty-ngx.log/">
 <meta property="og:site_name" content="树深时间录">
-<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2024-05-19T01:15:10+08:00"><meta property="article:modified_time" content="2024-05-19T01:15:10+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-ngx.log/image.jpg">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="openresty"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="OpenResty"><meta property="article:published_time" content="2023-02-24T12:00:00+08:00"><meta property="article:modified_time" content="2023-02-24T12:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/openresty-ngx.log/image.jpg">
 <meta name=twitter:title content="OpenResty ngx.log">
 <meta name=twitter:description content="ngx.log 我们都知道，这个接口的功能是打印错误日志，那么它是如何工作的呢？我们来探究一下。
 注意，是接口 ngx.log 不是指令 log_by_lua 。*
@@ -69,7 +69,7 @@ Nginx
 </h2>
 <footer class=article-time>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
-<time class=article-time--published>May 19, 2024</time>
+<time class=article-time--published>Feb 24, 2023</time>
 </div>
 <div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <time class=article-time--reading>
@@ -260,26 +260,6 @@ ngx_http_lua_inject_log_consts(lua_State *L)
 <div class=related-contents>
 <div class="flex article-list--tile">
 <article class=has-image>
-<a href=/p/openresty-init_by_lua/>
-<div class=article-image>
-<img src=/p/openresty-init_by_lua/image.9c17ef19f49d0f8c673557913641ae2c_hu70840ac7263b3ebb6d16250de0b46ff4_264462_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty init_by_lua*" data-hash="md5-nBfvGfSdD4xnNVeRNkGuLA==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty init_by_lua*</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
-<a href=/p/openresty-log_by_lua/>
-<div class=article-image>
-<img src=/p/openresty-log_by_lua/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty log_by_lua*" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
-</div>
-<div class=article-details>
-<h2 class=article-title>OpenResty log_by_lua*</h2>
-</div>
-</a>
-</article>
-<article class=has-image>
 <a href=/p/openresty-ngx.sleep/>
 <div class=article-image>
 <img src=/p/openresty-ngx.sleep/image.022e6f17ce69c48792e75233a6d037d7_hufcdb8a4692f8ada50966e20cd23479ea_226817_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.sleep" data-hash="md5-Ai5vF85pxIeS51IzptA31w==">
@@ -290,22 +270,42 @@ ngx_http_lua_inject_log_consts(lua_State *L)
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-cosocket/>
+<a href=/p/openresty-rewrite_by_lua/>
 <div class=article-image>
-<img src=/p/openresty-cosocket/image.268e2e79e52031653561f41fcb927715_hu791dd9063814c22195f4ea220a5b559d_225821_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty cosocket" data-hash="md5-Jo4ueeUgMWU1YfQfy5J3FQ==">
+<img src=/p/openresty-rewrite_by_lua/image.8d6393ed524ea8c96a0fc0d11a489908_hu488b2f82ab20ee50f487200f2be764c2_242367_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-jWOT7VJOqMlqD8DRGkiZCA==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty cosocket</h2>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
 </div>
 </a>
 </article>
 <article class=has-image>
-<a href=/p/openresty-content_by_lua/>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
 <div class=article-image>
-<img src=/p/openresty-content_by_lua/image.0a3f2e0a36bdf47265b1c1a8896e83cb_hud65e514ff14931b6d473072786819b50_270380_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty content_by_lua*" data-hash="md5-Cj8uCja99HJlscGoiW6Dyw==">
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image.9cfccc20d168493fc76af305bbc06809_hu689d4fb24de3faf3d6ece04efc963d1d_254728_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 协程" data-hash="md5-nPzMINFoST/HavMFu8BoCQ==">
 </div>
 <div class=article-details>
-<h2 class=article-title>OpenResty content_by_lua*</h2>
+<h2 class=article-title>OpenResty 协程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/>
+<div class=article-image>
+<img src=/p/openresty-lua-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%9E%E4%BE%8B%E8%B7%9F%E8%B8%AA/image.b2420bfcfc4a2b91bb002f59bcc2df48_hue5dc0d3f3cdfdc2db7e9f7df6176631d_248590_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty Lua 代码执行实例跟踪" data-hash="md5-skIL/PxKK5G7AC9ZvMLfSA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty Lua 代码执行实例跟踪</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/>
+<div class=article-image>
+<img src=/p/openresty-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E7%82%B9/image.96f45fc9989fb02948258bb53138a3eb_huff93e60677c963a35780fae817fe9703_270013_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 核心技术点" data-hash="md5-lvRfyZifsClIJYu1MTij6w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 核心技术点</h2>
 </div>
 </a>
 </article>
