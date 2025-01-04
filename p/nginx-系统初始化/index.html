@@ -1,0 +1,421 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Nginx 启动及初始化 入口  src/core/nginx.c
+ int ngx_cdecl main(int argc, char *const *argv) { ngx_buf_t *b; ngx_log_t *log; ngx_uint_t i; ngx_cycle_t *cycle, init_cycle; ngx_conf_dump_t *cd; ngx_core_conf_t *ccf; // 调试初始化  ngx_debug_init(); if (ngx_strerror_init() != NGX_OK) { return 1; } // 获取命令行选项  if (ngx_get_options(argc, argv) != NGX_OK) { return 1; } if (ngx_show_version) { ngx_show_version_info(); if (!ngx_test_config) { return 0; } } /* TODO */ ngx_max_sockets = -1; ngx_time_init(); // 如果使用了 pcre，则进行对应的初始化 #if (NGX_PCRE)  ngx_regex_init(); #endif  ngx_pid = ngx_getpid(); ngx_parent = ngx_getppid(); // 日志初始化  log = ngx_log_init(ngx_prefix, ngx_error_log); if (log == NULL) { return 1; } // 如果使用了 openssl，则进行相应的初始化  /* STUB */ #if (NGX_OPENSSL)  ngx_ssl_init(log); #endif  /* * init_cycle-&amp;gt;log is required for signal handlers and * ngx_process_options() */ ngx_memzero(&amp;amp;init_cycle, sizeof(ngx_cycle_t)); init_cycle."><title>Nginx - 系统初始化</title>
+<link rel=canonical href=https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Nginx - 系统初始化">
+<meta property="og:description" content="Nginx 启动及初始化 入口  src/core/nginx.c
+ int ngx_cdecl main(int argc, char *const *argv) { ngx_buf_t *b; ngx_log_t *log; ngx_uint_t i; ngx_cycle_t *cycle, init_cycle; ngx_conf_dump_t *cd; ngx_core_conf_t *ccf; // 调试初始化  ngx_debug_init(); if (ngx_strerror_init() != NGX_OK) { return 1; } // 获取命令行选项  if (ngx_get_options(argc, argv) != NGX_OK) { return 1; } if (ngx_show_version) { ngx_show_version_info(); if (!ngx_test_config) { return 0; } } /* TODO */ ngx_max_sockets = -1; ngx_time_init(); // 如果使用了 pcre，则进行对应的初始化 #if (NGX_PCRE)  ngx_regex_init(); #endif  ngx_pid = ngx_getpid(); ngx_parent = ngx_getppid(); // 日志初始化  log = ngx_log_init(ngx_prefix, ngx_error_log); if (log == NULL) { return 1; } // 如果使用了 openssl，则进行相应的初始化  /* STUB */ #if (NGX_OPENSSL)  ngx_ssl_init(log); #endif  /* * init_cycle-&amp;gt;log is required for signal handlers and * ngx_process_options() */ ngx_memzero(&amp;amp;init_cycle, sizeof(ngx_cycle_t)); init_cycle.">
+<meta property="og:url" content="https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="Nginx"><meta property="article:published_time" content="2024-05-16T06:00:00+08:00"><meta property="article:modified_time" content="2024-05-16T06:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg">
+<meta name=twitter:title content="Nginx - 系统初始化">
+<meta name=twitter:description content="Nginx 启动及初始化 入口  src/core/nginx.c
+ int ngx_cdecl main(int argc, char *const *argv) { ngx_buf_t *b; ngx_log_t *log; ngx_uint_t i; ngx_cycle_t *cycle, init_cycle; ngx_conf_dump_t *cd; ngx_core_conf_t *ccf; // 调试初始化  ngx_debug_init(); if (ngx_strerror_init() != NGX_OK) { return 1; } // 获取命令行选项  if (ngx_get_options(argc, argv) != NGX_OK) { return 1; } if (ngx_show_version) { ngx_show_version_info(); if (!ngx_test_config) { return 0; } } /* TODO */ ngx_max_sockets = -1; ngx_time_init(); // 如果使用了 pcre，则进行对应的初始化 #if (NGX_PCRE)  ngx_regex_init(); #endif  ngx_pid = ngx_getpid(); ngx_parent = ngx_getppid(); // 日志初始化  log = ngx_log_init(ngx_prefix, ngx_error_log); if (log == NULL) { return 1; } // 如果使用了 openssl，则进行相应的初始化  /* STUB */ #if (NGX_OPENSSL)  ngx_ssl_init(log); #endif  /* * init_cycle-&amp;gt;log is required for signal handlers and * ngx_process_options() */ ngx_memzero(&amp;amp;init_cycle, sizeof(ngx_cycle_t)); init_cycle."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<img src=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_800x0_resize_q75_box.jpg srcset="/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_800x0_resize_q75_box.jpg 800w, /p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Nginx - 系统初始化">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/>Nginx - 系统初始化</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2024</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 2 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=nginx-启动及初始化>Nginx 启动及初始化</h2>
+<h1 id=入口>入口</h1>
+<blockquote>
+<p>src/core/nginx.c</p>
+</blockquote>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>int</span> <span class=n>ngx_cdecl</span>
+<span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=k>const</span> <span class=o>*</span><span class=n>argv</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=n>ngx_buf_t</span>        <span class=o>*</span><span class=n>b</span><span class=p>;</span>
+    <span class=n>ngx_log_t</span>        <span class=o>*</span><span class=n>log</span><span class=p>;</span>
+    <span class=n>ngx_uint_t</span>        <span class=n>i</span><span class=p>;</span>
+    <span class=n>ngx_cycle_t</span>      <span class=o>*</span><span class=n>cycle</span><span class=p>,</span> <span class=n>init_cycle</span><span class=p>;</span>
+    <span class=n>ngx_conf_dump_t</span>  <span class=o>*</span><span class=n>cd</span><span class=p>;</span>
+    <span class=n>ngx_core_conf_t</span>  <span class=o>*</span><span class=n>ccf</span><span class=p>;</span>
+
+    <span class=c1>// 调试初始化
+</span><span class=c1></span>    <span class=n>ngx_debug_init</span><span class=p>();</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_strerror_init</span><span class=p>()</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=c1>// 获取命令行选项
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_get_options</span><span class=p>(</span><span class=n>argc</span><span class=p>,</span> <span class=n>argv</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_show_version</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>ngx_show_version_info</span><span class=p>();</span>
+
+        <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>ngx_test_config</span><span class=p>)</span> <span class=p>{</span>
+            <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+
+    <span class=cm>/* TODO */</span> <span class=n>ngx_max_sockets</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+
+    <span class=n>ngx_time_init</span><span class=p>();</span>
+
+    <span class=c1>// 如果使用了 pcre，则进行对应的初始化
+</span><span class=c1></span><span class=cp>#if (NGX_PCRE)
+</span><span class=cp></span>    <span class=n>ngx_regex_init</span><span class=p>();</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+    <span class=n>ngx_pid</span> <span class=o>=</span> <span class=n>ngx_getpid</span><span class=p>();</span>
+    <span class=n>ngx_parent</span> <span class=o>=</span> <span class=n>ngx_getppid</span><span class=p>();</span>
+
+    <span class=c1>// 日志初始化
+</span><span class=c1></span>    <span class=n>log</span> <span class=o>=</span> <span class=n>ngx_log_init</span><span class=p>(</span><span class=n>ngx_prefix</span><span class=p>,</span> <span class=n>ngx_error_log</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>log</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=c1>// 如果使用了 openssl，则进行相应的初始化
+</span><span class=c1></span>    <span class=cm>/* STUB */</span>
+<span class=cp>#if (NGX_OPENSSL)
+</span><span class=cp></span>    <span class=n>ngx_ssl_init</span><span class=p>(</span><span class=n>log</span><span class=p>);</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+    <span class=cm>/*
+</span><span class=cm>     * init_cycle-&gt;log is required for signal handlers and
+</span><span class=cm>     * ngx_process_options()
+</span><span class=cm>     */</span>
+
+    <span class=n>ngx_memzero</span><span class=p>(</span><span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>ngx_cycle_t</span><span class=p>));</span>
+    <span class=n>init_cycle</span><span class=p>.</span><span class=n>log</span> <span class=o>=</span> <span class=n>log</span><span class=p>;</span>
+    <span class=n>ngx_cycle</span> <span class=o>=</span> <span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>;</span>
+
+    <span class=c1>// 创建 cycle 使用的内存池
+</span><span class=c1></span>    <span class=n>init_cycle</span><span class=p>.</span><span class=n>pool</span> <span class=o>=</span> <span class=n>ngx_create_pool</span><span class=p>(</span><span class=mi>1024</span><span class=p>,</span> <span class=n>log</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>init_cycle</span><span class=p>.</span><span class=n>pool</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_save_argv</span><span class=p>(</span><span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>,</span> <span class=n>argc</span><span class=p>,</span> <span class=n>argv</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_process_options</span><span class=p>(</span><span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_os_init</span><span class=p>(</span><span class=n>log</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=cm>/*
+</span><span class=cm>     * ngx_crc32_table_init() requires ngx_cacheline_size set in ngx_os_init()
+</span><span class=cm>     */</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_crc32_table_init</span><span class=p>()</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=cm>/*
+</span><span class=cm>     * ngx_slab_sizes_init() requires ngx_pagesize set in ngx_os_init()
+</span><span class=cm>     */</span>
+
+    <span class=n>ngx_slab_sizes_init</span><span class=p>();</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_add_inherited_sockets</span><span class=p>(</span><span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=c1>// 模块的前置初始化：把模块进行编号
+</span><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_preinit_modules</span><span class=p>()</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=n>cycle</span> <span class=o>=</span> <span class=n>ngx_init_cycle</span><span class=p>(</span><span class=o>&amp;</span><span class=n>init_cycle</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>cycle</span> <span class=o>==</span> <span class=nb>NULL</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>ngx_test_config</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>ngx_log_stderr</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=s>&#34;configuration file %s test failed&#34;</span><span class=p>,</span>
+                           <span class=n>init_cycle</span><span class=p>.</span><span class=n>conf_file</span><span class=p>.</span><span class=n>data</span><span class=p>);</span>
+        <span class=p>}</span>
+
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_test_config</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>ngx_quiet_mode</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>ngx_log_stderr</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=s>&#34;configuration file %s test is successful&#34;</span><span class=p>,</span>
+                           <span class=n>cycle</span><span class=o>-&gt;</span><span class=n>conf_file</span><span class=p>.</span><span class=n>data</span><span class=p>);</span>
+        <span class=p>}</span>
+
+        <span class=k>if</span> <span class=p>(</span><span class=n>ngx_dump_config</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>cd</span> <span class=o>=</span> <span class=n>cycle</span><span class=o>-&gt;</span><span class=n>config_dump</span><span class=p>.</span><span class=n>elts</span><span class=p>;</span>
+
+            <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>cycle</span><span class=o>-&gt;</span><span class=n>config_dump</span><span class=p>.</span><span class=n>nelts</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+
+                <span class=n>ngx_write_stdout</span><span class=p>(</span><span class=s>&#34;# configuration file &#34;</span><span class=p>);</span>
+                <span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=n>ngx_write_fd</span><span class=p>(</span><span class=n>ngx_stdout</span><span class=p>,</span> <span class=n>cd</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>name</span><span class=p>.</span><span class=n>data</span><span class=p>,</span>
+                                    <span class=n>cd</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>name</span><span class=p>.</span><span class=n>len</span><span class=p>);</span>
+                <span class=n>ngx_write_stdout</span><span class=p>(</span><span class=s>&#34;:&#34;</span> <span class=n>NGX_LINEFEED</span><span class=p>);</span>
+
+                <span class=n>b</span> <span class=o>=</span> <span class=n>cd</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>buffer</span><span class=p>;</span>
+
+                <span class=p>(</span><span class=kt>void</span><span class=p>)</span> <span class=n>ngx_write_fd</span><span class=p>(</span><span class=n>ngx_stdout</span><span class=p>,</span> <span class=n>b</span><span class=o>-&gt;</span><span class=n>pos</span><span class=p>,</span> <span class=n>b</span><span class=o>-&gt;</span><span class=n>last</span> <span class=o>-</span> <span class=n>b</span><span class=o>-&gt;</span><span class=n>pos</span><span class=p>);</span>
+                <span class=n>ngx_write_stdout</span><span class=p>(</span><span class=n>NGX_LINEFEED</span><span class=p>);</span>
+            <span class=p>}</span>
+        <span class=p>}</span>
+
+        <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_signal</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=n>ngx_signal_process</span><span class=p>(</span><span class=n>cycle</span><span class=p>,</span> <span class=n>ngx_signal</span><span class=p>);</span>
+    <span class=p>}</span>
+
+    <span class=n>ngx_os_status</span><span class=p>(</span><span class=n>cycle</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>);</span>
+
+    <span class=n>ngx_cycle</span> <span class=o>=</span> <span class=n>cycle</span><span class=p>;</span>
+
+    <span class=n>ccf</span> <span class=o>=</span> <span class=p>(</span><span class=n>ngx_core_conf_t</span> <span class=o>*</span><span class=p>)</span> <span class=n>ngx_get_conf</span><span class=p>(</span><span class=n>cycle</span><span class=o>-&gt;</span><span class=n>conf_ctx</span><span class=p>,</span> <span class=n>ngx_core_module</span><span class=p>);</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ccf</span><span class=o>-&gt;</span><span class=n>master</span> <span class=o>&amp;&amp;</span> <span class=n>ngx_process</span> <span class=o>==</span> <span class=n>NGX_PROCESS_SINGLE</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>ngx_process</span> <span class=o>=</span> <span class=n>NGX_PROCESS_MASTER</span><span class=p>;</span>
+    <span class=p>}</span>
+
+<span class=cp>#if !(NGX_WIN32)
+</span><span class=cp></span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_init_signals</span><span class=p>(</span><span class=n>cycle</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>ngx_inherited</span> <span class=o>&amp;&amp;</span> <span class=n>ccf</span><span class=o>-&gt;</span><span class=n>daemon</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>ngx_daemon</span><span class=p>(</span><span class=n>cycle</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+            <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+        <span class=p>}</span>
+
+        <span class=n>ngx_daemonized</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_inherited</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>ngx_daemonized</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+<span class=cp>#endif
+</span><span class=cp></span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_create_pidfile</span><span class=p>(</span><span class=o>&amp;</span><span class=n>ccf</span><span class=o>-&gt;</span><span class=n>pid</span><span class=p>,</span> <span class=n>cycle</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_log_redirect_stderr</span><span class=p>(</span><span class=n>cycle</span><span class=p>)</span> <span class=o>!=</span> <span class=n>NGX_OK</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>log</span><span class=o>-&gt;</span><span class=n>file</span><span class=o>-&gt;</span><span class=n>fd</span> <span class=o>!=</span> <span class=n>ngx_stderr</span><span class=p>)</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>ngx_close_file</span><span class=p>(</span><span class=n>log</span><span class=o>-&gt;</span><span class=n>file</span><span class=o>-&gt;</span><span class=n>fd</span><span class=p>)</span> <span class=o>==</span> <span class=n>NGX_FILE_ERROR</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>ngx_log_error</span><span class=p>(</span><span class=n>NGX_LOG_ALERT</span><span class=p>,</span> <span class=n>cycle</span><span class=o>-&gt;</span><span class=n>log</span><span class=p>,</span> <span class=n>ngx_errno</span><span class=p>,</span>
+                          <span class=n>ngx_close_file_n</span> <span class=s>&#34; built-in log failed&#34;</span><span class=p>);</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+
+    <span class=n>ngx_use_stderr</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+
+    <span class=k>if</span> <span class=p>(</span><span class=n>ngx_process</span> <span class=o>==</span> <span class=n>NGX_PROCESS_SINGLE</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>ngx_single_process_cycle</span><span class=p>(</span><span class=n>cycle</span><span class=p>);</span>
+
+    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+        <span class=n>ngx_master_process_cycle</span><span class=p>(</span><span class=n>cycle</span><span class=p>);</span>
+    <span class=p>}</span>
+
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>这个是 Nginx 整个程序的入口，进行了一系列初始化以后，启动工作进程。</p>
+<ul>
+<li>ngx_log_init：在特别前面就把日志初始化了，这样可以尽快写日志。</li>
+<li>ngx_preinit_modules: 对模块进行编号，顺序是编译时就确定了。
+<ul>
+<li>顺序可以在 auto/modules 文件中进行修改。</li>
+</ul>
+</li>
+</ul>
+<p>后续我们针对各个点（如 log、module）进行详细的跟踪学习。</p>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>Nginx</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/>
+<div class=article-image>
+<img src=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image.39ccb3ce2b29dbd2891ecaa47eccfaa1_hu5bff14fb7655aa8fdab6bbae0922e168_186749_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - Proxy Cache 的使用与实现" data-hash="md5-Ocyzzisp29KJHsqkfsz6oQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - Proxy Cache 的使用与实现</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image.528d388cb2e77fdb0947dcbe6522cc89_hu22ef85a2611c4baed2aaa0166caa598b_203305_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 模块数据处理流程" data-hash="md5-Uo04jLLnf9sJR9y+ZSLMiQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 模块数据处理流程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.7670d23a97e5f347eef4dfd2083151bf_hu8886b919104ef84c776323591f53caab_196334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 模块初始化" data-hash="md5-dnDSOpfl80fu9N/SCDFRvw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-ngx.sleep/>
+<div class=article-image>
+<img src=/p/openresty-ngx.sleep/image.022e6f17ce69c48792e75233a6d037d7_hufcdb8a4692f8ada50966e20cd23479ea_226817_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty ngx.sleep" data-hash="md5-Ai5vF85pxIeS51IzptA31w==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty ngx.sleep</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-rewrite_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-rewrite_by_lua/image.8d6393ed524ea8c96a0fc0d11a489908_hu488b2f82ab20ee50f487200f2be764c2_242367_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-jWOT7VJOqMlqD8DRGkiZCA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2025 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#nginx-启动及初始化>Nginx 启动及初始化</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

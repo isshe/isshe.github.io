@@ -1,0 +1,558 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Proxy Cache 的使用与实现  基于 nginx-1.24.0 编译选项：./configure &amp;ndash;prefix=/opt/nginx &amp;ndash;with-debug &amp;ndash;with-stream &amp;ndash;with-http_stub_status_module &amp;ndash;with-http_ssl_module
+ 目的：
+ 了解如何使用 Proxy Cache。 了解 Proxy Cache 是如何实现的。  命中 cache 时是如何处理的。 没命中 cache 时是如何处理的。 如何保存 cache 的。   keys zone 中存储了哪些信息？如何构建生成的？Nginx 进程启动时，是否会自动构建 key 信息存到 keys zone 中？  当超过 keys zone 不够用了，会怎么处理？    使用 http { # ...  set $proxy_cache_key $uri; set $proxy_cache_zone &amp;#34;proxycache&amp;#34;; # 104857600: 100MB  # 2592000: 30 天  # 5368709120: 5GB  proxy_cache_path /mnt/data/proxy_cache levels=1 use_temp_path=off keys_zone=proxycache:104857600 inactive=2592000 max_size=5368709120; proxy_cache $proxy_cache_zone; proxy_cache_key $proxy_cache_key; # ."><title>Nginx - Proxy Cache 的使用与实现</title>
+<link rel=canonical href=https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Nginx - Proxy Cache 的使用与实现">
+<meta property="og:description" content="Proxy Cache 的使用与实现  基于 nginx-1.24.0 编译选项：./configure &amp;ndash;prefix=/opt/nginx &amp;ndash;with-debug &amp;ndash;with-stream &amp;ndash;with-http_stub_status_module &amp;ndash;with-http_ssl_module
+ 目的：
+ 了解如何使用 Proxy Cache。 了解 Proxy Cache 是如何实现的。  命中 cache 时是如何处理的。 没命中 cache 时是如何处理的。 如何保存 cache 的。   keys zone 中存储了哪些信息？如何构建生成的？Nginx 进程启动时，是否会自动构建 key 信息存到 keys zone 中？  当超过 keys zone 不够用了，会怎么处理？    使用 http { # ...  set $proxy_cache_key $uri; set $proxy_cache_zone &amp;#34;proxycache&amp;#34;; # 104857600: 100MB  # 2592000: 30 天  # 5368709120: 5GB  proxy_cache_path /mnt/data/proxy_cache levels=1 use_temp_path=off keys_zone=proxycache:104857600 inactive=2592000 max_size=5368709120; proxy_cache $proxy_cache_zone; proxy_cache_key $proxy_cache_key; # .">
+<meta property="og:url" content="https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="Nginx"><meta property="article:published_time" content="2024-05-16T06:00:00+08:00"><meta property="article:modified_time" content="2024-05-16T06:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image.jpg">
+<meta name=twitter:title content="Nginx - Proxy Cache 的使用与实现">
+<meta name=twitter:description content="Proxy Cache 的使用与实现  基于 nginx-1.24.0 编译选项：./configure &amp;ndash;prefix=/opt/nginx &amp;ndash;with-debug &amp;ndash;with-stream &amp;ndash;with-http_stub_status_module &amp;ndash;with-http_ssl_module
+ 目的：
+ 了解如何使用 Proxy Cache。 了解 Proxy Cache 是如何实现的。  命中 cache 时是如何处理的。 没命中 cache 时是如何处理的。 如何保存 cache 的。   keys zone 中存储了哪些信息？如何构建生成的？Nginx 进程启动时，是否会自动构建 key 信息存到 keys zone 中？  当超过 keys zone 不够用了，会怎么处理？    使用 http { # ...  set $proxy_cache_key $uri; set $proxy_cache_zone &amp;#34;proxycache&amp;#34;; # 104857600: 100MB  # 2592000: 30 天  # 5368709120: 5GB  proxy_cache_path /mnt/data/proxy_cache levels=1 use_temp_path=off keys_zone=proxycache:104857600 inactive=2592000 max_size=5368709120; proxy_cache $proxy_cache_zone; proxy_cache_key $proxy_cache_key; # ."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/>
+<img src=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image_hu5bff14fb7655aa8fdab6bbae0922e168_186749_800x0_resize_q75_box.jpg srcset="/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image_hu5bff14fb7655aa8fdab6bbae0922e168_186749_800x0_resize_q75_box.jpg 800w, /p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image_hu5bff14fb7655aa8fdab6bbae0922e168_186749_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Nginx - Proxy Cache 的使用与实现">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/>Nginx - Proxy Cache 的使用与实现</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2024</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 5 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h1 id=proxy-cache-的使用与实现>Proxy Cache 的使用与实现</h1>
+<blockquote>
+<p>基于 nginx-1.24.0
+编译选项：./configure &ndash;prefix=/opt/nginx &ndash;with-debug &ndash;with-stream &ndash;with-http_stub_status_module &ndash;with-http_ssl_module</p>
+</blockquote>
+<p>目的：</p>
+<ul>
+<li>了解如何使用 Proxy Cache。</li>
+<li>了解 Proxy Cache 是如何实现的。
+<ul>
+<li>命中 cache 时是如何处理的。</li>
+<li>没命中 cache 时是如何处理的。</li>
+<li>如何保存 cache 的。</li>
+</ul>
+</li>
+<li>keys zone 中存储了哪些信息？如何构建生成的？Nginx 进程启动时，是否会自动构建 key 信息存到 keys zone 中？
+<ul>
+<li>当超过 keys zone 不够用了，会怎么处理？</li>
+</ul>
+</li>
+</ul>
+<h2 id=使用>使用</h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-nginx.conf data-lang=nginx.conf><span class=k>http</span> <span class=p>{</span>
+    <span class=c1># ...
+</span><span class=c1></span>    <span class=kn>set</span> <span class=nv>$proxy_cache_key</span>    <span class=nv>$uri</span><span class=p>;</span>
+    <span class=kn>set</span> <span class=nv>$proxy_cache_zone</span>   <span class=s>&#34;proxycache&#34;</span><span class=p>;</span>
+
+    <span class=c1># 104857600: 100MB
+</span><span class=c1></span>    <span class=c1># 2592000: 30 天
+</span><span class=c1></span>    <span class=c1># 5368709120: 5GB
+</span><span class=c1></span>    <span class=kn>proxy_cache_path</span> <span class=s>/mnt/data/proxy_cache</span> <span class=s>levels=1</span>
+        <span class=s>use_temp_path=off</span>
+        <span class=s>keys_zone=proxycache:104857600</span>
+        <span class=s>inactive=2592000</span>
+        <span class=s>max_size=5368709120</span><span class=p>;</span>
+
+    <span class=kn>proxy_cache</span> <span class=nv>$proxy_cache_zone</span><span class=p>;</span>
+    <span class=kn>proxy_cache_key</span> <span class=nv>$proxy_cache_key</span><span class=p>;</span>
+    <span class=c1># ...
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></div><p>以上是 cache 最基本的使用方式，proxy_cache_path 指令用于定义缓存文件的存储路径等信息，proxy_cache 指令用于指定使用哪个 cache zone。proxy_cache_key 指令则是用于指定 cache key 的生成方式。
+可以看到，配置中使用 URI 作为了 cache key。在 OpenResty 中，可以通过 Lua 代码，动态修改 proxy_cache_zone 和 proxy_cache_key 成指定的内容，以达到定制 cache zone 和 cache key 的目的。</p>
+<h2 id=实现>实现</h2>
+<h3 id=关键调用栈>关键调用栈</h3>
+<p>根据 <a class=link href=../../../../M.%e6%96%b9%e6%b3%95%e8%ae%ba/%e9%98%85%e8%af%bb%e6%ba%90%e7%a0%81%e7%9a%84%e6%96%b9%e6%b3%95.md>《阅读源码的方法》</a> 中的方法。</p>
+<p>通过命令</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># 命令阻塞时，发送 HTTP 请求触发命中断点</span>
+bash trace.sh
+</code></pre></div><p>获取关键函数的调用栈：</p>
+<ul>
+<li>
+<p>未命中 Cache 时</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>ngx_http_file_cache_new</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_file_cache.c</span>
+<span class=n>ngx_http_upstream_cache</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span>
+<span class=n>ngx_http_upstream_init_request</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span>
+<span class=n>ngx_http_upstream_init</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span>
+<span class=n>ngx_http_read_client_request_body</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request_body.c</span>
+<span class=n>ngx_http_proxy_handler</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_http_proxy_module.c</span>
+<span class=n>ngx_http_core_content_phase</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_core_run_phases</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_handler</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_process_request</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_http_process_request_headers</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_http_process_request_line</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_epoll_process_events</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_epoll_module.c</span>
+<span class=p>...</span>
+</code></pre></div><p>调用 <code>ngx_http_file_cache_new</code> 后，后续还会继续调用 <code>ngx_http_file_cache_open</code>、<code>ngx_http_file_cache_update</code>、<code>ngx_http_file_cache_free</code> 等，都在 <code>ngx_http_upstream_cache</code>。相关函数的作用下面继续探究。</p>
+<blockquote>
+<p>后续看了代码后，发现 <code>ngx_http_upstream_init</code> 是作为参数传递给 ngx_http_read_client_request_body 的。</p>
+</blockquote>
+</li>
+<li>
+<p>命中 Cache 时：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>ngx_http_cache_send</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_file_cache.c</span>
+<span class=n>ngx_http_upstream_cache_send</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_file_cache.c</span>
+<span class=n>ngx_http_upstream_init_request</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span>
+<span class=n>ngx_http_read_client_request_body</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request_body.c</span>
+<span class=n>ngx_http_upstream_init</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span>
+<span class=n>ngx_http_proxy_handler</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_http_proxy_module.c</span>
+<span class=n>ngx_http_core_content_phase</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_core_run_phases</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_handler</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_core_module.c</span>
+<span class=n>ngx_http_process_request</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_http_process_request_headers</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_http_process_request_line</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_request.c</span>
+<span class=n>ngx_epoll_process_events</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_epoll_module.c</span>
+<span class=p>...</span>
+</code></pre></div></li>
+</ul>
+<p>从上面两个调用栈中可以得到以下信息</p>
+<ul>
+<li>是在 <code>content</code> 阶段处理 Cache 的</li>
+<li>共同的入口都是 <code>ngx_http_upstream_init_request</code> 函数，因此下一步我们主要跟踪这个函数的实现。</li>
+</ul>
+<h3 id=ngx_http_upstream_init_request>ngx_http_upstream_init_request</h3>
+<blockquote>
+<p>看函数名称猜测它的功能应该是用于构造上游请求的。</p>
+</blockquote>
+<pre tabindex=0><code>- ngx_http_upstream_init_request
+    \- rc = ngx_http_upstream_cache(): 进行缓存处理，设置缓存状态等
+    \- if (rc == NGX_BUSY): 正忙，下次再进来，通过设置 r-&gt;write_event_handler = ngx_http_upstream_init_request 实现
+    \- if (rc == NGX_ERROR): 出错了，直接结束请求
+        \- ngx_http_finalize_request
+    \- if (rc == NGX_OK): 缓存命中了
+        \- ngx_http_upstream_cache_send: 直接将缓存作为响应
+    \- if (rc != NGX_DECLINED): 非缓存未命中的情况，就直接结束请求
+        \- ngx_http_finalize_request
+    \- if (u-&gt;create_request(r) != NGX_OK): 构建请求
+    \- if (ngx_http_upstream_set_local(r, u, u-&gt;conf-&gt;local) != NGX_OK): 设置用于连接上游的本地地址（本地可能有多个地址）
+    \- ...: 中间还有一大堆东西，设置发送、接收回调等
+    \- ngx_http_upstream_connect: 发起连接到上游，其中与缓存流程相关的主要有以下几个 handler 的设置
+        \- c-&gt;write-&gt;handler = ngx_http_upstream_handler
+        \- c-&gt;read-&gt;handler = ngx_http_upstream_handler
+        \- u-&gt;write_event_handler = ngx_http_upstream_send_request_handler
+        \- u-&gt;read_event_handler = ngx_http_upstream_process_header
+            \- ngx_http_upstream_send_response
+                \- ngx_http_file_cache_valid: 获取缓存有效时间
+                \- ngx_http_upstream_process_upstream: 更新 u-&gt;read_event_handler 成这个函数
+                    \- ngx_http_upstream_process_request
+                        \- ngx_http_file_cache_update
+</code></pre><p>首先从最外层（ngx_http_upstream_init_request 直接调用）可以看到，与猜测一样，这里是进行上游请求的初始化（创建请求、连接到上游）。
+不过更关键的是，会先检查是否有 cache，再进行请求创建，如果有 cache，则会直接使用。</p>
+<p>ngx_http_upstream_cache_get 是获取 cache zone。可以是硬编码名称的形式 <code>proxy_cache proxy_cache_name;</code>，也可以是变量形式 <code>proxy_cache $arg_cache;</code>，当变量的值是 <code>off</code> 时不启用缓存。
+什么是 predicate（谓词），<code>set $predicate1 "$arg_param1";</code> 像这样的配置中的 <code>$predicate1</code> 即是
+缓存命中后，调用 <code>ngx_http_upstream_cache_send</code>。</p>
+<p>接下来，我们一层一层解释 ngx_http_upstream_cache、ngx_http_upstream_cache_send 等。</p>
+<p>ngx_http_upstream_connect 中设置的各个 handler，我们后续在“保存缓存”的章节进行说明。</p>
+<h2 id=ngx_http_upstream_cache>ngx_http_upstream_cache</h2>
+<pre tabindex=0><code>- ngx_http_upstream_cache(): 进行缓存处理
+    \- if (r-&gt;cache == NULL): 首先检查一下缓存是否存在，这个判断为真表示不存在
+        \- if (!(r-&gt;method &amp; u-&gt;conf-&gt;cache_methods)): 检查是否是能缓存的方法，不是直接返回 NGX_DECLINED
+        \- ngx_http_upstream_cache_get(r, u, &amp;cache): 选择 cache zone，决定要把 cache 存到哪里去
+        \- ngx_http_file_cache_new(r): 创建缓存对象
+        \- ngx_http_file_cache_create_key(r): 创建缓存 key
+        \- ngx_http_test_predicates(r, u-&gt;conf-&gt;cache_bypass): u-&gt;conf-&gt;cache_bypass 即是 predicates，对应 proxy_cache_bypass 指令的配置。
+            \- 返回 NGX_ERROR 表示出错；NGX_DECLINED 表示测试通过，需要 bypass（回源上游）；NGX_OK 表示测试没通过，继续进行缓存相关动作。
+        \- u-&gt;cache_status = NGX_HTTP_CACHE_MISS: 状态设置为 MISS，没有命中缓存但需要缓存（继续后续流程）。
+    \- 缓存存在；或是缓存不存在，但是需要进行缓存，也就是前面 if 执行完了
+    \- rc = ngx_http_file_cache_open(r): 打开缓存
+    \- switch (rc): 根据 cache open 的返回值进行处理。这个 switch 会更新 rc。后续再进行一次 switch。这个 switch 会设置 NGX_HTTP_CACHE_STALE、NGX_HTTP_CACHE_UPDATING、NGX_HTTP_CACHE_HIT 这些状态。
+        \- NGX_HTTP_CACHE_STALE: 缓存已经过期。如果需要后台更新缓存则调用 ngx_http_upstream_cache_background_update 进行后台更新，Cache 状态也会被设置成 NGX_HTTP_CACHE_STALE。
+        \- NGX_HTTP_CACHE_UPDATING: 缓存文件正在被**其他请求**更新。如果允许使用过期缓存，则把 Cache 状态设置成 NGX_HTTP_CACHE_UPDATING，把 rc 更新成 NGX_OK。否则把 rc 更新成 NGX_HTTP_CACHE_STALE，表示请求过期。
+        \- NGX_OK: 缓存有效，直接把状态设置成 NGX_HTTP_CACHE_HIT。
+    \- switch (rc): 再进行一次 switch。这个 switch 会设置 NGX_HTTP_CACHE_EXPIRED、NGX_HTTP_CACHE_HIT 状态。
+        \- NGX_OK: 直接返回 NGX_OK
+        \- NGX_HTTP_CACHE_STALE: 设置缓存状态为 NGX_HTTP_CACHE_EXPIRED，表示缓存过期了。
+        \- NGX_DECLINED: 缓存不存在之类的情况，总之是需要访问上游的。
+        \- NGX_HTTP_CACHE_SCARCE: 表示缓存空间不够了，cacheable 标记会被设置成 0，表示不可缓存。
+        \- NGX_AGAIN: 缓存正忙，直接返回 NGX_BUSY。
+        \- NGX_ERROR: 出错了，直接返回 NGX_ERROR
+        \- default: 设置成 NGX_HTTP_CACHE_HIT 状态
+    \- 能跑到这里表示都需要访问后端了，该返回的前面已经返回了。
+    \- ngx_http_upstream_cache_check_range: 检查 Range 请求头，看缓存是否能满足请求的范围。返回 NGX_DECLINED 表示不能满足。会把 cacheable 标记设置成 0，表示不可缓存。
+    \- r-&gt;cached = 0: 将请求对象 `r` 的 `cached` 字段设置为 0，表示该请求没有使用缓存，而是从后端服务器获取了响应
+</code></pre><p>ngx_http_upstream_cache 函数主要是检查缓存是否存在，如果存在就打开缓存，后续读取返回；不存在就继续后续的回源处理。以及会设置响应体中的缓存状态。</p>
+<h2 id=ngx_http_upstream_cache_send>ngx_http_upstream_cache_send</h2>
+<pre tabindex=0><code>- ngx_http_upstream_cache_send: 直接将缓存作为响应发送给客户端
+    \- r-&gt;cached = 1: 上来先把缓存状态设置成 1，表示请求使用了缓存。
+    \- if (c-&gt;header_start == c-&gt;body_start): 表示缓存中没有头部信息，是 HTTP 0.9。
+        \- ngx_http_cache_send：直接发送缓存响应
+            \- ngx_http_send_header: 发送响应头
+            \- ngx_http_output_filter: 调用输出过滤链，最后发送响应
+    \- 接下来主要是设置上游对象（u）的信息
+    \- ngx_list_init(&amp;u-&gt;headers_in.headers, ...): 初始化上游的响应头部列表，就是普通的请求头如 Content-Type。
+    \- ngx_list_init(&amp;u-&gt;headers_in.trailers, ...): 初始化上游的响应尾部列表。尾部列表通常用于传输一些元数据或附加信息，主要用于分块传输编码。
+    \- rc = u-&gt;process_header(r): 调用上游的 `process_header` 回调函数处理响应头部
+        \- rc == NGX_OK: 调用 `ngx_http_upstream_process_headers` 函数处理响应头部，如果处理失败，返回 `NGX_DONE`。否则，调用 `ngx_http_cache_send` 函数发送缓存响应。
+            \- ngx_http_upstream_process_headers: 处理响应头部
+            \- ngx_http_cache_send: 发送响应
+        \- rc == NGX_ERROR: 出错了，直接返回 NGX_ERROR
+        \- rc == NGX_AGAIN: 返回值设置为 `NGX_HTTP_UPSTREAM_INVALID_HEADER`，表示无效的响应头部
+</code></pre><p>ngx_http_upstream_cache_send 用于把缓存作为响应发送回给客户端，也就是缓存命中的情况。</p>
+<p>到这里为止可以回答，命中 cache 和没命中 cache 时，进行了哪些操作：</p>
+<ul>
+<li>命中 cache 时，读取 cache 并发送给客户端。</li>
+<li>没命中 cache 时，返回对应的状态码，后续进行回源。</li>
+</ul>
+<p>接下来继续看下回源后，是如何保存响应体到 cache 文件中的。</p>
+<h2 id=保存-cache-的调用流程>保存 cache 的调用流程</h2>
+<p>以下是缓存没命中的情况。</p>
+<ul>
+<li>
+<p>获取缓存保持时间（不是验证缓存，详见 <a class=link href=#ngx_http_file_cache_valid>ngx_http_file_cache_valid</a>）：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>ngx_http_file_cache_valid</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_file_cache.c</span><span class=p>:</span><span class=mi>2299</span>
+<span class=n>ngx_http_upstream_send_response</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>3156</span>
+<span class=n>ngx_http_upstream_process_header</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>2503</span>
+<span class=n>ngx_http_upstream_handler</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>1292</span>
+<span class=n>ngx_epoll_process_events</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_epoll_module.c</span><span class=p>:</span><span class=mi>901</span>
+</code></pre></div></li>
+<li>
+<p>缓存更新/保存（详见 <a class=link href=#ngx_http_file_cache_update>ngx_http_file_cache_update</a>）：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=n>ngx_http_file_cache_update</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_file_cache.c</span><span class=p>:</span><span class=mi>1360</span>
+<span class=n>ngx_http_upstream_process_request</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>4154</span>
+<span class=n>ngx_http_upstream_process_upstream</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>4097</span>
+<span class=n>ngx_http_upstream_handler</span> <span class=n>src</span><span class=o>/</span><span class=n>http</span><span class=o>/</span><span class=n>ngx_http_upstream.c</span><span class=p>:</span><span class=mi>1292</span>
+<span class=n>ngx_epoll_process_events</span> <span class=n>at</span> <span class=n>src</span><span class=o>/</span><span class=n>event</span><span class=o>/</span><span class=n>modules</span><span class=o>/</span><span class=n>ngx_epoll_module.c</span><span class=p>:</span><span class=mi>901</span>
+</code></pre></div></li>
+</ul>
+<p>从这两个调用栈，我们可以想到大致会进行以下两个工作：</p>
+<ol>
+<li>发送响应头给客户端前，需要知道缓存是否有效，是否使用了缓存，响应头也可能有和缓存相同的需要进行响应。</li>
+<li>处理上游发送过来的响应时，如果需要缓存，则进行缓存。</li>
+</ol>
+<p>此外，获取这两个调用栈过程中，我们也可以再次确认，当命中缓存时，是<strong>不会</strong>再进入到这两个逻辑，也就是和我们前面看的的那样，已经提前返回了。</p>
+<p>这两个调用栈共同的入口是 <code>ngx_http_upstream_handler</code>，因此接下来看下这个函数。以及 ngx_http_file_cache_valid 和 ngx_http_file_cache_update 这两个关键的操作缓存的函数，我们后续也来跟一下。</p>
+<h2 id=ngx_http_upstream_handler>ngx_http_upstream_handler</h2>
+<p>在代码中搜索了 ngx_http_upstream_handler 后，发现有必要介绍上游 handler 的设置节点以及串联起所有流程。
+不过我们先继续看具体的函数，都介绍完后，再进行串联。详见<a class=link href=#%e5%a6%82%e4%bd%95%e5%9b%9e%e6%ba%90%ef%bc%9f%e5%a6%82%e4%bd%95%e4%bf%9d%e5%ad%98Cache%e7%9a%84%ef%bc%9f>如何回源？如何保存 Cache 的？</a></p>
+<pre tabindex=0><code>- ngx_http_upstream_handler
+    \- ngx_http_set_log_request: 这是一个宏，用于将当前请求关联到连接的日志对象上。
+    \- write_event_handler: 如果是写事件，调用写处理函数。
+    \- read_event_handler: 如果是读事件，调用读处理函数。
+    \- ngx_http_run_posted_requests: 处理 posted 的请求。（之前中断执行，接下来还需要执行的请求）
+</code></pre><p>write_event_handler、read_event_handler 是 <a class=link href=#ngx_http_upstream_init_request>ngx_http_upstream_init_request</a> 中提到的 ngx_http_upstream_send_request_handler 和 ngx_http_upstream_process_header。</p>
+<h2 id=ngx_http_file_cache_valid>ngx_http_file_cache_valid</h2>
+<p>注释版代码见 <a class=link href=https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L2383 target=_blank rel=noopener>ngx_http_file_cache_valid</a></p>
+<pre tabindex=0><code>- ngx_http_file_cache_valid
+    \- for (i = 0; i &lt; cache_valid-&gt;nelts; i++): 遍历 cache_valid 数组
+        \- if (valid[i].status == 0): 如果状态码是 0，返回验证时间（表示会进行缓存）
+        \- if (valid[i].status == status): 如果上游响应状态码和 proxy_cache_valid 指令设置的相同，则返回对应的验证时间。
+</code></pre><p>与之前猜测的不同，<strong>这个函数并不是验证缓存，而是获取缓存的保持的时间</strong>。配置示例：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-nginx.conf data-lang=nginx.conf><span class=k>proxy_cache_valid</span> <span class=mi>200</span> <span class=mi>302</span> <span class=mi>10m</span><span class=p>;</span>
+</code></pre></div><p>对 200 和 302 状态码的上游响应，设置缓存时间为 10 分钟。</p>
+<h2 id=ngx_http_file_cache_update>ngx_http_file_cache_update</h2>
+<p>注释版代码见 <a class=link href=https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L1421 target=_blank rel=noopener>ngx_http_file_cache_update</a></p>
+<pre tabindex=0><code>- ngx_http_file_cache_update
+    \- ngx_ext_rename_file: 重命名临时缓存文件成正式缓存文件
+    \- if (rc == NGX_OK): 重命名成功
+        \- ngx_fd_info(tf-&gt;file.fd, &amp;fi): 获取文件信息
+        \- uniq = ngx_file_uniq(&amp;fi): 获取文件唯一标识符
+    \- ngx_shmtx_lock/ngx_shmtx_unlock: 加锁来更新缓存节点信息
+</code></pre><p>顾名思义，这个函数是用于更新缓存的，包括添加、删除、更新缓存文件。
+调用这个函数时，已经确定是<strong>可以缓存</strong>并且<strong>已经回源完成</strong>有缓存文件的了。</p>
+<h2 id=如何回源如何保存-cache-的>如何回源？如何保存 Cache 的？</h2>
+<ul>
+<li>ngx_http_upstream_init_request 的时候
+<ul>
+<li>判断是否命中缓存，如何命中并且缓存可用，直接使用缓存。</li>
+<li>如果需要回源，则创建回源请求，并连接到上游；连接到上游后，会设置好客户端与代理服务器的读写回调以及代理服务器与上游的读写回调。分别是：
+<ul>
+<li>c->write->handler = ngx_http_upstream_handler</li>
+<li>c->read->handler = ngx_http_upstream_handler</li>
+<li>u->write_event_handler = ngx_http_upstream_send_request_handler</li>
+<li>u->read_event_handler = ngx_http_upstream_process_header
+<ul>
+<li>header 处理完后，会将 handler 改为 ngx_http_upstream_process_upstream。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当读写事件到达时，调用对应的回调。</li>
+<li>当 ngx_http_upstream_process_header 回调中处理完上游的响应头时，会把 u->read_event_handler 更改为 ngx_http_upstream_process_upstream 以处理响应体。</li>
+<li>在 ngx_http_upstream_process_header 的处理中，会调用 ngx_http_file_cache_valid 来获取缓存验证时间，以标记缓存什么时候过期。</li>
+<li>在 ngx_http_upstream_process_upstream 的处理中，会调用 ngx_http_file_cache_update 更新/保存缓存。</li>
+</ul>
+<p>至此，我们串联起来了 cache 处理的核心流程，同时也是回源上游的核心流程。</p>
+<h2 id=key-zone>Key zone</h2>
+<h3 id=解析-keys_zone-配置初始化共享内存>解析 keys_zone 配置，初始化共享内存</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_file_cache_set_slot</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>shm_zone</span> <span class=o>=</span> <span class=n>ngx_shared_memory_add</span><span class=p>(</span><span class=n>cf</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>name</span><span class=p>,</span> <span class=n>size</span><span class=p>,</span> <span class=n>cmd</span><span class=o>-&gt;</span><span class=n>post</span><span class=p>):</span> <span class=err>解析完指令后，会添加共享内存用于</span> <span class=n>keys_zone</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>shm_zone</span><span class=o>-&gt;</span><span class=n>init</span> <span class=o>=</span> <span class=n>ngx_http_file_cache_init</span><span class=p>:</span> <span class=err>然后设置共享内存的初始化函数</span>
+        <span class=err>\</span><span class=o>-</span> <span class=n>ngx_http_file_cache_init</span><span class=p>():</span> <span class=err>设置</span> <span class=n>keys</span> <span class=n>zone</span> <span class=err>这块共享内存的一些属性</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>sh</span> <span class=o>=</span> <span class=n>ngx_slab_alloc</span><span class=p>(</span><span class=n>cache</span><span class=o>-&gt;</span><span class=n>shpool</span><span class=p>,</span> <span class=n>sizeof</span><span class=p>(</span><span class=n>ngx_http_file_cache_sh_t</span><span class=p>)):</span> <span class=err>分配内存，如果已经存在旧的内存和信息，则会直接使用</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_rbtree_init</span><span class=p>:</span> <span class=err>缓存</span> <span class=n>key</span> <span class=err>信息通过红黑树进行组织，可以提供</span> <span class=n>O</span><span class=p>(</span><span class=n>Logn</span><span class=p>)</span> <span class=err>的增删查的时间复杂度</span>
+            <span class=err>\</span><span class=o>-</span> <span class=n>ngx_queue_init</span><span class=p>:</span> <span class=err>缓存</span> <span class=n>key</span> <span class=err>信息通过双向队列进行管理，可以用于维护缓存项的使用顺序，实现</span><span class=n>LRU</span><span class=err>（最近最少使用）策略。</span>
+            <span class=err>\</span><span class=o>-</span> <span class=err>设置</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>shpool</span><span class=p>,</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>bsize</span><span class=p>,</span> <span class=n>cache</span><span class=o>-&gt;</span><span class=n>max_size</span> <span class=err>等</span>
+</code></pre></div><p>上面的 keys zone 缓存空间初始化（ngx_http_file_cache_init）流程中，省略了存在旧缓存空间等内容。详见<a class=link href=https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L99 target=_blank rel=noopener>ngx_http_file_cache_init 源码注释</a>。</p>
+<p>同时使用红黑树和双向队列配合管理缓存信息：</p>
+<ul>
+<li>红黑树提供快速查找特定缓存项的能力。</li>
+<li>队列允许按照特定顺序（如 LRU）遍历或操作缓存项。</li>
+</ul>
+<h3 id=缓存-keys-的处理>缓存 Keys 的处理</h3>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=o>-</span> <span class=n>ngx_http_file_cache_create_key</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_crc32_init</span><span class=p>(</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>crc32</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_md5_init</span><span class=p>(</span><span class=o>&amp;</span><span class=n>md5</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_crc32_update</span><span class=p>(</span><span class=o>&amp;</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>crc32</span><span class=p>,</span> <span class=n>key</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>data</span><span class=p>,</span> <span class=n>key</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>len</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_md5_update</span><span class=p>(</span><span class=o>&amp;</span><span class=n>md5</span><span class=p>,</span> <span class=n>key</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>data</span><span class=p>,</span> <span class=n>key</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>len</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_crc32_final</span><span class=p>(</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>crc32</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_md5_final</span><span class=p>(</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>key</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>md5</span><span class=p>)</span>
+    <span class=err>\</span><span class=o>-</span> <span class=n>ngx_memcpy</span><span class=p>(</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>main</span><span class=p>,</span> <span class=n>c</span><span class=o>-&gt;</span><span class=n>key</span><span class=p>,</span> <span class=n>NGX_HTTP_CACHE_KEY_LEN</span><span class=p>):</span> <span class=err>复制到</span> <span class=n>c</span><span class=o>-&gt;</span><span class=n>main</span>
+</code></pre></div><p>代码注释见 <a class=link href=https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L272 target=_blank rel=noopener>ngx_http_file_cache_create_key</a></p>
+<p>ngx_http_file_cache_create_key 与 ngx_http_file_cache_new 不同，ngx_http_file_cache_new 用于新建一个文件缓存的结构；ngx_http_file_cache_create_key 用于创建一个缓存的 Key。
+其实 proxy cache key 的值已经在 <code>u->create_key = ngx_http_proxy_create_key;</code> 回调中创建好了，后面的 ngx_http_file_cache_create_key 只是计算 crc32 和 md5，最终用于 keys zone 的值是这些 crc32 或 md5，不是 proxy cache key（例如 URI）。</p>
+<p>keys zone 共享内存中主要存储的内容是 ngx_http_file_cache_node_t，结构见 <a class=link href=https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.h#L39 target=_blank rel=noopener>ngx_http_file_cache_node_t</a>。</p>
+<h2 id=函数与指令之间的关联整理>函数与指令之间的关联整理</h2>
+<ul>
+<li>
+<p>proxy_cache_bypass: ngx_http_test_predicates</p>
+<ul>
+<li>示例：<code>proxy_cache_bypass $cookie_nocache $arg_nocache$arg_comment;</code></li>
+</ul>
+</li>
+<li>
+<p>ngx_http_file_cache_valid: proxy_cache_valid</p>
+<ul>
+<li>示例：
+<ul>
+<li>proxy_cache_valid 200 302 10m;</li>
+<li>proxy_cache_valid 404 1m;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id=更多说明>更多说明</h2>
+<ul>
+<li>
+<p>u->headers_in.trailers：响应的尾部列表。尾部字段并不常用，主要用于分块传输编码（Chunked Transfer Encoding）的场景。以下是一个请求示例。</p>
+<pre tabindex=0><code>POST /upload HTTP/1.1
+Host: www.example.com
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Trailer: Signature
+
+7\r\n
+Mozilla\r\n
+9\r\n
+Developer\r\n
+7\r\n
+Network\r\n
+0\r\n
+Signature: s0m3s1gn4tur3\r\n
+\r\n
+</code></pre></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>Nginx</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image.93769ba539d05344905d01012b30639d_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 系统初始化" data-hash="md5-k3abpTnQU0SQXQEBKzBjnQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 系统初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image.528d388cb2e77fdb0947dcbe6522cc89_hu22ef85a2611c4baed2aaa0166caa598b_203305_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 模块数据处理流程" data-hash="md5-Uo04jLLnf9sJR9y+ZSLMiQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 模块数据处理流程</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.7670d23a97e5f347eef4dfd2083151bf_hu8886b919104ef84c776323591f53caab_196334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 模块初始化" data-hash="md5-dnDSOpfl80fu9N/SCDFRvw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E7%AE%A1%E9%81%93pipe/>
+<div class=article-image>
+<img src=/p/openresty-%E7%AE%A1%E9%81%93pipe/image.7634b2466081893442eede1b1204b662_hu85aaf5f0d41b0975ba4c41b921fc00cc_279865_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 管道（pipe）" data-hash="md5-djSyRmCBiTRC7t4bEgS2Yg==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 管道（pipe）</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-%E5%8D%8F%E7%A8%8B/>
+<div class=article-image>
+<img src=/p/openresty-%E5%8D%8F%E7%A8%8B/image.9cfccc20d168493fc76af305bbc06809_hu689d4fb24de3faf3d6ece04efc963d1d_254728_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty 协程" data-hash="md5-nPzMINFoST/HavMFu8BoCQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty 协程</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2025 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#使用>使用</a></li>
+<li><a href=#实现>实现</a>
+<ol>
+<li><a href=#关键调用栈>关键调用栈</a></li>
+<li><a href=#ngx_http_upstream_init_request>ngx_http_upstream_init_request</a></li>
+</ol>
+</li>
+<li><a href=#ngx_http_upstream_cache>ngx_http_upstream_cache</a></li>
+<li><a href=#ngx_http_upstream_cache_send>ngx_http_upstream_cache_send</a></li>
+<li><a href=#保存-cache-的调用流程>保存 cache 的调用流程</a></li>
+<li><a href=#ngx_http_upstream_handler>ngx_http_upstream_handler</a></li>
+<li><a href=#ngx_http_file_cache_valid>ngx_http_file_cache_valid</a></li>
+<li><a href=#ngx_http_file_cache_update>ngx_http_file_cache_update</a></li>
+<li><a href=#如何回源如何保存-cache-的>如何回源？如何保存 Cache 的？</a></li>
+<li><a href=#key-zone>Key zone</a>
+<ol>
+<li><a href=#解析-keys_zone-配置初始化共享内存>解析 keys_zone 配置，初始化共享内存</a></li>
+<li><a href=#缓存-keys-的处理>缓存 Keys 的处理</a></li>
+</ol>
+</li>
+<li><a href=#函数与指令之间的关联整理>函数与指令之间的关联整理</a></li>
+<li><a href=#更多说明>更多说明</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

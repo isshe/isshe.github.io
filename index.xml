@@ -1,4 +1,939 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 20 Aug 2023 12:00:00 +0800</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>Valgrind 快速上手</title><link>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</link><pubDate>Sun, 20 Aug 2023 12:00:00 +0800</pubDate><guid>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</guid><description>&lt;img src="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image.jpg" alt="Featured image of post Valgrind 快速上手" />&lt;h1 id="valgrind-快速上手">Valgrind 快速上手&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>树深时间录</title><link>https://isshe.site/</link><description>Recent content on 树深时间录</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 09 Dec 2024 06:00:00 +0800</lastBuildDate><atom:link href="https://isshe.site/index.xml" rel="self" type="application/rss+xml"/><item><title>经典案例（网络）- TCP 重置</title><link>https://isshe.site/p/%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E7%BD%91%E7%BB%9C-tcp-%E9%87%8D%E7%BD%AE/</link><pubDate>Mon, 09 Dec 2024 06:00:00 +0800</pubDate><guid>https://isshe.site/p/%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E7%BD%91%E7%BB%9C-tcp-%E9%87%8D%E7%BD%AE/</guid><description>&lt;img src="https://isshe.site/p/%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E7%BD%91%E7%BB%9C-tcp-%E9%87%8D%E7%BD%AE/image.jpg" alt="Featured image of post 经典案例（网络）- TCP 重置" />&lt;h1 id="tcp-连接被重置reset分析">TCP 连接被重置（Reset）分析&lt;/h1>
+&lt;blockquote>
+&lt;p>TODO：以下简略版，后续补充完整的案例/步骤。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="strace-方案">strace 方案&lt;/h2>
+&lt;p>使用 strace 确认是否提前关闭 socket。注意 trace 不仅要 network 还要 close.&lt;/p>
+&lt;pre tabindex="0">&lt;code>goal all {
+run {
+$ timeout 60 strace -tt -f -e trace=network,close -p 50795,
+nop;
+}
+}
+&lt;/code>&lt;/pre>&lt;h2 id="stap-查看应用层调用栈">stap 查看应用层调用栈&lt;/h2>
+&lt;pre tabindex="0">&lt;code>_probe _stap_probe(&amp;quot;syscall.close&amp;quot;)
+{
+int fd = _stap_long(&amp;quot;fd&amp;quot;);
+_str sock = _stap_call_str_func(&amp;quot;describe_fd&amp;quot;, fd);
+printf(&amp;quot;%s %ld\n&amp;quot;, sock, _now_ms());
+_str bt = _sym_ubt(_ubt());
+printf(&amp;quot;%s&amp;quot;, bt);
+}
+&lt;/code>&lt;/pre>&lt;h2 id="stap-查看内核调用栈">stap 查看内核调用栈&lt;/h2>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://access.redhat.com/solutions/1570493" target="_blank" rel="noopener"
+>https://access.redhat.com/solutions/1570493&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;pre tabindex="0">&lt;code># reset-monitor.stap begins here
+#
+# usage : stap --all-modules reset-monitor.stap
+probe begin { printf (&amp;quot;Reset monitoring started...\n&amp;quot;) }
+probe end { printf(&amp;quot;Reset monitoring stopped.\n&amp;quot;) }
+probe kernel.function(&amp;quot;tcp_send_active_reset&amp;quot;).call,
+kernel.function(&amp;quot;tcp_v4_send_reset&amp;quot;).call,
+module(&amp;quot;ipt_REJECT&amp;quot;).function(&amp;quot;*&amp;quot;).call
+{
+printf (&amp;quot;%s-%lu: %s(%d) called %s\n&amp;quot;,
+ctime(gettimeofday_s()), gettimeofday_ns(),
+execname(), pid(), probefunc())
+print_backtrace()
+}
+#
+# reset-monitor.stap ends here
+&lt;/code>&lt;/pre></description></item><item><title>Nginx - Proxy Cache 的使用与实现</title><link>https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link><pubDate>Thu, 16 May 2024 06:00:00 +0800</pubDate><guid>https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid><description>&lt;img src="https://isshe.site/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image.jpg" alt="Featured image of post Nginx - Proxy Cache 的使用与实现" />&lt;h1 id="proxy-cache-的使用与实现">Proxy Cache 的使用与实现&lt;/h1>
+&lt;blockquote>
+&lt;p>基于 nginx-1.24.0
+编译选项：./configure &amp;ndash;prefix=/opt/nginx &amp;ndash;with-debug &amp;ndash;with-stream &amp;ndash;with-http_stub_status_module &amp;ndash;with-http_ssl_module&lt;/p>
+&lt;/blockquote>
+&lt;p>目的：&lt;/p>
+&lt;ul>
+&lt;li>了解如何使用 Proxy Cache。&lt;/li>
+&lt;li>了解 Proxy Cache 是如何实现的。
+&lt;ul>
+&lt;li>命中 cache 时是如何处理的。&lt;/li>
+&lt;li>没命中 cache 时是如何处理的。&lt;/li>
+&lt;li>如何保存 cache 的。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>keys zone 中存储了哪些信息？如何构建生成的？Nginx 进程启动时，是否会自动构建 key 信息存到 keys zone 中？
+&lt;ul>
+&lt;li>当超过 keys zone 不够用了，会怎么处理？&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="使用">使用&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx.conf" data-lang="nginx.conf">&lt;span class="k">http&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="c1"># ...
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kn">set&lt;/span> &lt;span class="nv">$proxy_cache_key&lt;/span> &lt;span class="nv">$uri&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">set&lt;/span> &lt;span class="nv">$proxy_cache_zone&lt;/span> &lt;span class="s">&amp;#34;proxycache&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1"># 104857600: 100MB
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="c1"># 2592000: 30 天
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="c1"># 5368709120: 5GB
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kn">proxy_cache_path&lt;/span> &lt;span class="s">/mnt/data/proxy_cache&lt;/span> &lt;span class="s">levels=1&lt;/span>
+&lt;span class="s">use_temp_path=off&lt;/span>
+&lt;span class="s">keys_zone=proxycache:104857600&lt;/span>
+&lt;span class="s">inactive=2592000&lt;/span>
+&lt;span class="s">max_size=5368709120&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_cache&lt;/span> &lt;span class="nv">$proxy_cache_zone&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="kn">proxy_cache_key&lt;/span> &lt;span class="nv">$proxy_cache_key&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1"># ...
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>以上是 cache 最基本的使用方式，proxy_cache_path 指令用于定义缓存文件的存储路径等信息，proxy_cache 指令用于指定使用哪个 cache zone。proxy_cache_key 指令则是用于指定 cache key 的生成方式。
+可以看到，配置中使用 URI 作为了 cache key。在 OpenResty 中，可以通过 Lua 代码，动态修改 proxy_cache_zone 和 proxy_cache_key 成指定的内容，以达到定制 cache zone 和 cache key 的目的。&lt;/p>
+&lt;h2 id="实现">实现&lt;/h2>
+&lt;h3 id="关键调用栈">关键调用栈&lt;/h3>
+&lt;p>根据 &lt;a class="link" href="../../../../M.%e6%96%b9%e6%b3%95%e8%ae%ba/%e9%98%85%e8%af%bb%e6%ba%90%e7%a0%81%e7%9a%84%e6%96%b9%e6%b3%95.md" >《阅读源码的方法》&lt;/a> 中的方法。&lt;/p>
+&lt;p>通过命令&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="c1"># 命令阻塞时，发送 HTTP 请求触发命中断点&lt;/span>
+bash trace.sh
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>获取关键函数的调用栈：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>未命中 Cache 时&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="n">ngx_http_file_cache_new&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_file_cache.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_cache&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_init_request&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_init&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>
+&lt;span class="n">ngx_http_read_client_request_body&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request_body.c&lt;/span>
+&lt;span class="n">ngx_http_proxy_handler&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_proxy_module.c&lt;/span>
+&lt;span class="n">ngx_http_core_content_phase&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_core_run_phases&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_handler&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_process_request&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_http_process_request_headers&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_http_process_request_line&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_epoll_process_events&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_epoll_module.c&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>调用 &lt;code>ngx_http_file_cache_new&lt;/code> 后，后续还会继续调用 &lt;code>ngx_http_file_cache_open&lt;/code>、&lt;code>ngx_http_file_cache_update&lt;/code>、&lt;code>ngx_http_file_cache_free&lt;/code> 等，都在 &lt;code>ngx_http_upstream_cache&lt;/code>。相关函数的作用下面继续探究。&lt;/p>
+&lt;blockquote>
+&lt;p>后续看了代码后，发现 &lt;code>ngx_http_upstream_init&lt;/code> 是作为参数传递给 ngx_http_read_client_request_body 的。&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;p>命中 Cache 时：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="n">ngx_http_cache_send&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_file_cache.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_cache_send&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_file_cache.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_init_request&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>
+&lt;span class="n">ngx_http_read_client_request_body&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request_body.c&lt;/span>
+&lt;span class="n">ngx_http_upstream_init&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>
+&lt;span class="n">ngx_http_proxy_handler&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_proxy_module.c&lt;/span>
+&lt;span class="n">ngx_http_core_content_phase&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_core_run_phases&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_handler&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_core_module.c&lt;/span>
+&lt;span class="n">ngx_http_process_request&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_http_process_request_headers&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_http_process_request_line&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_request.c&lt;/span>
+&lt;span class="n">ngx_epoll_process_events&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_epoll_module.c&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>从上面两个调用栈中可以得到以下信息&lt;/p>
+&lt;ul>
+&lt;li>是在 &lt;code>content&lt;/code> 阶段处理 Cache 的&lt;/li>
+&lt;li>共同的入口都是 &lt;code>ngx_http_upstream_init_request&lt;/code> 函数，因此下一步我们主要跟踪这个函数的实现。&lt;/li>
+&lt;/ul>
+&lt;h3 id="ngx_http_upstream_init_request">ngx_http_upstream_init_request&lt;/h3>
+&lt;blockquote>
+&lt;p>看函数名称猜测它的功能应该是用于构造上游请求的。&lt;/p>
+&lt;/blockquote>
+&lt;pre tabindex="0">&lt;code>- ngx_http_upstream_init_request
+\- rc = ngx_http_upstream_cache(): 进行缓存处理，设置缓存状态等
+\- if (rc == NGX_BUSY): 正忙，下次再进来，通过设置 r-&amp;gt;write_event_handler = ngx_http_upstream_init_request 实现
+\- if (rc == NGX_ERROR): 出错了，直接结束请求
+\- ngx_http_finalize_request
+\- if (rc == NGX_OK): 缓存命中了
+\- ngx_http_upstream_cache_send: 直接将缓存作为响应
+\- if (rc != NGX_DECLINED): 非缓存未命中的情况，就直接结束请求
+\- ngx_http_finalize_request
+\- if (u-&amp;gt;create_request(r) != NGX_OK): 构建请求
+\- if (ngx_http_upstream_set_local(r, u, u-&amp;gt;conf-&amp;gt;local) != NGX_OK): 设置用于连接上游的本地地址（本地可能有多个地址）
+\- ...: 中间还有一大堆东西，设置发送、接收回调等
+\- ngx_http_upstream_connect: 发起连接到上游，其中与缓存流程相关的主要有以下几个 handler 的设置
+\- c-&amp;gt;write-&amp;gt;handler = ngx_http_upstream_handler
+\- c-&amp;gt;read-&amp;gt;handler = ngx_http_upstream_handler
+\- u-&amp;gt;write_event_handler = ngx_http_upstream_send_request_handler
+\- u-&amp;gt;read_event_handler = ngx_http_upstream_process_header
+\- ngx_http_upstream_send_response
+\- ngx_http_file_cache_valid: 获取缓存有效时间
+\- ngx_http_upstream_process_upstream: 更新 u-&amp;gt;read_event_handler 成这个函数
+\- ngx_http_upstream_process_request
+\- ngx_http_file_cache_update
+&lt;/code>&lt;/pre>&lt;p>首先从最外层（ngx_http_upstream_init_request 直接调用）可以看到，与猜测一样，这里是进行上游请求的初始化（创建请求、连接到上游）。
+不过更关键的是，会先检查是否有 cache，再进行请求创建，如果有 cache，则会直接使用。&lt;/p>
+&lt;p>ngx_http_upstream_cache_get 是获取 cache zone。可以是硬编码名称的形式 &lt;code>proxy_cache proxy_cache_name;&lt;/code>，也可以是变量形式 &lt;code>proxy_cache $arg_cache;&lt;/code>，当变量的值是 &lt;code>off&lt;/code> 时不启用缓存。
+什么是 predicate（谓词），&lt;code>set $predicate1 &amp;quot;$arg_param1&amp;quot;;&lt;/code> 像这样的配置中的 &lt;code>$predicate1&lt;/code> 即是
+缓存命中后，调用 &lt;code>ngx_http_upstream_cache_send&lt;/code>。&lt;/p>
+&lt;p>接下来，我们一层一层解释 ngx_http_upstream_cache、ngx_http_upstream_cache_send 等。&lt;/p>
+&lt;p>ngx_http_upstream_connect 中设置的各个 handler，我们后续在“保存缓存”的章节进行说明。&lt;/p>
+&lt;h2 id="ngx_http_upstream_cache">ngx_http_upstream_cache&lt;/h2>
+&lt;pre tabindex="0">&lt;code>- ngx_http_upstream_cache(): 进行缓存处理
+\- if (r-&amp;gt;cache == NULL): 首先检查一下缓存是否存在，这个判断为真表示不存在
+\- if (!(r-&amp;gt;method &amp;amp; u-&amp;gt;conf-&amp;gt;cache_methods)): 检查是否是能缓存的方法，不是直接返回 NGX_DECLINED
+\- ngx_http_upstream_cache_get(r, u, &amp;amp;cache): 选择 cache zone，决定要把 cache 存到哪里去
+\- ngx_http_file_cache_new(r): 创建缓存对象
+\- ngx_http_file_cache_create_key(r): 创建缓存 key
+\- ngx_http_test_predicates(r, u-&amp;gt;conf-&amp;gt;cache_bypass): u-&amp;gt;conf-&amp;gt;cache_bypass 即是 predicates，对应 proxy_cache_bypass 指令的配置。
+\- 返回 NGX_ERROR 表示出错；NGX_DECLINED 表示测试通过，需要 bypass（回源上游）；NGX_OK 表示测试没通过，继续进行缓存相关动作。
+\- u-&amp;gt;cache_status = NGX_HTTP_CACHE_MISS: 状态设置为 MISS，没有命中缓存但需要缓存（继续后续流程）。
+\- 缓存存在；或是缓存不存在，但是需要进行缓存，也就是前面 if 执行完了
+\- rc = ngx_http_file_cache_open(r): 打开缓存
+\- switch (rc): 根据 cache open 的返回值进行处理。这个 switch 会更新 rc。后续再进行一次 switch。这个 switch 会设置 NGX_HTTP_CACHE_STALE、NGX_HTTP_CACHE_UPDATING、NGX_HTTP_CACHE_HIT 这些状态。
+\- NGX_HTTP_CACHE_STALE: 缓存已经过期。如果需要后台更新缓存则调用 ngx_http_upstream_cache_background_update 进行后台更新，Cache 状态也会被设置成 NGX_HTTP_CACHE_STALE。
+\- NGX_HTTP_CACHE_UPDATING: 缓存文件正在被**其他请求**更新。如果允许使用过期缓存，则把 Cache 状态设置成 NGX_HTTP_CACHE_UPDATING，把 rc 更新成 NGX_OK。否则把 rc 更新成 NGX_HTTP_CACHE_STALE，表示请求过期。
+\- NGX_OK: 缓存有效，直接把状态设置成 NGX_HTTP_CACHE_HIT。
+\- switch (rc): 再进行一次 switch。这个 switch 会设置 NGX_HTTP_CACHE_EXPIRED、NGX_HTTP_CACHE_HIT 状态。
+\- NGX_OK: 直接返回 NGX_OK
+\- NGX_HTTP_CACHE_STALE: 设置缓存状态为 NGX_HTTP_CACHE_EXPIRED，表示缓存过期了。
+\- NGX_DECLINED: 缓存不存在之类的情况，总之是需要访问上游的。
+\- NGX_HTTP_CACHE_SCARCE: 表示缓存空间不够了，cacheable 标记会被设置成 0，表示不可缓存。
+\- NGX_AGAIN: 缓存正忙，直接返回 NGX_BUSY。
+\- NGX_ERROR: 出错了，直接返回 NGX_ERROR
+\- default: 设置成 NGX_HTTP_CACHE_HIT 状态
+\- 能跑到这里表示都需要访问后端了，该返回的前面已经返回了。
+\- ngx_http_upstream_cache_check_range: 检查 Range 请求头，看缓存是否能满足请求的范围。返回 NGX_DECLINED 表示不能满足。会把 cacheable 标记设置成 0，表示不可缓存。
+\- r-&amp;gt;cached = 0: 将请求对象 `r` 的 `cached` 字段设置为 0，表示该请求没有使用缓存，而是从后端服务器获取了响应
+&lt;/code>&lt;/pre>&lt;p>ngx_http_upstream_cache 函数主要是检查缓存是否存在，如果存在就打开缓存，后续读取返回；不存在就继续后续的回源处理。以及会设置响应体中的缓存状态。&lt;/p>
+&lt;h2 id="ngx_http_upstream_cache_send">ngx_http_upstream_cache_send&lt;/h2>
+&lt;pre tabindex="0">&lt;code>- ngx_http_upstream_cache_send: 直接将缓存作为响应发送给客户端
+\- r-&amp;gt;cached = 1: 上来先把缓存状态设置成 1，表示请求使用了缓存。
+\- if (c-&amp;gt;header_start == c-&amp;gt;body_start): 表示缓存中没有头部信息，是 HTTP 0.9。
+\- ngx_http_cache_send：直接发送缓存响应
+\- ngx_http_send_header: 发送响应头
+\- ngx_http_output_filter: 调用输出过滤链，最后发送响应
+\- 接下来主要是设置上游对象（u）的信息
+\- ngx_list_init(&amp;amp;u-&amp;gt;headers_in.headers, ...): 初始化上游的响应头部列表，就是普通的请求头如 Content-Type。
+\- ngx_list_init(&amp;amp;u-&amp;gt;headers_in.trailers, ...): 初始化上游的响应尾部列表。尾部列表通常用于传输一些元数据或附加信息，主要用于分块传输编码。
+\- rc = u-&amp;gt;process_header(r): 调用上游的 `process_header` 回调函数处理响应头部
+\- rc == NGX_OK: 调用 `ngx_http_upstream_process_headers` 函数处理响应头部，如果处理失败，返回 `NGX_DONE`。否则，调用 `ngx_http_cache_send` 函数发送缓存响应。
+\- ngx_http_upstream_process_headers: 处理响应头部
+\- ngx_http_cache_send: 发送响应
+\- rc == NGX_ERROR: 出错了，直接返回 NGX_ERROR
+\- rc == NGX_AGAIN: 返回值设置为 `NGX_HTTP_UPSTREAM_INVALID_HEADER`，表示无效的响应头部
+&lt;/code>&lt;/pre>&lt;p>ngx_http_upstream_cache_send 用于把缓存作为响应发送回给客户端，也就是缓存命中的情况。&lt;/p>
+&lt;p>到这里为止可以回答，命中 cache 和没命中 cache 时，进行了哪些操作：&lt;/p>
+&lt;ul>
+&lt;li>命中 cache 时，读取 cache 并发送给客户端。&lt;/li>
+&lt;li>没命中 cache 时，返回对应的状态码，后续进行回源。&lt;/li>
+&lt;/ul>
+&lt;p>接下来继续看下回源后，是如何保存响应体到 cache 文件中的。&lt;/p>
+&lt;h2 id="保存-cache-的调用流程">保存 cache 的调用流程&lt;/h2>
+&lt;p>以下是缓存没命中的情况。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>获取缓存保持时间（不是验证缓存，详见 &lt;a class="link" href="#ngx_http_file_cache_valid" >ngx_http_file_cache_valid&lt;/a>）：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="n">ngx_http_file_cache_valid&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_file_cache.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">2299&lt;/span>
+&lt;span class="n">ngx_http_upstream_send_response&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">3156&lt;/span>
+&lt;span class="n">ngx_http_upstream_process_header&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">2503&lt;/span>
+&lt;span class="n">ngx_http_upstream_handler&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">1292&lt;/span>
+&lt;span class="n">ngx_epoll_process_events&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_epoll_module.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">901&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>缓存更新/保存（详见 &lt;a class="link" href="#ngx_http_file_cache_update" >ngx_http_file_cache_update&lt;/a>）：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="n">ngx_http_file_cache_update&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_file_cache.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">1360&lt;/span>
+&lt;span class="n">ngx_http_upstream_process_request&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">4154&lt;/span>
+&lt;span class="n">ngx_http_upstream_process_upstream&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">4097&lt;/span>
+&lt;span class="n">ngx_http_upstream_handler&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">http&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_http_upstream.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">1292&lt;/span>
+&lt;span class="n">ngx_epoll_process_events&lt;/span> &lt;span class="n">at&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">event&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">ngx_epoll_module.c&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">901&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>从这两个调用栈，我们可以想到大致会进行以下两个工作：&lt;/p>
+&lt;ol>
+&lt;li>发送响应头给客户端前，需要知道缓存是否有效，是否使用了缓存，响应头也可能有和缓存相同的需要进行响应。&lt;/li>
+&lt;li>处理上游发送过来的响应时，如果需要缓存，则进行缓存。&lt;/li>
+&lt;/ol>
+&lt;p>此外，获取这两个调用栈过程中，我们也可以再次确认，当命中缓存时，是&lt;strong>不会&lt;/strong>再进入到这两个逻辑，也就是和我们前面看的的那样，已经提前返回了。&lt;/p>
+&lt;p>这两个调用栈共同的入口是 &lt;code>ngx_http_upstream_handler&lt;/code>，因此接下来看下这个函数。以及 ngx_http_file_cache_valid 和 ngx_http_file_cache_update 这两个关键的操作缓存的函数，我们后续也来跟一下。&lt;/p>
+&lt;h2 id="ngx_http_upstream_handler">ngx_http_upstream_handler&lt;/h2>
+&lt;p>在代码中搜索了 ngx_http_upstream_handler 后，发现有必要介绍上游 handler 的设置节点以及串联起所有流程。
+不过我们先继续看具体的函数，都介绍完后，再进行串联。详见&lt;a class="link" href="#%e5%a6%82%e4%bd%95%e5%9b%9e%e6%ba%90%ef%bc%9f%e5%a6%82%e4%bd%95%e4%bf%9d%e5%ad%98Cache%e7%9a%84%ef%bc%9f" >如何回源？如何保存 Cache 的？&lt;/a>&lt;/p>
+&lt;pre tabindex="0">&lt;code>- ngx_http_upstream_handler
+\- ngx_http_set_log_request: 这是一个宏，用于将当前请求关联到连接的日志对象上。
+\- write_event_handler: 如果是写事件，调用写处理函数。
+\- read_event_handler: 如果是读事件，调用读处理函数。
+\- ngx_http_run_posted_requests: 处理 posted 的请求。（之前中断执行，接下来还需要执行的请求）
+&lt;/code>&lt;/pre>&lt;p>write_event_handler、read_event_handler 是 &lt;a class="link" href="#ngx_http_upstream_init_request" >ngx_http_upstream_init_request&lt;/a> 中提到的 ngx_http_upstream_send_request_handler 和 ngx_http_upstream_process_header。&lt;/p>
+&lt;h2 id="ngx_http_file_cache_valid">ngx_http_file_cache_valid&lt;/h2>
+&lt;p>注释版代码见 &lt;a class="link" href="https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L2383" target="_blank" rel="noopener"
+>ngx_http_file_cache_valid&lt;/a>&lt;/p>
+&lt;pre tabindex="0">&lt;code>- ngx_http_file_cache_valid
+\- for (i = 0; i &amp;lt; cache_valid-&amp;gt;nelts; i++): 遍历 cache_valid 数组
+\- if (valid[i].status == 0): 如果状态码是 0，返回验证时间（表示会进行缓存）
+\- if (valid[i].status == status): 如果上游响应状态码和 proxy_cache_valid 指令设置的相同，则返回对应的验证时间。
+&lt;/code>&lt;/pre>&lt;p>与之前猜测的不同，&lt;strong>这个函数并不是验证缓存，而是获取缓存的保持的时间&lt;/strong>。配置示例：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-nginx.conf" data-lang="nginx.conf">&lt;span class="k">proxy_cache_valid&lt;/span> &lt;span class="mi">200&lt;/span> &lt;span class="mi">302&lt;/span> &lt;span class="mi">10m&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>对 200 和 302 状态码的上游响应，设置缓存时间为 10 分钟。&lt;/p>
+&lt;h2 id="ngx_http_file_cache_update">ngx_http_file_cache_update&lt;/h2>
+&lt;p>注释版代码见 &lt;a class="link" href="https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L1421" target="_blank" rel="noopener"
+>ngx_http_file_cache_update&lt;/a>&lt;/p>
+&lt;pre tabindex="0">&lt;code>- ngx_http_file_cache_update
+\- ngx_ext_rename_file: 重命名临时缓存文件成正式缓存文件
+\- if (rc == NGX_OK): 重命名成功
+\- ngx_fd_info(tf-&amp;gt;file.fd, &amp;amp;fi): 获取文件信息
+\- uniq = ngx_file_uniq(&amp;amp;fi): 获取文件唯一标识符
+\- ngx_shmtx_lock/ngx_shmtx_unlock: 加锁来更新缓存节点信息
+&lt;/code>&lt;/pre>&lt;p>顾名思义，这个函数是用于更新缓存的，包括添加、删除、更新缓存文件。
+调用这个函数时，已经确定是&lt;strong>可以缓存&lt;/strong>并且&lt;strong>已经回源完成&lt;/strong>有缓存文件的了。&lt;/p>
+&lt;h2 id="如何回源如何保存-cache-的">如何回源？如何保存 Cache 的？&lt;/h2>
+&lt;ul>
+&lt;li>ngx_http_upstream_init_request 的时候
+&lt;ul>
+&lt;li>判断是否命中缓存，如何命中并且缓存可用，直接使用缓存。&lt;/li>
+&lt;li>如果需要回源，则创建回源请求，并连接到上游；连接到上游后，会设置好客户端与代理服务器的读写回调以及代理服务器与上游的读写回调。分别是：
+&lt;ul>
+&lt;li>c-&amp;gt;write-&amp;gt;handler = ngx_http_upstream_handler&lt;/li>
+&lt;li>c-&amp;gt;read-&amp;gt;handler = ngx_http_upstream_handler&lt;/li>
+&lt;li>u-&amp;gt;write_event_handler = ngx_http_upstream_send_request_handler&lt;/li>
+&lt;li>u-&amp;gt;read_event_handler = ngx_http_upstream_process_header
+&lt;ul>
+&lt;li>header 处理完后，会将 handler 改为 ngx_http_upstream_process_upstream。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>当读写事件到达时，调用对应的回调。&lt;/li>
+&lt;li>当 ngx_http_upstream_process_header 回调中处理完上游的响应头时，会把 u-&amp;gt;read_event_handler 更改为 ngx_http_upstream_process_upstream 以处理响应体。&lt;/li>
+&lt;li>在 ngx_http_upstream_process_header 的处理中，会调用 ngx_http_file_cache_valid 来获取缓存验证时间，以标记缓存什么时候过期。&lt;/li>
+&lt;li>在 ngx_http_upstream_process_upstream 的处理中，会调用 ngx_http_file_cache_update 更新/保存缓存。&lt;/li>
+&lt;/ul>
+&lt;p>至此，我们串联起来了 cache 处理的核心流程，同时也是回源上游的核心流程。&lt;/p>
+&lt;h2 id="key-zone">Key zone&lt;/h2>
+&lt;h3 id="解析-keys_zone-配置初始化共享内存">解析 keys_zone 配置，初始化共享内存&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_http_file_cache_set_slot&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">shm_zone&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_shared_memory_add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">post&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="err">解析完指令后，会添加共享内存用于&lt;/span> &lt;span class="n">keys_zone&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">shm_zone&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">init&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_http_file_cache_init&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">然后设置共享内存的初始化函数&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_http_file_cache_init&lt;/span>&lt;span class="p">():&lt;/span> &lt;span class="err">设置&lt;/span> &lt;span class="n">keys&lt;/span> &lt;span class="n">zone&lt;/span> &lt;span class="err">这块共享内存的一些属性&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">sh&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_slab_alloc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">shpool&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_http_file_cache_sh_t&lt;/span>&lt;span class="p">)):&lt;/span> &lt;span class="err">分配内存，如果已经存在旧的内存和信息，则会直接使用&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_rbtree_init&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">缓存&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="err">信息通过红黑树进行组织，可以提供&lt;/span> &lt;span class="n">O&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Logn&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="err">的增删查的时间复杂度&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_queue_init&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="err">缓存&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="err">信息通过双向队列进行管理，可以用于维护缓存项的使用顺序，实现&lt;/span>&lt;span class="n">LRU&lt;/span>&lt;span class="err">（最近最少使用）策略。&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="err">设置&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">shpool&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">bsize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cache&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">max_size&lt;/span> &lt;span class="err">等&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>上面的 keys zone 缓存空间初始化（ngx_http_file_cache_init）流程中，省略了存在旧缓存空间等内容。详见&lt;a class="link" href="https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L99" target="_blank" rel="noopener"
+>ngx_http_file_cache_init 源码注释&lt;/a>。&lt;/p>
+&lt;p>同时使用红黑树和双向队列配合管理缓存信息：&lt;/p>
+&lt;ul>
+&lt;li>红黑树提供快速查找特定缓存项的能力。&lt;/li>
+&lt;li>队列允许按照特定顺序（如 LRU）遍历或操作缓存项。&lt;/li>
+&lt;/ul>
+&lt;h3 id="缓存-keys-的处理">缓存 Keys 的处理&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-lua" data-lang="lua">&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_http_file_cache_create_key&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_crc32_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">crc32&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_md5_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">md5&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_crc32_update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">crc32&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">len&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_md5_update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">md5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">len&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_crc32_final&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">crc32&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_md5_final&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">md5&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="err">\&lt;/span>&lt;span class="o">-&lt;/span> &lt;span class="n">ngx_memcpy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">main&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NGX_HTTP_CACHE_KEY_LEN&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="err">复制到&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">main&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>代码注释见 &lt;a class="link" href="https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.c#L272" target="_blank" rel="noopener"
+>ngx_http_file_cache_create_key&lt;/a>&lt;/p>
+&lt;p>ngx_http_file_cache_create_key 与 ngx_http_file_cache_new 不同，ngx_http_file_cache_new 用于新建一个文件缓存的结构；ngx_http_file_cache_create_key 用于创建一个缓存的 Key。
+其实 proxy cache key 的值已经在 &lt;code>u-&amp;gt;create_key = ngx_http_proxy_create_key;&lt;/code> 回调中创建好了，后面的 ngx_http_file_cache_create_key 只是计算 crc32 和 md5，最终用于 keys zone 的值是这些 crc32 或 md5，不是 proxy cache key（例如 URI）。&lt;/p>
+&lt;p>keys zone 共享内存中主要存储的内容是 ngx_http_file_cache_node_t，结构见 &lt;a class="link" href="https://github.com/isshe/reading-codes/blob/master/nginx-1.24.0/src/http/ngx_http_file_cache.h#L39" target="_blank" rel="noopener"
+>ngx_http_file_cache_node_t&lt;/a>。&lt;/p>
+&lt;h2 id="函数与指令之间的关联整理">函数与指令之间的关联整理&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>proxy_cache_bypass: ngx_http_test_predicates&lt;/p>
+&lt;ul>
+&lt;li>示例：&lt;code>proxy_cache_bypass $cookie_nocache $arg_nocache$arg_comment;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>ngx_http_file_cache_valid: proxy_cache_valid&lt;/p>
+&lt;ul>
+&lt;li>示例：
+&lt;ul>
+&lt;li>proxy_cache_valid 200 302 10m;&lt;/li>
+&lt;li>proxy_cache_valid 404 1m;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="更多说明">更多说明&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>u-&amp;gt;headers_in.trailers：响应的尾部列表。尾部字段并不常用，主要用于分块传输编码（Chunked Transfer Encoding）的场景。以下是一个请求示例。&lt;/p>
+&lt;pre tabindex="0">&lt;code>POST /upload HTTP/1.1
+Host: www.example.com
+Content-Type: text/plain
+Transfer-Encoding: chunked
+Trailer: Signature
+7\r\n
+Mozilla\r\n
+9\r\n
+Developer\r\n
+7\r\n
+Network\r\n
+0\r\n
+Signature: s0m3s1gn4tur3\r\n
+\r\n
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;/ul></description></item><item><title>Nginx - 模块初始化</title><link>https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/</link><pubDate>Thu, 16 May 2024 06:00:00 +0800</pubDate><guid>https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/</guid><description>&lt;img src="https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg" alt="Featured image of post Nginx - 模块初始化" />&lt;h2 id="nginx-模块初始化">Nginx 模块初始化&lt;/h2>
+&lt;p>Nginx 都是以模块的形式进行组织的，无论是 Nginx 核心还是第三方模块。&lt;/p>
+&lt;p>我们按照 Nginx 的约定，可以比较方便地定义模块，详见：http://nginx.org/en/docs/dev/development_guide.html#Modules&lt;/p>
+&lt;p>不过，现在我们想了解的不是 Nginx 模块的定义/使用，而是 Nginx 本身的模块功能是如何实现的、包含了哪些内容，后续的系列文章将围绕这个目的展开。&lt;/p>
+&lt;p>而这篇文章的目的是解答以下问题：&lt;/p>
+&lt;ul>
+&lt;li>Nginx 配置是如何解析的？&lt;/li>
+&lt;li>Nginx 模块是如何初始化的？&lt;/li>
+&lt;/ul>
+&lt;h1 id="nginx-模块结构">Nginx 模块结构&lt;/h1>
+&lt;p>以下是涉及的模块相关的数据结构：（不完全，仅后续“Nginx 模块初始化调用过程”中涉及的）&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_module_t.md" >ngx_module_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_command_t.md" >ngx_command_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_core_module_t.md" >ngx_core_module_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_event_module_t.md" >ngx_event_module_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_http_module_t.md" >ngx_http_module_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_stream_module_t.md" >ngx_stream_module_t&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="../Nginx%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84/ngx_mail_module_t.md" >ngx_mail_module_t&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="nginx-模块变量">Nginx 模块变量&lt;/h1>
+&lt;p>以下是涉及到的模块变量。&lt;/p>
+&lt;h2 id="ngx_modules">ngx_modules&lt;/h2>
+&lt;blockquote>
+&lt;p>objs/ngx_modules.c：此文件在执行 ./auto/configure 后生成。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">extern&lt;/span> &lt;span class="n">ngx_module_t&lt;/span> &lt;span class="n">ngx_core_module&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_module_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ngx_modules&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">ngx_core_module&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="ngx_module_names">ngx_module_names&lt;/h2>
+&lt;blockquote>
+&lt;p>objs/ngx_modules.c：此文件在执行 ./auto/configure 后生成。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ngx_module_names&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="s">&amp;#34;ngx_core_module&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h1 id="nginx-模块初始化执行流程">Nginx 模块初始化执行流程&lt;/h1>
+&lt;pre tabindex="0">&lt;code>main: core/nginx.c
+|
+\ ngx_preinit_modules: core/ngx_module.c, populate global variable &amp;quot;ngx_modules&amp;quot;
+|
+\ ngx_init_cycle: core/ngx_cycle.c,
+|
+\ ngx_cycle_modules: core/ngx_module.c, copy &amp;quot;ngx_modules&amp;quot; to cycle
+|
+\ create_conf: prioritize core modules
+|
+\ ngx_conf_parse: core/ngx_conf_file.c
+|
+\ ngx_conf_handler: core/ngx_conf_file.c,
+|
+\ cmd-&amp;gt;set: defined by module, processes a directive and stores parsed values into the corresponding configuration
+- such as:
+- http/ngx_http.c, stream/ngx_stream.c, event/ngx_event.c, mail/ngx_mail.c
+- ngx_http_block, ngx_stream_block, ngx_events_block, ngx_mail_block
+|
+| (http or stream module)
+\ create_main_conf
+\ create_srv_conf
+\ create_loc_conf: http module only
+\ preconfiguration
+\ ngx_conf_parse: continue parsing the configuration in the http{}/stream{} block. (!!!)
+|
+\ ngx_http_core_server
+\ ngx_conf_parse
+\ ngx_http_core_listen
+\ ngx_http_core_location
+\ ngx_conf_parse
+\ ...
+\ ...
+\ init_main_conf
+\ ngx_http_merge_servers: http module only
+|
+\ merge_srv_conf
+\ merge_loc_conf
+\ merge_srv_conf: stream module only
+\ postconfiguration：调用 postconfiguration 函数，到这里整个 http block 内的配置指令已经解析完了
+|
+| (event module)
+\ create_conf
+\ init_conf
+|
+| (mail module)
+\ create_main_conf
+\ create_srv_conf
+\ init_main_conf
+\ merge_srv_conf
+|
+\ init_conf: core modules
+|
+\ ngx_init_modules: core/ngx_module.c
+|
+\ init_module: defined by module
+|
+\ ngx_cycle_post_init
+|
+\ ngx_single_process_cycle: core/nginx.c
+|
+\ init_process: defined by module
+\ exit_process: defined by module
+\ ngx_master_process_exit
+|
+\ exit_master
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>配置解析时，每获取完一项配置，就遍历模块，比较配置指令名称，匹配后调用相应的 cmd-&amp;gt;set 函数。
+&lt;ul>
+&lt;li>以 HTTP 模块示例：
+&lt;ul>
+&lt;li>解析到 http 指令时，执行 ngx_http_block 函数，函数内部继续调用 ngx_conf_parse 对 &lt;code>http { ... }&lt;/code> 块内的配置进行解析；&lt;/li>
+&lt;li>解析到 server 指令时，执行 ngx_http_core_server 函数，函数内部继续调用 ngx_conf_parse 对 &lt;code> server { ... }&lt;/code> 块内的配置进行解析；&lt;/li>
+&lt;li>解析到 listen 指令时，执行 ngx_http_core_listen 函数进行端口监听 (ngx_http_add_listen) 等动作。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>cmd-&amp;gt;set：处理&lt;strong>指令&lt;/strong>并将解析后的值存储到相应的配置中。
+&lt;ul>
+&lt;li>在 NGX_CORE_MODULE 类型的模块“http”的 cmd-&amp;gt;set (也就是 ngx_http_block) 中，逐个处理 NGX_HTTP_MODULE 类型的模块的上下文；NGX_HTTP_MODULE 的 cmd 还是和其他模块的一起处理了。&lt;/li>
+&lt;li>因为有顺序，因此是“http”模块的指令（cmd）处理完以后，再处理其他 NGX_HTTP_MODULE 类型模块的指令。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>配置解析完以后，进行模块初始化 ngx_init_modules。&lt;/li>
+&lt;/ul>
+&lt;p>接下来对其中的关键调用过程进行解析。&lt;/p>
+&lt;h2 id="ngx_preinit_modules">ngx_preinit_modules&lt;/h2>
+&lt;p>调用：&lt;/p>
+&lt;blockquote>
+&lt;p>src/core/nginx.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_preinit_modules&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>定义：&lt;/p>
+&lt;blockquote>
+&lt;p>src/core/ngx_module.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">ngx_int_t&lt;/span>
+&lt;span class="nf">ngx_preinit_modules&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_uint_t&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">ngx_modules&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">];&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_modules&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">index&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_modules&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">name&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_module_names&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">ngx_modules_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_max_module&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_modules_n&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">NGX_MAX_DYNAMIC_MODULES&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>此函数在上一篇的入口函数中调用，预初始化阶段，对所有模块进行编号，并填充名字——从全局变量 ngx_modules 指向全局变量 ngx_module_names。&lt;/p>
+&lt;h2 id="ngx_cycle_modules">ngx_cycle_modules&lt;/h2>
+&lt;p>调用：&lt;/p>
+&lt;blockquote>
+&lt;p>src/core/ngx_cycle.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>
+&lt;span class="nf">ngx_init_cycle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">old_cycle&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="c1">// ...
+&lt;/span>&lt;span class="c1">&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_cycle_modules&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_destroy_pool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pool&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// ...
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>定义：&lt;/p>
+&lt;blockquote>
+&lt;p>src/core/ngx_module.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">ngx_int_t&lt;/span>
+&lt;span class="nf">ngx_cycle_modules&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * create a list of modules to be used for this cycle,
+&lt;/span>&lt;span class="cm"> * copy static modules to it
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">modules&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_pcalloc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">pool&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_max_module&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="o">*&lt;/span> &lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_module_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">modules&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">NGX_ERROR&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">ngx_memcpy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">modules&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_modules&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">ngx_modules_n&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_module_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">modules_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_modules_n&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>在前面 ngx_preinit_modules() 时，已经填充了 ngx_modules。
+在这里就从当前 cycle 的内存池中分配一块内存，把前面填充到全局变量 ngx_modules 中的模块信息复制一份，用于当前 cycle，使用 cycle-&amp;gt;modules 指针指向。&lt;/p>
+&lt;p>注：每次 nginx reload 时都会新建一个 cycle，销毁旧 cycle。详见：http://nginx.org/en/docs/dev/development_guide.html#cycle&lt;/p>
+&lt;h2 id="cmd-set">cmd-&amp;gt;set&lt;/h2>
+&lt;p>原型：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">ngx_conf_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_command_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cmd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">conf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>在前面把模块信息复制到 cycle 后，便开始配置解析，配置解析时逐个调用各个模块，然后对其支持的指令进行解析存储。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">static&lt;/span> &lt;span class="n">ngx_int_t&lt;/span>
+&lt;span class="nf">ngx_conf_handler&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_conf_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_int_t&lt;/span> &lt;span class="n">last&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">rv&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">set&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cmd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">conf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">rv&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">NGX_CONF_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>以上是关于模块初始化、配置解析的调用过程。
+一句话总结：程序启动后会进行一系列初始化，并调用 ngx_conf_parse 来解析配置文件，遇到配置指令就执行对应指令的 set 回调，逐级深入。&lt;/p></description></item><item><title>Nginx - 模块数据处理流程</title><link>https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/</link><pubDate>Thu, 16 May 2024 06:00:00 +0800</pubDate><guid>https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/</guid><description>&lt;img src="https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image.jpg" alt="Featured image of post Nginx - 模块数据处理流程" />&lt;h2 id="nginx-模块数据处理流程">Nginx 模块数据处理流程&lt;/h2>
+&lt;p>前面一篇文章中，我们解析了 Nginx 模块的初始化流程，知道了 Nginx 是如何对各个模块就行初始化的。&lt;/p>
+&lt;p>而接下来，这篇文章的目的是解答以下问题：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h1 id="listen">listen&lt;/h1>
+&lt;p>我们都知道，通常 Nginx 的数据/请求是通过端口接收过来的，因此，我们来看看：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Nginx 是如何进行端口监听的？端口监听时做了些什么？&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>通过搜索源码，我们得到了相关 command：&lt;/p>
+&lt;blockquote>
+&lt;p>src/http/ngx_http_core_module.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c"> &lt;span class="p">{&lt;/span> &lt;span class="n">ngx_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;listen&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">NGX_HTTP_SRV_CONF&lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="n">NGX_CONF_1MORE&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">ngx_http_core_listen&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">NGX_HTTP_SRV_CONF_OFFSET&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nb">NULL&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>src/mail/ngx_mail_core_module.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c"> &lt;span class="p">{&lt;/span> &lt;span class="n">ngx_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;listen&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">NGX_MAIL_SRV_CONF&lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="n">NGX_CONF_1MORE&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">ngx_mail_core_listen&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">NGX_MAIL_SRV_CONF_OFFSET&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nb">NULL&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>src/stream/ngx_stream_core_module.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c"> &lt;span class="p">{&lt;/span> &lt;span class="n">ngx_string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;listen&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;span class="n">NGX_STREAM_SRV_CONF&lt;/span>&lt;span class="o">|&lt;/span>&lt;span class="n">NGX_CONF_1MORE&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">ngx_stream_core_listen&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">NGX_STREAM_SRV_CONF_OFFSET&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nb">NULL&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以看到，各个类型，都有自己的 listen 指令，因此 nginx.conf 中，不同配置块（block）下的 listen 指令是不同。&lt;/p>
+&lt;p>我们以 HTTP 为例，看下执行流程。&lt;/p>
+&lt;h2 id="http-模块中-listen-的执行流程">HTTP 模块中 listen 的执行流程&lt;/h2>
+&lt;p>为便于理解，先插播一条 listen 指令的用法：&lt;/p>
+&lt;p>&lt;a class="link" href="../Nginx%e6%8c%87%e4%bb%a4/http-listen.md" >listen&lt;/a>&lt;/p>
+&lt;h3 id="执行流程端口监听">执行流程：端口监听&lt;/h3>
+&lt;pre tabindex="0">&lt;code>- ngx_init_cycle: core/ngx_cycle.c
+\ - ngx_conf_parse
+\ - ngx_http_block
+\ - ngx_conf_parse
+\ - ngx_http_core_listen: src/http/ngx_http_core_module.c
+\ - ngx_parse_url: src/core/ngx_inet.c，解析 listen 指令后的第一部分（URL），先检查是否是 unix domain 类型，再检查是否是 IPv6 类型，都不是就调用 IPv4 的 URL 解析。
+\ - ngx_strcmp: 解析指令的各个部分。
+\ - ngx_inet_wildcard: src/core/ngx_inet.c，判断地址是否是通配地址（如 IPv4 的 INADDR_ANY）。
+\ - ngx_http_add_listen:
+\ - ngx_http_add_addresses:
+\ - ngx_cmp_sockaddr: src/core/ngx_inet.c，对比当前列表中的地址与即将添加的地址。
+\ - ngx_http_add_server: 将 server（虚拟主机） 添加到 address:port 对应的虚拟主机列表中（如果地址已经存在在当前列表中，则进行次操作，否则进行 ngx_http_add_address）
+\ - ngx_http_add_address: 将 server 地址、server 名、server 对应类型的核心模块配置添加到端口列表。
+\ - ngx_http_add_server: 将 server 对应类型的核心模块配置添加到 address:port
+\ - ngx_http_add_address: 将 server 地址、server 名、server 对应类型的核心模块配置添加到端口列表。
+\ - ngx_http_add_server: 将 server 对应类型的核心模块配置添加到 address:port
+\ - ngx_http_optimize_servers: 优化 ports、 addresses、 server names 列表。
+\ - ngx_http_server_names
+\ - ngx_http_init_listening
+\ - ngx_http_add_listening
+\ - ngx_create_listening: 把 cmcf-&amp;gt;ports 中的 address 信息复制到 cycle-&amp;gt;listening 中。
+\ - ngx_array_push: 调用此函数把地址添加到列表
+\ - ngx_open_listening_sockets: 遍历 cycle-&amp;gt;listening 进行实际的监听
+\ - setsockopt
+\ - ngx_socket
+\ - bind
+\ - listen
+&lt;/code>&lt;/pre>&lt;p>以上是监听的流程，相关操作是在 master 进程中进行，然后 fork worker 进程以后，worker 进程也得到了相关套接字信息。
+worker 进程调用 ngx_worker_process_cycle 进入自身循环。
+listen 之后，就能 accept 了，那么是如何处理 accept 的呢？&lt;/p>
+&lt;p>通过在源码中搜索 &lt;code>accept(&lt;/code>，我们知道 accept 是在 ngx_event_accept 中进行的：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">void&lt;/span>
+&lt;span class="nf">ngx_event_accept&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_event_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ev&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="cp">#if (NGX_HAVE_ACCEPT4)
+&lt;/span>&lt;span class="cp">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">use_accept4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">accept4&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lc&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">sa&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">sockaddr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">socklen&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">SOCK_NONBLOCK&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">accept&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lc&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">sa&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">sockaddr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">socklen&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cp">#else
+&lt;/span>&lt;span class="cp">&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">accept&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lc&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">fd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">sa&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">sockaddr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">socklen&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="cp">#endif
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>而 ngx_event_accept 是被像下面的代码设置到连接的 handler 变量中：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">static&lt;/span> &lt;span class="n">ngx_int_t&lt;/span>
+&lt;span class="nf">ngx_event_process_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">rev&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">handler&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_event_accept&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">rev&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">handler&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">type&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">SOCK_STREAM&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="nl">ngx_event_accept&lt;/span>
+&lt;span class="p">:&lt;/span> &lt;span class="n">ngx_event_recvmsg&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>继续搜索 ngx_event_process_init，发现：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="n">ngx_module_t&lt;/span> &lt;span class="n">ngx_event_core_module&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">NGX_MODULE_V1&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">ngx_event_core_module_ctx&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* module context */&lt;/span>
+&lt;span class="n">ngx_event_core_commands&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* module directives */&lt;/span>
+&lt;span class="n">NGX_EVENT_MODULE&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* module type */&lt;/span>
+&lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* init master */&lt;/span>
+&lt;span class="n">ngx_event_module_init&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* init module */&lt;/span>
+&lt;span class="n">ngx_event_process_init&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* init process */&lt;/span>
+&lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* init thread */&lt;/span>
+&lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* exit thread */&lt;/span>
+&lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* exit process */&lt;/span>
+&lt;span class="nb">NULL&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="cm">/* exit master */&lt;/span>
+&lt;span class="n">NGX_MODULE_V1_PADDING&lt;/span>
+&lt;span class="p">};&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以看到 ngx_event_process_init 是 event 模块的进程初始化函数，&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="k">struct&lt;/span> &lt;span class="n">ngx_module_s&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="n">ngx_int_t&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">init_process&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">...&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>也就是初始化工作进程时，会调用到。&lt;/p>
+&lt;p>因此，我们可以得到 accept 相关函数被设置为 event 读事件的执行流程。&lt;/p>
+&lt;h3 id="执行流程读事件初始化">执行流程：读事件初始化&lt;/h3>
+&lt;pre tabindex="0">&lt;code>- ngx_master_process_cycle: 起工作进程、cache 管理进程等，然后进入循环
+\ - sigemptyset: 清空信号集
+\ - sigaddset: 添加信号到信号集
+\ - sigprocmask: 屏蔽（SIG_BLOCK）信号集
+\ - sigemptyset: 清空信号集——只是清空变量不会实际影响到进程信号屏蔽字
+\ - ngx_setproctitle: 设置进程标题
+\ - ngx_get_conf: 获取核心模块配置
+\ - ngx_start_worker_processes: 启动工作进程
+\ - ngx_spawn_process: 生成进程
+\ - fork
+\ - proc = ngx_worker_process_cycle: 子进程调用此函数
+\ - ngx_worker_process_init: worker 进程初始化，设置 CPU 亲缘性等
+\ - init_process: 调用所有模块的初始化进程函数
+\ - ngx_event_process_init: 此函数是 event 的 init_process
+\ - rev-&amp;gt;handler = ngx_event_accept：设置连接的读事件为 ngx_event_accept
+\ - for: 进入无限循环等待事件
+- ngx_process_events_and_timers
+\ - ngx_pass_open_channel
+\ - ngx_start_cache_manager_processes: 启动 cache 管理进程
+\ - sigsuspend: 进入循环，开放信号，挂起进程等待信号
+&lt;/code>&lt;/pre>&lt;p>把连接（connection）的读事件设置为 ngx_event_accept 后，可以想象到连接有读事件时，就会调用此函数。&lt;/p>
+&lt;p>不过由于现在目的不是了解 event，因此像&lt;/p>
+&lt;ul>
+&lt;li>如何决定使用什么类型的 IO 多路复用？epoll、poll、select &amp;hellip; ？&lt;/li>
+&lt;li>event 是如何工作的？&lt;/li>
+&lt;/ul>
+&lt;p>等 event 相关内容我们先跳过，继续跟踪 ngx_event_accept。&lt;/p>
+&lt;h3 id="执行流程请求处理">执行流程：请求处理&lt;/h3>
+&lt;pre tabindex="0">&lt;code>- ngx_event_accept
+\ - ngx_enable_accept_events: 把连接的读事件加入到事件系统中
+\ - ngx_event_get_conf: 获取事件模块的配置
+\ - accept4/accept4: accept 连接
+\ - ngx_get_connection: 获取连接
+\ - ngx_close_accepted_connection: 如果内存池之类的分配失败，则调用此函数
+\ - ls-&amp;gt;handler: 具体的 http/mail/stream 处理函数，如 ngx_http_init_connection；也就是这里决定监听的端口是什么类型。
+\ - HTTP: ngx_http_init_connection
+\ - ngx_handle_read_event：添加到事件系统中
+\ - MAIL: ngx_mail_init_connection
+\ - STREAM: ngx_stream_init_connection
+&lt;/code>&lt;/pre>&lt;p>在这里，解答了我们最开始的疑问：Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？
+Nginx 通过设置不同的 handler，来处理不同类型的请求。&lt;/p>
+&lt;p>总结：&lt;/p>
+&lt;ul>
+&lt;li>Nginx（worker 进程）为每个服务器 socket 分配了一个连接结构（ngx_connection_t），读事件设置为 ngx_event_accept；
+&lt;ul>
+&lt;li>可以看到这里是每个 worker 进程都添加了 accept 事件到事件系统中，也就是一个连接请求过来时，会导致所有进程都被唤醒，这也就是所谓的惊群现象。Nginx 的解决方法是添加一个 accept 锁 ngx_accept_mutex。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Nginx 为每个客户端 socket 分配了一个对应类型的连接结构（ngx_http_connection_t），读事件设置为对应类型的事件。
+&lt;ul>
+&lt;li>以 HTTP 为例，不同的阶段会使用不同的事件 handler，来读取 HTTP 头部或者是 body 等。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="http://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"
+>How nginx processes a request&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/weixin_39399883/article/details/109700162" target="_blank" rel="noopener"
+>https://blog.csdn.net/weixin_39399883/article/details/109700162&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/weixin_39399883/article/details/110197613" target="_blank" rel="noopener"
+>https://blog.csdn.net/weixin_39399883/article/details/110197613&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Nginx - 系统初始化</title><link>https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/</link><pubDate>Thu, 16 May 2024 06:00:00 +0800</pubDate><guid>https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/</guid><description>&lt;img src="https://isshe.site/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image.jpg" alt="Featured image of post Nginx - 系统初始化" />&lt;h2 id="nginx-启动及初始化">Nginx 启动及初始化&lt;/h2>
+&lt;h1 id="入口">入口&lt;/h1>
+&lt;blockquote>
+&lt;p>src/core/nginx.c&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-c" data-lang="c">&lt;span class="kt">int&lt;/span> &lt;span class="n">ngx_cdecl&lt;/span>
+&lt;span class="nf">main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">argc&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">char&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="k">const&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">argv&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_buf_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_log_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_uint_t&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_cycle_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">init_cycle&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_conf_dump_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">cd&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_core_conf_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">ccf&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// 调试初始化
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">ngx_debug_init&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_strerror_init&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 获取命令行选项
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_get_options&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">argc&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">argv&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_show_version&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_show_version_info&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="n">ngx_test_config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cm">/* TODO */&lt;/span> &lt;span class="n">ngx_max_sockets&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_time_init&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="c1">// 如果使用了 pcre，则进行对应的初始化
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="cp">#if (NGX_PCRE)
+&lt;/span>&lt;span class="cp">&lt;/span> &lt;span class="n">ngx_regex_init&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="cp">#endif
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="n">ngx_pid&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_getpid&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="n">ngx_parent&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_getppid&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="c1">// 日志初始化
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">log&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_log_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_prefix&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_error_log&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">log&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 如果使用了 openssl，则进行相应的初始化
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="cm">/* STUB */&lt;/span>
+&lt;span class="cp">#if (NGX_OPENSSL)
+&lt;/span>&lt;span class="cp">&lt;/span> &lt;span class="n">ngx_ssl_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="cp">#endif
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * init_cycle-&amp;gt;log is required for signal handlers and
+&lt;/span>&lt;span class="cm"> * ngx_process_options()
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="n">ngx_memzero&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">sizeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_cycle_t&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">log&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ngx_cycle&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="c1">// 创建 cycle 使用的内存池
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="n">init_cycle&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">pool&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_create_pool&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1024&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">pool&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_save_argv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">argc&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">argv&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_process_options&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_os_init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * ngx_crc32_table_init() requires ngx_cacheline_size set in ngx_os_init()
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_crc32_table_init&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cm">/*
+&lt;/span>&lt;span class="cm"> * ngx_slab_sizes_init() requires ngx_pagesize set in ngx_os_init()
+&lt;/span>&lt;span class="cm"> */&lt;/span>
+&lt;span class="n">ngx_slab_sizes_init&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_add_inherited_sockets&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// 模块的前置初始化：把模块进行编号
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_preinit_modules&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">cycle&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ngx_init_cycle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">NULL&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_test_config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_log_stderr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;configuration file %s test failed&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">init_cycle&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">conf_file&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_test_config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="n">ngx_quiet_mode&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_log_stderr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;configuration file %s test is successful&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">conf_file&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_dump_config&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">cd&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">config_dump&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">elts&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">config_dump&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">nelts&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_write_stdout&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;# configuration file &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">ngx_write_fd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_stdout&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cd&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">cd&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">len&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">ngx_write_stdout&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;:&amp;#34;&lt;/span> &lt;span class="n">NGX_LINEFEED&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">b&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cd&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">buffer&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="kt">void&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">ngx_write_fd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ngx_stdout&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">pos&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">last&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">pos&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">ngx_write_stdout&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NGX_LINEFEED&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_signal&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="n">ngx_signal_process&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_signal&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">ngx_os_status&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="n">ngx_cycle&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cycle&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="n">ccf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_core_conf_t&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">ngx_get_conf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">conf_ctx&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_core_module&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ccf&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">master&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">ngx_process&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">NGX_PROCESS_SINGLE&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_process&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">NGX_PROCESS_MASTER&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cp">#if !(NGX_WIN32)
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_init_signals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="o">!&lt;/span>&lt;span class="n">ngx_inherited&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">ccf&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">daemon&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_daemon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">ngx_daemonized&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_inherited&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_daemonized&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="cp">#endif
+&lt;/span>&lt;span class="cp">&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_create_pidfile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">ccf&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">pid&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_log_redirect_stderr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">NGX_OK&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">fd&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">ngx_stderr&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_close_file&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">fd&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">NGX_FILE_ERROR&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_log_error&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NGX_LOG_ALERT&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cycle&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">log&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ngx_errno&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="n">ngx_close_file_n&lt;/span> &lt;span class="s">&amp;#34; built-in log failed&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="n">ngx_use_stderr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ngx_process&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">NGX_PROCESS_SINGLE&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_single_process_cycle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="n">ngx_master_process_cycle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cycle&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>这个是 Nginx 整个程序的入口，进行了一系列初始化以后，启动工作进程。&lt;/p>
+&lt;ul>
+&lt;li>ngx_log_init：在特别前面就把日志初始化了，这样可以尽快写日志。&lt;/li>
+&lt;li>ngx_preinit_modules: 对模块进行编号，顺序是编译时就确定了。
+&lt;ul>
+&lt;li>顺序可以在 auto/modules 文件中进行修改。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>后续我们针对各个点（如 log、module）进行详细的跟踪学习。&lt;/p></description></item><item><title>Valgrind 快速上手</title><link>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</link><pubDate>Sun, 20 Aug 2023 12:00:00 +0800</pubDate><guid>https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/</guid><description>&lt;img src="https://isshe.site/p/valgrind-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/image.jpg" alt="Featured image of post Valgrind 快速上手" />&lt;h1 id="valgrind-快速上手">Valgrind 快速上手&lt;/h1>
 &lt;h2 id="1介绍">1、介绍&lt;/h2>
 &lt;p>Valgrind 工具集提供了一系列调试和剖析工具，可以帮助我们写出更快更正确的程序。
 其中最常用的工具是 Memcheck。可以检测很多 C 或 C++ 程序中导致奔溃或未知行为的内存错误。&lt;/p>
@@ -5142,7 +6077,7 @@ E x D mode L = 1
 &lt;li>无法防止否认的本质是：相同的秘钥有多于 1 个人获得。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>图解密码技术 —— 第六章 - 混合密码系统</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E8%A7%A3%E5%AF%86.png" alt="Featured image of post 图解密码技术 —— 第六章 - 混合密码系统" />&lt;h2 id="第六章-混合密码系统">第六章 混合密码系统&lt;/h2>
+&lt;/ul></description></item><item><title>图解密码技术 —— 第六章 - 混合密码系统</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%B7%B7%E5%90%88%E5%AF%86%E7%A0%81%E7%B3%BB%E7%BB%9F/%E5%8A%A0%E5%AF%86.png" alt="Featured image of post 图解密码技术 —— 第六章 - 混合密码系统" />&lt;h2 id="第六章-混合密码系统">第六章 混合密码系统&lt;/h2>
 &lt;p>用对称密码提高速度，用公钥密码保护会话密钥。&lt;/p>
 &lt;ul>
 &lt;li>对称密码：用于加密消息/数据。&lt;/li>
@@ -5417,7 +6352,7 @@ alt="混合密码解密过程">
 &lt;li>认证机构：颁发证书的人。&lt;/li>
 &lt;li>仓库：保存证书的数据库。&lt;/li>
 &lt;/ul>
-&lt;h1 id="为什么需要证书">为什么需要证书？&lt;/h1></description></item><item><title>图解密码技术 —— 第四章 - 分组密码的模式</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/OFB%E6%A8%A1%E5%BC%8F2.png" alt="Featured image of post 图解密码技术 —— 第四章 - 分组密码的模式" />&lt;h2 id="第四章-分组密码的模式">第四章 分组密码的模式&lt;/h2>
+&lt;h1 id="为什么需要证书">为什么需要证书？&lt;/h1></description></item><item><title>图解密码技术 —— 第四章 - 分组密码的模式</title><link>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E5%9B%BE%E8%A7%A3%E5%AF%86%E7%A0%81%E6%8A%80%E6%9C%AF-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%9A%84%E6%A8%A1%E5%BC%8F/CBC%E6%A8%A1%E5%BC%8F.png" alt="Featured image of post 图解密码技术 —— 第四章 - 分组密码的模式" />&lt;h2 id="第四章-分组密码的模式">第四章 分组密码的模式&lt;/h2>
 &lt;p>DES 和 AES 都属于分组密码，它们只能加密固定长度的明文。
 如果需要加密任意长度的明文，则需进行迭代，而分组密码的&lt;code>迭代方法&lt;/code>，就称为分组密码的&lt;code>模式&lt;/code>。&lt;/p>
 &lt;h1 id="分组密码与流密码">分组密码与流密码&lt;/h1>
@@ -7620,7 +8555,7 @@ ushort *array; // GETALL/SETALL使用
 &lt;h2 id="b-注意">B. 注意&lt;/h2>
 &lt;ul>
 &lt;li>shmget 创建或打开共享内存区时，并没有给调用进程提供访问该内存区的手段。（因此要调用 shmat）&lt;/li>
-&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/System_V_msg_queue_struct_in_kernel.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" />&lt;h1 id="消息队列">消息队列&lt;/h1>
+&lt;/ul></description></item><item><title>操作系统 —— 进程间通信之 SystemV 消息队列</title><link>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid><description>&lt;img src="https://isshe.site/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B9%8B-systemv-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/msg_queue_system_limit.png" alt="Featured image of post 操作系统 —— 进程间通信之 SystemV 消息队列" />&lt;h1 id="消息队列">消息队列&lt;/h1>
 &lt;ul>
 &lt;li>&lt;strong>在新的应用程序中，不应再使用消息队列。【分布式系统里面，好像很常用！需要时再了解！】&lt;/strong>
 &lt;ul>
@@ -8971,7 +9906,7 @@ Additional | &amp;lt;empty&amp;gt; |
 &lt;/code>&lt;/pre>&lt;h1 id="相关">相关&lt;/h1>
 &lt;ul>
 &lt;li>RFC 792&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 代理模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ObjectDiagram.png" alt="Featured image of post 设计模式 —— 代理模式" />&lt;h1 id="代理模式">代理模式&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 代理模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 代理模式" />&lt;h1 id="代理模式">代理模式&lt;/h1>
 &lt;ul>
 &lt;li>目标：
 &lt;ul>
@@ -9385,7 +10320,7 @@ alt="类图">
 &lt;ul>
 &lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 工厂方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_HF.png" alt="Featured image of post 设计模式 —— 工厂方法模式" />&lt;h1 id="工厂方法">工厂方法&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 工厂方法模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/ClassDiagram_CPP.png" alt="Featured image of post 设计模式 —— 工厂方法模式" />&lt;h1 id="工厂方法">工厂方法&lt;/h1>
 &lt;p>工厂方法模式 (Factory Method Pattern) 又称为：&lt;/p>
 &lt;ul>
 &lt;li>工厂模式；&lt;/li>
@@ -10275,7 +11210,7 @@ alt="类图">
 &lt;h2 id="z-参考">z. 参考&lt;/h2>
 &lt;ul>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 组合模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ObjectDiagram.png" alt="Featured image of post 设计模式 —— 组合模式" />&lt;h1 id="组合模式">组合模式&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 组合模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/ClassDiagram.png" alt="Featured image of post 设计模式 —— 组合模式" />&lt;h1 id="组合模式">组合模式&lt;/h1>
 &lt;ul>
 &lt;li>目标：
 &lt;ul>
@@ -10492,7 +11427,7 @@ alt="对象图">
 &lt;ul>
 &lt;li>《设计模式：可复用面向对象软件的基础》&lt;/li>
 &lt;li>《Head First 设计模式》&lt;/li>
-&lt;/ul></description></item><item><title>设计模式 —— 装饰者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/classdiagram.png" alt="Featured image of post 设计模式 —— 装饰者模式" />&lt;h1 id="装饰者模式不改变接口但加入责任">装饰者模式——不改变接口，但加入责任&lt;/h1>
+&lt;/ul></description></item><item><title>设计模式 —— 装饰者模式</title><link>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link><pubDate>Sun, 16 Oct 2022 12:00:00 +0800</pubDate><guid>https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid><description>&lt;img src="https://isshe.site/p/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/xingbazi-classdiagram.png" alt="Featured image of post 设计模式 —— 装饰者模式" />&lt;h1 id="装饰者模式不改变接口但加入责任">装饰者模式——不改变接口，但加入责任&lt;/h1>
 &lt;h2 id="1-基础概念">1. 基础概念&lt;/h2>
 &lt;ul>
 &lt;li>

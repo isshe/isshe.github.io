@@ -1,0 +1,433 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Nginx 模块数据处理流程 前面一篇文章中，我们解析了 Nginx 模块的初始化流程，知道了 Nginx 是如何对各个模块就行初始化的。
+而接下来，这篇文章的目的是解答以下问题：
+ Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？  listen 我们都知道，通常 Nginx 的数据/请求是通过端口接收过来的，因此，我们来看看：
+ Nginx 是如何进行端口监听的？端口监听时做了些什么？  通过搜索源码，我们得到了相关 command：
+ src/http/ngx_http_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_HTTP_SRV_CONF|NGX_CONF_1MORE, ngx_http_core_listen, NGX_HTTP_SRV_CONF_OFFSET, 0, NULL },  src/mail/ngx_mail_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_MAIL_SRV_CONF|NGX_CONF_1MORE, ngx_mail_core_listen, NGX_MAIL_SRV_CONF_OFFSET, 0, NULL },  src/stream/ngx_stream_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_STREAM_SRV_CONF|NGX_CONF_1MORE, ngx_stream_core_listen, NGX_STREAM_SRV_CONF_OFFSET, 0, NULL }, 可以看到，各个类型，都有自己的 listen 指令，因此 nginx.conf 中，不同配置块（block）下的 listen 指令是不同。
+我们以 HTTP 为例，看下执行流程。
+HTTP 模块中 listen 的执行流程 为便于理解，先插播一条 listen 指令的用法："><title>Nginx - 模块数据处理流程</title>
+<link rel=canonical href=https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/>
+<link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="Nginx - 模块数据处理流程">
+<meta property="og:description" content="Nginx 模块数据处理流程 前面一篇文章中，我们解析了 Nginx 模块的初始化流程，知道了 Nginx 是如何对各个模块就行初始化的。
+而接下来，这篇文章的目的是解答以下问题：
+ Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？  listen 我们都知道，通常 Nginx 的数据/请求是通过端口接收过来的，因此，我们来看看：
+ Nginx 是如何进行端口监听的？端口监听时做了些什么？  通过搜索源码，我们得到了相关 command：
+ src/http/ngx_http_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_HTTP_SRV_CONF|NGX_CONF_1MORE, ngx_http_core_listen, NGX_HTTP_SRV_CONF_OFFSET, 0, NULL },  src/mail/ngx_mail_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_MAIL_SRV_CONF|NGX_CONF_1MORE, ngx_mail_core_listen, NGX_MAIL_SRV_CONF_OFFSET, 0, NULL },  src/stream/ngx_stream_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_STREAM_SRV_CONF|NGX_CONF_1MORE, ngx_stream_core_listen, NGX_STREAM_SRV_CONF_OFFSET, 0, NULL }, 可以看到，各个类型，都有自己的 listen 指令，因此 nginx.conf 中，不同配置块（block）下的 listen 指令是不同。
+我们以 HTTP 为例，看下执行流程。
+HTTP 模块中 listen 的执行流程 为便于理解，先插播一条 listen 指令的用法：">
+<meta property="og:url" content="https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/">
+<meta property="og:site_name" content="树深时间录">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="工具"><meta property="article:tag" content="源码分析"><meta property="article:tag" content="nginx"><meta property="article:tag" content="Nginx"><meta property="article:published_time" content="2024-05-16T06:00:00+08:00"><meta property="article:modified_time" content="2024-05-16T06:00:00+08:00"><meta property="og:image" content="https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image.jpg">
+<meta name=twitter:title content="Nginx - 模块数据处理流程">
+<meta name=twitter:description content="Nginx 模块数据处理流程 前面一篇文章中，我们解析了 Nginx 模块的初始化流程，知道了 Nginx 是如何对各个模块就行初始化的。
+而接下来，这篇文章的目的是解答以下问题：
+ Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？  listen 我们都知道，通常 Nginx 的数据/请求是通过端口接收过来的，因此，我们来看看：
+ Nginx 是如何进行端口监听的？端口监听时做了些什么？  通过搜索源码，我们得到了相关 command：
+ src/http/ngx_http_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_HTTP_SRV_CONF|NGX_CONF_1MORE, ngx_http_core_listen, NGX_HTTP_SRV_CONF_OFFSET, 0, NULL },  src/mail/ngx_mail_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_MAIL_SRV_CONF|NGX_CONF_1MORE, ngx_mail_core_listen, NGX_MAIL_SRV_CONF_OFFSET, 0, NULL },  src/stream/ngx_stream_core_module.c
+ { ngx_string(&amp;#34;listen&amp;#34;), NGX_STREAM_SRV_CONF|NGX_CONF_1MORE, ngx_stream_core_listen, NGX_STREAM_SRV_CONF_OFFSET, 0, NULL }, 可以看到，各个类型，都有自己的 listen 指令，因此 nginx.conf 中，不同配置块（block）下的 listen 指令是不同。
+我们以 HTTP 为例，看下执行流程。
+HTTP 模块中 listen 的执行流程 为便于理解，先插播一条 listen 指令的用法："><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://isshe.site/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image.jpg">
+<link rel="shortcut icon" href=/favicon/favicon-ss.svg>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YRCL8C5MTX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-YRCL8C5MTX',{anonymize_ip:!1})}</script>
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>返回</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image_hu22ef85a2611c4baed2aaa0166caa598b_203305_800x0_resize_q75_box.jpg srcset="/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image_hu22ef85a2611c4baed2aaa0166caa598b_203305_800x0_resize_q75_box.jpg 800w, /p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/image_hu22ef85a2611c4baed2aaa0166caa598b_203305_1600x0_resize_q75_box.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post Nginx - 模块数据处理流程">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/%E5%B7%A5%E5%85%B7/ style=background-color:#c18bc6;color:#fff>
+工具
+</a>
+<a href=/categories/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ style=background-color:#d7905c;color:#fff>
+源码分析
+</a>
+<a href=/categories/nginx/ style=background-color:#90de7b;color:#fff>
+Nginx
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B/>Nginx - 模块数据处理流程</a>
+</h2>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 16, 2024</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+阅读时长: 3 分钟
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<h2 id=nginx-模块数据处理流程>Nginx 模块数据处理流程</h2>
+<p>前面一篇文章中，我们解析了 Nginx 模块的初始化流程，知道了 Nginx 是如何对各个模块就行初始化的。</p>
+<p>而接下来，这篇文章的目的是解答以下问题：</p>
+<ul>
+<li><strong>Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？</strong></li>
+</ul>
+<h1 id=listen>listen</h1>
+<p>我们都知道，通常 Nginx 的数据/请求是通过端口接收过来的，因此，我们来看看：</p>
+<ul>
+<li><strong>Nginx 是如何进行端口监听的？端口监听时做了些什么？</strong></li>
+</ul>
+<p>通过搜索源码，我们得到了相关 command：</p>
+<blockquote>
+<p>src/http/ngx_http_core_module.c</p>
+</blockquote>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;listen&#34;</span><span class=p>),</span>
+      <span class=n>NGX_HTTP_SRV_CONF</span><span class=o>|</span><span class=n>NGX_CONF_1MORE</span><span class=p>,</span>
+      <span class=n>ngx_http_core_listen</span><span class=p>,</span>
+      <span class=n>NGX_HTTP_SRV_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=nb>NULL</span> <span class=p>},</span>
+</code></pre></div><blockquote>
+<p>src/mail/ngx_mail_core_module.c</p>
+</blockquote>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;listen&#34;</span><span class=p>),</span>
+      <span class=n>NGX_MAIL_SRV_CONF</span><span class=o>|</span><span class=n>NGX_CONF_1MORE</span><span class=p>,</span>
+      <span class=n>ngx_mail_core_listen</span><span class=p>,</span>
+      <span class=n>NGX_MAIL_SRV_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=nb>NULL</span> <span class=p>},</span>
+</code></pre></div><blockquote>
+<p>src/stream/ngx_stream_core_module.c</p>
+</blockquote>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c>    <span class=p>{</span> <span class=n>ngx_string</span><span class=p>(</span><span class=s>&#34;listen&#34;</span><span class=p>),</span>
+      <span class=n>NGX_STREAM_SRV_CONF</span><span class=o>|</span><span class=n>NGX_CONF_1MORE</span><span class=p>,</span>
+      <span class=n>ngx_stream_core_listen</span><span class=p>,</span>
+      <span class=n>NGX_STREAM_SRV_CONF_OFFSET</span><span class=p>,</span>
+      <span class=mi>0</span><span class=p>,</span>
+      <span class=nb>NULL</span> <span class=p>},</span>
+</code></pre></div><p>可以看到，各个类型，都有自己的 listen 指令，因此 nginx.conf 中，不同配置块（block）下的 listen 指令是不同。</p>
+<p>我们以 HTTP 为例，看下执行流程。</p>
+<h2 id=http-模块中-listen-的执行流程>HTTP 模块中 listen 的执行流程</h2>
+<p>为便于理解，先插播一条 listen 指令的用法：</p>
+<p><a class=link href=../Nginx%e6%8c%87%e4%bb%a4/http-listen.md>listen</a></p>
+<h3 id=执行流程端口监听>执行流程：端口监听</h3>
+<pre tabindex=0><code>- ngx_init_cycle: core/ngx_cycle.c
+    \ - ngx_conf_parse
+        \ - ngx_http_block
+            \ - ngx_conf_parse
+                \ - ngx_http_core_listen: src/http/ngx_http_core_module.c
+                    \ - ngx_parse_url: src/core/ngx_inet.c，解析 listen 指令后的第一部分（URL），先检查是否是 unix domain 类型，再检查是否是 IPv6 类型，都不是就调用 IPv4 的 URL 解析。
+                    \ - ngx_strcmp: 解析指令的各个部分。
+                    \ - ngx_inet_wildcard: src/core/ngx_inet.c，判断地址是否是通配地址（如 IPv4 的 INADDR_ANY）。
+                    \ - ngx_http_add_listen:
+                        \ - ngx_http_add_addresses:
+                            \ - ngx_cmp_sockaddr: src/core/ngx_inet.c，对比当前列表中的地址与即将添加的地址。
+                            \ - ngx_http_add_server: 将 server（虚拟主机） 添加到 address:port 对应的虚拟主机列表中（如果地址已经存在在当前列表中，则进行次操作，否则进行 ngx_http_add_address）
+                            \ - ngx_http_add_address: 将 server 地址、server 名、server 对应类型的核心模块配置添加到端口列表。
+                                \ - ngx_http_add_server: 将 server 对应类型的核心模块配置添加到 address:port
+                        \ - ngx_http_add_address: 将 server 地址、server 名、server 对应类型的核心模块配置添加到端口列表。
+                            \ - ngx_http_add_server: 将 server 对应类型的核心模块配置添加到 address:port
+            \ - ngx_http_optimize_servers: 优化 ports、 addresses、 server names 列表。
+                \ - ngx_http_server_names
+                \ - ngx_http_init_listening
+                    \ - ngx_http_add_listening
+                        \ - ngx_create_listening: 把 cmcf-&gt;ports 中的 address 信息复制到 cycle-&gt;listening 中。
+                            \ - ngx_array_push: 调用此函数把地址添加到列表
+    \ - ngx_open_listening_sockets: 遍历 cycle-&gt;listening 进行实际的监听
+        \ - setsockopt
+        \ - ngx_socket
+        \ - bind
+        \ - listen
+
+</code></pre><p>以上是监听的流程，相关操作是在 master 进程中进行，然后 fork worker 进程以后，worker 进程也得到了相关套接字信息。
+worker 进程调用 ngx_worker_process_cycle 进入自身循环。
+listen 之后，就能 accept 了，那么是如何处理 accept 的呢？</p>
+<p>通过在源码中搜索 <code>accept(</code>，我们知道 accept 是在 ngx_event_accept 中进行的：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=kt>void</span>
+<span class=nf>ngx_event_accept</span><span class=p>(</span><span class=n>ngx_event_t</span> <span class=o>*</span><span class=n>ev</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=p>...</span>
+
+<span class=cp>#if (NGX_HAVE_ACCEPT4)
+</span><span class=cp></span>        <span class=k>if</span> <span class=p>(</span><span class=n>use_accept4</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>s</span> <span class=o>=</span> <span class=n>accept4</span><span class=p>(</span><span class=n>lc</span><span class=o>-&gt;</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>sa</span><span class=p>.</span><span class=n>sockaddr</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>socklen</span><span class=p>,</span> <span class=n>SOCK_NONBLOCK</span><span class=p>);</span>
+        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+            <span class=n>s</span> <span class=o>=</span> <span class=n>accept</span><span class=p>(</span><span class=n>lc</span><span class=o>-&gt;</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>sa</span><span class=p>.</span><span class=n>sockaddr</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>socklen</span><span class=p>);</span>
+        <span class=p>}</span>
+<span class=cp>#else
+</span><span class=cp></span>        <span class=n>s</span> <span class=o>=</span> <span class=n>accept</span><span class=p>(</span><span class=n>lc</span><span class=o>-&gt;</span><span class=n>fd</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>sa</span><span class=p>.</span><span class=n>sockaddr</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>socklen</span><span class=p>);</span>
+<span class=cp>#endif
+</span><span class=cp></span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>而 ngx_event_accept 是被像下面的代码设置到连接的 handler 变量中：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=k>static</span> <span class=n>ngx_int_t</span>
+<span class=nf>ngx_event_process_init</span><span class=p>(</span><span class=n>ngx_cycle_t</span> <span class=o>*</span><span class=n>cycle</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=p>...</span>
+        <span class=n>rev</span><span class=o>-&gt;</span><span class=n>handler</span> <span class=o>=</span> <span class=n>ngx_event_accept</span><span class=p>;</span>
+
+        <span class=p>...</span>
+
+        <span class=n>rev</span><span class=o>-&gt;</span><span class=n>handler</span> <span class=o>=</span> <span class=p>(</span><span class=n>c</span><span class=o>-&gt;</span><span class=n>type</span> <span class=o>==</span> <span class=n>SOCK_STREAM</span><span class=p>)</span> <span class=o>?</span> <span class=nl>ngx_event_accept</span>
+                                                <span class=p>:</span> <span class=n>ngx_event_recvmsg</span><span class=p>;</span>
+
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>继续搜索 ngx_event_process_init，发现：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=n>ngx_module_t</span>  <span class=n>ngx_event_core_module</span> <span class=o>=</span> <span class=p>{</span>
+    <span class=n>NGX_MODULE_V1</span><span class=p>,</span>
+    <span class=o>&amp;</span><span class=n>ngx_event_core_module_ctx</span><span class=p>,</span>            <span class=cm>/* module context */</span>
+    <span class=n>ngx_event_core_commands</span><span class=p>,</span>               <span class=cm>/* module directives */</span>
+    <span class=n>NGX_EVENT_MODULE</span><span class=p>,</span>                      <span class=cm>/* module type */</span>
+    <span class=nb>NULL</span><span class=p>,</span>                                  <span class=cm>/* init master */</span>
+    <span class=n>ngx_event_module_init</span><span class=p>,</span>                 <span class=cm>/* init module */</span>
+    <span class=n>ngx_event_process_init</span><span class=p>,</span>                <span class=cm>/* init process */</span>
+    <span class=nb>NULL</span><span class=p>,</span>                                  <span class=cm>/* init thread */</span>
+    <span class=nb>NULL</span><span class=p>,</span>                                  <span class=cm>/* exit thread */</span>
+    <span class=nb>NULL</span><span class=p>,</span>                                  <span class=cm>/* exit process */</span>
+    <span class=nb>NULL</span><span class=p>,</span>                                  <span class=cm>/* exit master */</span>
+    <span class=n>NGX_MODULE_V1_PADDING</span>
+<span class=p>};</span>
+</code></pre></div><p>可以看到 ngx_event_process_init 是 event 模块的进程初始化函数，</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=k>struct</span> <span class=n>ngx_module_s</span> <span class=p>{</span>
+    <span class=p>...</span>
+
+    <span class=n>ngx_int_t</span>           <span class=p>(</span><span class=o>*</span><span class=n>init_process</span><span class=p>)(</span><span class=n>ngx_cycle_t</span> <span class=o>*</span><span class=n>cycle</span><span class=p>);</span>
+
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>也就是初始化工作进程时，会调用到。</p>
+<p>因此，我们可以得到 accept 相关函数被设置为 event 读事件的执行流程。</p>
+<h3 id=执行流程读事件初始化>执行流程：读事件初始化</h3>
+<pre tabindex=0><code>- ngx_master_process_cycle: 起工作进程、cache 管理进程等，然后进入循环
+    \ - sigemptyset: 清空信号集
+    \ - sigaddset: 添加信号到信号集
+    \ - sigprocmask: 屏蔽（SIG_BLOCK）信号集
+    \ - sigemptyset: 清空信号集——只是清空变量不会实际影响到进程信号屏蔽字
+    \ - ngx_setproctitle: 设置进程标题
+    \ - ngx_get_conf: 获取核心模块配置
+    \ - ngx_start_worker_processes: 启动工作进程
+        \ - ngx_spawn_process: 生成进程
+            \ - fork
+            \ - proc = ngx_worker_process_cycle: 子进程调用此函数
+                \ - ngx_worker_process_init: worker 进程初始化，设置 CPU 亲缘性等
+                    \ - init_process: 调用所有模块的初始化进程函数
+                        \ - ngx_event_process_init: 此函数是 event 的 init_process
+                            \ - rev-&gt;handler = ngx_event_accept：设置连接的读事件为 ngx_event_accept
+                \ - for: 进入无限循环等待事件
+                    - ngx_process_events_and_timers
+        \ - ngx_pass_open_channel
+    \ - ngx_start_cache_manager_processes: 启动 cache 管理进程
+    \ - sigsuspend: 进入循环，开放信号，挂起进程等待信号
+</code></pre><p>把连接（connection）的读事件设置为 ngx_event_accept 后，可以想象到连接有读事件时，就会调用此函数。</p>
+<p>不过由于现在目的不是了解 event，因此像</p>
+<ul>
+<li>如何决定使用什么类型的 IO 多路复用？epoll、poll、select &mldr; ？</li>
+<li>event 是如何工作的？</li>
+</ul>
+<p>等 event 相关内容我们先跳过，继续跟踪 ngx_event_accept。</p>
+<h3 id=执行流程请求处理>执行流程：请求处理</h3>
+<pre tabindex=0><code>- ngx_event_accept
+    \ - ngx_enable_accept_events: 把连接的读事件加入到事件系统中
+    \ - ngx_event_get_conf: 获取事件模块的配置
+    \ - accept4/accept4: accept 连接
+    \ - ngx_get_connection: 获取连接
+    \ - ngx_close_accepted_connection: 如果内存池之类的分配失败，则调用此函数
+    \ - ls-&gt;handler: 具体的 http/mail/stream 处理函数，如 ngx_http_init_connection；也就是这里决定监听的端口是什么类型。
+        \ - HTTP: ngx_http_init_connection
+            \ - ngx_handle_read_event：添加到事件系统中
+        \ - MAIL: ngx_mail_init_connection
+        \ - STREAM: ngx_stream_init_connection
+</code></pre><p>在这里，解答了我们最开始的疑问：Nginx 是如何知道从端口接收到的数据，应该交给哪些模块进行处理的呢？
+Nginx 通过设置不同的 handler，来处理不同类型的请求。</p>
+<p>总结：</p>
+<ul>
+<li>Nginx（worker 进程）为每个服务器 socket 分配了一个连接结构（ngx_connection_t），读事件设置为 ngx_event_accept；
+<ul>
+<li>可以看到这里是每个 worker 进程都添加了 accept 事件到事件系统中，也就是一个连接请求过来时，会导致所有进程都被唤醒，这也就是所谓的惊群现象。Nginx 的解决方法是添加一个 accept 锁 ngx_accept_mutex。</li>
+</ul>
+</li>
+<li>Nginx 为每个客户端 socket 分配了一个对应类型的连接结构（ngx_http_connection_t），读事件设置为对应类型的事件。
+<ul>
+<li>以 HTTP 为例，不同的阶段会使用不同的事件 handler，来读取 HTTP 头部或者是 body 等。</li>
+</ul>
+</li>
+</ul>
+<h1 id=参考>参考</h1>
+<ul>
+<li><a class=link href=http://nginx.org/en/docs/http/request_processing.html target=_blank rel=noopener>How nginx processes a request</a></li>
+<li><a class=link href=https://blog.csdn.net/weixin_39399883/article/details/109700162 target=_blank rel=noopener>https://blog.csdn.net/weixin_39399883/article/details/109700162</a></li>
+<li><a class=link href=https://blog.csdn.net/weixin_39399883/article/details/110197613 target=_blank rel=noopener>https://blog.csdn.net/weixin_39399883/article/details/110197613</a></li>
+</ul>
+</section>
+<footer class=article-footer>
+<section class=article-tags>
+<a href=/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/>源码分析</a>
+<a href=/tags/nginx/>Nginx</a>
+</section>
+<section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+</article>
+<aside class=related-contents--wrapper>
+<h2 class=section-title>相关文章</h2>
+<div class=related-contents>
+<div class="flex article-list--tile">
+<article class=has-image>
+<a href=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/nginx-%E6%A8%A1%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96/image.7670d23a97e5f347eef4dfd2083151bf_hu8886b919104ef84c776323591f53caab_196334_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 模块初始化" data-hash="md5-dnDSOpfl80fu9N/SCDFRvw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 模块初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/>
+<div class=article-image>
+<img src=/p/nginx-proxy-cache-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%AE%9E%E7%8E%B0/image.39ccb3ce2b29dbd2891ecaa47eccfaa1_hu5bff14fb7655aa8fdab6bbae0922e168_186749_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - Proxy Cache 的使用与实现" data-hash="md5-Ocyzzisp29KJHsqkfsz6oQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - Proxy Cache 的使用与实现</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/>
+<div class=article-image>
+<img src=/p/nginx-%E7%B3%BB%E7%BB%9F%E5%88%9D%E5%A7%8B%E5%8C%96/image.93769ba539d05344905d01012b30639d_hubd17b0d0eb5805f5f9f0eeb2ca84f8e7_240962_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post Nginx - 系统初始化" data-hash="md5-k3abpTnQU0SQXQEBKzBjnQ==">
+</div>
+<div class=article-details>
+<h2 class=article-title>Nginx - 系统初始化</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-rewrite_by_lua/>
+<div class=article-image>
+<img src=/p/openresty-rewrite_by_lua/image.8d6393ed524ea8c96a0fc0d11a489908_hu488b2f82ab20ee50f487200f2be764c2_242367_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty rewrite_by_lua*" data-hash="md5-jWOT7VJOqMlqD8DRGkiZCA==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty rewrite_by_lua*</h2>
+</div>
+</a>
+</article>
+<article class=has-image>
+<a href=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/>
+<div class=article-image>
+<img src=/p/openresty-http-%E6%A8%A1%E5%9D%97%E7%9A%84-_by_lua-%E5%8F%8A%E9%98%B6%E6%AE%B5/image.da4a85629ef67e2c5b901b667400929b_huab6d4bf2fac89bf04d136b1532e709da_268856_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post OpenResty HTTP 模块的 *_by_lua* 及阶段" data-hash="md5-2kqFYp72fixbkBtmdACSmw==">
+</div>
+<div class=article-details>
+<h2 class=article-title>OpenResty HTTP 模块的 *_by_lua* 及阶段</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div id=gitalk-container></div>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css>
+<script src=https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/blueimp-md5@2.18.0/js/md5.min.js></script>
+<script>const gitalk=new Gitalk({clientID:"7e9427059aca5b5e1496",clientSecret:"05b62531357375142bd7b06096ec194ee4db119c",repo:"isshe.github.io",owner:"isshe",admin:["isshe"],distractionFreeMode:!1,id:md5(location.pathname)});(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("gitalk-container").innerHTML="Gitalk comments not available by default when the website is previewed locally.";return}gitalk.render("gitalk-container")})()</script>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2021 -
+2025 树深时间录
+</section>
+<section class=powerby>
+相信美好的事情即将发生。 <br>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">目录</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#nginx-模块数据处理流程>Nginx 模块数据处理流程</a></li>
+</ol>
+<ol>
+<li><a href=#http-模块中-listen-的执行流程>HTTP 模块中 listen 的执行流程</a>
+<ol>
+<li><a href=#执行流程端口监听>执行流程：端口监听</a></li>
+<li><a href=#执行流程读事件初始化>执行流程：读事件初始化</a></li>
+<li><a href=#执行流程请求处理>执行流程：请求处理</a></li>
+</ol>
+</li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>
